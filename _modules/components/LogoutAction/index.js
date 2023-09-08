@@ -32,7 +32,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage logout behavior without UI component
  */
 var LogoutAction = function LogoutAction(props) {
-  var _configs$facebook_id3, _configs$google_login2;
+  var _configs$facebook_id3, _configs$google_login2, _ref;
   var UIComponent = props.UIComponent,
     handleSuccessLogout = props.handleSuccessLogout,
     token = props.token,
@@ -107,8 +107,8 @@ var LogoutAction = function LogoutAction(props) {
   /**
    * Default fuction for logout workflow
    */
-  var handleLogoutClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(bodyParams) {
+  var handleLogoutClick = function handleLogoutClick(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(bodyParams) {
       var accessToken, body, funtionFetch, _yield$funtionFetch, _yield$funtionFetch$c, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -177,11 +177,8 @@ var LogoutAction = function LogoutAction(props) {
             return _context.stop();
         }
       }, _callee, null, [[1, 21]]);
-    }));
-    return function handleLogoutClick(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     formState: formState,
     handleLogoutClick: handleLogoutClick

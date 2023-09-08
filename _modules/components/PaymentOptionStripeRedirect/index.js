@@ -27,6 +27,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage payment option stripe redirect behavior without UI component
  */
 var PaymentOptionStripeRedirect = function PaymentOptionStripeRedirect(props) {
+  var _ref;
   var paymentMethods = props.paymentMethods,
     UIComponent = props.UIComponent;
   var _useSession = (0, _SessionContext.useSession)(),
@@ -58,8 +59,8 @@ var PaymentOptionStripeRedirect = function PaymentOptionStripeRedirect(props) {
   /**
    * Method to get stripe credentials from API
    */
-  var getCredentials = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getCredentials = function getCredentials() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var response, _yield$response$json, publishable;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -85,11 +86,8 @@ var PaymentOptionStripeRedirect = function PaymentOptionStripeRedirect(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function getCredentials() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     getCredentials();
   }, []);

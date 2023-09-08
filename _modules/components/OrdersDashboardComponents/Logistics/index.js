@@ -29,6 +29,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Logistics = function Logistics(props) {
+  var _ref;
   var orderId = props.orderId,
     UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -61,8 +62,8 @@ var Logistics = function Logistics(props) {
   /**
    * Method to get logistics from API
    */
-  var getLogistics = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getLogistics = function getLogistics() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var requestOptions, response, _yield$response$json, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -105,11 +106,8 @@ var Logistics = function Logistics(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 13]]);
-    }));
-    return function getLogistics() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var parseLog = function parseLog(log) {
     var driverEvents = ['logistic_driver_found', 'logistic_driver_found_group', 'logistic_driver_not_found', 'logistic_driver_not_found_group', 'logistic_driver_found_in_coverage', 'logistic_driver_found_in_coverage_group', 'logistic_driver_found_out_coverage', 'logistic_driver_found_out_coverage_group', 'logistic_driver_autoaccepted', 'logistic_driver_autoaccepted_group', 'logistic_request_autorejected', 'logistic_request_autorejected_group', 'logistic_assign_request_accepted', 'logistic_assign_request_accepted_group', 'logistic_assign_request_rejected', 'logistic_assign_request_rejected_group', 'logistic_manual_driver_assignment', 'logistic_manual_driver_unassignment', 'logistic_driver_autoassigned_group'];
     var generalEvents = ['logistic_started', 'logistic_finished', 'logistic_expired', 'logistic_resolved', 'logistic_reset', 'logistic_grouped', 'logistic_cancelled', 'logistic_not_grouped', 'logistic_order_queued', 'logistic_order_out_queued', 'logistic_driver_company_not_found'];

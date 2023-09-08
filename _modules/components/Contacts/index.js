@@ -28,7 +28,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Contacts = function Contacts(props) {
-  var _paginationSettings$p;
+  var _paginationSettings$p, _ref, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7;
   var UIComponent = props.UIComponent,
     firstFetch = props.firstFetch,
     orderProps = props.orderProps,
@@ -80,8 +80,8 @@ var Contacts = function Contacts(props) {
     _useState8 = _slicedToArray(_useState7, 2),
     pagination = _useState8[0],
     setPagination = _useState8[1];
-  var getOrders = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(nextPage) {
+  var getOrders = function getOrders(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(nextPage) {
       var parameters, pageFetch, _yield$ordering$order, _yield$ordering$order2, result, error, pageConfig, hash;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -145,17 +145,14 @@ var Contacts = function Contacts(props) {
             return _context.stop();
         }
       }, _callee, null, [[3, 14]]);
-    }));
-    return function getOrders(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get businesses from SDK
    */
-  var getBusinesses = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(nextPage) {
+  var getBusinesses = function getBusinesses(_x2) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(nextPage) {
       var where, pageFetch, _yield$ordering$busin, _yield$ordering$busin2, result, error, pageConfig;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -217,17 +214,14 @@ var Contacts = function Contacts(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[3, 14]]);
-    }));
-    return function getBusinesses(_x2) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get customers from SDK
    */
-  var getCustomers = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(nextPage) {
+  var getCustomers = function getCustomers(_x3) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(nextPage) {
       var where, pageFetch, _yield$ordering$setAc, _yield$ordering$setAc2, result, error, pageConfig;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -289,17 +283,14 @@ var Contacts = function Contacts(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[3, 14]]);
-    }));
-    return function getCustomers(_x3) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get drivers from SDK
    */
-  var getDrivers = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(nextPage) {
+  var getDrivers = function getDrivers(_x4) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(nextPage) {
       var where, pageFetch, _yield$ordering$setAc3, _yield$ordering$setAc4, result, error, pageConfig;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -361,13 +352,10 @@ var Contacts = function Contacts(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[3, 14]]);
-    }));
-    return function getDrivers(_x4) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var loadMore = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(key) {
+    }))).apply(this, arguments);
+  };
+  var loadMore = function loadMore(_x5) {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(key) {
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
           case 0:
@@ -390,11 +378,8 @@ var Contacts = function Contacts(props) {
             return _context5.stop();
         }
       }, _callee5);
-    }));
-    return function loadMore(_x5) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     switch (firstFetch) {
       case 'businesses':
@@ -430,8 +415,8 @@ var Contacts = function Contacts(props) {
       socket.leave(ordersRoom);
     };
   }, [socket === null || socket === void 0 ? void 0 : socket.socket, user]);
-  var handleMessage = (0, _react.useCallback)( /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(message) {
+  var handleMessage = (0, _react.useCallback)(function (_x6) {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(message) {
       var orderId, _yield$ordering$setAc5, _yield$ordering$setAc6, result, error;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -475,13 +460,10 @@ var Contacts = function Contacts(props) {
             return _context6.stop();
         }
       }, _callee6, null, [[1, 11]]);
-    }));
-    return function (_x6) {
-      return _ref6.apply(this, arguments);
-    };
-  }(), []);
-  var handleOrder = (0, _react.useCallback)( /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(order) {
+    }))).apply(this, arguments);
+  }, []);
+  var handleOrder = (0, _react.useCallback)(function (_x7) {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(order) {
       var id, status, driver;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -515,11 +497,8 @@ var Contacts = function Contacts(props) {
             return _context7.stop();
         }
       }, _callee7);
-    }));
-    return function (_x7) {
-      return _ref7.apply(this, arguments);
-    };
-  }(), []);
+    }))).apply(this, arguments);
+  }, []);
   (0, _react.useEffect)(function () {
     socket.on('message', handleMessage);
     socket.on('orders_register', handleOrder);

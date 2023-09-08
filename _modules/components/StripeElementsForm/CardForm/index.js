@@ -35,7 +35,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage card form for stripe elements form behavior without UI component
  */
 var CardForm = function CardForm(props) {
-  var _validationFields$fie, _validationFields$fie2;
+  var _validationFields$fie, _validationFields$fie2, _ref, _ref2;
   var UIComponent = props.UIComponent,
     requirements = props.requirements,
     toSave = props.toSave,
@@ -92,8 +92,8 @@ var CardForm = function CardForm(props) {
    * @param {*object} user object with user info from session provider
    * @param {*string} businessId string to know your business
    */
-  var stripeTokenHandler = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(tokenId, user, businessId) {
+  var stripeTokenHandler = function stripeTokenHandler(_x, _x2, _x3) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(tokenId, user, businessId) {
       var _user$session;
       var isNewCard,
         result,
@@ -134,11 +134,8 @@ var CardForm = function CardForm(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function stripeTokenHandler(_x, _x2, _x3) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Handle real-time validation errors from the card Element
@@ -185,8 +182,8 @@ var CardForm = function CardForm(props) {
    * Handle form submission
    * @param {event} event
    */
-  var handleSubmit = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(event) {
+  var handleSubmit = function handleSubmit(_x4) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(event) {
       var _card, card, userName, userAddress, billingData, result, _result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -300,11 +297,8 @@ var CardForm = function CardForm(props) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function handleSubmit(_x4) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   return /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     handleSubmit: handleSubmit,
     error: error,

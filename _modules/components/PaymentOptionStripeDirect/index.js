@@ -27,6 +27,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage payment option stripe direct behavior without UI component
  */
 var PaymentOptionStripeDirect = function PaymentOptionStripeDirect(props) {
+  var _ref, _ref2;
   var UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
@@ -53,8 +54,8 @@ var PaymentOptionStripeDirect = function PaymentOptionStripeDirect(props) {
   /**
    * Method to get stripe credentials from API
    */
-  var getCredentials = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getCredentials = function getCredentials() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var response, _yield$response$json, publishable;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -80,17 +81,14 @@ var PaymentOptionStripeDirect = function PaymentOptionStripeDirect(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function getCredentials() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get client id for create stripe payment method
    */
-  var getRequirements = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var getRequirements = function getRequirements() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var response, _yield$response$json2, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -116,11 +114,8 @@ var PaymentOptionStripeDirect = function PaymentOptionStripeDirect(props) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function getRequirements() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (!token) return;
     getCredentials();

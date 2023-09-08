@@ -30,6 +30,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage login behavior without UI component
  */
 var CmsContent = function CmsContent(props) {
+  var _ref;
   var UIComponent = props.UIComponent,
     pageSlug = props.pageSlug,
     onNotFound = props.onNotFound;
@@ -52,8 +53,8 @@ var CmsContent = function CmsContent(props) {
   /**
    * Method used to get the page by slug
    */
-  var getPage = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(slug) {
+  var getPage = function getPage(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(slug) {
       var source, _yield$ordering$pages, _yield$ordering$pages2, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -102,11 +103,8 @@ var CmsContent = function CmsContent(props) {
             return _context.stop();
         }
       }, _callee, null, [[1, 14]]);
-    }));
-    return function getPage(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     getPage(pageSlug);
     return function () {

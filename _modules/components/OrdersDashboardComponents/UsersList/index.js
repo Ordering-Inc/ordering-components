@@ -34,7 +34,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var UsersList = function UsersList(props) {
-  var _paginationSettings$p;
+  var _paginationSettings$p, _ref, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7;
   var UIComponent = props.UIComponent,
     defaultUserActiveState = props.defaultUserActiveState,
     paginationSettings = props.paginationSettings,
@@ -170,8 +170,8 @@ var UsersList = function UsersList(props) {
    * Get users by params, order options and filters
    * @param {boolean} newFetch Make a new request or next page
    */
-  var getUsers = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(page, pageSize) {
+  var getUsers = function getUsers(_x, _x2) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(page, pageSize) {
       var _session$user, parameters, paginationParams, where, conditions, verifiedConditions, searchConditions, _filterValues$changes, _filterValues$changes2, filterConditions, _filterValues$changes3, _multiFilterValues$or, filterConditons, _multiFilterValues$or2, _multiFilterValues$or3, fetchEndpoint, content, response, requestOptions, _fetchEndpoint, _response, _content, result, pagination, error, nextPageItems, remainingItems;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -537,17 +537,14 @@ var UsersList = function UsersList(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 38]]);
-    }));
-    return function getUsers(_x, _x2) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Get the occupations from API
    */
-  var getOccupations = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var getOccupations = function getOccupations() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -597,11 +594,8 @@ var UsersList = function UsersList(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 12]]);
-    }));
-    return function getOccupations() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Change user type
@@ -622,8 +616,8 @@ var UsersList = function UsersList(props) {
    * Method to change user type from API
    * @param {Object} user user id and new type
    */
-  var handleChangeUserType = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(user) {
+  var handleChangeUserType = function handleChangeUserType(_x3) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(user) {
       var requestsState, source, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, users;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -684,19 +678,16 @@ var UsersList = function UsersList(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[0, 16]]);
-    }));
-    return function handleChangeUserType(_x3) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to change user enable/disable
    * @param {Object} user user id and enable state
    */
 
-  var handleChangeActiveUser = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(user) {
+  var handleChangeActiveUser = function handleChangeActiveUser(_x4) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(user) {
       var _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, users;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -757,18 +748,15 @@ var UsersList = function UsersList(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[0, 13]]);
-    }));
-    return function handleChangeActiveUser(_x4) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to delete users from API
    * @param {Number} userId user id to delete
    */
-  var handleDeleteUser = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(userId) {
+  var handleDeleteUser = function handleDeleteUser(_x5) {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(userId) {
       var _yield$ordering$setAc5, content, users, _selectedUsers;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -827,17 +815,14 @@ var UsersList = function UsersList(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[0, 10]]);
-    }));
-    return function handleDeleteUser(_x5) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to delete several users from API
    */
-  var handleDeleteSeveralUsers = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(code) {
+  var handleDeleteSeveralUsers = function handleDeleteSeveralUsers(_x6) {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(code) {
       var payload, requestOptions, response, content, users;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -905,11 +890,8 @@ var UsersList = function UsersList(props) {
             return _context6.stop();
         }
       }, _callee6, null, [[0, 15]]);
-    }));
-    return function handleDeleteSeveralUsers(_x6) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to change selected users
@@ -991,8 +973,8 @@ var UsersList = function UsersList(props) {
   /**
    * Method to get the drivers groups from API
    */
-  var getDriversGroups = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+  var getDriversGroups = function getDriversGroups() {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
       var requestOptions, response, content, _content$result, found, driverManagerGroups;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -1045,11 +1027,8 @@ var UsersList = function UsersList(props) {
             return _context7.stop();
         }
       }, _callee7, null, [[0, 12]]);
-    }));
-    return function getDriversGroups() {
-      return _ref7.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     var _session$user4;
     if ((session === null || session === void 0 || (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 5) {

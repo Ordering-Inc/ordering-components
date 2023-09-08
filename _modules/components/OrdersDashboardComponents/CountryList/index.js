@@ -27,6 +27,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var CountryList = function CountryList(props) {
+  var _ref, _ref2, _ref3;
   var UIComponent = props.UIComponent,
     isSearchByName = props.isSearchByName,
     countryCode = props.countryCode,
@@ -65,8 +66,8 @@ var CountryList = function CountryList(props) {
   /**
    * Method to change filter list
    */
-  var handleClickFilterButton = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var handleClickFilterButton = function handleClickFilterButton() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -80,17 +81,14 @@ var CountryList = function CountryList(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function handleClickFilterButton() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get businessList
    */
-  var getBusinessList = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var getBusinessList = function getBusinessList() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _yield$ordering$busin, _yield$ordering$busin2, error, result, _businessIds;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -145,17 +143,14 @@ var CountryList = function CountryList(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[3, 15]]);
-    }));
-    return function getBusinessList() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get the countries from API
    */
-  var getCountries = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+  var getCountries = function getCountries() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var where, conditions, searchConditions, isSpecialCharacter, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -222,11 +217,8 @@ var CountryList = function CountryList(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[0, 16]]);
-    }));
-    return function getCountries() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     getCountries();
   }, [searchValue]);

@@ -133,8 +133,9 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
     };
   }, [analytics]);
   (0, _react.useEffect)(function () {
-    var loadAnalytics = /*#__PURE__*/function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref;
+    var loadAnalytics = function loadAnalytics() {
+      return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var _yield$AnalyticsBrows, _yield$AnalyticsBrows2, response;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
@@ -153,11 +154,8 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
               return _context.stop();
           }
         }, _callee);
-      }));
-      return function loadAnalytics() {
-        return _ref.apply(this, arguments);
-      };
-    }();
+      }))).apply(this, arguments);
+    };
     loadAnalytics();
   }, [writeKey]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, children);

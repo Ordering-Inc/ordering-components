@@ -37,6 +37,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Settings List page behavior without UI component
  */
 var SettingsList = function SettingsList(props) {
+  var _ref;
   var UIComponent = props.UIComponent,
     category = props.category,
     handleUpdateCategoryList = props.handleUpdateCategoryList,
@@ -173,8 +174,8 @@ var SettingsList = function SettingsList(props) {
    * @param {Number} id config id to update a config
    * @param {Object} params key and value to change
    */
-  var saveConfig = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id, params) {
+  var saveConfig = function saveConfig(_x, _x2) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id, params) {
       var _yield$ordering$setAc, _yield$ordering$setAc2, error, result, changes, _configs, _categories;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -275,11 +276,8 @@ var SettingsList = function SettingsList(props) {
             return _context.stop();
         }
       }, _callee, null, [[2, 14]]);
-    }));
-    return function saveConfig(_x, _x2) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if ((category === null || category === void 0 ? void 0 : category.configs.length) > 0) {
       var _configs = _toConsumableArray(category === null || category === void 0 ? void 0 : category.configs);

@@ -37,6 +37,7 @@ var OrderingThemeContext = /*#__PURE__*/(0, _react.createContext)();
  */
 exports.OrderingThemeContext = OrderingThemeContext;
 var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
+  var _ref2;
   var children = _ref.children,
     settings = _ref.settings;
   var _useState = (0, _react.useState)({
@@ -53,8 +54,8 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
   var _useOptimizationLoad = (0, _OptimizationLoadContext.useOptimizationLoad)(),
     _useOptimizationLoad2 = _slicedToArray(_useOptimizationLoad, 1),
     optimizationLoad = _useOptimizationLoad2[0];
-  var getThemes = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getThemes = function getThemes() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var themes,
         requestOptions,
         _themes$error,
@@ -123,11 +124,8 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
             return _context.stop();
         }
       }, _callee, null, [[2, 20]]);
-    }));
-    return function getThemes() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var refreshTheme = function refreshTheme() {
     getThemes();
   };

@@ -34,7 +34,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PlaceSpot = function PlaceSpot(props) {
-  var _vehicleDefault$type, _vehicleDefault$model, _vehicleDefault$car_r, _vehicleDefault$color, _orderState$options2;
+  var _vehicleDefault$type, _vehicleDefault$model, _vehicleDefault$car_r, _vehicleDefault$color, _ref, _ref3, _orderState$options2;
   var UIComponent = props.UIComponent,
     cart = props.cart,
     spotNumberDefault = props.spotNumberDefault,
@@ -90,8 +90,8 @@ var PlaceSpot = function PlaceSpot(props) {
     vehicle = _useState8[0],
     setVehicle = _useState8[1];
   var orderTypesAllowed = [3, 4, 5];
-  var getPlaces = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getPlaces = function getPlaces() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var responsePlaceGroups, _yield$responsePlaceG, resultPlaceGroups, errorPlaceGroups, responsePlaces, _yield$responsePlaces, resultPlaces, errorPlaces, placeGroupDefault;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -183,13 +183,10 @@ var PlaceSpot = function PlaceSpot(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 25]]);
-    }));
-    return function getPlaces() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var handleChangeSpot = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref2) {
+    }))).apply(this, arguments);
+  };
+  var handleChangeSpot = function handleChangeSpot(_x) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref2) {
       var _ref2$isCheckout, isCheckout, bodyToSend, id, endpointToFetch, _yield$endpointToFetc, _yield$endpointToFetc2, error, result, _cart$business;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -232,11 +229,8 @@ var PlaceSpot = function PlaceSpot(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[1, 16]]);
-    }));
-    return function handleChangeSpot(_x) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     var _orderState$options;
     if (orderTypesAllowed.includes(orderState === null || orderState === void 0 || (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) && !props.isInputMode) {

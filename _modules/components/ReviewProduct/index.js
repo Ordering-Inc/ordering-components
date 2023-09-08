@@ -36,6 +36,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var ReviewProduct = function ReviewProduct(props) {
+  var _ref, _ref2;
   var UIComponent = props.UIComponent,
     order = props.order,
     isToast = props.isToast,
@@ -76,8 +77,8 @@ var ReviewProduct = function ReviewProduct(props) {
       changes: _changes
     }));
   };
-  var reviewProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId, changes) {
+  var reviewProducts = function reviewProducts(_x, _x2) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId, changes) {
       var headers, response, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -119,18 +120,15 @@ var ReviewProduct = function ReviewProduct(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function reviewProducts(_x, _x2) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Function that load and send the product review to ordering
    */
-  var handleSendProductReview = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-      var _order$business, error, result, _order$business2, _result;
+  var handleSendProductReview = function handleSendProductReview() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var _order$business, error, result, _order$business2, _ref3, _result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -143,8 +141,8 @@ var ReviewProduct = function ReviewProduct(props) {
               break;
             }
             // eslint-disable-next-line no-unused-expressions
-            order === null || order === void 0 || (_order$business2 = order.business) === null || _order$business2 === void 0 || _order$business2.forEach( /*#__PURE__*/function () {
-              var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(business, i) {
+            order === null || order === void 0 || (_order$business2 = order.business) === null || _order$business2 === void 0 || _order$business2.forEach(function (_x3, _x4) {
+              return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(business, i) {
                 var productsOfOrder, _result;
                 return _regeneratorRuntime().wrap(function _callee2$(_context2) {
                   while (1) switch (_context2.prev = _context2.next) {
@@ -166,11 +164,8 @@ var ReviewProduct = function ReviewProduct(props) {
                       return _context2.stop();
                   }
                 }, _callee2);
-              }));
-              return function (_x3, _x4) {
-                return _ref3.apply(this, arguments);
-              };
-            }());
+              }))).apply(this, arguments);
+            });
             _context3.next = 11;
             break;
           case 6:
@@ -218,11 +213,8 @@ var ReviewProduct = function ReviewProduct(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[1, 14]]);
-    }));
-    return function handleSendProductReview() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     formState: formState,
     handleChangeFormState: handleChangeFormState,

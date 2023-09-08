@@ -32,6 +32,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage forgot password behavior without UI component
  */
 var ForgotPasswordForm = function ForgotPasswordForm(props) {
+  var _ref;
   var UIComponent = props.UIComponent,
     defaultEmail = props.defaultEmail,
     handleButtonForgotPasswordClick = props.handleButtonForgotPasswordClick,
@@ -73,8 +74,8 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
   /**
    * Default fuction for forgot password workflow
    */
-  var handleForgotPasswordClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data) {
+  var handleForgotPasswordClick = function handleForgotPasswordClick(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data) {
       var values, _window, _values, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -142,11 +143,8 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
             return _context.stop();
         }
       }, _callee, null, [[7, 18]]);
-    }));
-    return function handleForgotPasswordClick(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Update form data data

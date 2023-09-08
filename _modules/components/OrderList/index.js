@@ -38,7 +38,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderList = function OrderList(props) {
-  var _paginationSettings$p;
+  var _paginationSettings$p, _ref, _ref4, _ref5, _ref7, _ref8, _ref9, _ref10, _ref11;
   var UIComponent = props.UIComponent,
     orders = props.orders,
     orderIds = props.orderIds,
@@ -148,9 +148,9 @@ var OrderList = function OrderList(props) {
   var isValidMoment = function isValidMoment(date, format) {
     return _dayjs.default.utc(date, format).format(format) === date;
   };
-  var handleReorder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(value) {
-      var orderId, _reordersArray$, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, fetchOrders, reordersArray, error, result, choosedOrder, _businessId, _businessData, _businessSlug, orderResult;
+  var handleReorder = function handleReorder(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(value) {
+      var orderId, _ref2, _reordersArray$, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, fetchOrders, reordersArray, error, result, choosedOrder, _businessId, _businessData, _businessSlug, orderResult;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -165,14 +165,15 @@ var OrderList = function OrderList(props) {
             setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
               loading: true
             }));
-            fetchOrders = /*#__PURE__*/function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
+            fetchOrders = function fetchOrders(_x2) {
+              return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
+                var _ref3;
                 var promises, data;
                 return _regeneratorRuntime().wrap(function _callee2$(_context2) {
                   while (1) switch (_context2.prev = _context2.next) {
                     case 0:
-                      promises = ids.map( /*#__PURE__*/function () {
-                        var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
+                      promises = ids.map(function (_x3) {
+                        return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
                           var res;
                           return _regeneratorRuntime().wrap(function _callee$(_context) {
                             while (1) switch (_context.prev = _context.next) {
@@ -187,11 +188,8 @@ var OrderList = function OrderList(props) {
                                 return _context.stop();
                             }
                           }, _callee);
-                        }));
-                        return function (_x3) {
-                          return _ref3.apply(this, arguments);
-                        };
-                      }());
+                        }))).apply(this, arguments);
+                      });
                       _context2.next = 3;
                       return Promise.all(promises);
                     case 3:
@@ -202,11 +200,8 @@ var OrderList = function OrderList(props) {
                       return _context2.stop();
                   }
                 }, _callee2);
-              }));
-              return function fetchOrders(_x2) {
-                return _ref2.apply(this, arguments);
-              };
-            }();
+              }))).apply(this, arguments);
+            };
             _context3.next = 8;
             return fetchOrders(orderId);
           case 8:
@@ -264,13 +259,10 @@ var OrderList = function OrderList(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[3, 24]]);
-    }));
-    return function handleReorder(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var getOrders = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(page) {
+    }))).apply(this, arguments);
+  };
+  var getOrders = function getOrders(_x4) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(page) {
       var otherStatus,
         pageSize,
         options,
@@ -352,13 +344,10 @@ var OrderList = function OrderList(props) {
             return _context4.stop();
         }
       }, _callee4);
-    }));
-    return function getOrders(_x4) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var loadOrders = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(isNextPage, searchByOtherStatus) {
+    }))).apply(this, arguments);
+  };
+  var loadOrders = function loadOrders(_x5, _x6) {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(isNextPage, searchByOtherStatus) {
       var keepOrders,
         getFirstOrder,
         pageSize,
@@ -478,11 +467,8 @@ var OrderList = function OrderList(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[8, 24]]);
-    }));
-    return function loadOrders(_x5, _x6) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var handleUpdateOrderList = function handleUpdateOrderList(orderId, changes) {
     var updatedOrders = orderList === null || orderList === void 0 ? void 0 : orderList.orders.map(function (order) {
       if ((order === null || order === void 0 ? void 0 : order.id) === orderId) {
@@ -494,8 +480,8 @@ var OrderList = function OrderList(props) {
       orders: updatedOrders
     }));
   };
-  var loadMessages = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderId) {
+  var loadMessages = function loadMessages(_x7) {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderId) {
       var url, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -549,13 +535,10 @@ var OrderList = function OrderList(props) {
             return _context6.stop();
         }
       }, _callee6, null, [[0, 14]]);
-    }));
-    return function loadMessages(_x7) {
-      return _ref7.apply(this, arguments);
-    };
-  }();
-  var getBusinesses = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(businessIds) {
+    }))).apply(this, arguments);
+  };
+  var getBusinesses = function getBusinesses(_x8) {
+    return (_ref8 = _ref8 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(businessIds) {
       var _orderState$options, _orderState$options2, _orderState$options3, _orderState$options4, parameters, _orderState$options5, moment, where, conditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -617,11 +600,8 @@ var OrderList = function OrderList(props) {
             return _context7.stop();
         }
       }, _callee7, null, [[0, 19]]);
-    }));
-    return function getBusinesses(_x8) {
-      return _ref8.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   // Function to update professional list
   var handleUpdateProfessionals = function handleUpdateProfessionals(id, changes) {
@@ -722,8 +702,8 @@ var OrderList = function OrderList(props) {
       socket.leave(ordersRoom);
     };
   }, [socket, session, userCustomerId]);
-  var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(searchByOtherStatus) {
+  var loadMoreOrders = function loadMoreOrders(_x9) {
+    return (_ref9 = _ref9 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(searchByOtherStatus) {
       var response;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
@@ -767,13 +747,10 @@ var OrderList = function OrderList(props) {
             return _context8.stop();
         }
       }, _callee8, null, [[1, 9]]);
-    }));
-    return function loadMoreOrders(_x9) {
-      return _ref9.apply(this, arguments);
-    };
-  }();
-  var goToPage = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(page) {
+    }))).apply(this, arguments);
+  };
+  var goToPage = function goToPage(_x10) {
+    return (_ref10 = _ref10 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(page) {
       var response;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) switch (_context9.prev = _context9.next) {
@@ -817,11 +794,8 @@ var OrderList = function OrderList(props) {
             return _context9.stop();
         }
       }, _callee9, null, [[1, 9]]);
-    }));
-    return function goToPage(_x10) {
-      return _ref10.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var sortOrders = function sortOrders(orders) {
     var sortBy = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'desc';
     var ordersSorted = orders.sort(function (a, b) {
@@ -853,8 +827,8 @@ var OrderList = function OrderList(props) {
       result: updatedBusiness
     }));
   };
-  var getPage = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(page, pageSize) {
+  var getPage = function getPage(_x11, _x12) {
+    return (_ref11 = _ref11 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(page, pageSize) {
       var response;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {
@@ -898,11 +872,8 @@ var OrderList = function OrderList(props) {
             return _context10.stop();
         }
       }, _callee10, null, [[1, 9]]);
-    }));
-    return function getPage(_x11, _x12) {
-      return _ref11.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (profileMessage) return;
     if (!orderList.loading && orderBy !== 'last_direct_message_at') {

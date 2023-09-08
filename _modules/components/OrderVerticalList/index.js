@@ -35,7 +35,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderVerticalList = function OrderVerticalList(props) {
-  var _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _paginationSettings$p;
+  var _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _paginationSettings$p, _ref2, _ref3, _ref5, _ref6;
   var UIComponent = props.UIComponent,
     orderBy = props.orderBy,
     businessId = props.businessId,
@@ -102,8 +102,8 @@ var OrderVerticalList = function OrderVerticalList(props) {
     setOrdersGroup = _useState4[1];
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
-  var getOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
+  var getOrders = function getOrders(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
       var page, _ref$pageSize, pageSize, orderStatus, options, _ordersGroup, source, functionFetch;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -151,13 +151,10 @@ var OrderVerticalList = function OrderVerticalList(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function getOrders(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var loadOrders = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    }))).apply(this, arguments);
+  };
+  var loadOrders = function loadOrders() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _ordersGroup$paginati;
       var _ref4,
         newFetch,
@@ -247,13 +244,10 @@ var OrderVerticalList = function OrderVerticalList(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[5, 19]]);
-    }));
-    return function loadOrders() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    }))).apply(this, arguments);
+  };
+  var loadMoreOrders = function loadMoreOrders() {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var _yield$getOrders2, _yield$getOrders2$con, error, result, pagination, tabOptions, _err$message2;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -310,11 +304,8 @@ var OrderVerticalList = function OrderVerticalList(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[0, 14]]);
-    }));
-    return function loadMoreOrders() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var sortOrders = function sortOrders(orders) {
     var sortBy = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'desc';
     var ordersSorted = orders.sort(function (a, b) {
@@ -357,8 +348,8 @@ var OrderVerticalList = function OrderVerticalList(props) {
       });
     }
   };
-  var handleReorder = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(orderId) {
+  var handleReorder = function handleReorder(_x2) {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(orderId) {
       var _yield$reorder, error, result;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -394,11 +385,8 @@ var OrderVerticalList = function OrderVerticalList(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[1, 14]]);
-    }));
-    return function handleReorder(_x2) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     loadOrders({
       newFetch: ordersGroup.pagination.total === null

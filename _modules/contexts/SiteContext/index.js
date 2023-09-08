@@ -38,6 +38,7 @@ var SiteContext = /*#__PURE__*/(0, _react.createContext)();
  */
 exports.SiteContext = SiteContext;
 var SiteProvider = function SiteProvider(_ref) {
+  var _ref2;
   var appId = _ref.appId,
     children = _ref.children;
   var _useState = (0, _react.useState)({
@@ -56,8 +57,8 @@ var SiteProvider = function SiteProvider(_ref) {
   var _useOptimizationLoad = (0, _OptimizationLoadContext.useOptimizationLoad)(),
     _useOptimizationLoad2 = _slicedToArray(_useOptimizationLoad, 1),
     optimizationLoad = _useOptimizationLoad2[0];
-  var refreshSite = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var refreshSite = function refreshSite() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var sites,
         _sites$error,
         _sites$result,
@@ -116,11 +117,8 @@ var SiteProvider = function SiteProvider(_ref) {
             return _context.stop();
         }
       }, _callee, null, [[1, 18]]);
-    }));
-    return function refreshSite() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var functions = {
     refreshSite: refreshSite
   };

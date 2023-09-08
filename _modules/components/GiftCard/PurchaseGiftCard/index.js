@@ -34,6 +34,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage purchase gift card behavior without UI component
  */
 var PurchaseGiftCard = function PurchaseGiftCard(props) {
+  var _ref, _ref2;
   var UIComponent = props.UIComponent,
     handleCustomGoToCheckout = props.handleCustomGoToCheckout;
   var _useSession = (0, _SessionContext.useSession)(),
@@ -71,8 +72,8 @@ var PurchaseGiftCard = function PurchaseGiftCard(props) {
   /**
    * Method to get the gift products from API
    */
-  var getPlatformProductsList = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getPlatformProductsList = function getPlatformProductsList() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var where, conditions, requestOptions, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -131,13 +132,10 @@ var PurchaseGiftCard = function PurchaseGiftCard(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 18]]);
-    }));
-    return function getPlatformProductsList() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var handleAccept = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    }))).apply(this, arguments);
+  };
+  var handleAccept = function handleAccept() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _giftCart$products$;
       var giftCard, _yield$addProduct, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -190,11 +188,8 @@ var PurchaseGiftCard = function PurchaseGiftCard(props) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function handleAccept() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     getPlatformProductsList();
   }, []);

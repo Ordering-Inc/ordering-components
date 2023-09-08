@@ -36,7 +36,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage signup behavior without UI component
  */
 var SignupForm = function SignupForm(props) {
-  var _configs$email_otp_si, _configs$phone_otp_si, _configs$full_details;
+  var _configs$email_otp_si, _configs$phone_otp_si, _configs$full_details, _ref, _ref4, _ref5, _ref6, _ref7;
   var UIComponent = props.UIComponent,
     useChekoutFileds = props.useChekoutFileds,
     handleButtonSignupClick = props.handleButtonSignupClick,
@@ -137,8 +137,8 @@ var SignupForm = function SignupForm(props) {
   /**
    * Default fuction for signup workflow
    */
-  var handleSignupClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
+  var handleSignupClick = function handleSignupClick(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
       var data, newData, source, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -238,11 +238,8 @@ var SignupForm = function SignupForm(props) {
             return _context.stop();
         }
       }, _callee, null, [[17, 28]]);
-    }));
-    return function handleSignupClick(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Update credential data
@@ -290,8 +287,8 @@ var SignupForm = function SignupForm(props) {
   * function to send verify code with twilio
   * @param {Object} values object with cellphone and country code values
   */
-  var sendVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
+  var sendVerifyPhoneCode = function sendVerifyPhoneCode(_x2) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
       var response, res;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -339,13 +336,10 @@ var SignupForm = function SignupForm(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 11]]);
-    }));
-    return function sendVerifyPhoneCode(_x2) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var generateOtpCode = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
+    }))).apply(this, arguments);
+  };
+  var generateOtpCode = function generateOtpCode(_x3) {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
       var body, email, cellphone, countryPhoneCode, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -445,11 +439,8 @@ var SignupForm = function SignupForm(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[8, 26]]);
-    }));
-    return function generateOtpCode(_x3) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var handleSetCheckPhoneCodeState = function handleSetCheckPhoneCodeState(data) {
     var values = data || {
       loading: false,
@@ -464,8 +455,8 @@ var SignupForm = function SignupForm(props) {
    * function to verify code with endpoint
    * @param {Object} values object with cellphone and country code values
    */
-  var checkVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
+  var checkVerifyPhoneCode = function checkVerifyPhoneCode(_x4) {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
       var body, _res$result, response, res, _res$result2;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -524,13 +515,10 @@ var SignupForm = function SignupForm(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[1, 14]]);
-    }));
-    return function checkVerifyPhoneCode(_x4) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-  var checkVerifyByOtpCode = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    }))).apply(this, arguments);
+  };
+  var checkVerifyByOtpCode = function checkVerifyByOtpCode() {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var _signupData$country_p;
       var _credentials, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
@@ -616,11 +604,8 @@ var SignupForm = function SignupForm(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[8, 19]]);
-    }));
-    return function checkVerifyByOtpCode() {
-      return _ref7.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * function to change promotions enabled
    */

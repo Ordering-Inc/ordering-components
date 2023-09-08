@@ -29,7 +29,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var AppleLogin = function AppleLogin(props) {
-  var _configs$apple_login_;
+  var _configs$apple_login_, _ref, _ref2;
   var UIComponent = props.UIComponent,
     onSuccess = props.onSuccess,
     onFailure = props.onFailure,
@@ -86,8 +86,8 @@ var AppleLogin = function AppleLogin(props) {
     js.defer = true;
     window.document.body.appendChild(js);
   };
-  var handleAppleLoginClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data) {
+  var handleAppleLoginClick = function handleAppleLoginClick(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data) {
       var response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -151,11 +151,8 @@ var AppleLogin = function AppleLogin(props) {
             return _context.stop();
         }
       }, _callee, null, [[3, 17]]);
-    }));
-    return function handleAppleLoginClick(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * start Login Apple
@@ -168,8 +165,8 @@ var AppleLogin = function AppleLogin(props) {
   /**
    * handilng the response of login apple when login
    */
-  var handleLoginApple = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var handleLoginApple = function handleLoginApple() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var data;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -191,11 +188,8 @@ var AppleLogin = function AppleLogin(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 7]]);
-    }));
-    return function handleLoginApple() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     initLoginApple: initLoginApple
   })));

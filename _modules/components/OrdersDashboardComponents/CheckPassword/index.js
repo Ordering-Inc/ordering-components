@@ -28,6 +28,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var CheckPassword = function CheckPassword(props) {
+  var _ref, _ref2;
   var UIComponent = props.UIComponent,
     defaultConfirmTab = props.defaultConfirmTab;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -100,8 +101,8 @@ var CheckPassword = function CheckPassword(props) {
   /**
    * Method to confirm password from API
    */
-  var getCheckPassword = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getCheckPassword = function getCheckPassword() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -154,13 +155,10 @@ var CheckPassword = function CheckPassword(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 12]]);
-    }));
-    return function getCheckPassword() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var generateOtpCode = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
+    }))).apply(this, arguments);
+  };
+  var generateOtpCode = function generateOtpCode(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
       var body, email, cellphone, countryPhoneCode, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -236,11 +234,8 @@ var CheckPassword = function CheckPassword(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[4, 20]]);
-    }));
-    return function generateOtpCode(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     checkPasswordStatus: checkPasswordStatus,
     getCheckPassword: getCheckPassword,

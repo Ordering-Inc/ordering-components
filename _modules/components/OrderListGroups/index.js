@@ -36,7 +36,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderListGroups = function OrderListGroups(props) {
-  var _configs$logistic_mod, _configs$combine_pend, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _orderGroupStatusCust5, _paginationSettings$p, _ordersGroup$currentT15;
+  var _configs$logistic_mod, _configs$combine_pend, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _orderGroupStatusCust5, _paginationSettings$p, _ref2, _ref3, _ref4, _ref6, _ref7, _ref8, _ref9, _ref10, _ref11, _ref14, _ref16, _ordersGroup$currentT15;
   var UIComponent = props.UIComponent,
     orderBy = props.orderBy,
     isIos = props.isIos,
@@ -162,8 +162,8 @@ var OrderListGroups = function OrderListGroups(props) {
     setBusinessIDs = _useState18[1];
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
-  var getOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
+  var getOrders = function getOrders(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
       var _filtered$customer, _filtered$customer2, _filtered$date, _filtered$date3;
       var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, _ordersGroup$currentT, _ordersGroup$currentT2, _paymethodResult, paymethodResult, _filtered$driver_grou, _filtered$customer3, _filtered$customer6, customerOptions, _filtered$customer4, _filtered$customer5, _filtered$customer7, _filtered$customer8, _filtered$date2, _filtered$date4, source, functionFetch;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -334,13 +334,10 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function getOrders(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var getControls = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    }))).apply(this, arguments);
+  };
+  var getControls = function getControls() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _result$paymethods, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, obj, _controlsState$error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -379,13 +376,10 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 13]]);
-    }));
-    return function getControls() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var loadOrders = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    }))).apply(this, arguments);
+  };
+  var loadOrders = function loadOrders() {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var _ref5,
         newFetch,
         newFetchCurrent,
@@ -473,13 +467,10 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[5, 18]]);
-    }));
-    return function loadOrders() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    }))).apply(this, arguments);
+  };
+  var loadMoreOrders = function loadMoreOrders() {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var _ordersGroup$currentT7, _ordersGroup$currentT8, _ordersGroup$currentT9, _yield$getOrders2, _yield$getOrders2$con, error, result, pagination, _ordersCleaned, _err$message2;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -530,13 +521,10 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[1, 13]]);
-    }));
-    return function loadMoreOrders() {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-  var loadMessages = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(orderId) {
+    }))).apply(this, arguments);
+  };
+  var loadMessages = function loadMessages(_x2) {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(orderId) {
       var url, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -590,13 +578,10 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[0, 14]]);
-    }));
-    return function loadMessages(_x2) {
-      return _ref7.apply(this, arguments);
-    };
-  }();
-  var deleteOrders = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderIds) {
+    }))).apply(this, arguments);
+  };
+  var deleteOrders = function deleteOrders(_x3) {
+    return (_ref8 = _ref8 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderIds) {
       var _ordersGroup$currentT10, _ordersGroup$currentT11, errorState, _yield$ordering$setAc3, error, _iterator, _step, id, _yield$ordering$setAc4, multiError, isError, idsDeleted, _err$message3;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -693,13 +678,10 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context6.stop();
         }
       }, _callee6, null, [[0, 39], [13, 26, 29, 32]]);
-    }));
-    return function deleteOrders(_x3) {
-      return _ref8.apply(this, arguments);
-    };
-  }();
-  var loadLogisticOrders = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(isAlreadyFetched) {
+    }))).apply(this, arguments);
+  };
+  var loadLogisticOrders = function loadLogisticOrders(_x4) {
+    return (_ref9 = _ref9 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(isAlreadyFetched) {
       var _session$user, url, response, _yield$response$json2, result, error;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -760,11 +742,8 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context7.stop();
         }
       }, _callee7, null, [[0, 17]]);
-    }));
-    return function loadLogisticOrders(_x4) {
-      return _ref9.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var sortOrders = function sortOrders(orders) {
     var sortBy = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'desc';
     var ordersSorted = orders === null || orders === void 0 ? void 0 : orders.sort(function (a, b) {
@@ -903,8 +882,8 @@ var OrderListGroups = function OrderListGroups(props) {
       }))));
     }
   };
-  var handleClickLogisticOrder = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(status, orderId) {
+  var handleClickLogisticOrder = function handleClickLogisticOrder(_x5, _x6) {
+    return (_ref10 = _ref10 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(status, orderId) {
       var _session$user2, _session$user3, response, _yield$response$json3, result, error, _logisticOrders$order, _logisticOrders$order2, order, newOrders, _order$order, _order$order$id, _order$order2, _order$order$id2, _order$order3;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
@@ -966,14 +945,12 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context8.stop();
         }
       }, _callee8, null, [[0, 18]]);
-    }));
-    return function handleClickLogisticOrder(_x5, _x6) {
-      return _ref10.apply(this, arguments);
-    };
-  }();
-  var handleChangeOrderStatus = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(status, orderIds) {
+    }))).apply(this, arguments);
+  };
+  var handleChangeOrderStatus = function handleChangeOrderStatus(_x7, _x8) {
+    return (_ref11 = _ref11 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(status, orderIds) {
       var body,
+        _ref12,
         bodyToSend,
         setOrderStatus,
         result,
@@ -988,8 +965,8 @@ var OrderListGroups = function OrderListGroups(props) {
             bodyToSend = Object.keys(body || {}).length > 0 ? body : {
               status: status
             };
-            setOrderStatus = /*#__PURE__*/function () {
-              var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(id) {
+            setOrderStatus = function setOrderStatus(_x9) {
+              return (_ref12 = _ref12 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(id) {
                 var _yield$ordering$setAc5, _yield$ordering$setAc6, _result, error;
                 return _regeneratorRuntime().wrap(function _callee9$(_context9) {
                   while (1) switch (_context9.prev = _context9.next) {
@@ -1014,11 +991,8 @@ var OrderListGroups = function OrderListGroups(props) {
                       return _context9.stop();
                   }
                 }, _callee9, null, [[0, 10]]);
-              }));
-              return function setOrderStatus(_x9) {
-                return _ref12.apply(this, arguments);
-              };
-            }();
+              }))).apply(this, arguments);
+            };
             _context10.next = 7;
             return Promise.all(orderIds === null || orderIds === void 0 ? void 0 : orderIds.map(function (id) {
               return setOrderStatus(id);
@@ -1035,21 +1009,18 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context10.stop();
         }
       }, _callee10, null, [[1, 11]]);
-    }));
-    return function handleChangeOrderStatus(_x7, _x8) {
-      return _ref11.apply(this, arguments);
-    };
-  }();
-  var handleSendCustomerReview = /*#__PURE__*/function () {
-    var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(_ref13) {
-      var customerId, orderIds, body, onClose, setCustomerReview, result, orders, _err$message5;
+    }))).apply(this, arguments);
+  };
+  var handleSendCustomerReview = function handleSendCustomerReview(_x10) {
+    return (_ref14 = _ref14 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(_ref13) {
+      var customerId, orderIds, body, onClose, _ref15, setCustomerReview, result, orders, _err$message5;
       return _regeneratorRuntime().wrap(function _callee12$(_context12) {
         while (1) switch (_context12.prev = _context12.next) {
           case 0:
             customerId = _ref13.customerId, orderIds = _ref13.orderIds, body = _ref13.body, onClose = _ref13.onClose;
             _context12.prev = 1;
-            setCustomerReview = /*#__PURE__*/function () {
-              var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(body) {
+            setCustomerReview = function setCustomerReview(_x11) {
+              return (_ref15 = _ref15 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(body) {
                 var response, _yield$response$json4, _result2, error;
                 return _regeneratorRuntime().wrap(function _callee11$(_context11) {
                   while (1) switch (_context11.prev = _context11.next) {
@@ -1084,11 +1055,8 @@ var OrderListGroups = function OrderListGroups(props) {
                       return _context11.stop();
                   }
                 }, _callee11, null, [[0, 12]]);
-              }));
-              return function setCustomerReview(_x11) {
-                return _ref15.apply(this, arguments);
-              };
-            }();
+              }))).apply(this, arguments);
+            };
             _context12.next = 5;
             return Promise.all(orderIds === null || orderIds === void 0 ? void 0 : orderIds.map(function (id) {
               return setCustomerReview(_objectSpread(_objectSpread({}, body), {}, {
@@ -1130,13 +1098,10 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context12.stop();
         }
       }, _callee12, null, [[1, 11]]);
-    }));
-    return function handleSendCustomerReview(_x10) {
-      return _ref14.apply(this, arguments);
-    };
-  }();
-  var getBusinessesIDs = /*#__PURE__*/function () {
-    var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
+    }))).apply(this, arguments);
+  };
+  var getBusinessesIDs = function getBusinessesIDs() {
+    return (_ref16 = _ref16 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
       var propsToFetch, _yield$ordering$busin, _yield$ordering$busin2, error, result, _businessIDs, _err$message6;
       return _regeneratorRuntime().wrap(function _callee13$(_context13) {
         while (1) switch (_context13.prev = _context13.next) {
@@ -1173,11 +1138,8 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context13.stop();
         }
       }, _callee13, null, [[1, 11]]);
-    }));
-    return function getBusinessesIDs() {
-      return _ref16.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     var _session$user4;
     if ((session === null || session === void 0 || (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) !== 2) return;

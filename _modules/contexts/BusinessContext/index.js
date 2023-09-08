@@ -36,6 +36,7 @@ var BusinessContext = /*#__PURE__*/(0, _react.createContext)();
  */
 exports.BusinessContext = BusinessContext;
 var BusinessProvider = function BusinessProvider(_ref) {
+  var _ref2, _ref3;
   var children = _ref.children,
     businessId = _ref.businessId;
   var _useState = (0, _react.useState)({
@@ -50,8 +51,8 @@ var BusinessProvider = function BusinessProvider(_ref) {
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
   var businessParams = ['header', 'logo', 'name', 'slug', 'address', 'location', 'distance', 'address_notes', 'zipcode', 'internal_number'];
-  var getBusiness = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
+  var getBusiness = function getBusiness(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
       var _yield$ordering$busin, _yield$ordering$busin2, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -86,13 +87,10 @@ var BusinessProvider = function BusinessProvider(_ref) {
             return _context.stop();
         }
       }, _callee, null, [[0, 11]]);
-    }));
-    return function getBusiness(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var setBusiness = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(business) {
+    }))).apply(this, arguments);
+  };
+  var setBusiness = function setBusiness(_x2) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(business) {
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -104,11 +102,8 @@ var BusinessProvider = function BusinessProvider(_ref) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function setBusiness(_x2) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var copyState = JSON.parse(JSON.stringify(state));
   var functions = {
     setBusiness: setBusiness

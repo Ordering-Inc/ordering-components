@@ -36,6 +36,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrdersManage = function OrdersManage(props) {
+  var _ref, _ref2, _ref3, _ref4, _ref5;
   var UIComponent = props.UIComponent,
     statusGroup = props.statusGroup,
     driversPropsToFetch = props.driversPropsToFetch,
@@ -367,8 +368,8 @@ var OrdersManage = function OrdersManage(props) {
   /**
    * Method to change multi orders status from API
    */
-  var handleChangeMultiOrderStatus = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId) {
+  var handleChangeMultiOrderStatus = function handleChangeMultiOrderStatus(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId) {
       var requestOptions, response, _yield$response$json, result, error, _ordersIds;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -424,17 +425,14 @@ var OrdersManage = function OrdersManage(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 15]]);
-    }));
-    return function handleChangeMultiOrderStatus(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Delete orders for orders selected
    */
-  var handleDeleteMultiOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(code) {
+  var handleDeleteMultiOrders = function handleDeleteMultiOrders(_x2) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(code) {
       var payload, requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -490,17 +488,14 @@ var OrdersManage = function OrdersManage(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 15]]);
-    }));
-    return function handleDeleteMultiOrders(_x2) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get drivers from API
    */
-  var getDrivers = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+  var getDrivers = function getDrivers() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var source, _yield$ordering$setAc, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -536,13 +531,10 @@ var OrdersManage = function OrdersManage(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[0, 10]]);
-    }));
-    return function getDrivers() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var getControlsOrders = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    }))).apply(this, arguments);
+  };
+  var getControlsOrders = function getControlsOrders() {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -603,11 +595,8 @@ var OrdersManage = function OrdersManage(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[0, 12]]);
-    }));
-    return function getControlsOrders() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Listening driver change
@@ -659,8 +648,8 @@ var OrdersManage = function OrdersManage(props) {
       socket.off('tracking_driver', handleTrackingDriver);
     };
   }, [socket, loading, driversList.drivers]);
-  var getOrderNumbersByStatus = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+  var getOrderNumbersByStatus = function getOrderNumbersByStatus() {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var where, conditions, _filterValues$metafie, filterConditons, metafieldConditions, additionalConditions, searchConditions, requestOptions, response, content, _orderStatusNumbers;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -973,11 +962,8 @@ var OrdersManage = function OrdersManage(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[14, 26]]);
-    }));
-    return function getOrderNumbersByStatus() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var handleNewOrder = function handleNewOrder(order) {
     if (customerId && (order === null || order === void 0 ? void 0 : order.customer_id) !== customerId) return;
     if (!numberOfOrdersByStatus.result) return;
@@ -1055,9 +1041,10 @@ var OrdersManage = function OrdersManage(props) {
     getOrderNumbersByStatus();
   }, [filterValues, searchValue, driverId, customerId, businessId, timeStatus]);
   (0, _react.useEffect)(function () {
+    var _ref8;
     if (!user.id || configState !== null && configState !== void 0 && configState.loading) return;
-    var getUser = /*#__PURE__*/function () {
-      var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+    var getUser = function getUser() {
+      return (_ref8 = _ref8 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
         var _result$settings, _configState$configs, _configState$configs2, response, _response$content, error, result, _result$settings2, _configState$configs3, _configState$configs4;
         return _regeneratorRuntime().wrap(function _callee6$(_context6) {
           while (1) switch (_context6.prev = _context6.next) {
@@ -1101,11 +1088,8 @@ var OrdersManage = function OrdersManage(props) {
               return _context6.stop();
           }
         }, _callee6, null, [[0, 11]]);
-      }));
-      return function getUser() {
-        return _ref8.apply(this, arguments);
-      };
-    }();
+      }))).apply(this, arguments);
+    };
     getUser();
   }, [user, configState]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

@@ -35,6 +35,7 @@ var OptimizationLoadContext = /*#__PURE__*/(0, _react.createContext)();
  */
 exports.OptimizationLoadContext = OptimizationLoadContext;
 var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
+  var _ref2;
   var settings = _ref.settings,
     children = _ref.children,
     strategy = _ref.strategy;
@@ -49,8 +50,8 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
-  var getData = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getData = function getData() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _localOptions$address;
       var requestOptions, countryCodeFromLocalStorage, localOptions, countryCode, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -112,11 +113,8 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
             return _context.stop();
         }
       }, _callee, null, [[11, 23]]);
-    }));
-    return function getData() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var handleUpdateOptimizationState = function handleUpdateOptimizationState(key, data) {
     var _state$result;
     var keysAllowed = ['configs', 'features', 'site', 'theme', 'validation_fields'];

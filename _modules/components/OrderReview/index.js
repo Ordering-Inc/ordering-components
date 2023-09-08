@@ -31,6 +31,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderReview = function OrderReview(props) {
+  var _ref, _ref2;
   var UIComponent = props.UIComponent,
     order = props.order,
     hashKey = props.hashKey,
@@ -71,8 +72,8 @@ var OrderReview = function OrderReview(props) {
     _useState4 = _slicedToArray(_useState3, 2),
     formState = _useState4[0],
     setFormState = _useState4[1];
-  var reviewOrder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(body) {
+  var reviewOrder = function reviewOrder(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(body) {
       var headers, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -112,18 +113,15 @@ var OrderReview = function OrderReview(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function reviewOrder(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * Function that load and send the review order to ordering
    */
-  var handleSendReview = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+  var handleSendReview = function handleSendReview() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var _session$user;
-      var staticBody, _order$business, _order$business2, body, _yield$reviewOrder2, response, result, error;
+      var staticBody, _order$business, _order$business2, _ref3, body, _yield$reviewOrder2, response, result, error;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -147,8 +145,8 @@ var OrderReview = function OrderReview(props) {
               break;
             }
             // eslint-disable-next-line no-unused-expressions
-            order === null || order === void 0 || (_order$business2 = order.business) === null || _order$business2 === void 0 || _order$business2.forEach( /*#__PURE__*/function () {
-              var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_business, i) {
+            order === null || order === void 0 || (_order$business2 = order.business) === null || _order$business2 === void 0 || _order$business2.forEach(function (_x2, _x3) {
+              return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_business, i) {
                 var _order$business3;
                 var body, _yield$reviewOrder, result, error;
                 return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -180,11 +178,8 @@ var OrderReview = function OrderReview(props) {
                       return _context2.stop();
                   }
                 }, _callee2);
-              }));
-              return function (_x2, _x3) {
-                return _ref3.apply(this, arguments);
-              };
-            }());
+              }))).apply(this, arguments);
+            });
             _context3.next = 19;
             break;
           case 8:
@@ -227,11 +222,8 @@ var OrderReview = function OrderReview(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[3, 21]]);
-    }));
-    return function handleSendReview() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * Rating the product
    * @param {EventTarget} e Related HTML event

@@ -39,6 +39,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage user form details behavior without UI component
  */
 var UserFormDetails = function UserFormDetails(props) {
+  var _ref, _ref2;
   var UIComponent = props.UIComponent,
     useSessionUser = props.useSessionUser,
     refreshSessionUser = props.refreshSessionUser,
@@ -144,8 +145,8 @@ var UserFormDetails = function UserFormDetails(props) {
   /**
    * Default fuction for user profile workflow
    */
-  var handleUpdateClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(changes, isImage, image) {
+  var handleUpdateClick = function handleUpdateClick(_x, _x2, _x3) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(changes, isImage, image) {
       var response, content, _session$user, requestOptions, _response, _formState$changes, photo, _changes, _session$user2, _requestOptions, _response2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -277,13 +278,10 @@ var UserFormDetails = function UserFormDetails(props) {
             return _context.stop();
         }
       }, _callee, null, [[2, 43]]);
-    }));
-    return function handleUpdateClick(_x, _x2, _x3) {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var handleAddClick = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    }))).apply(this, arguments);
+  };
+  var handleAddClick = function handleAddClick() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var changes, response;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -335,11 +333,8 @@ var UserFormDetails = function UserFormDetails(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 11]]);
-    }));
-    return function handleAddClick() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Update credential data

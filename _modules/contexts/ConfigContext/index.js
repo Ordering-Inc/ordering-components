@@ -44,6 +44,7 @@ var ConfigContext = /*#__PURE__*/(0, _react.createContext)();
  */
 exports.ConfigContext = ConfigContext;
 var ConfigProvider = function ConfigProvider(_ref) {
+  var _ref2;
   var children = _ref.children,
     strategy = _ref.strategy;
   var _useState = (0, _react.useState)({
@@ -151,8 +152,8 @@ var ConfigProvider = function ConfigProvider(_ref) {
       value: null
     }
   };
-  var refreshConfigs = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newCountryCode) {
+  var refreshConfigs = function refreshConfigs(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newCountryCode) {
       var configs,
         _configs$error,
         _configs$result,
@@ -274,11 +275,8 @@ var ConfigProvider = function ConfigProvider(_ref) {
             return _context.stop();
         }
       }, _callee, null, [[1, 42], [24, 34]]);
-    }));
-    return function refreshConfigs(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var functions = {
     refreshConfigs: refreshConfigs
   };

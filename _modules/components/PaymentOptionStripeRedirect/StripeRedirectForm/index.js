@@ -16,6 +16,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  * Component to manage stripe redirect form behavior without UI component
  */
 var StripeRedirectForm = function StripeRedirectForm(props) {
+  var _ref2;
   var UIComponent = props.UIComponent,
     handleStripeRedirect = props.handleStripeRedirect;
 
@@ -23,8 +24,8 @@ var StripeRedirectForm = function StripeRedirectForm(props) {
    * Method to handle all workflow about stripe redirect page
    * @param {Object} param0 object with name, email and paydata from stripe form
    */
-  var handleSubmitPaymentMethod = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
+  var handleSubmitPaymentMethod = function handleSubmitPaymentMethod(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
       var type, name, email;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -42,11 +43,8 @@ var StripeRedirectForm = function StripeRedirectForm(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function handleSubmitPaymentMethod(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     handleSubmitPaymentMethod: handleSubmitPaymentMethod
   })));

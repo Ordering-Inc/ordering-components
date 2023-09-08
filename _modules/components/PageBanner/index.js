@@ -37,7 +37,7 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 var PageBanner = function PageBanner(props) {
-  var _configs$unaddressed_, _orderState$options, _orderState$options8, _orderState$options9, _orderState$options10;
+  var _configs$unaddressed_, _orderState$options, _ref, _orderState$options8, _orderState$options9, _orderState$options10;
   var UIComponent = props.UIComponent,
     position = props.position,
     businessId = props.businessId;
@@ -70,8 +70,8 @@ var PageBanner = function PageBanner(props) {
   /**
    * Method to get the page banner from API
    */
-  var handleGetPageBanner = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var handleGetPageBanner = function handleGetPageBanner() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _orderState$options5, _orderState$options6, requestOptions, fetchEndpoint, _configs$location_def, _configs$location_def2, _orderState$options2, _orderState$options3, _orderState$options4, defaultLatitude, defaultLongitude, isInvalidDefaultLocation, defaultLocation, location, type, _orderState$options7, moment, response, _yield$response$json, error, result, totalItems;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -143,11 +143,8 @@ var PageBanner = function PageBanner(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 19]]);
-    }));
-    return function handleGetPageBanner() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (!position || orderState !== null && orderState !== void 0 && orderState.loading) return;
     handleGetPageBanner();

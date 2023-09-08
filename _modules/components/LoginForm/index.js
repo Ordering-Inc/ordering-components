@@ -36,7 +36,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage login behavior without UI component
  */
 var LoginForm = function LoginForm(props) {
-  var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$email_passwo, _configs$spoonity_ena, _configs$device_code_;
+  var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$email_passwo, _configs$spoonity_ena, _configs$device_code_, _ref, _ref2, _ref3, _ref4, _ref5;
   var UIComponent = props.UIComponent,
     handleButtonLoginClick = props.handleButtonLoginClick,
     handleSuccessLogin = props.handleSuccessLogin,
@@ -137,8 +137,8 @@ var LoginForm = function LoginForm(props) {
    * Default fuction for login workflow
    * @param {object} credentials Login credentials email/cellphone and password
    */
-  var handleLoginClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
+  var handleLoginClick = function handleLoginClick(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
       var _credentials4, _window, _credentials, _credentials2, _credentials3, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, level, session, accessToken, _yield$ordering$setAc, logoutResp, _result$session, _result$session2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -306,11 +306,8 @@ var LoginForm = function LoginForm(props) {
             return _context.stop();
         }
       }, _callee, null, [[3, 52], [30, 39]]);
-    }));
-    return function handleLoginClick(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     var _configs$security_rec;
     setIsReCaptchaEnable(props.isRecaptchaEnable && configs && Object.keys(configs).length > 0 && (configs === null || configs === void 0 || (_configs$security_rec = configs.security_recaptcha_auth) === null || _configs$security_rec === void 0 ? void 0 : _configs$security_rec.value) === '1');
@@ -338,8 +335,8 @@ var LoginForm = function LoginForm(props) {
    * function to send verify code with twilio
    * @param {Object} values object with cellphone and country code values
    */
-  var sendVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
+  var sendVerifyPhoneCode = function sendVerifyPhoneCode(_x2) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
       var response, res;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -392,11 +389,8 @@ var LoginForm = function LoginForm(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 12]]);
-    }));
-    return function sendVerifyPhoneCode(_x2) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var handleSetCheckPhoneCodeState = function handleSetCheckPhoneCodeState(data) {
     var values = data || {
       loading: false,
@@ -411,8 +405,8 @@ var LoginForm = function LoginForm(props) {
    * function to verify code with endpoint
    * @param {Object} values object with cellphone and country code values
    */
-  var checkVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
+  var checkVerifyPhoneCode = function checkVerifyPhoneCode(_x3) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
       var body, _res$result, response, res, _res$result2;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -471,13 +465,10 @@ var LoginForm = function LoginForm(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[1, 14]]);
-    }));
-    return function checkVerifyPhoneCode(_x3) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var generateOtpCode = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
+    }))).apply(this, arguments);
+  };
+  var generateOtpCode = function generateOtpCode(_x4) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
       var body, email, cellphone, countryPhoneCode, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -554,13 +545,10 @@ var LoginForm = function LoginForm(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[4, 20]]);
-    }));
-    return function generateOtpCode(_x4) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var handleLoginSpoonity = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    }))).apply(this, arguments);
+  };
+  var handleLoginSpoonity = function handleLoginSpoonity() {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var _result$session3, response, _yield$response$json2, result, error;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -629,11 +617,8 @@ var LoginForm = function LoginForm(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[0, 17]]);
-    }));
-    return function handleLoginSpoonity() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     formState: formState,
     loginTab: loginTab,

@@ -31,7 +31,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage gift cards without UI component
  */
 var GiftCardsList = function GiftCardsList(props) {
-  var _paginationSettings$p;
+  var _paginationSettings$p, _ref;
   var UIComponent = props.UIComponent,
     paginationSettings = props.paginationSettings,
     isSearchById = props.isSearchById,
@@ -73,8 +73,8 @@ var GiftCardsList = function GiftCardsList(props) {
   /**
    * Method to get the gift cards from API
    */
-  var getGiftCards = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(page, pageSize) {
+  var getGiftCards = function getGiftCards(_x, _x2) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(page, pageSize) {
       var where, conditions, searchConditions, requestOptions, fetchEndpoint, response, _yield$response$json, error, result, pagination;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -197,11 +197,8 @@ var GiftCardsList = function GiftCardsList(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 22]]);
-    }));
-    return function getGiftCards(_x, _x2) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     getGiftCards(0, paginationProps.pageSize);
   }, [activeStatus, searchValue]);

@@ -27,6 +27,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage stripe elements form behavior without UI component
  */
 var StripeElementsForm = function StripeElementsForm(props) {
+  var _ref;
   var UIComponent = props.UIComponent,
     toSave = props.toSave;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -44,8 +45,8 @@ var StripeElementsForm = function StripeElementsForm(props) {
   /**
    * Method to get client id for create stripe payment method
    */
-  var getRequirements = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getRequirements = function getRequirements() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var response, _yield$response$json, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -71,11 +72,8 @@ var StripeElementsForm = function StripeElementsForm(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function getRequirements() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (!token) return;
     toSave && getRequirements();

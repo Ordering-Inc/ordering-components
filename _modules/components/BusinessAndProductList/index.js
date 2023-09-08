@@ -37,7 +37,7 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 var BusinessAndProductList = function BusinessAndProductList(props) {
-  var _configs$use_parent_c, _configs$use_parent_c2, _businessState$busine12, _orderState$options20, _orderState$options21, _orderState$options22;
+  var _configs$use_parent_c, _configs$use_parent_c2, _ref, _ref6, _ref7, _ref10, _ref12, _businessState$busine12, _ref13, _ref14, _ref15, _ref16, _orderState$options20, _orderState$options21, _orderState$options22;
   var isSearchByName = props.isSearchByName,
     isSearchByDescription = props.isSearchByDescription,
     slug = props.slug,
@@ -301,8 +301,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       })
     }));
   };
-  var getProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getProducts = function getProducts() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _categoryState$produc;
       var i, _ref2, _businessState$busine2, _businessState$busine3, _category$products, category, isFeatured, categoryState, _businessState$busine4, _ref3, _businessState$busine5, _businessState$busine6, _categories$find, _subCategoriesList$fi, _businessState$busine7, categoriesList, categories, parentCategory, categoryFinded, productsFiltered, _businessState$busine8, _productsFiltered, _businessState$busine10, _categoriesCustom, _businessState$busine9, customCategories, productsToFilter, _productsFiltered2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -384,13 +384,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function getProducts() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var getLazyProducts = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref5) {
+    }))).apply(this, arguments);
+  };
+  var getLazyProducts = function getLazyProducts(_x) {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref5) {
       var _orderState$options$t, _orderState$options, _orderState$options2, _orderState$options3, _where, _where2;
       var page, _ref5$pageSize, pageSize, parameters, _orderState$options4, moment, where, searchConditions, source, promises, functionFetch, productEndpoint, _where3;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -504,13 +501,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function getLazyProducts(_x) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-  var loadProducts = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    }))).apply(this, arguments);
+  };
+  var loadProducts = function loadProducts() {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var _categoriesState$cate, _curCategoryState$pro, _businessState$busine11;
       var _ref8,
         newFetch,
@@ -698,13 +692,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[11, 35]]);
-    }));
-    return function loadProducts() {
-      return _ref7.apply(this, arguments);
-    };
-  }();
-  var loadMoreProducts = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    }))).apply(this, arguments);
+  };
+  var loadMoreProducts = function loadMoreProducts() {
+    return (_ref10 = _ref10 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var _categoriesState$cate2;
       var curCategoryState, _featuredRes$content13, _yield$getLazyProduct3, _yield$getLazyProduct4, lazyRes, featuredRes, content, error, result, pagination, errorsList, _featuredRes$content14, _featuredRes$content15, _featuredRes$content16, _featuredRes$content17, _oldFeatured$products2, _featuredRes$content$2, _featuredRes$content18, oldFeatured, featureState, _curCategoryState$pro2, _categoriesState$all, _categoriesState$feat7, newcategoryState, isFeatured, _ref11, _featuredRes$content$3, _featuredRes$content19, _categoriesState$feat8, _categoriesState$feat9, _curCategoryState$pag2, _featuredRes$content20, _featuredRes$content21, _featuredRes$content22, _curCategoryState$pro3, _curCategoryState$pro4, _categoriesState$all2, _categoriesState$feat10, productsList, productsListFeatured, paginationData, _newcategoryState2, _isFeatured2, _err$constructor2, _err$message2;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
@@ -827,13 +818,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[3, 27]]);
-    }));
-    return function loadMoreProducts() {
-      return _ref10.apply(this, arguments);
-    };
-  }();
-  var getProduct = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    }))).apply(this, arguments);
+  };
+  var getProduct = function getProduct() {
+    return (_ref12 = _ref12 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var _props$product, _props$product2, _props$product3;
       var _orderState$options5, _orderState$options6, _orderState$options7, _orderState$options8, _props$product4, _props$product5, _props$product6, source, parameters, _orderState$options9, moment, _yield$ordering$busin, result, product;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
@@ -884,18 +872,15 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[1, 16]]);
-    }));
-    return function getProduct() {
-      return _ref12.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (isInitialRender) {
       getProduct();
     }
   }, [JSON.stringify((_businessState$busine12 = businessState.business) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.id), isInitialRender]);
-  var getBusiness = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+  var getBusiness = function getBusiness() {
+    return (_ref13 = _ref13 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
       var _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13, _orderState$options14, _orderState$options15, _result$categories, source, parameters, _orderState$options16, moment, _yield$ordering$busin2, result, data, _yield$ordering$busin3, menus;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -958,13 +943,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             return _context6.stop();
         }
       }, _callee6, null, [[0, 23]]);
-    }));
-    return function getBusiness() {
-      return _ref13.apply(this, arguments);
-    };
-  }();
-  var multiRemoveProducts = /*#__PURE__*/function () {
-    var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(unavailableProducts, carts) {
+    }))).apply(this, arguments);
+  };
+  var multiRemoveProducts = function multiRemoveProducts(_x2, _x3) {
+    return (_ref14 = _ref14 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(unavailableProducts, carts) {
       var allPromise;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -992,11 +974,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             return _context7.stop();
         }
       }, _callee7);
-    }));
-    return function multiRemoveProducts(_x2, _x3) {
-      return _ref14.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var handleUpdateProfessionals = function handleUpdateProfessionals(selectedProfessional) {
     var _businessState$busine13;
     var professionals = businessState === null || businessState === void 0 || (_businessState$busine13 = businessState.business) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.professionals.map(function (professional) {
@@ -1024,8 +1003,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       return category;
     });
   };
-  var updateStoreProduct = /*#__PURE__*/function () {
-    var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(categoryId, productId) {
+  var updateStoreProduct = function updateStoreProduct(_x4, _x5) {
+    return (_ref15 = _ref15 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(categoryId, productId) {
       var updateParams,
         _businessState$busine14,
         _yield$ordering$busin4,
@@ -1071,13 +1050,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             return _context8.stop();
         }
       }, _callee8, null, [[1, 11]]);
-    }));
-    return function updateStoreProduct(_x4, _x5) {
-      return _ref15.apply(this, arguments);
-    };
-  }();
-  var updateStoreCategory = /*#__PURE__*/function () {
-    var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(categoryId) {
+    }))).apply(this, arguments);
+  };
+  var updateStoreCategory = function updateStoreCategory(_x6) {
+    return (_ref16 = _ref16 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(categoryId) {
       var updateParams,
         _businessState$busine15,
         _yield$ordering$busin6,
@@ -1122,11 +1098,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             return _context9.stop();
         }
       }, _callee9, null, [[1, 11]]);
-    }));
-    return function updateStoreCategory(_x6) {
-      return _ref16.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (!businessState.loading) {
       loadProducts({

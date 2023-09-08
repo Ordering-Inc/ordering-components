@@ -37,7 +37,7 @@ var paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon']
  * Component to manage payment options behavior without UI component
  */
 var PaymentOptions = function PaymentOptions(props) {
-  var _orderState$carts;
+  var _orderState$carts, _ref;
   var isLoading = props.isLoading,
     paymethods = props.paymethods,
     businessId = props.businessId,
@@ -99,8 +99,8 @@ var PaymentOptions = function PaymentOptions(props) {
   /**
    * Method to get payment options from API
    */
-  var getPaymentOptions = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getPaymentOptions = function getPaymentOptions() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var headers, _yield$ordering$busin, _yield$ordering$busin2, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -143,11 +143,8 @@ var PaymentOptions = function PaymentOptions(props) {
             return _context.stop();
         }
       }, _callee, null, [[2, 13]]);
-    }));
-    return function getPaymentOptions() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to set payment option selected by user

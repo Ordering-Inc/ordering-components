@@ -34,6 +34,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * @param {object} props Props of AddressList component
  */
 var AddressList = function AddressList(props) {
+  var _ref, _ref2, _ref3;
   var UIComponent = props.UIComponent,
     changeOrderAddressWithDefault = props.changeOrderAddressWithDefault,
     handleClickSetDefault = props.handleClickSetDefault,
@@ -74,8 +75,8 @@ var AddressList = function AddressList(props) {
   /**
    * Function to load addresses from API
    */
-  var loadAddresses = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var loadAddresses = function loadAddresses() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var source, _yield$ordering$setAc, content;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -114,11 +115,8 @@ var AddressList = function AddressList(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 11]]);
-    }));
-    return function loadAddresses() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     loadAddresses();
     return function () {
@@ -132,8 +130,8 @@ var AddressList = function AddressList(props) {
    * Function to make an address as default address
    * @param {object} address Address to make as default
    */
-  var handleSetDefault = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(address, userCustomerSetup, sameAddress, dontSetUserCustomer) {
+  var handleSetDefault = function handleSetDefault(_x, _x2, _x3, _x4) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(address, userCustomerSetup, sameAddress, dontSetUserCustomer) {
       var _yield$ordering$setAc2, content, _content$result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -202,17 +200,14 @@ var AddressList = function AddressList(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[6, 16]]);
-    }));
-    return function handleSetDefault(_x, _x2, _x3, _x4) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * Function to delete an address
    * @param {object} address Address to delete
    */
-  var handleDelete = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(address) {
+  var handleDelete = function handleDelete(_x5) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(address) {
       var _yield$ordering$users, content, addresses;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -260,11 +255,8 @@ var AddressList = function AddressList(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[2, 12]]);
-    }));
-    return function handleDelete(_x5) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     addressList: addressList,
     setAddressList: setAddressList,

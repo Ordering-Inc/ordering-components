@@ -28,7 +28,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MainSearch = function MainSearch(props) {
-  var _orderState$options;
+  var _orderState$options, _ref;
   var searchByAddress = props.searchByAddress,
     handlerFindBusiness = props.handlerFindBusiness,
     UIComponent = props.UIComponent;
@@ -71,8 +71,8 @@ var MainSearch = function MainSearch(props) {
   /**
    * Method to get countries from SDK
    */
-  var getContries = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getContries = function getContries() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _response$data, _yield$ordering$count, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -97,11 +97,8 @@ var MainSearch = function MainSearch(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 8]]);
-    }));
-    return function getContries() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * Method to handle change values when searchByAddres is false
    * @param {object} e

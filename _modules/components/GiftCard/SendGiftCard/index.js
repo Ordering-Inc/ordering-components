@@ -34,6 +34,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage to send gift card behavior without UI component
  */
 var SendGiftCard = function SendGiftCard(props) {
+  var _ref;
   var UIComponent = props.UIComponent,
     giftCardId = props.giftCardId,
     setIsGiftCardSent = props.setIsGiftCardSent;
@@ -57,8 +58,8 @@ var SendGiftCard = function SendGiftCard(props) {
     _useState2 = _slicedToArray(_useState, 2),
     actionState = _useState2[0],
     setActionState = _useState2[1];
-  var handleSendGiftCard = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
+  var handleSendGiftCard = function handleSendGiftCard(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
       var requestOptions, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -109,11 +110,8 @@ var SendGiftCard = function SendGiftCard(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 16]]);
-    }));
-    return function handleSendGiftCard(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     actionState: actionState,
     handleSendGiftCard: handleSendGiftCard

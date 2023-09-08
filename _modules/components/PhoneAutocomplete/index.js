@@ -32,6 +32,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PhoneAutocomplete = function PhoneAutocomplete(props) {
+  var _ref, _ref2, _ref4;
   var UIComponent = props.UIComponent,
     isIos = props.isIos,
     businessSlug = props.businessSlug,
@@ -104,8 +105,8 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   /**
    * Get users from API
    */
-  var getUsers = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getUsers = function getUsers() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var conditions, _yield$ordering$setAc, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -159,16 +160,13 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
             return _context.stop();
         }
       }, _callee, null, [[2, 10]]);
-    }));
-    return function getUsers() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * fetch business to get its address
    */
-  var getBusiness = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var getBusiness = function getBusiness() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _yield$ordering$busin, _yield$ordering$busin2, result, error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -196,11 +194,8 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function getBusiness() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var checkAddress = function checkAddress(address1, address2) {
     var props = ['address', 'location'];
     var values = [];
@@ -219,8 +214,8 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       return value;
     });
   };
-  var setGuestOptions = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(_ref3) {
+  var setGuestOptions = function setGuestOptions(_x) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(_ref3) {
       var _businessState$busine;
       var customer, _ref3$type, type, onRedirect, businessObj, userObj, _addressSelected, _orderState$options, _yield$ordering$users, _yield$ordering$users2, resultAddresses, error, userAddressFinded, addressSelected, _response$content$res, _addressSelected2, response, addressResponse, options, _addressSelected3;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
@@ -335,11 +330,8 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[5, 41]]);
-    }));
-    return function setGuestOptions(_x) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     var _customersPhones$user;
     if (urlPhone) return;

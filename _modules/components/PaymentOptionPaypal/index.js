@@ -26,7 +26,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage payment option paypal behavior without UI component
  */
 var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
-  var _window2;
+  var _ref, _ref2, _ref3, _window2;
   var body = props.body,
     clientId = props.clientId,
     currency = props.currency,
@@ -64,8 +64,8 @@ var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
       script.onload = null;
     };
   }, [clientId]);
-  var createOrder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data, actions) {
+  var createOrder = function createOrder(_x, _x2) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data, actions) {
       var params, _yield$placeCart, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -93,13 +93,10 @@ var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function createOrder(_x, _x2) {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var onApprove = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(data, actions) {
+    }))).apply(this, arguments);
+  };
+  var onApprove = function onApprove(_x3, _x4) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(data, actions) {
       var _yield$confirmCart, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -123,13 +120,10 @@ var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function onApprove(_x3, _x4) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var onFail = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(data) {
+    }))).apply(this, arguments);
+  };
+  var onFail = function onFail(_x5) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(data) {
       var _yield$confirmCart2, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -145,11 +139,8 @@ var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
             return _context3.stop();
         }
       }, _callee3);
-    }));
-    return function onFail(_x5) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Assign paypal button to an instance of react dom
