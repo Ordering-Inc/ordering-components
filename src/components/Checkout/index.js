@@ -154,9 +154,10 @@ export const Checkout = (props) => {
       }
     }
     let payload = {
-      offer_id: cart?.offer_id,
       amount: cart?.balance ?? cart?.total
     }
+
+    if(cart?.offer_id) payload.offer_id = cart?.offer_id
 
     if (paymethodSelected?.paymethod) {
       payload = {
@@ -464,9 +465,9 @@ export const Checkout = (props) => {
         paymethod_id: paymethodSelected.paymethodId,
         paymethod_data: paymethodSelected?.data,
         delivery_zone_id: cart.delivery_zone_id,
-        offer_id: cart.offer_id,
         amount: cart?.balance ?? cart?.total
       }
+      if(cart?.offer_id) payload.offer_id = cart?.offer_id
       onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cart)
     }
   }, [cart])
