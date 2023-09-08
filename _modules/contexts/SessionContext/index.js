@@ -228,7 +228,7 @@ var SessionProvider = function SessionProvider(_ref) {
                 token: token
               });
             }
-            if (!token && state.token || !(user !== null && user !== void 0 && user.enabled) || user !== null && user !== void 0 && user.availableFromDashboardOnly && !(user !== null && user !== void 0 && user.available)) {
+            if (!token && state.token || !(user !== null && user !== void 0 && user.enabled)) {
               logout();
             }
           case 7:
