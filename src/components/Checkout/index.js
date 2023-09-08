@@ -157,7 +157,7 @@ export const Checkout = (props) => {
       amount: cart?.balance ?? cart?.total
     }
 
-    cart?.offer_id ? payload.offer_id = cart?.offer_id : delete payload?.offer_id
+    if(cart?.offer_id) payload.offer_id = cart?.offer_id
 
     if (paymethodSelected?.paymethod) {
       payload = {
@@ -467,7 +467,7 @@ export const Checkout = (props) => {
         delivery_zone_id: cart.delivery_zone_id,
         amount: cart?.balance ?? cart?.total
       }
-      cart?.offer_id ? data.offer_id = cart.offer_id : delete data?.offer_id
+      if(cart?.offer_id) payload.offer_id = cart?.offer_id
       onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cart)
     }
   }, [cart])
