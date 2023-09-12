@@ -14,7 +14,8 @@ export const PaymentOptionStripe = (props) => {
     setCardList,
     gateway,
     onPaymentChange,
-    paySelected
+    paySelected,
+    newCardAdded
   } = props
 
   const [{ token, user }] = useSession()
@@ -216,6 +217,12 @@ export const PaymentOptionStripe = (props) => {
       }
     }
   }, [token, businessId, paySelected?.data])
+
+  useEffect(() => {
+    if (newCardAdded) {
+      getCards()
+    }
+  }, [JSON.stringify(newCardAdded)])
 
   return (
     <>
