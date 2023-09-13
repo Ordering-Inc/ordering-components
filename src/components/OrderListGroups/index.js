@@ -964,7 +964,7 @@ export const OrderListGroups = (props) => {
         orders: sortOrders([...prevState?.orders, order].filter((order, index, hash) => { // remove possibles duplicates
           const val = JSON.stringify(order)
           return index === hash.findIndex(_order => {
-            return JSON.stringify(_order || {}) === val
+            return JSON.stringify(_order) === val
           })
         }))
       }))
