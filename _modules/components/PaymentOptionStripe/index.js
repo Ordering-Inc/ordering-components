@@ -38,7 +38,8 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
     setCardList = props.setCardList,
     gateway = props.gateway,
     onPaymentChange = props.onPaymentChange,
-    paySelected = props.paySelected;
+    paySelected = props.paySelected,
+    newCardAdded = props.newCardAdded;
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     _useSession2$ = _useSession2[0],
@@ -375,6 +376,11 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
       }
     };
   }, [token, businessId, paySelected === null || paySelected === void 0 ? void 0 : paySelected.data]);
+  (0, _react.useEffect)(function () {
+    if (newCardAdded) {
+      getCards();
+    }
+  }, [JSON.stringify(newCardAdded)]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cardSelected: cardSelected,
     cardDefault: cardDefault,
