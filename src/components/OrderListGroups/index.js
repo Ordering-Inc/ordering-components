@@ -82,13 +82,16 @@ export const OrderListGroups = (props) => {
     }
   })
   const [currentTabSelected, setCurrentTabSelected] = useState(combineTabs ? 'active' : 'pending')
-  const [logisticOrders, setlogisticOrders] = useState({ loading: false, error: null, orders: null })
+  const [logisticOrders, setlogisticOrders] = useState({ loading: false, error: null, orders: [] })
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [currentFilters, setCurrentFilters] = useState(null)
   const [filtered, setFiltered] = useState(null)
   const [ordersDeleted, setOrdersDeleted] = useState({ loading: false, error: null, result: [] })
   const [controlsState, setControlsState] = useState({ loading: true, error: null, paymethods: [] })
   const [businessIDs, setBusinessIDs] = useState([])
+  const [orderUpdated, setOrderUpdated] = useState(null)
+  const [orderLogisticAdded, setOrderLogisticAdded] = useState(null)
+  const [orderLogisticUpdated, setOrderLogisticUpdated] = useState(null)
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -836,9 +839,13 @@ export const OrderListGroups = (props) => {
     if (ordersGroup[currentTabSelected]?.loading || !socket?.socket) return
 
     const handleUpdateOrder = (order) => {
+      const isSameEvent = orderUpdated?.id === order?.id && orderUpdated.status === order?.status
       if (session?.user?.level === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return
-      handleActionEvent('update_order', order)
-      events.emit('order_updated', order)
+      if (!isSameEvent) {
+        handleActionEvent('update_order', order)
+        events.emit('order_updated', order)
+        setOrderUpdated(order)
+      }
       let orderFound = null
       for (let i = 0; i < ordersStatusArray.length; i++) {
         const status = ordersStatusArray[i]
@@ -937,9 +944,7 @@ export const OrderListGroups = (props) => {
     socket.off('message', (e) => handleActionEvent('messages', e))
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
-    socket.socket && socket.socket.on('connect', () => {
-      socket.join(ordersRoom)
-    })
+
     return () => {
       socket.off('orders_register', handleAddNewOrder)
       socket.off('update_order', handleUpdateOrder)
@@ -949,13 +954,17 @@ export const OrderListGroups = (props) => {
 
   const handleAddAssignRequest = useCallback(
     (order) => {
-      handleActionEvent('request_register', order)
+      setOrderLogisticAdded(order)
+      const isSameEvent = orderLogisticAdded?.id === order?.id && orderLogisticAdded.status === order?.status
+      if (!order?.locked && !isSameEvent) {
+        handleActionEvent('request_register', order)
+      }
       setlogisticOrders((prevState) => ({
         ...prevState,
         orders: sortOrders([...prevState?.orders, order].filter((order, index, hash) => { // remove possibles duplicates
           const val = JSON.stringify(order)
           return index === hash.findIndex(_order => {
-            return JSON.stringify(_order) === val
+            return JSON.stringify(_order || {}) === val
           })
         }))
       }))
@@ -982,7 +991,11 @@ export const OrderListGroups = (props) => {
 
   const handleUpdateAssignRequest = useCallback(
     (order) => {
-      handleActionEvent('request_update', order)
+      setOrderLogisticUpdated(order)
+      const isSameEvent = orderLogisticUpdated?.id === order?.id && orderLogisticUpdated.status === order?.status
+      if (!order?.locked && !isSameEvent) {
+        handleActionEvent('request_update', order)
+      }
       setlogisticOrders(prevState => ({
         ...prevState,
         orders: prevState?.orders?.some(_order => _order?.id === order?.id)
