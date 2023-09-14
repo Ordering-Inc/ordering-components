@@ -172,6 +172,10 @@ var OrderListGroups = function OrderListGroups(props) {
     _useState24 = _slicedToArray(_useState23, 2),
     orderLogisticUpdated = _useState24[0],
     setOrderLogisticUpdated = _useState24[1];
+  var _useState25 = (0, _react.useState)(null),
+    _useState26 = _slicedToArray(_useState25, 2),
+    recentlyReceivedMessage = _useState26[0],
+    setRecentlyReceivedMessage = _useState26[1];
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
   var getOrders = function getOrders(_x) {
@@ -1265,19 +1269,21 @@ var OrderListGroups = function OrderListGroups(props) {
         actionOrderToTab(order, status, 'add');
       }
     };
+    var handleReceiveMessage = function handleReceiveMessage(message) {
+      if ((message === null || message === void 0 ? void 0 : message.id) !== (recentlyReceivedMessage === null || recentlyReceivedMessage === void 0 ? void 0 : recentlyReceivedMessage.id)) {
+        handleActionEvent('messages', message);
+        setRecentlyReceivedMessage(message);
+      }
+    };
     socket.on('orders_register', handleAddNewOrder);
     socket.on('update_order', handleUpdateOrder);
-    socket.off('message', function (e) {
-      return handleActionEvent('messages', e);
-    });
+    socket.on('message', handleReceiveMessage);
     var ordersRoom = (session === null || session === void 0 || (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user8 = session.user) === null || _session$user8 === void 0 ? void 0 : _session$user8.id);
     socket.join(ordersRoom);
     return function () {
       socket.off('orders_register', handleAddNewOrder);
       socket.off('update_order', handleUpdateOrder);
-      socket.off('message', function (e) {
-        return handleActionEvent('messages', e);
-      });
+      socket.off('message', handleReceiveMessage);
     };
   }, [ordersGroup, socket === null || socket === void 0 ? void 0 : socket.socket, session]);
   var handleAddAssignRequest = (0, _react.useCallback)(function (order) {
