@@ -125,7 +125,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
             _yield$ordering$setAc = _context.sent;
             result = _yield$ordering$setAc.content.result;
             defaultCard = result === null || result === void 0 ? void 0 : result.find(function (card) {
-              return card.default;
+              return card.default || (card === null || card === void 0 ? void 0 : card.id) === (newCardAdded === null || newCardAdded === void 0 ? void 0 : newCardAdded.paymentMethodId);
             });
             if (defaultCard) {
               setCardDefault({
