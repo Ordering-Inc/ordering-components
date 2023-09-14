@@ -92,7 +92,7 @@ export const OrderListGroups = (props) => {
   const [orderUpdated, setOrderUpdated] = useState(null)
   const [orderLogisticAdded, setOrderLogisticAdded] = useState(null)
   const [orderLogisticUpdated, setOrderLogisticUpdated] = useState(null)
-  const [recentlyRecievedMessage, setRecentlyRecievedMessage] = useState(null)
+  const [recentlyReceivedMessage, setRecentlyReceivedMessage] = useState(null)
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -940,23 +940,23 @@ export const OrderListGroups = (props) => {
       }
     }
 
-    const handleRecieveMessage = (message) => {
-      if (message?.id !== recentlyRecievedMessage?.id) {
+    const handleReceiveMessage = (message) => {
+      if (message?.id !== recentlyReceivedMessage?.id) {
         handleActionEvent('messages', message)
-        setRecentlyRecievedMessage(message)
+        setRecentlyReceivedMessage(message)
       }
     }
 
     socket.on('orders_register', handleAddNewOrder)
     socket.on('update_order', handleUpdateOrder)
-    socket.on('message', handleRecieveMessage)
+    socket.on('message', handleReceiveMessage)
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
 
     return () => {
       socket.off('orders_register', handleAddNewOrder)
       socket.off('update_order', handleUpdateOrder)
-      socket.off('message', handleRecieveMessage)
+      socket.off('message', handleReceiveMessage)
     }
   }, [ordersGroup, socket?.socket, session])
 
