@@ -54,7 +54,7 @@ export const PaymentOptionStripe = (props) => {
       requestState.paymentCards = source
       // The order of paymentCards params is businessId, userId. This sdk needs to be improved in the future,
       const { content: { result } } = await ordering.setAccessToken(token).paymentCards(businessId, user.id).get({ cancelToken: source })
-      const defaultCard = result?.find(card => card.default)
+      const defaultCard = result?.find(card => card.default || card?.id === newCardAdded?.paymentMethodId)
       if (defaultCard) {
         setCardDefault({
           id: defaultCard.id,
