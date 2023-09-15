@@ -108,7 +108,7 @@ export const PaymentOptionStripe = (props) => {
         setCardsList({
           ...cardsList
         })
-        if (cardSelected?.id === card?.id) {
+        if (paySelected?.data?.id === card?.id) {
           setCardSelected(null)
           onPaymentChange && onPaymentChange(null)
         }
