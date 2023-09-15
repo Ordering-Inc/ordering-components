@@ -172,7 +172,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
    */
   var deleteCard = function deleteCard(_x) {
     return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(card) {
-      var _yield$ordering$payme, error;
+      var _yield$ordering$payme, error, _paySelected$data;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -204,7 +204,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
                 return _card.id !== card.id;
               });
               setCardsList(_objectSpread({}, cardsList));
-              if ((cardSelected === null || cardSelected === void 0 ? void 0 : cardSelected.id) === (card === null || card === void 0 ? void 0 : card.id)) {
+              if ((paySelected === null || paySelected === void 0 || (_paySelected$data = paySelected.data) === null || _paySelected$data === void 0 ? void 0 : _paySelected$data.id) === (card === null || card === void 0 ? void 0 : card.id)) {
                 setCardSelected(null);
                 onPaymentChange && onPaymentChange(null);
               }
