@@ -119,7 +119,7 @@ var OrderListGroups = function OrderListGroups(props) {
   var _useState5 = (0, _react.useState)({
       loading: false,
       error: null,
-      orders: null
+      orders: []
     }),
     _useState6 = _slicedToArray(_useState5, 2),
     logisticOrders = _useState6[0],
@@ -160,6 +160,18 @@ var OrderListGroups = function OrderListGroups(props) {
     _useState18 = _slicedToArray(_useState17, 2),
     businessIDs = _useState18[0],
     setBusinessIDs = _useState18[1];
+  var _useState19 = (0, _react.useState)(null),
+    _useState20 = _slicedToArray(_useState19, 2),
+    orderUpdated = _useState20[0],
+    setOrderUpdated = _useState20[1];
+  var _useState21 = (0, _react.useState)(null),
+    _useState22 = _slicedToArray(_useState21, 2),
+    orderLogisticAdded = _useState22[0],
+    setOrderLogisticAdded = _useState22[1];
+  var _useState23 = (0, _react.useState)(null),
+    _useState24 = _slicedToArray(_useState23, 2),
+    orderLogisticUpdated = _useState24[0],
+    setOrderLogisticUpdated = _useState24[1];
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
   var getOrders = function getOrders(_x) {
@@ -1185,9 +1197,13 @@ var OrderListGroups = function OrderListGroups(props) {
     if ((_ordersGroup$currentT14 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT14 !== void 0 && _ordersGroup$currentT14.loading || !(socket !== null && socket !== void 0 && socket.socket)) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
       var _session$user5, _orderFound, _order$driver, _session$user6;
+      var isSameEvent = (orderUpdated === null || orderUpdated === void 0 ? void 0 : orderUpdated.id) === (order === null || order === void 0 ? void 0 : order.id) && orderUpdated.status === (order === null || order === void 0 ? void 0 : order.status);
       if ((session === null || session === void 0 || (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.level) === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return;
-      handleActionEvent('update_order', order);
-      events.emit('order_updated', order);
+      if (!isSameEvent) {
+        handleActionEvent('update_order', order);
+        events.emit('order_updated', order);
+        setOrderUpdated(order);
+      }
       var orderFound = null;
       for (var i = 0; i < ordersStatusArray.length; i++) {
         var status = ordersStatusArray[i];
@@ -1256,9 +1272,6 @@ var OrderListGroups = function OrderListGroups(props) {
     });
     var ordersRoom = (session === null || session === void 0 || (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user8 = session.user) === null || _session$user8 === void 0 ? void 0 : _session$user8.id);
     socket.join(ordersRoom);
-    socket.socket && socket.socket.on('connect', function () {
-      socket.join(ordersRoom);
-    });
     return function () {
       socket.off('orders_register', handleAddNewOrder);
       socket.off('update_order', handleUpdateOrder);
@@ -1269,7 +1282,11 @@ var OrderListGroups = function OrderListGroups(props) {
   }, [ordersGroup, socket === null || socket === void 0 ? void 0 : socket.socket, session]);
   var handleAddAssignRequest = (0, _react.useCallback)(function (order) {
     var _order$order$id3, _order$order4;
-    handleActionEvent('request_register', order);
+    setOrderLogisticAdded(order);
+    var isSameEvent = (orderLogisticAdded === null || orderLogisticAdded === void 0 ? void 0 : orderLogisticAdded.id) === (order === null || order === void 0 ? void 0 : order.id) && orderLogisticAdded.status === (order === null || order === void 0 ? void 0 : order.status);
+    if (!(order !== null && order !== void 0 && order.locked) && !isSameEvent) {
+      handleActionEvent('request_register', order);
+    }
     setlogisticOrders(function (prevState) {
       return _objectSpread(_objectSpread({}, prevState), {}, {
         orders: sortOrders([].concat(_toConsumableArray(prevState === null || prevState === void 0 ? void 0 : prevState.orders), [order]).filter(function (order, index, hash) {
@@ -1301,7 +1318,11 @@ var OrderListGroups = function OrderListGroups(props) {
   }, [logisticOrders]);
   var handleUpdateAssignRequest = (0, _react.useCallback)(function (order) {
     var _order$order$id4, _order$order5;
-    handleActionEvent('request_update', order);
+    setOrderLogisticUpdated(order);
+    var isSameEvent = (orderLogisticUpdated === null || orderLogisticUpdated === void 0 ? void 0 : orderLogisticUpdated.id) === (order === null || order === void 0 ? void 0 : order.id) && orderLogisticUpdated.status === (order === null || order === void 0 ? void 0 : order.status);
+    if (!(order !== null && order !== void 0 && order.locked) && !isSameEvent) {
+      handleActionEvent('request_update', order);
+    }
     setlogisticOrders(function (prevState) {
       var _prevState$orders4, _prevState$orders5, _prevState$orders6;
       return _objectSpread(_objectSpread({}, prevState), {}, {
