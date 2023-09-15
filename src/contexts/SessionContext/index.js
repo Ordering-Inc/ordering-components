@@ -32,29 +32,36 @@ export const SessionProvider = ({ children, strategy }) => {
       token,
       user,
       loading: false,
-      device_code,
+      device_code
     })
   }
 
   const getValuesFromLocalStorage = async () => {
-    const auth = await strategy.getItem('token')
-    const token = await strategy.getItem('token')
-    const user = await strategy.getItem('user', true)
-    const device_code = await strategy.getItem('device_code')
-    return { auth, token, user, device_code }
+    try {
+      const auth = await strategy.getItem('token')
+      const token = await strategy.getItem('token')
+      const user = await strategy.getItem('user', true)
+      const device_code = await strategy.getItem('device_code')
+      return { auth, token, user, device_code }
+    } catch (err) {
+      setState({
+        ...state,
+        loading: false
+      })
+    }
   }
 
   const login = async (values) => {
-    await strategy.setItem('token', values.token)
-    await strategy.setItem('user', values.user, true)
+    await strategy.setItem('token', values?.token)
+    await strategy.setItem('user', values?.user, true)
     if (values?.device_code) {
       await strategy.setItem('device_code', values?.device_code)
     }
     setState({
       ...state,
       auth: true,
-      user: values.user,
-      token: values.token,
+      user: values?.user,
+      token: values?.token,
       loading: false,
       device_code: values?.device_code || null
     })
@@ -86,16 +93,22 @@ export const SessionProvider = ({ children, strategy }) => {
   }
 
   const checkLocalStorage = async () => {
-    const { token, user } = await getValuesFromLocalStorage()
-    if (token && !state.token) {
-      login({
-        user,
-        token
+    try {
+      const { token, user } = await getValuesFromLocalStorage()
+      if (token && !state.token) {
+        login({
+          user,
+          token
+        })
+      }
+      if ((!token && state.token) || (!user?.enabled)) {
+        logout()
+      }
+    } catch (err) {
+      setState({
+        ...state,
+        loading: false
       })
-    }
-
-    if ((!token && state.token) || (!user?.enabled)) {
-      logout()
     }
   }
 
@@ -105,15 +118,16 @@ export const SessionProvider = ({ children, strategy }) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `bearer ${state.token}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering?.appId
         }
       }
-      const response = await fetch(`${ordering.root}/users/${state.user.id}`, requestOptions)
+      const response = await fetch(`${ordering.root}/users/${state.user?.id}`, requestOptions)
       const { result, error } = await response.json()
       if (!error) {
         setState({
           ...state,
-          user: result
+          user: result,
+          loading: false
         })
         await strategy.setItem('user', result, true)
       } else {
