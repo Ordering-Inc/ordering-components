@@ -57,7 +57,7 @@ export const LoginForm = (props) => {
    * Default fuction for login workflow
    * @param {object} credentials Login credentials email/cellphone and password
    */
-  const handleLoginClick = async (values) => {
+  const handleLoginClick = async (values, reloadApp) => {
     if (handleCustomLogin) {
       handleCustomLogin(values || credentials, loginTab)
       return
@@ -154,7 +154,7 @@ export const LoginForm = (props) => {
               return
             }
           }
-          if(values?.device_code) {
+          if (values?.device_code) {
             login({
               user: result,
               token: result.session?.access_token,
@@ -164,7 +164,7 @@ export const LoginForm = (props) => {
             login({
               user: result,
               token: result.session?.access_token
-            })
+            }, reloadApp)
           }
         }
         events.emit('userLogin', result)

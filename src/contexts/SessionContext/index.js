@@ -51,7 +51,7 @@ export const SessionProvider = ({ children, strategy }) => {
     }
   }
 
-  const login = async (values) => {
+  const login = async (values, restartApp) => {
     await strategy.setItem('token', values?.token)
     await strategy.setItem('user', values?.user, true)
     if (values?.device_code) {
@@ -65,6 +65,9 @@ export const SessionProvider = ({ children, strategy }) => {
       loading: false,
       device_code: values?.device_code || null
     })
+    if (restartApp) {
+      restartApp()
+    }
   }
 
   const logout = async () => {
