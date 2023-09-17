@@ -1,6 +1,6 @@
 "use strict";
 
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -16,7 +16,7 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var FacebookPixel = function FacebookPixel(props) {
   var children = props.children,
@@ -61,10 +61,10 @@ var FacebookPixel = function FacebookPixel(props) {
   var handleProductAdded = function handleProductAdded(product) {
     var _product$category, _configs$stripe_curre, _configs$stripe_curre2, _product$total;
     fbq('track', 'AddToCart', {
-      content_category: product === null || product === void 0 || (_product$category = product.category) === null || _product$category === void 0 ? void 0 : _product$category.name,
+      content_category: product === null || product === void 0 ? void 0 : (_product$category = product.category) === null || _product$category === void 0 ? void 0 : _product$category.name,
       content_ids: [product === null || product === void 0 ? void 0 : product.id],
       content_name: product === null || product === void 0 ? void 0 : product.name,
-      currency: (_configs$stripe_curre = configs === null || configs === void 0 || (_configs$stripe_curre2 = configs.stripe_currency) === null || _configs$stripe_curre2 === void 0 ? void 0 : _configs$stripe_curre2.value) !== null && _configs$stripe_curre !== void 0 ? _configs$stripe_curre : 'USD',
+      currency: (_configs$stripe_curre = configs === null || configs === void 0 ? void 0 : (_configs$stripe_curre2 = configs.stripe_currency) === null || _configs$stripe_curre2 === void 0 ? void 0 : _configs$stripe_curre2.value) !== null && _configs$stripe_curre !== void 0 ? _configs$stripe_curre : 'USD',
       value: (_product$total = product === null || product === void 0 ? void 0 : product.total) !== null && _product$total !== void 0 ? _product$total : product === null || product === void 0 ? void 0 : product.price,
       quantity: product === null || product === void 0 ? void 0 : product.quantity
     });
@@ -72,10 +72,10 @@ var FacebookPixel = function FacebookPixel(props) {
   var handleProductEdited = function handleProductEdited(product) {
     var _product$category2, _configs$stripe_curre3, _configs$stripe_curre4, _product$total2;
     fbq('track', 'CustomizeProduct', {
-      content_category: product === null || product === void 0 || (_product$category2 = product.category) === null || _product$category2 === void 0 ? void 0 : _product$category2.name,
+      content_category: product === null || product === void 0 ? void 0 : (_product$category2 = product.category) === null || _product$category2 === void 0 ? void 0 : _product$category2.name,
       content_ids: [product === null || product === void 0 ? void 0 : product.id],
       content_name: product === null || product === void 0 ? void 0 : product.name,
-      currency: (_configs$stripe_curre3 = configs === null || configs === void 0 || (_configs$stripe_curre4 = configs.stripe_currency) === null || _configs$stripe_curre4 === void 0 ? void 0 : _configs$stripe_curre4.value) !== null && _configs$stripe_curre3 !== void 0 ? _configs$stripe_curre3 : 'USD',
+      currency: (_configs$stripe_curre3 = configs === null || configs === void 0 ? void 0 : (_configs$stripe_curre4 = configs.stripe_currency) === null || _configs$stripe_curre4 === void 0 ? void 0 : _configs$stripe_curre4.value) !== null && _configs$stripe_curre3 !== void 0 ? _configs$stripe_curre3 : 'USD',
       value: (_product$total2 = product === null || product === void 0 ? void 0 : product.total) !== null && _product$total2 !== void 0 ? _product$total2 : product === null || product === void 0 ? void 0 : product.price,
       quantity: product === null || product === void 0 ? void 0 : product.quantity
     });
@@ -85,7 +85,7 @@ var FacebookPixel = function FacebookPixel(props) {
     fbq('track', 'Purchase', {
       content_ids: [order.id],
       value: order === null || order === void 0 ? void 0 : order.total,
-      currency: (_configs$stripe_curre5 = configs === null || configs === void 0 || (_configs$stripe_curre6 = configs.stripe_currency) === null || _configs$stripe_curre6 === void 0 ? void 0 : _configs$stripe_curre6.value) !== null && _configs$stripe_curre5 !== void 0 ? _configs$stripe_curre5 : 'USD'
+      currency: (_configs$stripe_curre5 = configs === null || configs === void 0 ? void 0 : (_configs$stripe_curre6 = configs.stripe_currency) === null || _configs$stripe_curre6 === void 0 ? void 0 : _configs$stripe_curre6.value) !== null && _configs$stripe_curre5 !== void 0 ? _configs$stripe_curre5 : 'USD'
     });
   };
   var handleSignupUser = function handleSignupUser(user) {
