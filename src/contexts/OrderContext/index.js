@@ -174,7 +174,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     } catch (err) {
       const message = err?.message?.includes('Internal error')
         ? 'INTERNAL_ERROR'
-        : err.message
+        : !err.message
+          ? t('NETWORK_ERROR', 'Network error')
+          : err.message
       setAlert({ show: true, content: [message] })
       setState({ ...state, loading: false })
     }
@@ -439,7 +441,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         }
         events.emit('cart_updated', result)
         events.emit('product_added', product, result)
-        isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name))
+        isQuickAddProduct && !isDisableToast && showToast(ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name))
       } else {
         setAlert({ show: true, content: result })
       }
