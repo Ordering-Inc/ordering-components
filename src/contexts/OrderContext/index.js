@@ -174,7 +174,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     } catch (err) {
       const message = err?.message?.includes('Internal error')
         ? 'INTERNAL_ERROR'
-        : err.message
+        : !err.message
+          ? t('NETWORK_ERROR', 'Network error')
+          : err.message
       setAlert({ show: true, content: [message] })
       setState({ ...state, loading: false })
     }
