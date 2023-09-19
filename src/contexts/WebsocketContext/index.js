@@ -26,7 +26,7 @@ export const WebsocketProvider = ({ settings, children, strategy, isAlsea }) => 
       const _socket = new Socket({ ...configs, accessToken: session.token, url: isAlsea ? configs.url : 'https://socket-v3.ordering.co' })
       setSocket(_socket)
     }
-  }, [JSON.stringify(session), JSON.stringify(configs)])
+  }, [session.loading, session.token, JSON.stringify(configs)])
 
   useEffect(() => {
     if (socket) {
