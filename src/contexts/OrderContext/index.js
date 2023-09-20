@@ -1296,7 +1296,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       socket.leave(`carts_${customerState?.user?.id || session?.user?.id}`)
       socket.leave(`orderoptions_${customerState?.user?.id || session?.user?.id}`)
     }
-  }, [socket, session, customerState?.user?.id])
+  }, [socket, session.auth, session.loading, customerState?.user?.id, session?.user?.id])
 
   const functions = {
     refreshOrderOptions,
