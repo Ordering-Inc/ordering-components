@@ -23,7 +23,8 @@ export const GoogleMaps = (props) => {
     fillStyle,
     useMapWithBusinessZones,
     deactiveAlerts,
-    fallbackIcon
+    fallbackIcon,
+    manualZoom
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -347,7 +348,7 @@ export const GoogleMaps = (props) => {
   }, [location, JSON.stringify(locations)])
 
   useEffect(() => {
-    if (!businessMap) {
+    if (!businessMap && !manualZoom) {
       const interval = setInterval(() => {
         if (googleReady && !userActivity) {
           const driverLocation = useMapWithBusinessZones ? center : locations?.[0]
