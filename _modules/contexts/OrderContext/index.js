@@ -53,7 +53,7 @@ var OrderContext = /*#__PURE__*/(0, _react.createContext)();
  */
 exports.OrderContext = OrderContext;
 var OrderProvider = function OrderProvider(_ref) {
-  var _configState$configs, _configState$configs2, _customerState$user5;
+  var _configState$configs, _configState$configs2, _customerState$user5, _session$user5;
   var Alert = _ref.Alert,
     children = _ref.children,
     strategy = _ref.strategy,
@@ -2229,7 +2229,7 @@ var OrderProvider = function OrderProvider(_ref) {
       socket.leave("carts_".concat((customerState === null || customerState === void 0 || (_customerState$user3 = customerState.user) === null || _customerState$user3 === void 0 ? void 0 : _customerState$user3.id) || (session === null || session === void 0 || (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id)));
       socket.leave("orderoptions_".concat((customerState === null || customerState === void 0 || (_customerState$user4 = customerState.user) === null || _customerState$user4 === void 0 ? void 0 : _customerState$user4.id) || (session === null || session === void 0 || (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id)));
     };
-  }, [socket, session, customerState === null || customerState === void 0 || (_customerState$user5 = customerState.user) === null || _customerState$user5 === void 0 ? void 0 : _customerState$user5.id]);
+  }, [socket, session.auth, session.loading, customerState === null || customerState === void 0 || (_customerState$user5 = customerState.user) === null || _customerState$user5 === void 0 ? void 0 : _customerState$user5.id, session === null || session === void 0 || (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.id]);
   var functions = {
     refreshOrderOptions: refreshOrderOptions,
     changeAddress: changeAddress,

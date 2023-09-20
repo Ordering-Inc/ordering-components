@@ -42,7 +42,8 @@ var GoogleMaps = function GoogleMaps(props) {
     fillStyle = props.fillStyle,
     useMapWithBusinessZones = props.useMapWithBusinessZones,
     deactiveAlerts = props.deactiveAlerts,
-    fallbackIcon = props.fallbackIcon;
+    fallbackIcon = props.fallbackIcon,
+    manualZoom = props.manualZoom;
   var _useUtils = (0, _UtilsContext.useUtils)(),
     _useUtils2 = _slicedToArray(_useUtils, 1),
     optimizeImage = _useUtils2[0].optimizeImage;
@@ -434,7 +435,7 @@ var GoogleMaps = function GoogleMaps(props) {
     }
   }, [location, JSON.stringify(locations)]);
   (0, _react.useEffect)(function () {
-    if (!businessMap) {
+    if (!businessMap && !manualZoom) {
       var interval = setInterval(function () {
         if (googleReady && !userActivity) {
           var driverLocation = useMapWithBusinessZones ? center : locations === null || locations === void 0 ? void 0 : locations[0];
