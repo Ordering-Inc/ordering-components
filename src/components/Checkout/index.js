@@ -157,7 +157,7 @@ export const Checkout = (props) => {
       amount: cart?.balance ?? cart?.total
     }
 
-    if(cart?.offer_id) payload.offer_id = cart?.offer_id
+    if (cart?.offer_id) payload.offer_id = cart?.offer_id
 
     if (paymethodSelected?.paymethod) {
       payload = {
@@ -395,6 +395,7 @@ export const Checkout = (props) => {
   const handleConfirmCredomaticPage = async (cart, paymethodSelected) => {
     const isSandbox = configs?.credomatic_integration_sandbox?.value === '1'
     const keyId = isSandbox ? configs?.credomatic_integration_public_sandbox_key?.value : configs?.credomatic_integration_public_production_key?.value
+    const processorId = configs?.credomatic_integration_processor_id?.value
     try {
       const cartUuid = cart?.uuid
       const data = {
@@ -408,6 +409,9 @@ export const Checkout = (props) => {
         cvv: paymethodSelected?.data?.cvv,
         ccexp: paymethodSelected?.data?.ccexp,
         redirect: window.location.href.replace(window.location.search, '')
+      }
+      if (processorId) {
+        data.processor_id = processorId
       }
       const form = document.createElement('form')
       form.method = 'POST'
@@ -467,7 +471,7 @@ export const Checkout = (props) => {
         delivery_zone_id: cart.delivery_zone_id,
         amount: cart?.balance ?? cart?.total
       }
-      if(cart?.offer_id) payload.offer_id = cart?.offer_id
+      if (cart?.offer_id) payload.offer_id = cart?.offer_id
       onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cart)
     }
   }, [cart])
