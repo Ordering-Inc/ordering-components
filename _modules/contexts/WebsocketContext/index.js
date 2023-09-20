@@ -64,7 +64,7 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
       }));
       setSocket(_socket);
     }
-  }, [session, JSON.stringify(configs)]);
+  }, [session.loading, session.token, JSON.stringify(configs)]);
   (0, _react.useEffect)(function () {
     if (socket) {
       socket.connect();
