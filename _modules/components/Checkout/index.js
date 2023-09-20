@@ -678,13 +678,14 @@ var Checkout = function Checkout(props) {
   }();
   var handleConfirmCredomaticPage = /*#__PURE__*/function () {
     var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(cart, paymethodSelected) {
-      var _configs$credomatic_i, _configs$credomatic_i2, _configs$credomatic_i3;
-      var isSandbox, keyId, _cart$paymethod_data, _cart$paymethod_data2, _paymethodSelected$da2, _paymethodSelected$da3, _paymethodSelected$da4, _Object$keys, cartUuid, data, form;
+      var _configs$credomatic_i, _configs$credomatic_i2, _configs$credomatic_i3, _configs$credomatic_i4;
+      var isSandbox, keyId, processorId, _cart$paymethod_data, _cart$paymethod_data2, _paymethodSelected$da2, _paymethodSelected$da3, _paymethodSelected$da4, _Object$keys, cartUuid, data, form;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) switch (_context9.prev = _context9.next) {
           case 0:
             isSandbox = (configs === null || configs === void 0 || (_configs$credomatic_i = configs.credomatic_integration_sandbox) === null || _configs$credomatic_i === void 0 ? void 0 : _configs$credomatic_i.value) === '1';
             keyId = isSandbox ? configs === null || configs === void 0 || (_configs$credomatic_i2 = configs.credomatic_integration_public_sandbox_key) === null || _configs$credomatic_i2 === void 0 ? void 0 : _configs$credomatic_i2.value : configs === null || configs === void 0 || (_configs$credomatic_i3 = configs.credomatic_integration_public_production_key) === null || _configs$credomatic_i3 === void 0 ? void 0 : _configs$credomatic_i3.value;
+            processorId = configs === null || configs === void 0 || (_configs$credomatic_i4 = configs.credomatic_integration_processor_id) === null || _configs$credomatic_i4 === void 0 ? void 0 : _configs$credomatic_i4.value;
             try {
               cartUuid = cart === null || cart === void 0 ? void 0 : cart.uuid;
               data = {
@@ -699,6 +700,9 @@ var Checkout = function Checkout(props) {
                 ccexp: paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$da4 = paymethodSelected.data) === null || _paymethodSelected$da4 === void 0 ? void 0 : _paymethodSelected$da4.ccexp,
                 redirect: window.location.href.replace(window.location.search, '')
               };
+              if (processorId) {
+                data.processor_id = processorId;
+              }
               form = document.createElement('form');
               form.method = 'POST';
               form.action = 'https://credomatic.compassmerchantsolutions.com/api/transact.php';
@@ -715,7 +719,7 @@ var Checkout = function Checkout(props) {
             } catch (err) {
               showToast(_ToastContext.ToastType.Error, err.message);
             }
-          case 3:
+          case 4:
           case "end":
             return _context9.stop();
         }
