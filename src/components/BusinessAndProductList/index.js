@@ -862,13 +862,13 @@ export const BusinessAndProductList = (props) => {
   }, [priceFilterValues])
 
   useEffect(() => {
-    if (!orderState.loading && Object.keys(orderOptions)?.length > 0 && !languageState.loading && !props.avoidBusinessLoading) {
+    if (!orderState.loading && Object.keys(orderOptions || {})?.length > 0 && !languageState.loading && !props.avoidBusinessLoading) {
       getBusiness()
     }
   }, [JSON.stringify(orderOptions), languageState.loading, slug, filterByMenus, professionalSelected])
 
   useEffect(() => {
-    if (!orderState.loading && Object.keys(orderOptions)?.length > 0 && !languageState.loading && !businessState.loading && props.avoidBusinessLoading) {
+    if (!orderState.loading && Object.keys(orderOptions || {})?.length > 0 && !languageState.loading && !businessState.loading && props.avoidBusinessLoading) {
       getBusiness()
     }
   }, [JSON.stringify(orderOptions), languageState.loading, slug, filterByMenus, professionalSelected])
