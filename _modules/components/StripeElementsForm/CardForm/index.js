@@ -46,7 +46,9 @@ var CardForm = function CardForm(props) {
     businessIds = props.businessIds;
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
-    user = _useSession2[0].user;
+    _useSession2$ = _useSession2[0],
+    user = _useSession2$.user,
+    token = _useSession2$.token;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -94,7 +96,6 @@ var CardForm = function CardForm(props) {
    */
   var stripeTokenHandler = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(tokenId, user, businessId) {
-      var _user$session;
       var isNewCard,
         result,
         response,
@@ -107,7 +108,7 @@ var CardForm = function CardForm(props) {
             return fetch("".concat(ordering.root, "/payments/stripe/cards"), {
               method: 'POST',
               headers: {
-                Authorization: "Bearer ".concat(user === null || user === void 0 || (_user$session = user.session) === null || _user$session === void 0 ? void 0 : _user$session.access_token),
+                Authorization: "Bearer ".concat(token),
                 'Content-Type': 'application/json',
                 'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()

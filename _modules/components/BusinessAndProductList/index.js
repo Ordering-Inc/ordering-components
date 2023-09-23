@@ -1160,12 +1160,14 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     });
   }, [priceFilterValues]);
   (0, _react.useEffect)(function () {
-    if (!orderState.loading && orderOptions && !languageState.loading && !props.avoidBusinessLoading) {
+    var _Object$keys;
+    if (!orderState.loading && ((_Object$keys = Object.keys(orderOptions || {})) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length) > 0 && !languageState.loading && !props.avoidBusinessLoading) {
       getBusiness();
     }
   }, [JSON.stringify(orderOptions), languageState.loading, slug, filterByMenus, professionalSelected]);
   (0, _react.useEffect)(function () {
-    if (!orderState.loading && orderOptions && !languageState.loading && !businessState.loading && props.avoidBusinessLoading) {
+    var _Object$keys2;
+    if (!orderState.loading && ((_Object$keys2 = Object.keys(orderOptions || {})) === null || _Object$keys2 === void 0 ? void 0 : _Object$keys2.length) > 0 && !languageState.loading && !businessState.loading && props.avoidBusinessLoading) {
       getBusiness();
     }
   }, [JSON.stringify(orderOptions), languageState.loading, slug, filterByMenus, professionalSelected]);
@@ -1174,8 +1176,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
    * getBusiness if orderState is loading the first time when is rendered
    */
   (0, _react.useEffect)(function () {
-    var _Object$keys;
-    if (props.product && !orderState.loading && !((_Object$keys = Object.keys(businessState.business)) !== null && _Object$keys !== void 0 && _Object$keys.length)) {
+    var _Object$keys3;
+    if (props.product && !orderState.loading && !((_Object$keys3 = Object.keys(businessState.business)) !== null && _Object$keys3 !== void 0 && _Object$keys3.length)) {
       getBusiness();
     }
   }, [orderState.loading]);
