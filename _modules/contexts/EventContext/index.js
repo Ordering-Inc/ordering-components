@@ -13,15 +13,14 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  * Create EventContext
  * This context will manage the app events and provide an interface
  */
-var EventContext = /*#__PURE__*/(0, _react.createContext)();
+var EventContext = exports.EventContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to events manager
  * This provider has a reducer for manage event state
  * @param {props} props
  */
-exports.EventContext = EventContext;
-var EventProvider = function EventProvider(_ref) {
+var EventProvider = exports.EventProvider = function EventProvider(_ref) {
   var children = _ref.children;
   var events = new _Emitter.Emitter();
   return /*#__PURE__*/_react.default.createElement(EventContext.Provider, {
@@ -32,9 +31,7 @@ var EventProvider = function EventProvider(_ref) {
 /**
  * Hook to get and update events state
  */
-exports.EventProvider = EventProvider;
-var useEvent = function useEvent() {
+var useEvent = exports.useEvent = function useEvent() {
   var configManager = (0, _react.useContext)(EventContext);
   return configManager || [new _Emitter.Emitter()];
 };
-exports.useEvent = useEvent;

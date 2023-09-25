@@ -29,15 +29,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Create SiteContext
  * This context will manage the current site internally and provide an easy interface
  */
-var SiteContext = /*#__PURE__*/(0, _react.createContext)();
+var SiteContext = exports.SiteContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to site manager
  * This provider has a reducer for manage site state
  * @param {props} props
  */
-exports.SiteContext = SiteContext;
-var SiteProvider = function SiteProvider(_ref) {
+var SiteProvider = exports.SiteProvider = function SiteProvider(_ref) {
   var appId = _ref.appId,
     children = _ref.children;
   var _useState = (0, _react.useState)({
@@ -141,8 +140,7 @@ var SiteProvider = function SiteProvider(_ref) {
 /**
  * Hook to get and update site state
  */
-exports.SiteProvider = SiteProvider;
-var useSite = function useSite() {
+var useSite = exports.useSite = function useSite() {
   var siteManager = (0, _react.useContext)(SiteContext);
   return siteManager || [{}, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -154,4 +152,3 @@ var useSite = function useSite() {
     }, _callee2);
   }))];
 };
-exports.useSite = useSite;

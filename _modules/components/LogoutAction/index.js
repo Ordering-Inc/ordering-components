@@ -31,7 +31,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage logout behavior without UI component
  */
-var LogoutAction = function LogoutAction(props) {
+var LogoutAction = exports.LogoutAction = function LogoutAction(props) {
   var _configs$facebook_id3, _configs$google_login2;
   var UIComponent = props.UIComponent,
     handleSuccessLogout = props.handleSuccessLogout,
@@ -187,7 +187,6 @@ var LogoutAction = function LogoutAction(props) {
     handleLogoutClick: handleLogoutClick
   })));
 };
-exports.LogoutAction = LogoutAction;
 LogoutAction.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

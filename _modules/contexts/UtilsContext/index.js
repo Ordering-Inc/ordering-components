@@ -29,15 +29,14 @@ _dayjs.default.extend(_updateLocale.default);
  * This context will manage the current configs internally and provide an easy interface
  */
 
-var UtilsContext = /*#__PURE__*/(0, _react.createContext)();
+var UtilsContext = exports.UtilsContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to utils manager
  * This provider has a reducer for manage utils functions
  * @param {props} props
  */
-exports.UtilsContext = UtilsContext;
-var UtilsProviders = function UtilsProviders(_ref) {
+var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
   var children = _ref.children;
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
     _useLanguage2 = _slicedToArray(_useLanguage, 2),
@@ -323,9 +322,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
 /**
  * Hook to get utils functions
  */
-exports.UtilsProviders = UtilsProviders;
-var useUtils = function useUtils() {
+var useUtils = exports.useUtils = function useUtils() {
   var utilsManager = (0, _react.useContext)(UtilsContext);
   return utilsManager || [{}, function () {}];
 };
-exports.useUtils = useUtils;

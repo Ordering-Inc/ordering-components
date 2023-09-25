@@ -31,7 +31,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage redeem gift card behavior without UI component
  */
-var RedeemGiftCard = function RedeemGiftCard(props) {
+var RedeemGiftCard = exports.RedeemGiftCard = function RedeemGiftCard(props) {
   var UIComponent = props.UIComponent;
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
@@ -115,7 +115,6 @@ var RedeemGiftCard = function RedeemGiftCard(props) {
     setRedeemedGiftCard: setRedeemedGiftCard
   })));
 };
-exports.RedeemGiftCard = RedeemGiftCard;
 RedeemGiftCard.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

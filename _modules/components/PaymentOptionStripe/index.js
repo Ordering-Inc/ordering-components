@@ -31,7 +31,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage payment option stripe behavior without UI component
  */
-var PaymentOptionStripe = function PaymentOptionStripe(props) {
+var PaymentOptionStripe = exports.PaymentOptionStripe = function PaymentOptionStripe(props) {
   var businessId = props.businessId,
     UIComponent = props.UIComponent,
     setCardList = props.setCardList,
@@ -406,7 +406,6 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
     paymethodsWithoutSaveCards: paymethodsWithoutSaveCards
   })));
 };
-exports.PaymentOptionStripe = PaymentOptionStripe;
 PaymentOptionStripe.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

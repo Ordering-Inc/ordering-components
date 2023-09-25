@@ -27,15 +27,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Create BusinessContext
  * This context will manage the business internally and provide an easy interface
  */
-var BusinessContext = /*#__PURE__*/(0, _react.createContext)();
+var BusinessContext = exports.BusinessContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to business manager
  * This provider has a reducer for manage business state
  * @param {props} props
  */
-exports.BusinessContext = BusinessContext;
-var BusinessProvider = function BusinessProvider(_ref) {
+var BusinessProvider = exports.BusinessProvider = function BusinessProvider(_ref) {
   var children = _ref.children,
     businessId = _ref.businessId;
   var _useState = (0, _react.useState)({
@@ -126,9 +125,7 @@ var BusinessProvider = function BusinessProvider(_ref) {
 /**
  * Hook to get and update business state
  */
-exports.BusinessProvider = BusinessProvider;
-var useBusiness = function useBusiness() {
+var useBusiness = exports.useBusiness = function useBusiness() {
   var BusinessManager = (0, _react.useContext)(BusinessContext);
   return BusinessManager || [{}, function () {}];
 };
-exports.useBusiness = useBusiness;

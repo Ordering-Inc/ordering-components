@@ -29,7 +29,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage login behavior without UI component
  */
-var CmsContent = function CmsContent(props) {
+var CmsContent = exports.CmsContent = function CmsContent(props) {
   var UIComponent = props.UIComponent,
     pageSlug = props.pageSlug,
     onNotFound = props.onNotFound;
@@ -119,7 +119,6 @@ var CmsContent = function CmsContent(props) {
     cmsState: cmsState
   })));
 };
-exports.CmsContent = CmsContent;
 CmsContent.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

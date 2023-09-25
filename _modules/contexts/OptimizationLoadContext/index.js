@@ -27,14 +27,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Create OptimizationLoadContext
  * Context to use Ordering API on the app
  */
-var OptimizationLoadContext = /*#__PURE__*/(0, _react.createContext)();
+var OptimizationLoadContext = exports.OptimizationLoadContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Api provider to manage api request
  * @param {props} props
  */
-exports.OptimizationLoadContext = OptimizationLoadContext;
-var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
+var OptimizationLoadProvider = exports.OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
   var settings = _ref.settings,
     children = _ref.children,
     strategy = _ref.strategy;
@@ -140,9 +139,7 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
 /**
  * Hook to get OptimizationLoadContext state
  */
-exports.OptimizationLoadProvider = OptimizationLoadProvider;
-var useOptimizationLoad = function useOptimizationLoad() {
+var useOptimizationLoad = exports.useOptimizationLoad = function useOptimizationLoad() {
   var optimizationLoadManager = (0, _react.useContext)(OptimizationLoadContext);
   return optimizationLoadManager || [{}];
 };
-exports.useOptimizationLoad = useOptimizationLoad;

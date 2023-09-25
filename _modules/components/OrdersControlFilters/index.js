@@ -28,7 +28,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage controls behavior without UI component functionality
  */
-var OrdersControlFilters = function OrdersControlFilters(props) {
+var OrdersControlFilters = exports.OrdersControlFilters = function OrdersControlFilters(props) {
   var UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
@@ -105,7 +105,6 @@ var OrdersControlFilters = function OrdersControlFilters(props) {
     controlsState: controlsState
   })));
 };
-exports.OrdersControlFilters = OrdersControlFilters;
 OrdersControlFilters.defaultProps = {
   beforeComponents: [],
   afterComponents: [],

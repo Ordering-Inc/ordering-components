@@ -33,7 +33,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage custom order details behavior without UI component
  */
-var CustomOrderDetails = function CustomOrderDetails(props) {
+var CustomOrderDetails = exports.CustomOrderDetails = function CustomOrderDetails(props) {
   var UIComponent = props.UIComponent,
     businessPropsToFetch = props.businessPropsToFetch;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -354,7 +354,6 @@ var CustomOrderDetails = function CustomOrderDetails(props) {
     cart: cart
   })));
 };
-exports.CustomOrderDetails = CustomOrderDetails;
 CustomOrderDetails.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

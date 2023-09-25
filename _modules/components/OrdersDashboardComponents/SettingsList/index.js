@@ -36,7 +36,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage Settings List page behavior without UI component
  */
-var SettingsList = function SettingsList(props) {
+var SettingsList = exports.SettingsList = function SettingsList(props) {
   var UIComponent = props.UIComponent,
     category = props.category,
     handleUpdateCategoryList = props.handleUpdateCategoryList,
@@ -318,7 +318,6 @@ var SettingsList = function SettingsList(props) {
     saveConfig: saveConfig
   })));
 };
-exports.SettingsList = SettingsList;
 SettingsList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

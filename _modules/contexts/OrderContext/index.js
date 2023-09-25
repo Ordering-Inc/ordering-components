@@ -44,15 +44,14 @@ _dayjs.default.extend(_utc.default);
  * Create OrderContext
  * This context will manage the current order with options internally and provide an easy interface
  */
-var OrderContext = /*#__PURE__*/(0, _react.createContext)();
+var OrderContext = exports.OrderContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to order manager
  * This provider has a reducer for manage order state
  * @param {props} props
  */
-exports.OrderContext = OrderContext;
-var OrderProvider = function OrderProvider(_ref) {
+var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
   var _configState$configs, _configState$configs2, _customerState$user5, _session$user5;
   var Alert = _ref.Alert,
     children = _ref.children,
@@ -2303,8 +2302,7 @@ var OrderProvider = function OrderProvider(_ref) {
 /**
  * Hook to get and update order state
  */
-exports.OrderProvider = OrderProvider;
-var useOrder = function useOrder() {
+var useOrder = exports.useOrder = function useOrder() {
   var orderManager = (0, _react.useContext)(OrderContext);
   var warningMessage = function warningMessage() {
     console.warn('Must use OrderProvider to wrappe the app.');
@@ -2334,4 +2332,3 @@ var useOrder = function useOrder() {
   };
   return orderManager || [{}, functionsPlaceholders];
 };
-exports.useOrder = useOrder;

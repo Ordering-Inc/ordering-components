@@ -20,7 +20,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage login behavior without UI component
  */
-var Popup = function Popup(props) {
+var Popup = exports.Popup = function Popup(props) {
   var UIComponent = props.UIComponent,
     open = props.open,
     backdropClassName = props.backdropClassName,
@@ -135,7 +135,6 @@ var Popup = function Popup(props) {
     ref: modalRef
   }, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props)), root));
 };
-exports.Popup = Popup;
 Popup.propTypes = {
   UIComponent: _propTypes.default.elementType,
   /**

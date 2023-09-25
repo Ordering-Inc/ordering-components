@@ -33,7 +33,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage query login behavior without UI component
  */
-var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
+var QueryLoginSpoonity = exports.QueryLoginSpoonity = function QueryLoginSpoonity(props) {
   var UIComponent = props.UIComponent,
     token = props.token;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -201,7 +201,6 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
     setModalPageToShow: setModalPageToShow
   })));
 };
-exports.QueryLoginSpoonity = QueryLoginSpoonity;
 QueryLoginSpoonity.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

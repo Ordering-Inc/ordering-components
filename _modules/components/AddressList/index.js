@@ -33,7 +33,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to control a address list
  * @param {object} props Props of AddressList component
  */
-var AddressList = function AddressList(props) {
+var AddressList = exports.AddressList = function AddressList(props) {
   var UIComponent = props.UIComponent,
     changeOrderAddressWithDefault = props.changeOrderAddressWithDefault,
     handleClickSetDefault = props.handleClickSetDefault,
@@ -274,7 +274,6 @@ var AddressList = function AddressList(props) {
     loadAddresses: loadAddresses
   })));
 };
-exports.AddressList = AddressList;
 AddressList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

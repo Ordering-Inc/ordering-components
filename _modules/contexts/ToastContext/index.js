@@ -16,17 +16,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 // Defines the three kinds of message that are displayed
-var ToastType = {
+var ToastType = exports.ToastType = {
   Info: 'INFO',
   Error: 'ERROR',
   Success: 'SUCCESS'
 };
 
 // Creates the toast context
-exports.ToastType = ToastType;
-var ToastContext = /*#__PURE__*/React.createContext(null);
-exports.ToastContext = ToastContext;
-var ToastProvider = function ToastProvider(_ref) {
+var ToastContext = exports.ToastContext = /*#__PURE__*/React.createContext(null);
+var ToastProvider = exports.ToastProvider = function ToastProvider(_ref) {
   var children = _ref.children;
   // Calls setToastConfig in order to control the toast
   // toastConfig is null by default so the toast is hidden
@@ -55,7 +53,7 @@ var ToastProvider = function ToastProvider(_ref) {
 };
 
 // hook context
-exports.ToastProvider = ToastProvider;
+
 function useToast() {
   var toastManager = React.useContext(ToastContext);
   return toastManager || [{}, function () {}];

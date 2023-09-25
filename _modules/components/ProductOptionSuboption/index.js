@@ -17,7 +17,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 /**
  * Component to render product option suboption
  */
-var ProductOptionSuboption = function ProductOptionSuboption(props) {
+var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOptionSuboption(props) {
   var UIComponent = props.UIComponent,
     balance = props.balance,
     option = props.option,
@@ -124,7 +124,6 @@ var ProductOptionSuboption = function ProductOptionSuboption(props) {
     toggleSelect: toggleSelect
   })));
 };
-exports.ProductOptionSuboption = ProductOptionSuboption;
 ProductOptionSuboption.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

@@ -24,9 +24,8 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-var ValidationFieldsContext = /*#__PURE__*/(0, _react.createContext)();
-exports.ValidationFieldsContext = ValidationFieldsContext;
-var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
+var ValidationFieldsContext = exports.ValidationFieldsContext = /*#__PURE__*/(0, _react.createContext)();
+var ValidationFieldsProvider = exports.ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
   var children = _ref.children,
     appId = _ref.appId;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -134,8 +133,7 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
     value: [state, functions]
   }, children);
 };
-exports.ValidationFieldsProvider = ValidationFieldsProvider;
-var useValidationFields = function useValidationFields() {
+var useValidationFields = exports.useValidationFields = function useValidationFields() {
   var validationFieldsManager = (0, _react.useContext)(ValidationFieldsContext);
   return validationFieldsManager || [{}, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -147,4 +145,3 @@ var useValidationFields = function useValidationFields() {
     }, _callee2);
   }))];
 };
-exports.useValidationFields = useValidationFields;

@@ -29,15 +29,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Create SessionContext
  * This context will manage the session internally and provide an easy interface
  */
-var SessionContext = /*#__PURE__*/(0, _react.createContext)();
+var SessionContext = exports.SessionContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to session manager
  * This provider has a reducer for manage session state
  * @param {props} props
  */
-exports.SessionContext = SessionContext;
-var SessionProvider = function SessionProvider(_ref) {
+var SessionProvider = exports.SessionProvider = function SessionProvider(_ref) {
   var children = _ref.children,
     strategy = _ref.strategy;
   var _useState = (0, _react.useState)({
@@ -352,9 +351,7 @@ var SessionProvider = function SessionProvider(_ref) {
 /**
  * Hook to get and update session state
  */
-exports.SessionProvider = SessionProvider;
-var useSession = function useSession() {
+var useSession = exports.useSession = function useSession() {
   var sessionManager = (0, _react.useContext)(SessionContext);
   return sessionManager || [{}, function () {}];
 };
-exports.useSession = useSession;

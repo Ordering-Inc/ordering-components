@@ -29,7 +29,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage User Verification behavior without UI component
  */
-var UserVerification = function UserVerification(props) {
+var UserVerification = exports.UserVerification = function UserVerification(props) {
   var UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
@@ -346,4 +346,3 @@ var UserVerification = function UserVerification(props) {
     cleanErrorsState: cleanErrorsState
   })));
 };
-exports.UserVerification = UserVerification;
