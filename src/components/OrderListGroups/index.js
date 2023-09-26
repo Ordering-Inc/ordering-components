@@ -298,7 +298,8 @@ export const OrderListGroups = (props) => {
           [tab]: {
             ...orderStructure,
             defaultFilter: ordersGroupStatus[tab],
-            currentFilter: ordersGroup[tab].currentFilter
+            currentFilter: ordersGroup[tab].currentFilter,
+            orders: ordersGroup[tab].orders
           }
         }
       })
