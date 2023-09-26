@@ -25,7 +25,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage login behavior without UI component
  */
-var ProductComponent = function ProductComponent(props) {
+var ProductComponent = exports.ProductComponent = function ProductComponent(props) {
   var product = props.product,
     UIComponent = props.UIComponent;
   var _useProduct = (0, _ProductContext.useProduct)(),
@@ -208,7 +208,6 @@ var ProductComponent = function ProductComponent(props) {
     onClickedButtonAdd: onClickedButtonAdd
   })));
 };
-exports.ProductComponent = ProductComponent;
 ProductComponent.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

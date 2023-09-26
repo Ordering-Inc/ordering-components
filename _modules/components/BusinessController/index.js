@@ -41,7 +41,7 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_timezone.default);
 _dayjs.default.extend(_isBetween.default);
-var BusinessController = function BusinessController(props) {
+var BusinessController = exports.BusinessController = function BusinessController(props) {
   var business = props.business,
     businessId = props.businessId,
     businessAttributes = props.businessAttributes,
@@ -460,7 +460,6 @@ var BusinessController = function BusinessController(props) {
     handleFavoriteBusiness: handleFavoriteBusiness
   })));
 };
-exports.BusinessController = BusinessController;
 BusinessController.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

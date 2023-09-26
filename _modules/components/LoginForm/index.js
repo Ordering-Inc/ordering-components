@@ -35,7 +35,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage login behavior without UI component
  */
-var LoginForm = function LoginForm(props) {
+var LoginForm = exports.LoginForm = function LoginForm(props) {
   var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$email_passwo, _configs$spoonity_ena, _configs$device_code_;
   var UIComponent = props.UIComponent,
     handleButtonLoginClick = props.handleButtonLoginClick,
@@ -662,7 +662,6 @@ var LoginForm = function LoginForm(props) {
     handleLoginSpoonity: handleLoginSpoonity
   })));
 };
-exports.LoginForm = LoginForm;
 LoginForm.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

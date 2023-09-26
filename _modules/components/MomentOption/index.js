@@ -27,7 +27,7 @@ _dayjs.default.extend(_utc.default);
 /**
  * Component to manage moment option behavior without UI component
  */
-var MomentOption = function MomentOption(props) {
+var MomentOption = exports.MomentOption = function MomentOption(props) {
   var _orderStatus$options, _orderStatus$options4;
   var minDate = props.minDate,
     maxDate = props.maxDate,
@@ -281,7 +281,6 @@ var MomentOption = function MomentOption(props) {
     scheduleSelected: scheduleSelected
   })));
 };
-exports.MomentOption = MomentOption;
 MomentOption.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

@@ -168,5 +168,4 @@ AutocompleteInput.defaultProps = {
   fields: ['ALL'],
   countryCode: '*'
 };
-var GoogleAutocompleteInput = (0, _WrapperGoogleMaps.WrapperGoogleMaps)(AutocompleteInput);
-exports.GoogleAutocompleteInput = GoogleAutocompleteInput;
+var GoogleAutocompleteInput = exports.GoogleAutocompleteInput = (0, _WrapperGoogleMaps.WrapperGoogleMaps)(AutocompleteInput);

@@ -34,7 +34,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage Multi orders page behavior without UI component
  */
-var MultiOrdersDetails = function MultiOrdersDetails(props) {
+var MultiOrdersDetails = exports.MultiOrdersDetails = function MultiOrdersDetails(props) {
   var _ordersList$orders$;
   var orderId = props.orderId,
     userId = props.userId,
@@ -165,7 +165,6 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
     ordersSummary: ordersSummary
   })));
 };
-exports.MultiOrdersDetails = MultiOrdersDetails;
 MultiOrdersDetails.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

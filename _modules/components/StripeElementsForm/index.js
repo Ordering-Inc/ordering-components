@@ -26,7 +26,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage stripe elements form behavior without UI component
  */
-var StripeElementsForm = function StripeElementsForm(props) {
+var StripeElementsForm = exports.StripeElementsForm = function StripeElementsForm(props) {
   var UIComponent = props.UIComponent,
     toSave = props.toSave;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -84,7 +84,6 @@ var StripeElementsForm = function StripeElementsForm(props) {
     requirements: requirements
   }));
 };
-exports.StripeElementsForm = StripeElementsForm;
 StripeElementsForm.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

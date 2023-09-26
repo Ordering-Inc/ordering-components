@@ -29,7 +29,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage coupon form behavior without UI component
  */
-var CouponControl = function CouponControl(props) {
+var CouponControl = exports.CouponControl = function CouponControl(props) {
   var _orderState$carts;
   var businessId = props.businessId,
     businessIds = props.businessIds,
@@ -170,7 +170,6 @@ var CouponControl = function CouponControl(props) {
     setConfirm: setConfirm
   })));
 };
-exports.CouponControl = CouponControl;
 CouponControl.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

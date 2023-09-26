@@ -33,7 +33,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage purchase gift card behavior without UI component
  */
-var PurchaseGiftCard = function PurchaseGiftCard(props) {
+var PurchaseGiftCard = exports.PurchaseGiftCard = function PurchaseGiftCard(props) {
   var UIComponent = props.UIComponent,
     handleCustomGoToCheckout = props.handleCustomGoToCheckout;
   var _useSession = (0, _SessionContext.useSession)(),
@@ -205,7 +205,6 @@ var PurchaseGiftCard = function PurchaseGiftCard(props) {
     handleAccept: handleAccept
   })));
 };
-exports.PurchaseGiftCard = PurchaseGiftCard;
 PurchaseGiftCard.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

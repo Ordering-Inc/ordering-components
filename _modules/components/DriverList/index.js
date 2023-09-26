@@ -28,7 +28,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage drivers behavior without UI component
  */
-var DriverList = function DriverList(props) {
+var DriverList = exports.DriverList = function DriverList(props) {
   var drivers = props.drivers,
     UIComponent = props.UIComponent,
     propsToFetch = props.propsToFetch;
@@ -116,7 +116,6 @@ var DriverList = function DriverList(props) {
     driverList: driverList
   })));
 };
-exports.DriverList = DriverList;
 DriverList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

@@ -31,7 +31,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage paymethods behavior without UI component
  */
-var PaymethodList = function PaymethodList(props) {
+var PaymethodList = exports.PaymethodList = function PaymethodList(props) {
   var paymethods = props.paymethods,
     UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -139,7 +139,6 @@ var PaymethodList = function PaymethodList(props) {
     paymethodList: paymethodList
   })));
 };
-exports.PaymethodList = PaymethodList;
 PaymethodList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

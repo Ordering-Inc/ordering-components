@@ -35,7 +35,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage signup behavior without UI component
  */
-var SignupForm = function SignupForm(props) {
+var SignupForm = exports.SignupForm = function SignupForm(props) {
   var _configs$email_otp_si, _configs$phone_otp_si, _configs$full_details;
   var UIComponent = props.UIComponent,
     useChekoutFileds = props.useChekoutFileds,
@@ -671,7 +671,6 @@ var SignupForm = function SignupForm(props) {
     useSignUpOtpCellphone: useSignUpOtpCellphone
   })));
 };
-exports.SignupForm = SignupForm;
 SignupForm.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

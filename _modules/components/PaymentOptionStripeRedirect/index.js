@@ -26,7 +26,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage payment option stripe redirect behavior without UI component
  */
-var PaymentOptionStripeRedirect = function PaymentOptionStripeRedirect(props) {
+var PaymentOptionStripeRedirect = exports.PaymentOptionStripeRedirect = function PaymentOptionStripeRedirect(props) {
   var paymentMethods = props.paymentMethods,
     UIComponent = props.UIComponent;
   var _useSession = (0, _SessionContext.useSession)(),
@@ -98,7 +98,6 @@ var PaymentOptionStripeRedirect = function PaymentOptionStripeRedirect(props) {
     modalName: modalName()
   })));
 };
-exports.PaymentOptionStripeRedirect = PaymentOptionStripeRedirect;
 PaymentOptionStripeRedirect.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

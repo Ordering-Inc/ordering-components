@@ -38,7 +38,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage Multi businesses checkout page behavior without UI component
  */
-var MultiCheckout = function MultiCheckout(props) {
+var MultiCheckout = exports.MultiCheckout = function MultiCheckout(props) {
   var _cartGroup$result, _cartGroup$result2, _openCarts$filter;
   var UIComponent = props.UIComponent,
     onPlaceOrderClick = props.onPlaceOrderClick,
@@ -608,7 +608,6 @@ var MultiCheckout = function MultiCheckout(props) {
     cartsInvalid: cartsInvalid
   })));
 };
-exports.MultiCheckout = MultiCheckout;
 MultiCheckout.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

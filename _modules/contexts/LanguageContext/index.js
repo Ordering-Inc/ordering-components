@@ -27,15 +27,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Create LanguageContext
  * This context will manage the current languages internally and provide an easy interface
  */
-var LanguageContext = /*#__PURE__*/(0, _react.createContext)();
+var LanguageContext = exports.LanguageContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to languages manager
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-exports.LanguageContext = LanguageContext;
-var LanguageProvider = function LanguageProvider(_ref) {
+var LanguageProvider = exports.LanguageProvider = function LanguageProvider(_ref) {
   var _state$language4;
   var settings = _ref.settings,
     children = _ref.children,
@@ -246,8 +245,7 @@ var LanguageProvider = function LanguageProvider(_ref) {
 /**
  * Hook to get and update language state
  */
-exports.LanguageProvider = LanguageProvider;
-var useLanguage = function useLanguage() {
+var useLanguage = exports.useLanguage = function useLanguage() {
   var languageManager = (0, _react.useContext)(LanguageContext);
   return languageManager || [{}, function (key) {
     var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
@@ -270,4 +268,3 @@ var useLanguage = function useLanguage() {
     }, _callee6);
   }))];
 };
-exports.useLanguage = useLanguage;

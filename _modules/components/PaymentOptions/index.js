@@ -36,7 +36,7 @@ var paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon']
 /**
  * Component to manage payment options behavior without UI component
  */
-var PaymentOptions = function PaymentOptions(props) {
+var PaymentOptions = exports.PaymentOptions = function PaymentOptions(props) {
   var _orderState$carts;
   var isLoading = props.isLoading,
     paymethods = props.paymethods,
@@ -263,7 +263,6 @@ var PaymentOptions = function PaymentOptions(props) {
     handlePaymethodDataChange: handlePaymethodDataChange
   })));
 };
-exports.PaymentOptions = PaymentOptions;
 PaymentOptions.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

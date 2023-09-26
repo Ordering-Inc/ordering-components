@@ -25,7 +25,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage payment option paypal behavior without UI component
  */
-var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
+var PaymentOptionPaypal = exports.PaymentOptionPaypal = function PaymentOptionPaypal(props) {
   var _window2;
   var body = props.body,
     clientId = props.clientId,
@@ -170,7 +170,6 @@ var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
     }
   }));
 };
-exports.PaymentOptionPaypal = PaymentOptionPaypal;
 PaymentOptionPaypal.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

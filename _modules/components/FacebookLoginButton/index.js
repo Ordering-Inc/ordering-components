@@ -29,7 +29,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage Facebook login behavior without UI component
  */
-var FacebookLoginButton = function FacebookLoginButton(props) {
+var FacebookLoginButton = exports.FacebookLoginButton = function FacebookLoginButton(props) {
   var UIComponent = props.UIComponent,
     appId = props.appId,
     debug = props.debug,
@@ -231,7 +231,6 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
     handleFacebookLogin: handleFacebookLogin
   })));
 };
-exports.FacebookLoginButton = FacebookLoginButton;
 FacebookLoginButton.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

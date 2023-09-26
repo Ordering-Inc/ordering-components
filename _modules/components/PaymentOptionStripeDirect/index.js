@@ -26,7 +26,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage payment option stripe direct behavior without UI component
  */
-var PaymentOptionStripeDirect = function PaymentOptionStripeDirect(props) {
+var PaymentOptionStripeDirect = exports.PaymentOptionStripeDirect = function PaymentOptionStripeDirect(props) {
   var UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
@@ -131,7 +131,6 @@ var PaymentOptionStripeDirect = function PaymentOptionStripeDirect(props) {
     clientSecret: requirements
   })));
 };
-exports.PaymentOptionStripeDirect = PaymentOptionStripeDirect;
 PaymentOptionStripeDirect.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

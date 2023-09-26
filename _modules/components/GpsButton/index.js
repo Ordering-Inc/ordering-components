@@ -24,7 +24,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to get information from GPS
  * @param {object} props Props of GpsButton component
  */
-var GpsButton = function GpsButton(props) {
+var GpsButton = exports.GpsButton = function GpsButton(props) {
   var UIComponent = props.UIComponent,
     googleReady = props.googleReady,
     onData = props.onData,
@@ -117,7 +117,6 @@ var GpsButton = function GpsButton(props) {
     isLoading: isLoading
   }));
 };
-exports.GpsButton = GpsButton;
 GpsButton.propTypes = {
   /**
    * Function to get data from GPS
@@ -130,8 +129,7 @@ GpsButton.propTypes = {
    */
   onError: _propTypes.default.func
 };
-var GoogleGpsButton = (0, _WrapperGoogleMaps.WrapperGoogleMaps)(GpsButton);
-exports.GoogleGpsButton = GoogleGpsButton;
+var GoogleGpsButton = exports.GoogleGpsButton = (0, _WrapperGoogleMaps.WrapperGoogleMaps)(GpsButton);
 GoogleGpsButton.propTypes = {
   /**
    * You Google Maps api key

@@ -36,7 +36,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage user form details behavior without UI component
  */
-var UserFormDetails = function UserFormDetails(props) {
+var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) {
   var UIComponent = props.UIComponent,
     useSessionUser = props.useSessionUser,
     refreshSessionUser = props.refreshSessionUser,
@@ -654,7 +654,6 @@ var UserFormDetails = function UserFormDetails(props) {
     handleChangeNotifications: handleChangeNotifications
   })));
 };
-exports.UserFormDetails = UserFormDetails;
 UserFormDetails.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

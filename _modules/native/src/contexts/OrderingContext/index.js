@@ -28,15 +28,14 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  * Create OrderingContext
  * Wrapper to use all context to ordering apps
  */
-var OrderingContext = /*#__PURE__*/(0, _react.createContext)();
+var OrderingContext = exports.OrderingContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to languages manager
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-exports.OrderingContext = OrderingContext;
-var OrderingProvider = function OrderingProvider(_ref) {
+var OrderingProvider = exports.OrderingProvider = function OrderingProvider(_ref) {
   var _settings$franchiseSl, _settings$businessSlu;
   var Alert = _ref.Alert,
     settings = _ref.settings,
@@ -85,4 +84,3 @@ var OrderingProvider = function OrderingProvider(_ref) {
     businessId: (_settings$businessSlu = settings === null || settings === void 0 ? void 0 : settings.businessSlug) !== null && _settings$businessSlu !== void 0 ? _settings$businessSlu : settings === null || settings === void 0 ? void 0 : settings.businessId
   }, children))))))))))))))));
 };
-exports.OrderingProvider = OrderingProvider;

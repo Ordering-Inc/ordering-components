@@ -34,7 +34,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage card form for stripe elements form behavior without UI component
  */
-var CardForm = function CardForm(props) {
+var CardForm = exports.CardForm = function CardForm(props) {
   var _validationFields$fie, _validationFields$fie2;
   var UIComponent = props.UIComponent,
     requirements = props.requirements,
@@ -319,7 +319,6 @@ var CardForm = function CardForm(props) {
     handleChange: handleChange
   }));
 };
-exports.CardForm = CardForm;
 CardForm.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

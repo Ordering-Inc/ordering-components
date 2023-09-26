@@ -27,7 +27,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage address details behavior without UI component
  */
-var AddressDetails = function AddressDetails(props) {
+var AddressDetails = exports.AddressDetails = function AddressDetails(props) {
   var _configs$google_maps_, _Object$values$find$b, _Object$values$find, _orderState$options2;
   var apiKey = props.apiKey,
     UIComponent = props.UIComponent,
@@ -141,7 +141,6 @@ var AddressDetails = function AddressDetails(props) {
     googleMapsUrl: isMultiCheckout ? formatUrlMethod() : formatUrl
   })));
 };
-exports.AddressDetails = AddressDetails;
 AddressDetails.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

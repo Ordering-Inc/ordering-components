@@ -15,7 +15,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /**
  * Component to manage stripe redirect form behavior without UI component
  */
-var StripeRedirectForm = function StripeRedirectForm(props) {
+var StripeRedirectForm = exports.StripeRedirectForm = function StripeRedirectForm(props) {
   var UIComponent = props.UIComponent,
     handleStripeRedirect = props.handleStripeRedirect;
 
@@ -51,7 +51,6 @@ var StripeRedirectForm = function StripeRedirectForm(props) {
     handleSubmitPaymentMethod: handleSubmitPaymentMethod
   })));
 };
-exports.StripeRedirectForm = StripeRedirectForm;
 StripeRedirectForm.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

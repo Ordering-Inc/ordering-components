@@ -23,7 +23,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage driver tips behavior without UI component
  */
-var DriverTips = function DriverTips(props) {
+var DriverTips = exports.DriverTips = function DriverTips(props) {
   var UIComponent = props.UIComponent,
     businessId = props.businessId,
     businessIds = props.businessIds,
@@ -104,7 +104,6 @@ var DriverTips = function DriverTips(props) {
     handlerChangeOption: handlerChangeOption
   })));
 };
-exports.DriverTips = DriverTips;
 DriverTips.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

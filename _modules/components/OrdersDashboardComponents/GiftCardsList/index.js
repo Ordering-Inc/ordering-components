@@ -30,7 +30,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage gift cards without UI component
  */
-var GiftCardsList = function GiftCardsList(props) {
+var GiftCardsList = exports.GiftCardsList = function GiftCardsList(props) {
   var _paginationSettings$p;
   var UIComponent = props.UIComponent,
     paginationSettings = props.paginationSettings,
@@ -215,7 +215,6 @@ var GiftCardsList = function GiftCardsList(props) {
     onSearch: setSearchValue
   })));
 };
-exports.GiftCardsList = GiftCardsList;
 GiftCardsList.propTypes = {
   /**
   * UI Component, this must be containt all graphic elements and use parent props

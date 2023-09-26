@@ -31,7 +31,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage forgot password behavior without UI component
  */
-var ForgotPasswordForm = function ForgotPasswordForm(props) {
+var ForgotPasswordForm = exports.ForgotPasswordForm = function ForgotPasswordForm(props) {
   var UIComponent = props.UIComponent,
     defaultEmail = props.defaultEmail,
     handleButtonForgotPasswordClick = props.handleButtonForgotPasswordClick,
@@ -169,7 +169,6 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
     handleButtonForgotPasswordClick: handleButtonForgotPasswordClick || handleForgotPasswordClick
   })));
 };
-exports.ForgotPasswordForm = ForgotPasswordForm;
 ForgotPasswordForm.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

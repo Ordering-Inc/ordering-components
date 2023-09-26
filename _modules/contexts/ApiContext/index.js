@@ -24,14 +24,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Create ApiContext
  * Context to use Ordering API on the app
  */
-var ApiContext = /*#__PURE__*/(0, _react.createContext)();
+var ApiContext = exports.ApiContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Api provider to manage api request
  * @param {props} props
  */
-exports.ApiContext = ApiContext;
-var ApiProvider = function ApiProvider(_ref) {
+var ApiProvider = exports.ApiProvider = function ApiProvider(_ref) {
   var settings = _ref.settings,
     children = _ref.children;
   var _useState = (0, _react.useState)(new _orderingApiSdk.Ordering(settings)),
@@ -71,9 +70,7 @@ var ApiProvider = function ApiProvider(_ref) {
 /**
  * Hook to get api state
  */
-exports.ApiProvider = ApiProvider;
-var useApi = function useApi() {
+var useApi = exports.useApi = function useApi() {
   var apiManager = (0, _react.useContext)(ApiContext);
   return apiManager || [{}];
 };
-exports.useApi = useApi;

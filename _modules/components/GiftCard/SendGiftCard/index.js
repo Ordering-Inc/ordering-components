@@ -33,7 +33,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage to send gift card behavior without UI component
  */
-var SendGiftCard = function SendGiftCard(props) {
+var SendGiftCard = exports.SendGiftCard = function SendGiftCard(props) {
   var UIComponent = props.UIComponent,
     giftCardId = props.giftCardId,
     setIsGiftCardSent = props.setIsGiftCardSent;
@@ -119,7 +119,6 @@ var SendGiftCard = function SendGiftCard(props) {
     handleSendGiftCard: handleSendGiftCard
   })));
 };
-exports.SendGiftCard = SendGiftCard;
 SendGiftCard.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

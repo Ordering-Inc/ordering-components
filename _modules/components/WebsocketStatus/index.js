@@ -22,7 +22,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage websocket status without UI component
  */
-var WebsocketStatus = function WebsocketStatus(props) {
+var WebsocketStatus = exports.WebsocketStatus = function WebsocketStatus(props) {
   var _socket$socket;
   var UIComponent = props.UIComponent;
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
@@ -76,7 +76,6 @@ var WebsocketStatus = function WebsocketStatus(props) {
     reconnectAttemptCount: reconnectAttemptCount
   })));
 };
-exports.WebsocketStatus = WebsocketStatus;
 WebsocketStatus.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

@@ -28,7 +28,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Create SessionContext
  * This context will manage the socket conection and provide an easy interface
  */
-var WebsocketContext = /*#__PURE__*/(0, _react.createContext)();
+var WebsocketContext = exports.WebsocketContext = /*#__PURE__*/(0, _react.createContext)();
 
 // let socket = null
 
@@ -37,8 +37,7 @@ var WebsocketContext = /*#__PURE__*/(0, _react.createContext)();
  * This provider has a reducer for manage session state
  * @param {props} props
  */
-exports.WebsocketContext = WebsocketContext;
-var WebsocketProvider = function WebsocketProvider(_ref) {
+var WebsocketProvider = exports.WebsocketProvider = function WebsocketProvider(_ref) {
   var _session$user;
   var settings = _ref.settings,
     children = _ref.children,
@@ -143,9 +142,7 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
 /**
  * Hook to get and update websocket state
  */
-exports.WebsocketProvider = WebsocketProvider;
-var useWebsocket = function useWebsocket() {
+var useWebsocket = exports.useWebsocket = function useWebsocket() {
   var sockerManager = (0, _react.useContext)(WebsocketContext);
   return sockerManager || new _socket2.Socket({});
 };
-exports.useWebsocket = useWebsocket;

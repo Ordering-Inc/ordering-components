@@ -38,7 +38,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
-var BusinessList = function BusinessList(props) {
+var BusinessList = exports.BusinessList = function BusinessList(props) {
   var _paginationSettings$p, _configs$advanced_bus, _ref, _orderingTheme$busine, _orderState$options, _configs$unaddressed_, _orderState$options2, _orderState$options20, _orderState$options21, _orderState$options22, _orderState$options23, _orderState$options24, _orderState$options25;
   var UIComponent = props.UIComponent,
     initialBuisnessType = props.initialBuisnessType,
@@ -731,7 +731,6 @@ var BusinessList = function BusinessList(props) {
     citiesState: citiesState
   })));
 };
-exports.BusinessList = BusinessList;
 BusinessList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

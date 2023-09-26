@@ -35,7 +35,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage Multi carts paymethods and wallets behavior without UI component
  */
-var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(props) {
+var MultiCartsPaymethodsAndWallets = exports.MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(props) {
   var UIComponent = props.UIComponent,
     openCarts = props.openCarts,
     loyaltyPlansState = props.loyaltyPlansState,
@@ -278,7 +278,6 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
     walletsState: walletsState
   })));
 };
-exports.MultiCartsPaymethodsAndWallets = MultiCartsPaymethodsAndWallets;
 MultiCartsPaymethodsAndWallets.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

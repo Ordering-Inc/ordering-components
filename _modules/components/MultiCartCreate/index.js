@@ -24,7 +24,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-var MultiCartCreate = function MultiCartCreate(props) {
+var MultiCartCreate = exports.MultiCartCreate = function MultiCartCreate(props) {
   var UIComponent = props.UIComponent,
     userId = props.userId,
     handleOnRedirectCheckout = props.handleOnRedirectCheckout,
@@ -98,7 +98,6 @@ var MultiCartCreate = function MultiCartCreate(props) {
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props));
 };
-exports.MultiCartCreate = MultiCartCreate;
 MultiCartCreate.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

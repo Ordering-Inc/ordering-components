@@ -28,15 +28,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Create OrderingThemeContext
  * This context will manage the current themes and layouts
  */
-var OrderingThemeContext = /*#__PURE__*/(0, _react.createContext)();
+var OrderingThemeContext = exports.OrderingThemeContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to ordering themes and layouts manager
  * This provider has a reducer for manage themes and layouts state
  * @param {props} props
  */
-exports.OrderingThemeContext = OrderingThemeContext;
-var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
+var OrderingThemeProvider = exports.OrderingThemeProvider = function OrderingThemeProvider(_ref) {
   var children = _ref.children,
     settings = _ref.settings;
   var _useState = (0, _react.useState)({
@@ -153,8 +152,7 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
 /**
  * Hook to get ordering theme
  */
-exports.OrderingThemeProvider = OrderingThemeProvider;
-var useOrderingTheme = function useOrderingTheme() {
+var useOrderingTheme = exports.useOrderingTheme = function useOrderingTheme() {
   var orderingThemeManager = (0, _react.useContext)(OrderingThemeContext);
   var warningMessage = function warningMessage() {
     console.warn('Must use OrderingThemeProvider to wrappe the app.');
@@ -167,4 +165,3 @@ var useOrderingTheme = function useOrderingTheme() {
   };
   return orderingThemeManager || [{}, functionsPlaceholders];
 };
-exports.useOrderingTheme = useOrderingTheme;

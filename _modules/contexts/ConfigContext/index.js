@@ -35,15 +35,14 @@ _dayjs.default.extend(_utc.default);
  * Create ConfigContext
  * This context will manage the current configs internally and provide an easy interface
  */
-var ConfigContext = /*#__PURE__*/(0, _react.createContext)();
+var ConfigContext = exports.ConfigContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to configs manager
  * This provider has a reducer for manage configs state
  * @param {props} props
  */
-exports.ConfigContext = ConfigContext;
-var ConfigProvider = function ConfigProvider(_ref) {
+var ConfigProvider = exports.ConfigProvider = function ConfigProvider(_ref) {
   var children = _ref.children,
     strategy = _ref.strategy;
   var _useState = (0, _react.useState)({
@@ -313,8 +312,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
 /**
  * Hook to get and update configs state
  */
-exports.ConfigProvider = ConfigProvider;
-var useConfig = function useConfig() {
+var useConfig = exports.useConfig = function useConfig() {
   var configManager = (0, _react.useContext)(ConfigContext);
   return configManager || [{}, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -326,4 +324,3 @@ var useConfig = function useConfig() {
     }, _callee2);
   }))];
 };
-exports.useConfig = useConfig;

@@ -15,15 +15,14 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  * Create BillingContext
  * Wrapper to use all context to ordering apps
  */
-var BillingContext = /*#__PURE__*/(0, _react.createContext)();
+var BillingContext = exports.BillingContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to languages manager
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-exports.BillingContext = BillingContext;
-var BillingProvider = function BillingProvider(_ref) {
+var BillingProvider = exports.BillingProvider = function BillingProvider(_ref) {
   var settings = _ref.settings,
     children = _ref.children;
   return /*#__PURE__*/_react.default.createElement(BillingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
@@ -33,4 +32,3 @@ var BillingProvider = function BillingProvider(_ref) {
     })
   }, /*#__PURE__*/_react.default.createElement(_ToastContext.ToastProvider, null, children))));
 };
-exports.BillingProvider = BillingProvider;
