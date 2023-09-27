@@ -328,7 +328,7 @@ export const OrderListGroups = (props) => {
         page: 1,
         pageSize,
         orderStatus: ordersGroup[currentTabSelected]?.currentFilter,
-        newFetch
+        newFetch: (newFetch || newFetchCurrent)
       })
 
       const _ordersCleaned = error
@@ -808,12 +808,10 @@ export const OrderListGroups = (props) => {
     setCurrentFilters(ordersGroup[currentTabSelected]?.currentFilter)
     if (currentTabSelected === 'logisticOrders') {
       loadLogisticOrders(!!logisticOrders?.orders)
-    } else {
-      loadOrders({
-        newFetchCurrent: ordersGroup[currentTabSelected]?.pagination?.total === null
-      })
+    } else if (ordersGroup[currentTabSelected]?.pagination?.total === null && props.isNetConnected) {
+      loadOrders({ newFetchCurrent: true })
     }
-  }, [currentTabSelected])
+  }, [currentTabSelected, props.isNetConnected])
 
   useEffect(() => {
     if (currentFilters && !isDriverApp) {
@@ -1127,6 +1125,7 @@ export const OrderListGroups = (props) => {
 OrderListGroups.defaultProps = {
   orderBy: '-id',
   orderDirection: 'desc',
+  isNetConnected: true,
   paginationSettings: { initialPage: 1, pageSize: 10, controlType: 'infinity' },
   beforeComponents: [],
   afterComponents: [],
