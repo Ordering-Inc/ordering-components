@@ -432,7 +432,8 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
               ordersStatusArray === null || ordersStatusArray === void 0 || ordersStatusArray.map(function (tab) {
                 ordersGroup = _objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, tab, _objectSpread(_objectSpread({}, orderStructure), {}, {
                   defaultFilter: ordersGroupStatus[tab],
-                  currentFilter: ordersGroup[tab].currentFilter
+                  currentFilter: ordersGroup[tab].currentFilter,
+                  orders: ordersGroup[tab].orders
                 })));
               });
             } else if (newFetchCurrent) {
