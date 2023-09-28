@@ -452,7 +452,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
               page: 1,
               pageSize: pageSize,
               orderStatus: (_ordersGroup$currentT4 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT4 === void 0 ? void 0 : _ordersGroup$currentT4.currentFilter,
-              newFetch: newFetch
+              newFetch: newFetch || newFetchCurrent
             });
           case 9:
             _yield$getOrders = _context3.sent;
@@ -1201,17 +1201,16 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     getBusinessesIDs();
   }, []);
   (0, _react.useEffect)(function () {
-    var _ordersGroup$currentT12;
+    var _ordersGroup$currentT12, _ordersGroup$currentT13;
     setCurrentFilters((_ordersGroup$currentT12 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT12 === void 0 ? void 0 : _ordersGroup$currentT12.currentFilter);
     if (currentTabSelected === 'logisticOrders') {
       loadLogisticOrders(!!(logisticOrders !== null && logisticOrders !== void 0 && logisticOrders.orders));
-    } else {
-      var _ordersGroup$currentT13;
+    } else if (((_ordersGroup$currentT13 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT13 === void 0 || (_ordersGroup$currentT13 = _ordersGroup$currentT13.pagination) === null || _ordersGroup$currentT13 === void 0 ? void 0 : _ordersGroup$currentT13.total) === null && props.isNetConnected) {
       loadOrders({
-        newFetchCurrent: ((_ordersGroup$currentT13 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT13 === void 0 || (_ordersGroup$currentT13 = _ordersGroup$currentT13.pagination) === null || _ordersGroup$currentT13 === void 0 ? void 0 : _ordersGroup$currentT13.total) === null
+        newFetchCurrent: true
       });
     }
-  }, [currentTabSelected]);
+  }, [currentTabSelected, props.isNetConnected]);
   (0, _react.useEffect)(function () {
     if (currentFilters && !isDriverApp) {
       loadOrders({
@@ -1481,6 +1480,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
 OrderListGroups.defaultProps = {
   orderBy: '-id',
   orderDirection: 'desc',
+  isNetConnected: true,
   paginationSettings: {
     initialPage: 1,
     pageSize: 10,
