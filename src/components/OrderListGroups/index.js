@@ -29,8 +29,11 @@ export const OrderListGroups = (props) => {
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
   const [{ configs }] = useConfig()
+
+  const _combineTabs = props.combineTabs ?? configs?.combine_pending_and_progress_orders?.value === '1'
+  const [combineTabs, setCombineTabsState] = useState(_combineTabs)
+
   const isLogisticActivated = configs?.logistic_module?.value
-  const combineTabs = configs?.combine_pending_and_progress_orders?.value === '1'
   const ordersStatusArray = combineTabs ? ['active', 'completed', 'cancelled'] : ['pending', 'inProgress', 'completed', 'cancelled']
 
   const ordersGroupStatus = {
@@ -1100,6 +1103,7 @@ export const OrderListGroups = (props) => {
           setOrdersGroup={setOrdersGroup}
           logisticOrders={logisticOrders}
           messages={messages}
+          setCombineTabsState={setCombineTabsState}
           ordersDeleted={ordersDeleted}
           setOrdersDeleted={setOrdersDeleted}
           setMessages={setMessages}
