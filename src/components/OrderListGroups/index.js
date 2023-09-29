@@ -89,7 +89,6 @@ export const OrderListGroups = (props) => {
   const [ordersDeleted, setOrdersDeleted] = useState({ loading: false, error: null, result: [] })
   const [controlsState, setControlsState] = useState({ loading: true, error: null, paymethods: [] })
   const [businessIDs, setBusinessIDs] = useState([])
-  const [orderUpdated, setOrderUpdated] = useState(null)
   const [orderLogisticAdded, setOrderLogisticAdded] = useState(null)
   const [orderLogisticUpdated, setOrderLogisticUpdated] = useState(null)
   const [recentlyReceivedMessage, setRecentlyReceivedMessage] = useState(null)
@@ -836,16 +835,11 @@ export const OrderListGroups = (props) => {
   }
 
   useEffect(() => {
-    if (ordersGroup[currentTabSelected]?.loading || !socket?.socket) return
-
+    if (ordersGroup[currentTabSelected]?.loading || !socket?.socket || !socket?.socket?.connected) return
     const handleUpdateOrder = (order) => {
-      const isSameEvent = orderUpdated?.id === order?.id && orderUpdated.status === order?.status
       if (session?.user?.level === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return
-      if (!isSameEvent) {
-        handleActionEvent('update_order', order)
-        events.emit('order_updated', order)
-        setOrderUpdated(order)
-      }
+      handleActionEvent('update_order', order)
+      events.emit('order_updated', order)
       let orderFound = null
       for (let i = 0; i < ordersStatusArray.length; i++) {
         const status = ordersStatusArray[i]
@@ -945,19 +939,23 @@ export const OrderListGroups = (props) => {
         setRecentlyReceivedMessage(message)
       }
     }
-
-    socket.on('orders_register', handleAddNewOrder)
-    socket.on('update_order', handleUpdateOrder)
-    socket.on('message', handleReceiveMessage)
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
-
+    if (socket?.socket?._callbacks?.$orders_register?.length < 2) {
+      socket.on('orders_register', handleAddNewOrder)
+    }
+    if (socket?.socket?._callbacks?.$update_order?.length < 2) {
+      socket.on('update_order', handleUpdateOrder)
+    }
+    if (socket?.socket?._callbacks?.$message?.length < 2) {
+      socket.on('message', handleReceiveMessage)
+    }
     return () => {
       socket.off('orders_register', handleAddNewOrder)
       socket.off('update_order', handleUpdateOrder)
       socket.off('message', handleReceiveMessage)
     }
-  }, [ordersGroup, socket?.socket, session])
+  }, [ordersGroup, socket?.socket, session, events])
 
   const handleAddAssignRequest = useCallback(
     (order) => {
