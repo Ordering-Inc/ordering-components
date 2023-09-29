@@ -71,6 +71,11 @@ export const ProductForm = (props) => {
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
 
   /**
+   * pizza type and position
+   */
+  const [pizzaType, setPizzaType] = useState({ type: '', left: false, right: false, center: false })
+
+  /**
    * Edit mode
    */
   const editMode = typeof props.productCart?.code !== 'undefined'
@@ -354,6 +359,7 @@ export const ProductForm = (props) => {
       newProductCart.options[`id:${option.id}`].balance = newBalance
       newProductCart.unitTotal = getUnitTotal(newProductCart)
       newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
+      handleVerifyPizzaType(newProductCart)
       setProductCart(newProductCart)
     }
   }
@@ -400,6 +406,7 @@ export const ProductForm = (props) => {
         newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
       }
     })
+    handleVerifyPizzaType(newProductCart)
     setProductCart(newProductCart)
   }
 
@@ -615,6 +622,25 @@ export const ProductForm = (props) => {
       })
     }
   }
+  /**
+   * function to verify position of pizza ingredients
+   * @param {object} newProductCart cart updated with suboptions
+   */
+  const handleVerifyPizzaType = (newProductCart) => {
+    const pizzaTypeSubtoption = Object.values(newProductCart?.options || {})?.map(option => Object.values(option?.suboptions || {}))?.flat()?.find?.(suboption => suboption?.name === 'Completa' || suboption?.name === 'Mitad y mitad')
+    if (pizzaTypeSubtoption) {
+      const option = Object.values(newProductCart?.options || {})?.find(option => option?.name === 'Elige tus ingredientes' && Object.values(option?.suboptions)?.length > 0)
+      const suboption1 = Object.values(option?.suboptions || {})?.map(suboption => suboption)?.[0]
+      const suboption2 = Object.values(option?.suboptions || {})?.map(suboption => suboption)?.[1]
+      setPizzaType({
+        ...pizzaType,
+        type: pizzaTypeSubtoption?.name,
+        center: pizzaTypeSubtoption?.name === 'Completa',
+        left: pizzaTypeSubtoption?.name === 'Mitad y mitad' && suboption1?.position === suboption2?.position ? suboption2 : suboption1,
+        right: pizzaTypeSubtoption?.name === 'Mitad y mitad' && suboption1?.position === suboption2?.position ? suboption1 : suboption2
+      })
+    }
+  }
 
   /**
    * Init product cart when product changed
@@ -656,10 +682,10 @@ export const ProductForm = (props) => {
           const preselected = checkHasPreselected(extra.options, option)
           return (
             ((option.min === 1 &&
-            option.max === 1 &&
-            option.suboptions.filter(suboption => suboption.enabled).length === 1) ||
-          option.suboptions.filter(suboption => suboption.preselected).length > 0) &&
-          (!option?.conditioned || (option?.conditioned && preselected))
+              option.max === 1 &&
+              option.suboptions.filter(suboption => suboption.enabled).length === 1) ||
+              option.suboptions.filter(suboption => suboption.preselected).length > 0) &&
+            (!option?.conditioned || (option?.conditioned && preselected))
           )
         }
       )))
@@ -798,6 +824,8 @@ export const ProductForm = (props) => {
             isSoldOut={isSoldOut}
             actionStatus={actionStatus}
             maxProductQuantity={maxProductQuantity}
+            pizzaType={pizzaType}
+            setPizzaType={setPizzaType}
             increment={increment}
             decrement={decrement}
             handleChangeProductCartQuantity={handleChangeProductCartQuantity}
