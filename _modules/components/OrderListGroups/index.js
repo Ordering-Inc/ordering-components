@@ -162,20 +162,16 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     setBusinessIDs = _useState18[1];
   var _useState19 = (0, _react.useState)(null),
     _useState20 = _slicedToArray(_useState19, 2),
-    orderUpdated = _useState20[0],
-    setOrderUpdated = _useState20[1];
+    orderLogisticAdded = _useState20[0],
+    setOrderLogisticAdded = _useState20[1];
   var _useState21 = (0, _react.useState)(null),
     _useState22 = _slicedToArray(_useState21, 2),
-    orderLogisticAdded = _useState22[0],
-    setOrderLogisticAdded = _useState22[1];
+    orderLogisticUpdated = _useState22[0],
+    setOrderLogisticUpdated = _useState22[1];
   var _useState23 = (0, _react.useState)(null),
     _useState24 = _slicedToArray(_useState23, 2),
-    orderLogisticUpdated = _useState24[0],
-    setOrderLogisticUpdated = _useState24[1];
-  var _useState25 = (0, _react.useState)(null),
-    _useState26 = _slicedToArray(_useState25, 2),
-    recentlyReceivedMessage = _useState26[0],
-    setRecentlyReceivedMessage = _useState26[1];
+    recentlyReceivedMessage = _useState24[0],
+    setRecentlyReceivedMessage = _useState24[1];
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
   var getOrders = /*#__PURE__*/function () {
@@ -1235,17 +1231,13 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     events.emit(evts[event], value);
   };
   (0, _react.useEffect)(function () {
-    var _ordersGroup$currentT14, _session$user7, _session$user8;
-    if ((_ordersGroup$currentT14 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT14 !== void 0 && _ordersGroup$currentT14.loading || !(socket !== null && socket !== void 0 && socket.socket)) return;
+    var _ordersGroup$currentT14, _socket$socket, _session$user7, _session$user8, _socket$socket2, _socket$socket3, _socket$socket4;
+    if ((_ordersGroup$currentT14 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT14 !== void 0 && _ordersGroup$currentT14.loading || !(socket !== null && socket !== void 0 && socket.socket) || !(socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && _socket$socket.connected)) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
       var _session$user5, _orderFound, _order$driver, _session$user6;
-      var isSameEvent = (orderUpdated === null || orderUpdated === void 0 ? void 0 : orderUpdated.id) === (order === null || order === void 0 ? void 0 : order.id) && orderUpdated.status === (order === null || order === void 0 ? void 0 : order.status);
       if ((session === null || session === void 0 || (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.level) === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return;
-      if (!isSameEvent) {
-        handleActionEvent('update_order', order);
-        events.emit('order_updated', order);
-        setOrderUpdated(order);
-      }
+      handleActionEvent('update_order', order);
+      events.emit('order_updated', order);
       var orderFound = null;
       for (var i = 0; i < ordersStatusArray.length; i++) {
         var status = ordersStatusArray[i];
@@ -1313,17 +1305,23 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
         setRecentlyReceivedMessage(message);
       }
     };
-    socket.on('orders_register', handleAddNewOrder);
-    socket.on('update_order', handleUpdateOrder);
-    socket.on('message', handleReceiveMessage);
     var ordersRoom = (session === null || session === void 0 || (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user8 = session.user) === null || _session$user8 === void 0 ? void 0 : _session$user8.id);
     socket.join(ordersRoom);
+    if ((socket === null || socket === void 0 || (_socket$socket2 = socket.socket) === null || _socket$socket2 === void 0 || (_socket$socket2 = _socket$socket2._callbacks) === null || _socket$socket2 === void 0 || (_socket$socket2 = _socket$socket2.$orders_register) === null || _socket$socket2 === void 0 ? void 0 : _socket$socket2.length) < 2) {
+      socket.on('orders_register', handleAddNewOrder);
+    }
+    if ((socket === null || socket === void 0 || (_socket$socket3 = socket.socket) === null || _socket$socket3 === void 0 || (_socket$socket3 = _socket$socket3._callbacks) === null || _socket$socket3 === void 0 || (_socket$socket3 = _socket$socket3.$update_order) === null || _socket$socket3 === void 0 ? void 0 : _socket$socket3.length) < 2) {
+      socket.on('update_order', handleUpdateOrder);
+    }
+    if ((socket === null || socket === void 0 || (_socket$socket4 = socket.socket) === null || _socket$socket4 === void 0 || (_socket$socket4 = _socket$socket4._callbacks) === null || _socket$socket4 === void 0 || (_socket$socket4 = _socket$socket4.$message) === null || _socket$socket4 === void 0 ? void 0 : _socket$socket4.length) < 2) {
+      socket.on('message', handleReceiveMessage);
+    }
     return function () {
       socket.off('orders_register', handleAddNewOrder);
       socket.off('update_order', handleUpdateOrder);
       socket.off('message', handleReceiveMessage);
     };
-  }, [ordersGroup, socket === null || socket === void 0 ? void 0 : socket.socket, session]);
+  }, [ordersGroup, socket === null || socket === void 0 ? void 0 : socket.socket, session, events]);
   var handleAddAssignRequest = (0, _react.useCallback)(function (order) {
     var _order$order$id3, _order$order4;
     setOrderLogisticAdded(order);
