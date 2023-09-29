@@ -953,12 +953,7 @@ export const OrderListGroups = (props) => {
     if (socket?.socket?._callbacks?.$message?.length < 2) {
       socket.on('message', handleReceiveMessage)
     }
-    return () => {
-      socket.off('orders_register', handleAddNewOrder)
-      socket.off('update_order', handleUpdateOrder)
-      socket.off('message', handleReceiveMessage)
-    }
-  }, [ordersGroup, socket?.socket, session, events])
+  }, [ordersGroup, socket?.socket, session])
 
   const handleAddAssignRequest = useCallback(
     (order) => {
