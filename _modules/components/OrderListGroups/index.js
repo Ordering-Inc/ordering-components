@@ -36,7 +36,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) {
-  var _configs$logistic_mod, _configs$combine_pend, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _orderGroupStatusCust5, _paginationSettings$p, _ordersGroup$currentT15;
+  var _props$combineTabs, _configs$combine_pend, _configs$logistic_mod, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _orderGroupStatusCust5, _paginationSettings$p, _ordersGroup$currentT15;
   var UIComponent = props.UIComponent,
     orderBy = props.orderBy,
     isIos = props.isIos,
@@ -67,8 +67,12 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
   var _useConfig = (0, _ConfigContext.useConfig)(),
     _useConfig2 = _slicedToArray(_useConfig, 1),
     configs = _useConfig2[0].configs;
+  var _combineTabs = (_props$combineTabs = props.combineTabs) !== null && _props$combineTabs !== void 0 ? _props$combineTabs : (configs === null || configs === void 0 || (_configs$combine_pend = configs.combine_pending_and_progress_orders) === null || _configs$combine_pend === void 0 ? void 0 : _configs$combine_pend.value) === '1';
+  var _useState = (0, _react.useState)(_combineTabs),
+    _useState2 = _slicedToArray(_useState, 2),
+    combineTabs = _useState2[0],
+    setCombineTabsState = _useState2[1];
   var isLogisticActivated = configs === null || configs === void 0 || (_configs$logistic_mod = configs.logistic_module) === null || _configs$logistic_mod === void 0 ? void 0 : _configs$logistic_mod.value;
-  var combineTabs = (configs === null || configs === void 0 || (_configs$combine_pend = configs.combine_pending_and_progress_orders) === null || _configs$combine_pend === void 0 ? void 0 : _configs$combine_pend.value) === '1';
   var ordersStatusArray = combineTabs ? ['active', 'completed', 'cancelled'] : ['pending', 'inProgress', 'completed', 'cancelled'];
   var ordersGroupStatus = {
     active: (_orderGroupStatusCust = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.active) !== null && _orderGroupStatusCust !== void 0 ? _orderGroupStatusCust : [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23],
@@ -87,7 +91,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
       total: null
     }
   };
-  var _useState = (0, _react.useState)({
+  var _useState3 = (0, _react.useState)({
       active: _objectSpread(_objectSpread({}, orderStructure), {}, {
         defaultFilter: ordersGroupStatus.active,
         currentFilter: ordersGroupStatus.active
@@ -109,73 +113,73 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
         currentFilter: ordersGroupStatus.cancelled
       })
     }),
-    _useState2 = _slicedToArray(_useState, 2),
-    ordersGroup = _useState2[0],
-    setOrdersGroup = _useState2[1];
-  var _useState3 = (0, _react.useState)(combineTabs ? 'active' : 'pending'),
     _useState4 = _slicedToArray(_useState3, 2),
-    currentTabSelected = _useState4[0],
-    setCurrentTabSelected = _useState4[1];
-  var _useState5 = (0, _react.useState)({
+    ordersGroup = _useState4[0],
+    setOrdersGroup = _useState4[1];
+  var _useState5 = (0, _react.useState)(combineTabs ? 'active' : 'pending'),
+    _useState6 = _slicedToArray(_useState5, 2),
+    currentTabSelected = _useState6[0],
+    setCurrentTabSelected = _useState6[1];
+  var _useState7 = (0, _react.useState)({
       loading: false,
       error: null,
       orders: []
     }),
-    _useState6 = _slicedToArray(_useState5, 2),
-    logisticOrders = _useState6[0],
-    setlogisticOrders = _useState6[1];
-  var _useState7 = (0, _react.useState)({
+    _useState8 = _slicedToArray(_useState7, 2),
+    logisticOrders = _useState8[0],
+    setlogisticOrders = _useState8[1];
+  var _useState9 = (0, _react.useState)({
       loading: false,
       error: null,
       messages: []
     }),
-    _useState8 = _slicedToArray(_useState7, 2),
-    messages = _useState8[0],
-    setMessages = _useState8[1];
-  var _useState9 = (0, _react.useState)(null),
     _useState10 = _slicedToArray(_useState9, 2),
-    currentFilters = _useState10[0],
-    setCurrentFilters = _useState10[1];
+    messages = _useState10[0],
+    setMessages = _useState10[1];
   var _useState11 = (0, _react.useState)(null),
     _useState12 = _slicedToArray(_useState11, 2),
-    filtered = _useState12[0],
-    setFiltered = _useState12[1];
-  var _useState13 = (0, _react.useState)({
+    currentFilters = _useState12[0],
+    setCurrentFilters = _useState12[1];
+  var _useState13 = (0, _react.useState)(null),
+    _useState14 = _slicedToArray(_useState13, 2),
+    filtered = _useState14[0],
+    setFiltered = _useState14[1];
+  var _useState15 = (0, _react.useState)({
       loading: false,
       error: null,
       result: []
     }),
-    _useState14 = _slicedToArray(_useState13, 2),
-    ordersDeleted = _useState14[0],
-    setOrdersDeleted = _useState14[1];
-  var _useState15 = (0, _react.useState)({
+    _useState16 = _slicedToArray(_useState15, 2),
+    ordersDeleted = _useState16[0],
+    setOrdersDeleted = _useState16[1];
+  var _useState17 = (0, _react.useState)({
       loading: true,
       error: null,
       paymethods: []
     }),
-    _useState16 = _slicedToArray(_useState15, 2),
-    controlsState = _useState16[0],
-    setControlsState = _useState16[1];
-  var _useState17 = (0, _react.useState)([]),
     _useState18 = _slicedToArray(_useState17, 2),
-    businessIDs = _useState18[0],
-    setBusinessIDs = _useState18[1];
-  var _useState19 = (0, _react.useState)(null),
+    controlsState = _useState18[0],
+    setControlsState = _useState18[1];
+  var _useState19 = (0, _react.useState)([]),
     _useState20 = _slicedToArray(_useState19, 2),
-    orderUpdated = _useState20[0],
-    setOrderUpdated = _useState20[1];
+    businessIDs = _useState20[0],
+    setBusinessIDs = _useState20[1];
   var _useState21 = (0, _react.useState)(null),
     _useState22 = _slicedToArray(_useState21, 2),
-    orderLogisticAdded = _useState22[0],
-    setOrderLogisticAdded = _useState22[1];
+    orderUpdated = _useState22[0],
+    setOrderUpdated = _useState22[1];
   var _useState23 = (0, _react.useState)(null),
     _useState24 = _slicedToArray(_useState23, 2),
-    orderLogisticUpdated = _useState24[0],
-    setOrderLogisticUpdated = _useState24[1];
+    orderLogisticAdded = _useState24[0],
+    setOrderLogisticAdded = _useState24[1];
   var _useState25 = (0, _react.useState)(null),
     _useState26 = _slicedToArray(_useState25, 2),
-    recentlyReceivedMessage = _useState26[0],
-    setRecentlyReceivedMessage = _useState26[1];
+    orderLogisticUpdated = _useState26[0],
+    setOrderLogisticUpdated = _useState26[1];
+  var _useState27 = (0, _react.useState)(null),
+    _useState28 = _slicedToArray(_useState27, 2),
+    recentlyReceivedMessage = _useState28[0],
+    setRecentlyReceivedMessage = _useState28[1];
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
   var getOrders = /*#__PURE__*/function () {
@@ -1459,6 +1463,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     setOrdersGroup: setOrdersGroup,
     logisticOrders: logisticOrders,
     messages: messages,
+    setCombineTabsState: setCombineTabsState,
     ordersDeleted: ordersDeleted,
     setOrdersDeleted: setOrdersDeleted,
     setMessages: setMessages,
