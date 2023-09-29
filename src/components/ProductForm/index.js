@@ -636,8 +636,8 @@ export const ProductForm = (props) => {
         ...pizzaType,
         type: pizzaTypeSubtoption?.name,
         center: pizzaTypeSubtoption?.name === 'Completa',
-        left: pizzaTypeSubtoption?.name === 'Mitad y mitad' && suboption1?.position === suboption2?.position ? suboption2 : suboption1,
-        right: pizzaTypeSubtoption?.name === 'Mitad y mitad' && suboption1?.position === suboption2?.position ? suboption1 : suboption2
+        left: pizzaTypeSubtoption?.name === 'Mitad y mitad' && suboption1,
+        right: pizzaTypeSubtoption?.name === 'Mitad y mitad' && suboption2
       })
     }
   }
