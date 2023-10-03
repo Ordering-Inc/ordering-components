@@ -1322,13 +1322,19 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     };
     var ordersRoom = (session === null || session === void 0 || (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user8 = session.user) === null || _session$user8 === void 0 ? void 0 : _session$user8.id);
     socket.join(ordersRoom);
-    if ((socket === null || socket === void 0 || (_socket$socket2 = socket.socket) === null || _socket$socket2 === void 0 || (_socket$socket2 = _socket$socket2._callbacks) === null || _socket$socket2 === void 0 || (_socket$socket2 = _socket$socket2.$orders_register) === null || _socket$socket2 === void 0 ? void 0 : _socket$socket2.length) < 2) {
+    if (socket !== null && socket !== void 0 && (_socket$socket2 = socket.socket) !== null && _socket$socket2 !== void 0 && (_socket$socket2 = _socket$socket2._callbacks) !== null && _socket$socket2 !== void 0 && (_socket$socket2 = _socket$socket2.$orders_register) !== null && _socket$socket2 !== void 0 && _socket$socket2.find(function (func) {
+      return (func === null || func === void 0 ? void 0 : func.name) !== 'handleAddNewOrder';
+    })) {
       socket.on('orders_register', handleAddNewOrder);
     }
-    if ((socket === null || socket === void 0 || (_socket$socket3 = socket.socket) === null || _socket$socket3 === void 0 || (_socket$socket3 = _socket$socket3._callbacks) === null || _socket$socket3 === void 0 || (_socket$socket3 = _socket$socket3.$update_order) === null || _socket$socket3 === void 0 ? void 0 : _socket$socket3.length) < 2) {
+    if (socket !== null && socket !== void 0 && (_socket$socket3 = socket.socket) !== null && _socket$socket3 !== void 0 && (_socket$socket3 = _socket$socket3._callbacks) !== null && _socket$socket3 !== void 0 && (_socket$socket3 = _socket$socket3.$update_order) !== null && _socket$socket3 !== void 0 && _socket$socket3.find(function (func) {
+      return (func === null || func === void 0 ? void 0 : func.name) !== 'handleUpdateOrder';
+    })) {
       socket.on('update_order', handleUpdateOrder);
     }
-    if ((socket === null || socket === void 0 || (_socket$socket4 = socket.socket) === null || _socket$socket4 === void 0 || (_socket$socket4 = _socket$socket4._callbacks) === null || _socket$socket4 === void 0 || (_socket$socket4 = _socket$socket4.$message) === null || _socket$socket4 === void 0 ? void 0 : _socket$socket4.length) < 2) {
+    if (socket !== null && socket !== void 0 && (_socket$socket4 = socket.socket) !== null && _socket$socket4 !== void 0 && (_socket$socket4 = _socket$socket4._callbacks) !== null && _socket$socket4 !== void 0 && (_socket$socket4 = _socket$socket4.$message) !== null && _socket$socket4 !== void 0 && _socket$socket4.find(function (func) {
+      return (func === null || func === void 0 ? void 0 : func.name) !== 'handleReceiveMessage';
+    })) {
       socket.on('message', handleReceiveMessage);
     }
     return function () {
