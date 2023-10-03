@@ -950,13 +950,13 @@ export const OrderListGroups = (props) => {
     }
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
-    if (socket?.socket?._callbacks?.$orders_register?.length < 2) {
+    if (socket?.socket?._callbacks?.$orders_register?.find(func => func?.name !== 'handleAddNewOrder')) {
       socket.on('orders_register', handleAddNewOrder)
     }
-    if (socket?.socket?._callbacks?.$update_order?.length < 2) {
+    if (socket?.socket?._callbacks?.$update_order?.find(func => func?.name !== 'handleUpdateOrder')) {
       socket.on('update_order', handleUpdateOrder)
     }
-    if (socket?.socket?._callbacks?.$message?.length < 2) {
+    if (socket?.socket?._callbacks?.$message?.find(func => func?.name !== 'handleReceiveMessage')) {
       socket.on('message', handleReceiveMessage)
     }
 
