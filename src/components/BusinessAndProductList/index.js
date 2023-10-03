@@ -39,6 +39,7 @@ export const BusinessAndProductList = (props) => {
   const [filterByMenus, setFilterByMenus] = useState(null)
   const [professionalSelected, setProfessionalSelected] = useState(null)
   const [businessState, setBusinessState] = useState({ business: {}, menus: null, loading: !props.avoidBusinessLoading, error: null })
+  const [loadedFirstTime, setLoadedFirstTime] = useState(false)
   const [categoriesState, setCategoriesState] = useState({})
   const [orderOptions, setOrderOptions] = useState({})
   const [productModal, setProductModal] = useState({ product: null, loading: false, error: null })
@@ -738,12 +739,14 @@ export const BusinessAndProductList = (props) => {
       }
 
       setBusinessState(data)
+      setLoadedFirstTime(true)
     } catch (err) {
       setBusinessState({
         ...businessState,
         loading: false,
         error: [err.message]
       })
+      setLoadedFirstTime(true)
     }
   }
 
@@ -957,6 +960,7 @@ export const BusinessAndProductList = (props) => {
           setNotFound={setNotFound}
           updateStoreCategory={updateStoreCategory}
           updateStoreProduct={updateStoreProduct}
+          loadedFirstTime={loadedFirstTime}
         />
       )}
     </>
