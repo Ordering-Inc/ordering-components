@@ -1021,7 +1021,8 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     handleReorder: handleReorder,
     handleRemoveCart: handleRemoveCart,
     cartState: cartState,
-    handleClickLogisticOrder: handleClickLogisticOrder
+    handleClickLogisticOrder: handleClickLogisticOrder,
+    loadMessages: loadMessages
   })));
 };
 OrderDetails.propTypes = {

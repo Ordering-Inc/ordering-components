@@ -338,7 +338,7 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
   };
   var handleToggleAvalaibleStatusDriver = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(newValue) {
-      var _props$userData3, response;
+      var _session$user, response;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -347,7 +347,7 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               loadingDriver: true
             }));
             _context2.next = 4;
-            return ordering.users((props === null || props === void 0 || (_props$userData3 = props.userData) === null || _props$userData3 === void 0 ? void 0 : _props$userData3.id) || userState.result.result.id).save({
+            return ordering.users(session === null || session === void 0 || (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id).save({
               available: newValue
             }, {
               accessToken: accessToken
@@ -455,13 +455,13 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
   }();
   var updatePromotions = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(change, setState, state) {
-      var _props$userData4, response, _change$setCustomerIn;
+      var _props$userData3, response, _change$setCustomerIn;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
             _context4.prev = 0;
             _context4.next = 3;
-            return ordering.users((props === null || props === void 0 || (_props$userData4 = props.userData) === null || _props$userData4 === void 0 ? void 0 : _props$userData4.id) || userState.result.result.id).save(change, {
+            return ordering.users((props === null || props === void 0 || (_props$userData3 = props.userData) === null || _props$userData3 === void 0 ? void 0 : _props$userData3.id) || userState.result.result.id).save(change, {
               accessToken: accessToken
             });
           case 3:
