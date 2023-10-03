@@ -249,7 +249,7 @@ export const UserFormDetails = (props) => {
     try {
       setUserState({ ...userState, loadingDriver: true })
       const response = await ordering
-        .users(props?.userData?.id || userState.result.result.id)
+        .users(session?.user?.id)
         .save(
           { available: newValue },
           {
