@@ -613,6 +613,7 @@ export const OrderDetails = (props) => {
           handleRemoveCart={handleRemoveCart}
           cartState={cartState}
           handleClickLogisticOrder={handleClickLogisticOrder}
+          loadMessages={loadMessages}
         />
       )}
     </>
