@@ -36,7 +36,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) {
-  var _props$combineTabs, _configs$combine_pend, _configs$logistic_mod, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _orderGroupStatusCust5, _paginationSettings$p, _ordersGroup$currentT15;
+  var _props$combineTabs, _configs$combine_pend, _configs$logistic_mod, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _orderGroupStatusCust5, _paginationSettings$p, _ordersGroup$currentT14;
   var UIComponent = props.UIComponent,
     orderBy = props.orderBy,
     isIos = props.isIos,
@@ -94,23 +94,28 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
   var _useState3 = (0, _react.useState)({
       active: _objectSpread(_objectSpread({}, orderStructure), {}, {
         defaultFilter: ordersGroupStatus.active,
-        currentFilter: ordersGroupStatus.active
+        currentFilter: ordersGroupStatus.active,
+        fetched: false
       }),
       pending: _objectSpread(_objectSpread({}, orderStructure), {}, {
         defaultFilter: ordersGroupStatus.pending,
-        currentFilter: ordersGroupStatus.pending
+        currentFilter: ordersGroupStatus.pending,
+        fetched: false
       }),
       inProgress: _objectSpread(_objectSpread({}, orderStructure), {}, {
         defaultFilter: ordersGroupStatus.inProgress,
-        currentFilter: ordersGroupStatus.inProgress
+        currentFilter: ordersGroupStatus.inProgress,
+        fetched: false
       }),
       completed: _objectSpread(_objectSpread({}, orderStructure), {}, {
         defaultFilter: ordersGroupStatus.completed,
-        currentFilter: ordersGroupStatus.completed
+        currentFilter: ordersGroupStatus.completed,
+        fetched: false
       }),
       cancelled: _objectSpread(_objectSpread({}, orderStructure), {}, {
         defaultFilter: ordersGroupStatus.cancelled,
-        currentFilter: ordersGroupStatus.cancelled
+        currentFilter: ordersGroupStatus.cancelled,
+        fetched: false
       })
     }),
     _useState4 = _slicedToArray(_useState3, 2),
@@ -465,6 +470,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
               loading: false,
               orders: _ordersCleaned,
               error: error ? result : null,
+              fetched: true,
               pagination: _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected].pagination), {}, {
                 currentPage: pagination.current_page,
                 pageSize: pagination.page_size,
@@ -873,18 +879,21 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
         return _order.id !== order.id;
       });
     }
-    ordersGroup[status].orders = sortOrders(orders);
     var _pagination = ordersGroup[status].pagination;
     if (type !== 'update') {
       _pagination = _objectSpread(_objectSpread({}, ordersGroup[status].pagination), {}, {
         total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
       });
-      ordersGroup[status].pagination = _pagination;
     }
-    setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, {
-      orders: filterByIdUnique(sortOrders(orders)),
-      pagination: _pagination
-    }));
+    setOrdersGroup(function (prevState) {
+      var _objectSpread12;
+      return _objectSpread(_objectSpread({}, prevState), {}, (_objectSpread12 = {
+        orders: filterByIdUnique(sortOrders(orders))
+      }, _defineProperty(_objectSpread12, status, _objectSpread(_objectSpread({}, prevState[status]), {}, {
+        orders: sortOrders(orders),
+        pagination: _pagination
+      })), _defineProperty(_objectSpread12, "pagination", _pagination), _objectSpread12));
+    });
   };
   var handleClickOrder = function handleClickOrder(orderAux) {
     var _order$order_group2;
@@ -1205,7 +1214,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     setCurrentFilters((_ordersGroup$currentT12 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT12 === void 0 ? void 0 : _ordersGroup$currentT12.currentFilter);
     if (currentTabSelected === 'logisticOrders') {
       loadLogisticOrders(!!(logisticOrders !== null && logisticOrders !== void 0 && logisticOrders.orders));
-    } else if (((_ordersGroup$currentT13 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT13 === void 0 || (_ordersGroup$currentT13 = _ordersGroup$currentT13.pagination) === null || _ordersGroup$currentT13 === void 0 ? void 0 : _ordersGroup$currentT13.total) === null && props.isNetConnected) {
+    } else if (!((_ordersGroup$currentT13 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT13 !== void 0 && _ordersGroup$currentT13.fetched) && props.isNetConnected) {
       loadOrders({
         newFetchCurrent: true
       });
@@ -1235,8 +1244,8 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     events.emit(evts[event], value);
   };
   (0, _react.useEffect)(function () {
-    var _ordersGroup$currentT14, _socket$socket, _session$user7, _session$user8, _socket$socket2, _socket$socket3, _socket$socket4;
-    if ((_ordersGroup$currentT14 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT14 !== void 0 && _ordersGroup$currentT14.loading || !(socket !== null && socket !== void 0 && socket.socket) || !(socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && _socket$socket.connected)) return;
+    var _socket$socket, _session$user7, _session$user8, _socket$socket2, _socket$socket3, _socket$socket4;
+    if (!(socket !== null && socket !== void 0 && socket.socket) || !(socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && _socket$socket.connected)) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
       var _session$user5, _orderFound, _order$driver, _session$user6;
       if ((session === null || session === void 0 || (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.level) === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return;
@@ -1255,8 +1264,10 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
       }
       showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id), 1000);
       if (!orderFound) {
-        var _ordersGroup, _getStatusById;
-        if (!(order !== null && order !== void 0 && order.products) || !(order !== null && order !== void 0 && order.summary) || typeof (order === null || order === void 0 ? void 0 : order.status) !== 'number' || !(order !== null && order !== void 0 && order.customer) || !(order !== null && order !== void 0 && order.business) || !(order !== null && order !== void 0 && order.paymethod)) {
+        var _order$payment_events, _ordersGroup, _getStatusById;
+        if (!(order !== null && order !== void 0 && order.products) || !(order !== null && order !== void 0 && order.summary) || typeof (order === null || order === void 0 ? void 0 : order.status) !== 'number' || !(order !== null && order !== void 0 && order.customer) || !(order !== null && order !== void 0 && order.business) || !(order !== null && order !== void 0 && order.paymethod) && !(order !== null && order !== void 0 && (_order$payment_events = order.payment_events) !== null && _order$payment_events !== void 0 && _order$payment_events.some(function (e) {
+          return e.event === 'payment';
+        }))) {
           return;
         }
         delete order.total;
@@ -1325,7 +1336,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
       socket.off('update_order', handleUpdateOrder);
       socket.off('message', handleReceiveMessage);
     };
-  }, [ordersGroup, socket === null || socket === void 0 ? void 0 : socket.socket, session, events]);
+  }, [JSON.stringify(ordersGroup), socket === null || socket === void 0 ? void 0 : socket.socket, session]);
   var handleAddAssignRequest = (0, _react.useCallback)(function (order) {
     var _order$order$id3, _order$order4;
     setOrderLogisticAdded(order);
@@ -1476,7 +1487,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     onFiltered: setFiltered,
     handleChangeOrderStatus: handleChangeOrderStatus,
     handleSendCustomerReview: handleSendCustomerReview,
-    ordersFormatted: formatOrdersGrouped((_ordersGroup$currentT15 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT15 === void 0 ? void 0 : _ordersGroup$currentT15.orders),
+    ordersFormatted: formatOrdersGrouped((_ordersGroup$currentT14 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT14 === void 0 ? void 0 : _ordersGroup$currentT14.orders),
     isLogisticActivated: isLogisticActivated
   })));
 };
