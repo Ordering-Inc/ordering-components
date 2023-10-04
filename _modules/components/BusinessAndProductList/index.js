@@ -106,43 +106,47 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
     _useState14 = _slicedToArray(_useState13, 2),
     businessState = _useState14[0],
     setBusinessState = _useState14[1];
-  var _useState15 = (0, _react.useState)({}),
+  var _useState15 = (0, _react.useState)(false),
     _useState16 = _slicedToArray(_useState15, 2),
-    categoriesState = _useState16[0],
-    setCategoriesState = _useState16[1];
+    loadedFirstTime = _useState16[0],
+    setLoadedFirstTime = _useState16[1];
   var _useState17 = (0, _react.useState)({}),
     _useState18 = _slicedToArray(_useState17, 2),
-    orderOptions = _useState18[0],
-    setOrderOptions = _useState18[1];
-  var _useState19 = (0, _react.useState)({
+    categoriesState = _useState18[0],
+    setCategoriesState = _useState18[1];
+  var _useState19 = (0, _react.useState)({}),
+    _useState20 = _slicedToArray(_useState19, 2),
+    orderOptions = _useState20[0],
+    setOrderOptions = _useState20[1];
+  var _useState21 = (0, _react.useState)({
       product: null,
       loading: false,
       error: null
     }),
-    _useState20 = _slicedToArray(_useState19, 2),
-    productModal = _useState20[0],
-    setProductModal = _useState20[1];
-  var _useState21 = (0, _react.useState)(false),
     _useState22 = _slicedToArray(_useState21, 2),
-    notFound = _useState22[0],
-    setNotFound = _useState22[1];
+    productModal = _useState22[0],
+    setProductModal = _useState22[1];
   var _useState23 = (0, _react.useState)(false),
     _useState24 = _slicedToArray(_useState23, 2),
-    featuredProducts = _useState24[0],
-    setFeaturedProducts = _useState24[1];
-  var _useState25 = (0, _react.useState)({
+    notFound = _useState24[0],
+    setNotFound = _useState24[1];
+  var _useState25 = (0, _react.useState)(false),
+    _useState26 = _slicedToArray(_useState25, 2),
+    featuredProducts = _useState26[0],
+    setFeaturedProducts = _useState26[1];
+  var _useState27 = (0, _react.useState)({
       values: []
     }),
-    _useState26 = _slicedToArray(_useState25, 2),
-    openCategories = _useState26[0],
-    setOpenCategories = _useState26[1];
-  var _useState27 = (0, _react.useState)({
+    _useState28 = _slicedToArray(_useState27, 2),
+    openCategories = _useState28[0],
+    setOpenCategories = _useState28[1];
+  var _useState29 = (0, _react.useState)({
       min: null,
       max: null
     }),
-    _useState28 = _slicedToArray(_useState27, 2),
-    priceFilterValues = _useState28[0],
-    setPriceFilterValues = _useState28[1];
+    _useState30 = _slicedToArray(_useState29, 2),
+    priceFilterValues = _useState30[0],
+    setPriceFilterValues = _useState30[1];
   var requestsState = {};
   var categoryStateDefault = {
     loading: true,
@@ -155,18 +159,18 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
     },
     products: []
   };
-  var _useState29 = (0, _react.useState)(categoryStateDefault),
-    _useState30 = _slicedToArray(_useState29, 2),
-    categoryState = _useState30[0],
-    setCategoryState = _useState30[1];
-  var _useState31 = (0, _react.useState)(null),
+  var _useState31 = (0, _react.useState)(categoryStateDefault),
     _useState32 = _slicedToArray(_useState31, 2),
-    errors = _useState32[0],
-    setErrors = _useState32[1];
-  var _useState33 = (0, _react.useState)(false),
+    categoryState = _useState32[0],
+    setCategoryState = _useState32[1];
+  var _useState33 = (0, _react.useState)(null),
     _useState34 = _slicedToArray(_useState33, 2),
-    errorQuantityProducts = _useState34[0],
-    setErrorQuantityProducts = _useState34[1];
+    errors = _useState34[0],
+    setErrors = _useState34[1];
+  var _useState35 = (0, _react.useState)(false),
+    _useState36 = _slicedToArray(_useState35, 2),
+    errorQuantityProducts = _useState36[0],
+    setErrorQuantityProducts = _useState36[1];
   var categoryKey = searchValue ? 'search' : categorySelected.id === 'featured' ? 'featured' : categorySelected.id ? "categoryId:".concat(categorySelected.id) : 'all';
   var isUseParentCategory = (configs === null || configs === void 0 || (_configs$use_parent_c = configs.use_parent_category) === null || _configs$use_parent_c === void 0 ? void 0 : _configs$use_parent_c.value) === 'true' || (configs === null || configs === void 0 || (_configs$use_parent_c2 = configs.use_parent_category) === null || _configs$use_parent_c2 === void 0 ? void 0 : _configs$use_parent_c2.value) === '1';
 
@@ -944,20 +948,22 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
             data.menus = menus;
           case 20:
             setBusinessState(data);
-            _context6.next = 26;
+            setLoadedFirstTime(true);
+            _context6.next = 28;
             break;
-          case 23:
-            _context6.prev = 23;
+          case 24:
+            _context6.prev = 24;
             _context6.t0 = _context6["catch"](0);
             setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
               loading: false,
               error: [_context6.t0.message]
             }));
-          case 26:
+            setLoadedFirstTime(true);
+          case 28:
           case "end":
             return _context6.stop();
         }
-      }, _callee6, null, [[0, 23]]);
+      }, _callee6, null, [[0, 24]]);
     }));
     return function getBusiness() {
       return _ref13.apply(this, arguments);
@@ -1256,7 +1262,8 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
     notFound: notFound,
     setNotFound: setNotFound,
     updateStoreCategory: updateStoreCategory,
-    updateStoreProduct: updateStoreProduct
+    updateStoreProduct: updateStoreProduct,
+    loadedFirstTime: loadedFirstTime
   })));
 };
 BusinessAndProductList.propTypes = {
