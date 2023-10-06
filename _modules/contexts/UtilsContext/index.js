@@ -1,6 +1,6 @@
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -19,7 +19,7 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 _dayjs.default.extend(_relativeTime.default);
@@ -29,15 +29,14 @@ _dayjs.default.extend(_updateLocale.default);
  * This context will manage the current configs internally and provide an easy interface
  */
 
-var UtilsContext = /*#__PURE__*/(0, _react.createContext)();
+var UtilsContext = exports.UtilsContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to utils manager
  * This provider has a reducer for manage utils functions
  * @param {props} props
  */
-exports.UtilsContext = UtilsContext;
-var UtilsProviders = function UtilsProviders(_ref) {
+var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
   var children = _ref.children;
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
     _useLanguage2 = _slicedToArray(_useLanguage, 2),
@@ -149,12 +148,12 @@ var UtilsProviders = function UtilsProviders(_ref) {
     return number;
   };
   var parseDate = function parseDate(date) {
-    var _configState$configs$9, _configState$configs, _configState$configs$10;
+    var _configState$configs$9, _configState$configs;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_configState$configs$9 = configState.configs.format_time) === null || _configState$configs$9 === void 0 ? void 0 : _configState$configs$9.value) || '24';
     var formatDate = {
       inputFormat: (options === null || options === void 0 ? void 0 : options.inputFormat) || ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD hh:mm:ss A', 'YYYY-MM-DD hh:mm:ss'],
-      outputFormat: (options === null || options === void 0 ? void 0 : options.outputFormat) || ((_configState$configs = configState.configs) === null || _configState$configs === void 0 ? void 0 : (_configState$configs$10 = _configState$configs.dates_general_format) === null || _configState$configs$10 === void 0 ? void 0 : _configState$configs$10.value) || (formatTime === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ss A'),
+      outputFormat: (options === null || options === void 0 ? void 0 : options.outputFormat) || ((_configState$configs = configState.configs) === null || _configState$configs === void 0 || (_configState$configs = _configState$configs.dates_general_format) === null || _configState$configs === void 0 ? void 0 : _configState$configs.value) || (formatTime === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ss A'),
       utc: typeof (options === null || options === void 0 ? void 0 : options.utc) === 'boolean' ? options === null || options === void 0 ? void 0 : options.utc : true
     };
     if (!(0, _dayjs.default)(date, formatDate.inputFormat).isValid()) {
@@ -164,10 +163,10 @@ var UtilsProviders = function UtilsProviders(_ref) {
     return _date.format(formatDate.outputFormat);
   };
   var parseTime = function parseTime(time) {
-    var _configState$configs$11;
+    var _configState$configs$10;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     if (!time) return '00:00';
-    var _formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_configState$configs$11 = configState.configs.format_time) === null || _configState$configs$11 === void 0 ? void 0 : _configState$configs$11.value) || '24';
+    var _formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_configState$configs$10 = configState.configs.format_time) === null || _configState$configs$10 === void 0 ? void 0 : _configState$configs$10.value) || '24';
     var formatTime = {
       inputFormat: (options === null || options === void 0 ? void 0 : options.inputFormat) || ['HH:mm', 'hh:mm A', 'hh:mm'],
       outputFormat: (options === null || options === void 0 ? void 0 : options.outputFormat) || (_formatTime === '24' ? 'HH:mm' : 'hh:mm A'),
@@ -192,16 +191,16 @@ var UtilsProviders = function UtilsProviders(_ref) {
     }
   };
   var parseDistance = function parseDistance(distance) {
-    var _configState$configs$12, _configState$configs$13;
+    var _configState$configs$11, _configState$configs$12;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     distance = parseFloat(distance) || 0;
     var unit = (options === null || options === void 0 ? void 0 : options.unit) || 'KM';
-    if (((_configState$configs$12 = configState.configs.distance_unit_km) === null || _configState$configs$12 === void 0 ? void 0 : _configState$configs$12.value) === '1') {
+    if (((_configState$configs$11 = configState.configs.distance_unit_km) === null || _configState$configs$11 === void 0 ? void 0 : _configState$configs$11.value) === '1') {
       unit = 'KM';
     }
-    if ((_configState$configs$13 = configState.configs.distance_unit) !== null && _configState$configs$13 !== void 0 && _configState$configs$13.value) {
-      var _configState$configs$14;
-      unit = (_configState$configs$14 = configState.configs.distance_unit) === null || _configState$configs$14 === void 0 ? void 0 : _configState$configs$14.value;
+    if ((_configState$configs$12 = configState.configs.distance_unit) !== null && _configState$configs$12 !== void 0 && _configState$configs$12.value) {
+      var _configState$configs$13;
+      unit = (_configState$configs$13 = configState.configs.distance_unit) === null || _configState$configs$13 === void 0 ? void 0 : _configState$configs$13.value;
     }
     if (unit.toUpperCase() === 'MI') {
       var dist = distance * 0.621371;
@@ -323,9 +322,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
 /**
  * Hook to get utils functions
  */
-exports.UtilsProviders = UtilsProviders;
-var useUtils = function useUtils() {
+var useUtils = exports.useUtils = function useUtils() {
   var utilsManager = (0, _react.useContext)(UtilsContext);
   return utilsManager || [{}, function () {}];
 };
-exports.useUtils = useUtils;
