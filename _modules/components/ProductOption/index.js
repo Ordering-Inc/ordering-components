@@ -10,10 +10,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * Component to render product options
  */
-var ProductOption = exports.ProductOption = function ProductOption(props) {
+var ProductOption = function ProductOption(props) {
   var UIComponent = props.UIComponent;
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props));
 };
+exports.ProductOption = ProductOption;
 ProductOption.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
