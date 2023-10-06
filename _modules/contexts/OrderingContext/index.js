@@ -1,6 +1,6 @@
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -28,15 +28,14 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
  * Create OrderingContext
  * Wrapper to use all context to ordering apps
  */
-var OrderingContext = /*#__PURE__*/(0, _react.createContext)();
+var OrderingContext = exports.OrderingContext = /*#__PURE__*/(0, _react.createContext)();
 
 /**
  * Custom provider to languages manager
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-exports.OrderingContext = OrderingContext;
-var OrderingProvider = function OrderingProvider(_ref) {
+var OrderingProvider = exports.OrderingProvider = function OrderingProvider(_ref) {
   var _settings$franchiseSl;
   var Alert = _ref.Alert,
     settings = _ref.settings,
@@ -82,4 +81,3 @@ var OrderingProvider = function OrderingProvider(_ref) {
     businessSlug: settings === null || settings === void 0 ? void 0 : settings.businessSlug
   }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children))))))))))))))));
 };
-exports.OrderingProvider = OrderingProvider;
