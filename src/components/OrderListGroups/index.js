@@ -922,7 +922,9 @@ export const OrderListGroups = (props) => {
             actionOrderToTab(orderFound, newOrderStatus, 'add')
           }
         } else {
-          actionOrderToTab(orderFound, newOrderStatus, 'remove')
+          !currentFilter.includes(orderFound.status) || (orderFound?.driver === null && isDriverApp)
+            ? actionOrderToTab(orderFound, newOrderStatus, 'remove')
+            : actionOrderToTab(orderFound, newOrderStatus, 'update')
         }
       }
     }
