@@ -32,7 +32,9 @@ export const OrderListGroups = (props) => {
   const isLogisticActivated = configs?.logistic_module?.value
   const combineTabs = configs?.combine_pending_and_progress_orders?.value === '1'
   const ordersStatusArray = combineTabs ? ['active', 'completed', 'cancelled'] : ['pending', 'inProgress', 'completed', 'cancelled']
-
+  const notificationStatusses = props.isDriverApp
+    ? configs?.notification_driver_states?.value.split('|').map(value => Number(value)) || []
+    : configs?.notification_business_states?.value.split('|').map(value => Number(value)) || []
   const ordersGroupStatus = {
     active: orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23],
     pending: orderGroupStatusCustom?.pending ?? [0, 13],
@@ -837,7 +839,6 @@ export const OrderListGroups = (props) => {
 
     const handleUpdateOrder = (order) => {
       if (session?.user?.level === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return
-      handleActionEvent('update_order', order)
       events.emit('order_updated', order)
       let orderFound = null
       for (let i = 0; i < ordersStatusArray.length; i++) {
@@ -847,12 +848,13 @@ export const OrderListGroups = (props) => {
         }
         if (orderFound) break
       }
-
-      showToast(
-        ToastType.Info,
-        t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id),
-        1000
-      )
+      if (notificationStatusses.includes(order?.status)) {
+        showToast(
+          ToastType.Info,
+          t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id),
+          1000
+        )
+      }
 
       if (!orderFound) {
         if (
@@ -910,9 +912,7 @@ export const OrderListGroups = (props) => {
             actionOrderToTab(orderFound, newOrderStatus, 'add')
           }
         } else {
-          !currentFilter.includes(orderFound.status)
-            ? actionOrderToTab(orderFound, newOrderStatus, 'remove')
-            : actionOrderToTab(orderFound, newOrderStatus, 'update')
+          actionOrderToTab(orderFound, newOrderStatus, 'remove')
         }
       }
     }
@@ -920,16 +920,15 @@ export const OrderListGroups = (props) => {
     const handleAddNewOrder = (order) => {
       events.emit('order_added', order)
       handleActionEvent('order_added', order)
-      showToast(
-        ToastType.Info,
-        t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id),
-        1000
-      )
-      const status = getStatusById(order?.status) ?? ''
-      const currentFilter = ordersGroup[status]?.currentFilter
-      if (currentFilter?.includes(order?.status)) {
-        actionOrderToTab(order, status, 'add')
+      if (notificationStatusses.includes(order?.status)) {
+        showToast(
+          ToastType.Info,
+          t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id),
+          1000
+        )
       }
+      const status = getStatusById(order?.status) ?? ''
+      actionOrderToTab(order, status, 'add')
     }
 
     socket.on('orders_register', handleAddNewOrder)
@@ -937,11 +936,27 @@ export const OrderListGroups = (props) => {
     socket.off('message', (e) => handleActionEvent('messages', e))
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
+<<<<<<< HEAD
     socket.socket && socket.socket.on('connect', () => {
       socket.join(ordersRoom)
     })
+=======
+    if (socket?.socket?._callbacks?.$orders_register?.find(func => func?.name !== 'handleAddNewOrder')) {
+      socket.on('orders_register', handleAddNewOrder)
+    }
+    if (!socket?.socket?._callbacks?.$order_assigned || socket?.socket?._callbacks?.$order_assigned?.find(func => func?.name !== 'handleAddNewOrder')) {
+      socket.on('order_assigned', handleAddNewOrder)
+    }
+    if (socket?.socket?._callbacks?.$update_order?.find(func => func?.name !== 'handleUpdateOrder')) {
+      socket.on('update_order', handleUpdateOrder)
+    }
+    if (socket?.socket?._callbacks?.$message?.find(func => func?.name !== 'handleReceiveMessage')) {
+      socket.on('message', handleReceiveMessage)
+    }
+>>>>>>> ee4c8ede ([FIX] toasts and alerts driver app (#1131))
     return () => {
       socket.off('orders_register', handleAddNewOrder)
+      socket.off('order_assigned', handleAddNewOrder)
       socket.off('update_order', handleUpdateOrder)
       socket.off('message', (e) => handleActionEvent('messages', e))
     }
