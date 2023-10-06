@@ -13,13 +13,14 @@ function _extends() { _extends = Object.assign ? Object.assign.bind() : function
 /**
  * Component to manage payment option cash behavior without UI component
  */
-var PaymentOptionCash = exports.PaymentOptionCash = function PaymentOptionCash(props) {
+var PaymentOptionCash = function PaymentOptionCash(props) {
   var UIComponent = props.UIComponent,
     orderTotal = props.orderTotal;
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     total: orderTotal
   })));
 };
+exports.PaymentOptionCash = PaymentOptionCash;
 PaymentOptionCash.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
