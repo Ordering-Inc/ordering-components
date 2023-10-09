@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import * as Sentry from '@sentry/react'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useApi } from '../../contexts/ApiContext'
@@ -62,6 +63,16 @@ export const ProductForm = (props) => {
    * Custom Suboption by default
    */
   const [customDefaultSubOptions, setCustomDefaultSubOptions] = useState([])
+
+  /**
+   * preselected and selected suboptions
+   */
+  const [selectedSuboptions, setSelectedSuboptions] = useState([])
+
+  /**
+   * dictionary of respect_to suboptions
+   */
+  const [dependsSuboptions, setDependsSuboptions] = useState([])
 
   const [professionalListState, setProfessionalListState] = useState({ loading: false, professionals: [], error: null })
 
@@ -347,6 +358,74 @@ export const ProductForm = (props) => {
       }
       newProductCart.options[`id:${option.id}`].suboptions[`id:${suboption.id}`] = state
     }
+    let suboptionsArray = []
+    const _selectedSuboptions = selectedSuboptions
+    if (state.selected) {
+      for (const extra of product.product.extras) {
+        for (const option of extra.options) {
+          if (Object.keys(newProductCart?.options[`id:${option?.id}`]?.suboptions || {})?.length === 0) {
+            delete newProductCart?.options[`id:${option?.id}`]
+          }
+        }
+      }
+      if (newProductCart?.options) { // actualizacion del diccionario de options selected
+        for (const extra of product.product.extras) {
+          for (const option of extra.options) {
+            for (const suboption of option.suboptions) {
+              if (newProductCart?.options[`id:${option?.id}`]) {
+                if (newProductCart?.options[`id:${option?.id}`]?.suboptions[`id:${suboption?.id}`]) {
+                  _selectedSuboptions[`suboption:${suboption.id}`] = true
+                } else {
+                  _selectedSuboptions[`suboption:${suboption.id}`] = false
+                }
+              } else {
+                _selectedSuboptions[`suboption:${suboption.id}`] = suboption?.preselected || (option?.max === 1 && option?.min === 1 && option?.suboptions?.length === 1)
+              }
+            }
+          }
+        }
+      }
+      const preselectedOptions = []
+      const preselectedSuboptions = []
+      for (const extra of product.product.extras) {
+        for (const option of extra.options) {
+          for (const suboption of option.suboptions) {
+            if (checkSuboptionsSelected(suboption?.id, _selectedSuboptions, dependsSuboptions)) {
+              preselectedOptions.push(option)
+              preselectedSuboptions.push(suboption)
+            }
+          }
+        }
+      }
+
+      const states = preselectedSuboptions.map((suboption, i) => {
+        const price = preselectedOptions[i]?.with_half_option && suboption?.half_price && suboption?.position !== 'whole'
+          ? suboption.half_price
+          : suboption.price
+
+        return {
+          id: suboption.id,
+          name: suboption.name,
+          position: suboption.position || 'whole',
+          price,
+          quantity: 1,
+          selected: true,
+          total: price
+        }
+      })
+      preselectedOptions.map((option) => {
+        const defaultSuboptions = option.suboptions
+          .filter(suboption => states?.some(state => state?.id === suboption?.id))
+          .map((suboption) => {
+            return {
+              option: option,
+              suboption: suboption,
+              state: states.find(state => state?.id === suboption?.id)
+            }
+          })
+        suboptionsArray = [...suboptionsArray, ...defaultSuboptions]
+      })
+    }
 
     let newBalance = Object.keys(newProductCart.options[`id:${option.id}`].suboptions).length
     if (option.limit_suboptions_by_max) {
@@ -359,8 +438,12 @@ export const ProductForm = (props) => {
       newProductCart.options[`id:${option.id}`].balance = newBalance
       newProductCart.unitTotal = getUnitTotal(newProductCart)
       newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
-      handleVerifyPizzaType(newProductCart)
-      setProductCart(newProductCart)
+      if (state.selected && suboptionsArray?.length > 0) {
+        handleChangeSuboptionDefault(suboptionsArray)
+        setSelectedSuboptions(_selectedSuboptions)
+      } else {
+        setProductCart(newProductCart)
+      }
     }
   }
 
@@ -665,41 +748,56 @@ export const ProductForm = (props) => {
     setProduct({ ...product, product: props.product })
   }, [props.product])
 
-  const checkHasPreselected = (options, option) => {
-    if (!option?.respect_to) return true
-    const selectedOption = options.filter(option1 => option1?.suboptions?.filter(suboption => option.respect_to === suboption?.id && suboption.preselected).length > 0)
-    if (!selectedOption) return false
-    checkHasPreselected(options, selectedOption)
-  }
-
   /**
    * Check if there is an option required with one suboption
-   */
+  */
+
+  const checkSuboptionsSelected = (suboptionId, _selectedSuboptions, _dependsSuboptions, count = 0) => {
+    if (count > 100) {
+      Sentry.captureMessage('Suboptions selected bucle, more than 100 iterations')
+      return false
+    }
+    if (!_selectedSuboptions[`suboption:${suboptionId}`]) {
+      return false
+    }
+    const respectTo = _dependsSuboptions[`suboption:${suboptionId}`] ?? null
+    if (respectTo === null) {
+      return _selectedSuboptions[`suboption:${suboptionId}`]
+    }
+    return checkSuboptionsSelected(respectTo, _selectedSuboptions, _dependsSuboptions, count++)
+  }
+
   useEffect(() => {
     if (product?.product && product.product?.extras?.length > 0) {
-      const options = [].concat(...product.product.extras.map(extra => extra.options.filter(
-        option => {
-          const preselected = checkHasPreselected(extra.options, option)
-          return (
-            ((option.min === 1 &&
-              option.max === 1 &&
-              option.suboptions.filter(suboption => suboption.enabled).length === 1) ||
-              option.suboptions.filter(suboption => suboption.preselected).length > 0) &&
-            (!option?.conditioned || (option?.conditioned && preselected))
-          )
+      const _selectedSuboptions = {}
+      const _dependsSuboptions = {}
+      const preselectedOptions = []
+      const preselectedSuboptions = []
+      for (const extra of product.product.extras) {
+        for (const option of extra.options) {
+          for (const suboption of option.suboptions) {
+            _selectedSuboptions[`suboption:${suboption.id}`] = suboption.preselected || (option?.max === 1 && option?.min === 1 && option?.suboptions?.length === 1)
+            _dependsSuboptions[`suboption:${suboption.id}`] = option?.conditioned && option?.respect_to !== null ? option?.respect_to : null
+          }
         }
-      )))
+      }
 
-      if (!options?.length) {
+      for (const extra of product.product.extras) {
+        for (const option of extra.options) {
+          for (const suboption of option.suboptions) {
+            if (checkSuboptionsSelected(suboption?.id, _selectedSuboptions, _dependsSuboptions)) {
+              preselectedOptions.push(option)
+              preselectedSuboptions.push(suboption)
+            }
+          }
+        }
+      }
+      if (!preselectedOptions?.length) {
         return
       }
 
-      const suboptions = []
-        .concat(...options.map(option => option.suboptions))
-        .filter(suboption => suboption.enabled)
-
-      const states = suboptions.map((suboption, i) => {
-        const price = options[i]?.with_half_option && suboption?.half_price && suboption?.position !== 'whole'
+      const states = preselectedSuboptions.map((suboption, i) => {
+        const price = preselectedOptions[i]?.with_half_option && suboption?.half_price && suboption?.position !== 'whole'
           ? suboption.half_price
           : suboption.price
 
@@ -714,7 +812,7 @@ export const ProductForm = (props) => {
         }
       })
       let suboptionsArray = []
-      options.map((option) => {
+      preselectedOptions.map((option) => {
         const defaultSuboptions = option.suboptions
           .filter(suboption => suboption?.enabled && (suboption?.preselected || option?.suboptions?.length === 1))
           .map((suboption) => {
@@ -726,6 +824,8 @@ export const ProductForm = (props) => {
           })
         suboptionsArray = [...suboptionsArray, ...defaultSuboptions]
       })
+      setSelectedSuboptions(_selectedSuboptions)
+      setDependsSuboptions(_dependsSuboptions)
       setDefaultSubOptions(suboptionsArray)
       setCustomDefaultSubOptions(suboptionsArray)
     }
@@ -779,7 +879,7 @@ export const ProductForm = (props) => {
     if (defaultSubOptions?.length) {
       handleChangeSuboptionDefault(defaultSubOptions)
     }
-  }, [defaultSubOptions])
+  }, [JSON.stringify(defaultSubOptions)])
 
   /**
    * Load product on component mounted
