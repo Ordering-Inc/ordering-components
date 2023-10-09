@@ -12,7 +12,8 @@ export const StoreProductList = (props) => {
     businessProps,
     slug,
     asDashboard,
-    paginationSettings
+    paginationSettings,
+    isIos
   } = props
 
   const [ordering] = useApi()
@@ -62,7 +63,7 @@ export const StoreProductList = (props) => {
               attribute: 'name',
               value: {
                 condition: 'ilike',
-                value: encodeURI(`%${productSearch}%`)
+                value: isIos ? `%${productSearch}%` : encodeURI(`%${productSearch}%`)
               }
             }
           )
@@ -73,7 +74,7 @@ export const StoreProductList = (props) => {
               attribute: 'description',
               value: {
                 condition: 'ilike',
-                value: encodeURI(`%${productSearch}%`)
+                value: isIos ? `%${productSearch}%` : encodeURI(`%${productSearch}%`)
               }
             }
           )
