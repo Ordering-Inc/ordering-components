@@ -8,6 +8,7 @@ exports.ProductForm = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _moment = _interopRequireDefault(require("moment"));
+var Sentry = _interopRequireWildcard(require("@sentry/react"));
 var _OrderContext = require("../../contexts/OrderContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
 var _ApiContext = require("../../contexts/ApiContext");
@@ -20,6 +21,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator.return && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, catch: function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -121,38 +123,54 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
     _useState10 = _slicedToArray(_useState9, 2),
     customDefaultSubOptions = _useState10[0],
     setCustomDefaultSubOptions = _useState10[1];
-  var _useState11 = (0, _react.useState)({
+
+  /**
+   * preselected and selected suboptions
+   */
+  var _useState11 = (0, _react.useState)([]),
+    _useState12 = _slicedToArray(_useState11, 2),
+    selectedSuboptions = _useState12[0],
+    setSelectedSuboptions = _useState12[1];
+
+  /**
+   * dictionary of respect_to suboptions
+   */
+  var _useState13 = (0, _react.useState)([]),
+    _useState14 = _slicedToArray(_useState13, 2),
+    dependsSuboptions = _useState14[0],
+    setDependsSuboptions = _useState14[1];
+  var _useState15 = (0, _react.useState)({
       loading: false,
       professionals: [],
       error: null
     }),
-    _useState12 = _slicedToArray(_useState11, 2),
-    professionalListState = _useState12[0],
-    setProfessionalListState = _useState12[1];
+    _useState16 = _slicedToArray(_useState15, 2),
+    professionalListState = _useState16[0],
+    setProfessionalListState = _useState16[1];
 
   /**
    * Action status
    */
-  var _useState13 = (0, _react.useState)({
+  var _useState17 = (0, _react.useState)({
       loading: false,
       error: null
     }),
-    _useState14 = _slicedToArray(_useState13, 2),
-    actionStatus = _useState14[0],
-    setActionStatus = _useState14[1];
+    _useState18 = _slicedToArray(_useState17, 2),
+    actionStatus = _useState18[0],
+    setActionStatus = _useState18[1];
 
   /**
    * pizza type and position
    */
-  var _useState15 = (0, _react.useState)({
+  var _useState19 = (0, _react.useState)({
       type: '',
       left: false,
       right: false,
       center: false
     }),
-    _useState16 = _slicedToArray(_useState15, 2),
-    pizzaType = _useState16[0],
-    setPizzaType = _useState16[1];
+    _useState20 = _slicedToArray(_useState19, 2),
+    pizzaType = _useState20[0],
+    setPizzaType = _useState20[1];
 
   /**
    * Edit mode
@@ -507,6 +525,151 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
       }
       newProductCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)] = state;
     }
+    var suboptionsArray = [];
+    var _selectedSuboptions = selectedSuboptions;
+    if (state.selected) {
+      var _iterator = _createForOfIteratorHelper(product.product.extras),
+        _step;
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var _extra2 = _step.value;
+          var _iterator6 = _createForOfIteratorHelper(_extra2.options),
+            _step6;
+          try {
+            for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+              var _Object$keys, _newProductCart$optio2;
+              var _option3 = _step6.value;
+              if (((_Object$keys = Object.keys((newProductCart === null || newProductCart === void 0 || (_newProductCart$optio2 = newProductCart.options["id:".concat(_option3 === null || _option3 === void 0 ? void 0 : _option3.id)]) === null || _newProductCart$optio2 === void 0 ? void 0 : _newProductCart$optio2.suboptions) || {})) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length) === 0) {
+                newProductCart === null || newProductCart === void 0 || delete newProductCart.options["id:".concat(_option3 === null || _option3 === void 0 ? void 0 : _option3.id)];
+              }
+            }
+          } catch (err) {
+            _iterator6.e(err);
+          } finally {
+            _iterator6.f();
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+      if (newProductCart !== null && newProductCart !== void 0 && newProductCart.options) {
+        // actualizacion del diccionario de options selected
+        var _iterator2 = _createForOfIteratorHelper(product.product.extras),
+          _step2;
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var extra = _step2.value;
+            var _iterator3 = _createForOfIteratorHelper(extra.options),
+              _step3;
+            try {
+              for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+                var _option2 = _step3.value;
+                var _iterator4 = _createForOfIteratorHelper(_option2.suboptions),
+                  _step4;
+                try {
+                  for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+                    var _suboption = _step4.value;
+                    if (newProductCart !== null && newProductCart !== void 0 && newProductCart.options["id:".concat(_option2 === null || _option2 === void 0 ? void 0 : _option2.id)]) {
+                      var _newProductCart$optio;
+                      if (newProductCart !== null && newProductCart !== void 0 && (_newProductCart$optio = newProductCart.options["id:".concat(_option2 === null || _option2 === void 0 ? void 0 : _option2.id)]) !== null && _newProductCart$optio !== void 0 && _newProductCart$optio.suboptions["id:".concat(_suboption === null || _suboption === void 0 ? void 0 : _suboption.id)]) {
+                        _selectedSuboptions["suboption:".concat(_suboption.id)] = true;
+                      } else {
+                        _selectedSuboptions["suboption:".concat(_suboption.id)] = false;
+                      }
+                    } else {
+                      var _option2$suboptions;
+                      _selectedSuboptions["suboption:".concat(_suboption.id)] = (_suboption === null || _suboption === void 0 ? void 0 : _suboption.preselected) || (_option2 === null || _option2 === void 0 ? void 0 : _option2.max) === 1 && (_option2 === null || _option2 === void 0 ? void 0 : _option2.min) === 1 && (_option2 === null || _option2 === void 0 || (_option2$suboptions = _option2.suboptions) === null || _option2$suboptions === void 0 ? void 0 : _option2$suboptions.length) === 1;
+                    }
+                  }
+                } catch (err) {
+                  _iterator4.e(err);
+                } finally {
+                  _iterator4.f();
+                }
+              }
+            } catch (err) {
+              _iterator3.e(err);
+            } finally {
+              _iterator3.f();
+            }
+          }
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
+        }
+      }
+      var preselectedOptions = [];
+      var preselectedSuboptions = [];
+      var _iterator5 = _createForOfIteratorHelper(product.product.extras),
+        _step5;
+      try {
+        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+          var _extra3 = _step5.value;
+          var _iterator7 = _createForOfIteratorHelper(_extra3.options),
+            _step7;
+          try {
+            for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+              var _option4 = _step7.value;
+              var _iterator8 = _createForOfIteratorHelper(_option4.suboptions),
+                _step8;
+              try {
+                for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+                  var _suboption2 = _step8.value;
+                  if (checkSuboptionsSelected(_suboption2 === null || _suboption2 === void 0 ? void 0 : _suboption2.id, _selectedSuboptions, dependsSuboptions)) {
+                    preselectedOptions.push(_option4);
+                    preselectedSuboptions.push(_suboption2);
+                  }
+                }
+              } catch (err) {
+                _iterator8.e(err);
+              } finally {
+                _iterator8.f();
+              }
+            }
+          } catch (err) {
+            _iterator7.e(err);
+          } finally {
+            _iterator7.f();
+          }
+        }
+      } catch (err) {
+        _iterator5.e(err);
+      } finally {
+        _iterator5.f();
+      }
+      var states = preselectedSuboptions.map(function (suboption, i) {
+        var _preselectedOptions$i;
+        var price = (_preselectedOptions$i = preselectedOptions[i]) !== null && _preselectedOptions$i !== void 0 && _preselectedOptions$i.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
+        return {
+          id: suboption.id,
+          name: suboption.name,
+          position: suboption.position || 'whole',
+          price: price,
+          quantity: 1,
+          selected: true,
+          total: price
+        };
+      });
+      preselectedOptions.map(function (option) {
+        var defaultSuboptions = option.suboptions.filter(function (suboption) {
+          return states === null || states === void 0 ? void 0 : states.some(function (state) {
+            return (state === null || state === void 0 ? void 0 : state.id) === (suboption === null || suboption === void 0 ? void 0 : suboption.id);
+          });
+        }).map(function (suboption) {
+          return {
+            option: option,
+            suboption: suboption,
+            state: states.find(function (state) {
+              return (state === null || state === void 0 ? void 0 : state.id) === (suboption === null || suboption === void 0 ? void 0 : suboption.id);
+            })
+          };
+        });
+        suboptionsArray = [].concat(_toConsumableArray(suboptionsArray), _toConsumableArray(defaultSuboptions));
+      });
+    }
     var newBalance = Object.keys(newProductCart.options["id:".concat(option.id)].suboptions).length;
     if (option.limit_suboptions_by_max) {
       newBalance = Object.values(newProductCart.options["id:".concat(option.id)].suboptions).reduce(function (count, suboption) {
@@ -514,11 +677,16 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
       }, 0);
     }
     if (newBalance <= option.max) {
+      var _suboptionsArray;
       newProductCart.options["id:".concat(option.id)].balance = newBalance;
       newProductCart.unitTotal = getUnitTotal(newProductCart);
       newProductCart.total = newProductCart.unitTotal * newProductCart.quantity;
-      handleVerifyPizzaType(newProductCart);
-      setProductCart(newProductCart);
+      if (state.selected && ((_suboptionsArray = suboptionsArray) === null || _suboptionsArray === void 0 ? void 0 : _suboptionsArray.length) > 0) {
+        handleChangeSuboptionDefault(suboptionsArray);
+        setSelectedSuboptions(_selectedSuboptions);
+      } else {
+        setProductCart(newProductCart);
+      }
     }
   };
   var handleChangeSuboptionDefault = function handleChangeSuboptionDefault(defaultOptions) {
@@ -594,11 +762,11 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
     }
     (_product$product8 = product.product) === null || _product$product8 === void 0 || (_product$product8 = _product$product8.extras) === null || _product$product8 === void 0 || _product$product8.forEach(function (extra) {
       extra.options.map(function (option) {
-        var _productCart$options3, _Object$keys, _option$suboptions3;
+        var _productCart$options3, _Object$keys2, _option$suboptions3;
         var suboptions = (_productCart$options3 = productCart.options["id:".concat(option.id)]) === null || _productCart$options3 === void 0 ? void 0 : _productCart$options3.suboptions;
         var quantity = suboptions ? option.limit_suboptions_by_max ? Object.values(suboptions).reduce(function (count, suboption) {
           return count + suboption.quantity;
-        }, 0) : (_Object$keys = Object.keys(suboptions)) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length : 0;
+        }, 0) : (_Object$keys2 = Object.keys(suboptions)) === null || _Object$keys2 === void 0 ? void 0 : _Object$keys2.length : 0;
         var evaluateRespectTo = false;
         if (option.respect_to && productCart.options) {
           var options = productCart === null || productCart === void 0 ? void 0 : productCart.options;
@@ -911,46 +1079,113 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
       product: props.product
     }));
   }, [props.product]);
-  var checkHasPreselected = function checkHasPreselected(options, option) {
-    if (!(option !== null && option !== void 0 && option.respect_to)) return true;
-    var selectedOption = options.filter(function (option1) {
-      var _option1$suboptions;
-      return (option1 === null || option1 === void 0 || (_option1$suboptions = option1.suboptions) === null || _option1$suboptions === void 0 ? void 0 : _option1$suboptions.filter(function (suboption) {
-        return option.respect_to === (suboption === null || suboption === void 0 ? void 0 : suboption.id) && suboption.preselected;
-      }).length) > 0;
-    });
-    if (!selectedOption) return false;
-    checkHasPreselected(options, selectedOption);
-  };
 
   /**
    * Check if there is an option required with one suboption
-   */
+  */
+
+  var checkSuboptionsSelected = function checkSuboptionsSelected(suboptionId, _selectedSuboptions, _dependsSuboptions) {
+    var _dependsSuboptions2;
+    var count = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+    if (count > 100) {
+      Sentry.captureMessage('Suboptions selected bucle, more than 100 iterations');
+      return false;
+    }
+    if (!_selectedSuboptions["suboption:".concat(suboptionId)]) {
+      return false;
+    }
+    var respectTo = (_dependsSuboptions2 = _dependsSuboptions["suboption:".concat(suboptionId)]) !== null && _dependsSuboptions2 !== void 0 ? _dependsSuboptions2 : null;
+    if (respectTo === null) {
+      return _selectedSuboptions["suboption:".concat(suboptionId)];
+    }
+    return checkSuboptionsSelected(respectTo, _selectedSuboptions, _dependsSuboptions, count++);
+  };
   (0, _react.useEffect)(function () {
     var _product$product10;
     if (product !== null && product !== void 0 && product.product && ((_product$product10 = product.product) === null || _product$product10 === void 0 || (_product$product10 = _product$product10.extras) === null || _product$product10 === void 0 ? void 0 : _product$product10.length) > 0) {
-      var _ref7, _ref8;
-      var options = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(product.product.extras.map(function (extra) {
-        return extra.options.filter(function (option) {
-          var preselected = checkHasPreselected(extra.options, option);
-          return (option.min === 1 && option.max === 1 && option.suboptions.filter(function (suboption) {
-            return suboption.enabled;
-          }).length === 1 || option.suboptions.filter(function (suboption) {
-            return suboption.preselected;
-          }).length > 0) && (!(option !== null && option !== void 0 && option.conditioned) || (option === null || option === void 0 ? void 0 : option.conditioned) && preselected);
-        });
-      })));
-      if (!(options !== null && options !== void 0 && options.length)) {
+      var _selectedSuboptions = {};
+      var _dependsSuboptions = {};
+      var preselectedOptions = [];
+      var preselectedSuboptions = [];
+      var _iterator9 = _createForOfIteratorHelper(product.product.extras),
+        _step9;
+      try {
+        for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
+          var extra = _step9.value;
+          var _iterator11 = _createForOfIteratorHelper(extra.options),
+            _step11;
+          try {
+            for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
+              var option = _step11.value;
+              var _iterator12 = _createForOfIteratorHelper(option.suboptions),
+                _step12;
+              try {
+                for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
+                  var _option$suboptions7;
+                  var suboption = _step12.value;
+                  _selectedSuboptions["suboption:".concat(suboption.id)] = suboption.preselected || (option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1 && (option === null || option === void 0 || (_option$suboptions7 = option.suboptions) === null || _option$suboptions7 === void 0 ? void 0 : _option$suboptions7.length) === 1;
+                  _dependsSuboptions["suboption:".concat(suboption.id)] = option !== null && option !== void 0 && option.conditioned && (option === null || option === void 0 ? void 0 : option.respect_to) !== null ? option === null || option === void 0 ? void 0 : option.respect_to : null;
+                }
+              } catch (err) {
+                _iterator12.e(err);
+              } finally {
+                _iterator12.f();
+              }
+            }
+          } catch (err) {
+            _iterator11.e(err);
+          } finally {
+            _iterator11.f();
+          }
+        }
+      } catch (err) {
+        _iterator9.e(err);
+      } finally {
+        _iterator9.f();
+      }
+      var _iterator10 = _createForOfIteratorHelper(product.product.extras),
+        _step10;
+      try {
+        for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
+          var _extra4 = _step10.value;
+          var _iterator13 = _createForOfIteratorHelper(_extra4.options),
+            _step13;
+          try {
+            for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
+              var _option5 = _step13.value;
+              var _iterator14 = _createForOfIteratorHelper(_option5.suboptions),
+                _step14;
+              try {
+                for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
+                  var _suboption3 = _step14.value;
+                  if (checkSuboptionsSelected(_suboption3 === null || _suboption3 === void 0 ? void 0 : _suboption3.id, _selectedSuboptions, _dependsSuboptions)) {
+                    preselectedOptions.push(_option5);
+                    preselectedSuboptions.push(_suboption3);
+                  }
+                }
+              } catch (err) {
+                _iterator14.e(err);
+              } finally {
+                _iterator14.f();
+              }
+            }
+          } catch (err) {
+            _iterator13.e(err);
+          } finally {
+            _iterator13.f();
+          }
+        }
+      } catch (err) {
+        _iterator10.e(err);
+      } finally {
+        _iterator10.f();
+      }
+      if (!(preselectedOptions !== null && preselectedOptions !== void 0 && preselectedOptions.length)) {
         return;
       }
-      var suboptions = (_ref8 = []).concat.apply(_ref8, _toConsumableArray(options.map(function (option) {
-        return option.suboptions;
-      }))).filter(function (suboption) {
-        return suboption.enabled;
-      });
-      var states = suboptions.map(function (suboption, i) {
-        var _options$i;
-        var price = (_options$i = options[i]) !== null && _options$i !== void 0 && _options$i.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
+      var states = preselectedSuboptions.map(function (suboption, i) {
+        var _preselectedOptions$i2;
+        var price = (_preselectedOptions$i2 = preselectedOptions[i]) !== null && _preselectedOptions$i2 !== void 0 && _preselectedOptions$i2.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
         return {
           id: suboption.id,
           name: suboption.name,
@@ -962,7 +1197,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         };
       });
       var suboptionsArray = [];
-      options.map(function (option) {
+      preselectedOptions.map(function (option) {
         var defaultSuboptions = option.suboptions.filter(function (suboption) {
           var _option$suboptions6;
           return (suboption === null || suboption === void 0 ? void 0 : suboption.enabled) && ((suboption === null || suboption === void 0 ? void 0 : suboption.preselected) || (option === null || option === void 0 || (_option$suboptions6 = option.suboptions) === null || _option$suboptions6 === void 0 ? void 0 : _option$suboptions6.length) === 1);
@@ -977,6 +1212,8 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         });
         suboptionsArray = [].concat(_toConsumableArray(suboptionsArray), _toConsumableArray(defaultSuboptions));
       });
+      setSelectedSuboptions(_selectedSuboptions);
+      setDependsSuboptions(_dependsSuboptions);
       setDefaultSubOptions(suboptionsArray);
       setCustomDefaultSubOptions(suboptionsArray);
     }
@@ -984,8 +1221,8 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
   if (isStarbucks) {
     (0, _react.useEffect)(function () {
       if (product !== null && product !== void 0 && product.product && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
-        var _ref9, _ref10;
-        var options = (_ref9 = []).concat.apply(_ref9, _toConsumableArray(product.product.extras.map(function (extra) {
+        var _ref7, _ref8;
+        var options = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(product.product.extras.map(function (extra) {
           return extra.options.filter(function (option) {
             return option.name === 'Tamaño' && option.suboptions.filter(function (suboption) {
               return suboption.name === 'Grande (16oz - 437ml)';
@@ -995,7 +1232,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         if (!(options !== null && options !== void 0 && options.length)) {
           return;
         }
-        var suboptions = (_ref10 = []).concat.apply(_ref10, _toConsumableArray(options.map(function (option) {
+        var suboptions = (_ref8 = []).concat.apply(_ref8, _toConsumableArray(options.map(function (option) {
           return option.suboptions;
         }))).filter(function (suboption) {
           return suboption.name === 'Grande (16oz - 437ml)';
@@ -1030,7 +1267,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
     if (defaultSubOptions !== null && defaultSubOptions !== void 0 && defaultSubOptions.length) {
       handleChangeSuboptionDefault(defaultSubOptions);
     }
-  }, [defaultSubOptions]);
+  }, [JSON.stringify(defaultSubOptions)]);
 
   /**
    * Load product on component mounted
