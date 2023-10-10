@@ -111,7 +111,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     _useState10 = _slicedToArray(_useState9, 2),
     driverLocation = _useState10[0],
     setDriverLocation = _useState10[1];
-  var _useState11 = (0, _react.useState)(false),
+  var _useState11 = (0, _react.useState)([]),
     _useState12 = _slicedToArray(_useState11, 2),
     messagesReadList = _useState12[0],
     setMessagesReadList = _useState12[1];
@@ -1021,7 +1021,8 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     handleReorder: handleReorder,
     handleRemoveCart: handleRemoveCart,
     cartState: cartState,
-    handleClickLogisticOrder: handleClickLogisticOrder
+    handleClickLogisticOrder: handleClickLogisticOrder,
+    loadMessages: loadMessages
   })));
 };
 OrderDetails.propTypes = {
