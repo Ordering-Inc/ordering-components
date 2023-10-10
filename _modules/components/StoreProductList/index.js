@@ -40,7 +40,8 @@ var StoreProductList = exports.StoreProductList = function StoreProductList(prop
     businessProps = props.businessProps,
     slug = props.slug,
     asDashboard = props.asDashboard,
-    paginationSettings = props.paginationSettings;
+    paginationSettings = props.paginationSettings,
+    isIos = props.isIos;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -117,7 +118,7 @@ var StoreProductList = exports.StoreProductList = function StoreProductList(prop
                   attribute: 'name',
                   value: {
                     condition: 'ilike',
-                    value: encodeURI("%".concat(productSearch, "%"))
+                    value: isIos ? "%".concat(productSearch, "%") : encodeURI("%".concat(productSearch, "%"))
                   }
                 });
               }
@@ -126,7 +127,7 @@ var StoreProductList = exports.StoreProductList = function StoreProductList(prop
                   attribute: 'description',
                   value: {
                     condition: 'ilike',
-                    value: encodeURI("%".concat(productSearch, "%"))
+                    value: isIos ? "%".concat(productSearch, "%") : encodeURI("%".concat(productSearch, "%"))
                   }
                 });
               }
