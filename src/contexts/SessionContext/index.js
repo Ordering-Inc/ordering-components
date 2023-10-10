@@ -141,9 +141,9 @@ export const SessionProvider = ({ children, strategy }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       checkLocalStorage()
-    }, 1000)
+    }, 2000)
     return () => clearInterval(interval)
-  }, [state])
+  }, [JSON.stringify(state)])
 
   useEffect(() => {
     setValuesFromLocalStorage()
