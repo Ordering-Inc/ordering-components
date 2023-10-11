@@ -35,7 +35,8 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
   var UIComponent = props.UIComponent,
     isIos = props.isIos,
     businessSlug = props.businessSlug,
-    urlPhone = props.urlPhone;
+    urlPhone = props.urlPhone,
+    propsToFetch = props.propsToFetch;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -137,7 +138,7 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
             };
             _context.prev = 2;
             _context.next = 5;
-            return ordering.setAccessToken(token).users().where(conditions).get();
+            return ordering.setAccessToken(token).users().select(propsToFetch).where(conditions).get();
           case 5:
             _yield$ordering$setAc = _context.sent;
             result = _yield$ordering$setAc.content.result;
@@ -436,5 +437,6 @@ PhoneAutocomplete.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  propsToFetch: ['name', 'lastname', 'email', 'phone', 'photo', 'cellphone', 'country_phone_code', 'city_id', 'city', 'address', 'addresses', 'address_notes', 'dropdown_option_id', 'dropdown_option', 'location', 'zipcode', 'level', 'enabled', 'middle_name', 'second_lastname', 'metadata']
 };
