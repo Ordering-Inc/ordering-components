@@ -8,7 +8,7 @@ import { CODES } from '../../constants/code-numbers'
 import { TIMEZONES } from '../../constants/timezones'
 
 export const PhoneAutocomplete = (props) => {
-  const { UIComponent, isIos, businessSlug, urlPhone } = props
+  const { UIComponent, isIos, businessSlug, urlPhone, propsToFetch } = props
 
   const [ordering] = useApi()
   const [{ user, token }] = useSession()
@@ -56,6 +56,7 @@ export const PhoneAutocomplete = (props) => {
       const { content: { result } } = await ordering
         .setAccessToken(token)
         .users()
+        .select(propsToFetch)
         .where(conditions)
         .get()
       setCustomersPhones({ ...customersPhones, users: result, loading: false })
@@ -246,5 +247,6 @@ PhoneAutocomplete.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  propsToFetch: ['name', 'lastname', 'email', 'phone', 'photo', 'cellphone', 'country_phone_code', 'city_id', 'city', 'address', 'addresses', 'address_notes', 'dropdown_option_id', 'dropdown_option', 'location', 'zipcode', 'level', 'enabled', 'middle_name', 'second_lastname', 'metadata']
 }
