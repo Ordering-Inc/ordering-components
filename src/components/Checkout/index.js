@@ -425,6 +425,19 @@ export const Checkout = (props) => {
         form.appendChild(formInputName)
       })
       document.body.appendChild(form)
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          data: data,
+          project_code: ordering.project,
+          cart_uuid: cartUuid
+        })
+      }
+      await fetch('https://integrations.ordering.co/credomatic/log_generator.php', requestOptions)
       form.submit()
     } catch (err) {
       showToast(ToastType.Error, err.message)
