@@ -329,11 +329,11 @@ var SessionProvider = exports.SessionProvider = function SessionProvider(_ref) {
   (0, _react.useEffect)(function () {
     var interval = setInterval(function () {
       checkLocalStorage();
-    }, 1000);
+    }, 2000);
     return function () {
       return clearInterval(interval);
     };
-  }, [state]);
+  }, [JSON.stringify(state)]);
   (0, _react.useEffect)(function () {
     setValuesFromLocalStorage();
   }, []);
