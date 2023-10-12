@@ -821,7 +821,7 @@ export const OrderListGroups = (props) => {
     } else if (!ordersGroup[currentTabSelected]?.fetched && props.isNetConnected) {
       loadOrders({ newFetchCurrent: true })
     }
-  }, [currentTabSelected, props.isNetConnected])
+  }, [currentTabSelected])
 
   useEffect(() => {
     if (currentFilters && !isDriverApp) {
@@ -1098,6 +1098,10 @@ export const OrderListGroups = (props) => {
       events.off('customer_reviewed', handleCustomerReviewed)
     }
   }, [ordersGroup])
+
+  useEffect(() => {
+    setCurrentTabSelected(combineTabs ? 'active' : 'pending')
+  }, [combineTabs])
 
   return (
     <>
