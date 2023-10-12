@@ -1224,7 +1224,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
         newFetchCurrent: true
       });
     }
-  }, [currentTabSelected, props.isNetConnected]);
+  }, [currentTabSelected]);
   (0, _react.useEffect)(function () {
     if (currentFilters && !isDriverApp) {
       loadOrders({
@@ -1481,6 +1481,9 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
       events.off('customer_reviewed', handleCustomerReviewed);
     };
   }, [ordersGroup]);
+  (0, _react.useEffect)(function () {
+    setCurrentTabSelected(combineTabs ? 'active' : 'pending');
+  }, [combineTabs]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     currentFilters: currentFilters,
     setCurrentFilters: setCurrentFilters,
