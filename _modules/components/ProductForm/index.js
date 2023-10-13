@@ -537,9 +537,9 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
             _step6;
           try {
             for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-              var _Object$keys, _newProductCart$optio2;
+              var _Object$keys, _newProductCart$optio3;
               var _option3 = _step6.value;
-              if (((_Object$keys = Object.keys((newProductCart === null || newProductCart === void 0 || (_newProductCart$optio2 = newProductCart.options["id:".concat(_option3 === null || _option3 === void 0 ? void 0 : _option3.id)]) === null || _newProductCart$optio2 === void 0 ? void 0 : _newProductCart$optio2.suboptions) || {})) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length) === 0) {
+              if (((_Object$keys = Object.keys((newProductCart === null || newProductCart === void 0 || (_newProductCart$optio3 = newProductCart.options["id:".concat(_option3 === null || _option3 === void 0 ? void 0 : _option3.id)]) === null || _newProductCart$optio3 === void 0 ? void 0 : _newProductCart$optio3.suboptions) || {})) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length) === 0) {
                 newProductCart === null || newProductCart === void 0 || delete newProductCart.options["id:".concat(_option3 === null || _option3 === void 0 ? void 0 : _option3.id)];
               }
             }
@@ -555,7 +555,6 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         _iterator.f();
       }
       if (newProductCart !== null && newProductCart !== void 0 && newProductCart.options) {
-        // actualizacion del diccionario de options selected
         var _iterator2 = _createForOfIteratorHelper(product.product.extras),
           _step2;
         try {
@@ -641,33 +640,26 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         _iterator5.f();
       }
       var states = preselectedSuboptions.map(function (suboption, i) {
-        var _preselectedOptions$i;
-        var price = (_preselectedOptions$i = preselectedOptions[i]) !== null && _preselectedOptions$i !== void 0 && _preselectedOptions$i.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
+        var _newProductCart$optio2, _preselectedOptions$i, _preselectedOptions$i2;
+        var cartSuboption = (newProductCart === null || newProductCart === void 0 || (_newProductCart$optio2 = newProductCart.options["id:".concat((_preselectedOptions$i = preselectedOptions[i]) === null || _preselectedOptions$i === void 0 ? void 0 : _preselectedOptions$i.id)]) === null || _newProductCart$optio2 === void 0 ? void 0 : _newProductCart$optio2.suboptions["id:".concat(suboption === null || suboption === void 0 ? void 0 : suboption.id)]) || suboption;
+        var price = (_preselectedOptions$i2 = preselectedOptions[i]) !== null && _preselectedOptions$i2 !== void 0 && _preselectedOptions$i2.with_half_option && cartSuboption !== null && cartSuboption !== void 0 && cartSuboption.half_price && (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.position) !== 'whole' ? cartSuboption.half_price : cartSuboption.price;
         return {
-          id: suboption.id,
-          name: suboption.name,
-          position: suboption.position || 'whole',
-          price: price,
-          quantity: 1,
+          id: cartSuboption.id,
+          name: cartSuboption.name,
+          position: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state === null || state === void 0 ? void 0 : state.position : cartSuboption.position || 'whole',
+          price: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state.price : price,
+          quantity: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state.quantity : (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.quantity) || 1,
           selected: true,
-          total: price
+          total: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state.total : price
         };
       });
-      preselectedOptions.map(function (option) {
-        var defaultSuboptions = option.suboptions.filter(function (suboption) {
-          return states === null || states === void 0 ? void 0 : states.some(function (state) {
-            return (state === null || state === void 0 ? void 0 : state.id) === (suboption === null || suboption === void 0 ? void 0 : suboption.id);
-          });
-        }).map(function (suboption) {
-          return {
-            option: option,
-            suboption: suboption,
-            state: states.find(function (state) {
-              return (state === null || state === void 0 ? void 0 : state.id) === (suboption === null || suboption === void 0 ? void 0 : suboption.id);
-            })
-          };
-        });
-        suboptionsArray = [].concat(_toConsumableArray(suboptionsArray), _toConsumableArray(defaultSuboptions));
+      preselectedOptions.map(function (option, i) {
+        var defaultSuboption = {
+          option: option,
+          suboption: preselectedSuboptions[i],
+          state: states[i]
+        };
+        suboptionsArray = [].concat(_toConsumableArray(suboptionsArray), [defaultSuboption]);
       });
     }
     var newBalance = Object.keys(newProductCart.options["id:".concat(option.id)].suboptions).length;
@@ -705,7 +697,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
           suboptions: {}
         };
       }
-      if (!state.selected) {
+      if (!(state !== null && state !== void 0 && state.selected)) {
         delete newProductCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)];
         removeRelatedOptions(newProductCart, suboption.id);
       } else {
@@ -1121,9 +1113,9 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
                 _step12;
               try {
                 for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
-                  var _option$suboptions7;
+                  var _option$suboptions6, _props$productCart10;
                   var suboption = _step12.value;
-                  _selectedSuboptions["suboption:".concat(suboption.id)] = suboption.preselected || (option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1 && (option === null || option === void 0 || (_option$suboptions7 = option.suboptions) === null || _option$suboptions7 === void 0 ? void 0 : _option$suboptions7.length) === 1;
+                  _selectedSuboptions["suboption:".concat(suboption.id)] = (suboption.preselected || (option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1 && (option === null || option === void 0 || (_option$suboptions6 = option.suboptions) === null || _option$suboptions6 === void 0 ? void 0 : _option$suboptions6.length) === 1) && (!editMode || !!((_props$productCart10 = props.productCart) !== null && _props$productCart10 !== void 0 && (_props$productCart10 = _props$productCart10.options["id:".concat(option === null || option === void 0 ? void 0 : option.id)]) !== null && _props$productCart10 !== void 0 && _props$productCart10.suboptions["id:".concat(suboption === null || suboption === void 0 ? void 0 : suboption.id)]));
                   _dependsSuboptions["suboption:".concat(suboption.id)] = option !== null && option !== void 0 && option.conditioned && (option === null || option === void 0 ? void 0 : option.respect_to) !== null ? option === null || option === void 0 ? void 0 : option.respect_to : null;
                 }
               } catch (err) {
@@ -1142,6 +1134,15 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         _iterator9.e(err);
       } finally {
         _iterator9.f();
+      }
+      if (editMode && props !== null && props !== void 0 && props.productCart) {
+        var _Object$values6, _props$productCart8;
+        (_Object$values6 = Object.values(props === null || props === void 0 || (_props$productCart8 = props.productCart) === null || _props$productCart8 === void 0 ? void 0 : _props$productCart8.options)) === null || _Object$values6 === void 0 || _Object$values6.map(function (option) {
+          var _Object$values7;
+          return (_Object$values7 = Object.values(option === null || option === void 0 ? void 0 : option.suboptions)) === null || _Object$values7 === void 0 ? void 0 : _Object$values7.map(function (suboption) {
+            _selectedSuboptions["suboption:".concat(suboption.id)] = true;
+          });
+        });
       }
       var _iterator10 = _createForOfIteratorHelper(product.product.extras),
         _step10;
@@ -1183,34 +1184,48 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
       if (!(preselectedOptions !== null && preselectedOptions !== void 0 && preselectedOptions.length)) {
         return;
       }
-      var states = preselectedSuboptions.map(function (suboption, i) {
-        var _preselectedOptions$i2;
-        var price = (_preselectedOptions$i2 = preselectedOptions[i]) !== null && _preselectedOptions$i2 !== void 0 && _preselectedOptions$i2.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
-        return {
-          id: suboption.id,
-          name: suboption.name,
-          position: suboption.position || 'whole',
-          price: price,
-          quantity: 1,
-          selected: true,
-          total: price
-        };
-      });
-      var suboptionsArray = [];
-      preselectedOptions.map(function (option) {
-        var defaultSuboptions = option.suboptions.filter(function (suboption) {
-          var _option$suboptions6;
-          return (suboption === null || suboption === void 0 ? void 0 : suboption.enabled) && ((suboption === null || suboption === void 0 ? void 0 : suboption.preselected) || (option === null || option === void 0 || (_option$suboptions6 = option.suboptions) === null || _option$suboptions6 === void 0 ? void 0 : _option$suboptions6.length) === 1);
-        }).map(function (suboption) {
+      var states = {};
+      if (editMode && props !== null && props !== void 0 && props.productCart) {
+        var _Object$values8, _props$productCart9;
+        var cartSuboptions = (_Object$values8 = Object.values(props === null || props === void 0 || (_props$productCart9 = props.productCart) === null || _props$productCart9 === void 0 ? void 0 : _props$productCart9.options)) === null || _Object$values8 === void 0 || (_Object$values8 = _Object$values8.map(function (option) {
+          return Object.values(option === null || option === void 0 ? void 0 : option.suboptions);
+        })) === null || _Object$values8 === void 0 ? void 0 : _Object$values8.flat();
+        states = cartSuboptions.map(function (suboption, i) {
+          var _preselectedOptions$i3;
+          var price = (_preselectedOptions$i3 = preselectedOptions[i]) !== null && _preselectedOptions$i3 !== void 0 && _preselectedOptions$i3.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
           return {
-            option: option,
-            suboption: suboption,
-            state: states.find(function (state) {
-              return (state === null || state === void 0 ? void 0 : state.id) === (suboption === null || suboption === void 0 ? void 0 : suboption.id);
-            })
+            id: suboption.id,
+            name: suboption.name,
+            position: suboption.position || 'whole',
+            price: price,
+            quantity: suboption.quantity,
+            selected: true,
+            total: price
           };
         });
-        suboptionsArray = [].concat(_toConsumableArray(suboptionsArray), _toConsumableArray(defaultSuboptions));
+      } else {
+        states = preselectedSuboptions.map(function (suboption, i) {
+          var _preselectedOptions$i4;
+          var price = (_preselectedOptions$i4 = preselectedOptions[i]) !== null && _preselectedOptions$i4 !== void 0 && _preselectedOptions$i4.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
+          return {
+            id: suboption.id,
+            name: suboption.name,
+            position: suboption.position || 'whole',
+            price: price,
+            quantity: 1,
+            selected: true,
+            total: price
+          };
+        });
+      }
+      var suboptionsArray = [];
+      preselectedOptions.map(function (option, i) {
+        var defaultSuboption = {
+          option: option,
+          suboption: preselectedSuboptions[i],
+          state: states[i]
+        };
+        suboptionsArray = [].concat(_toConsumableArray(suboptionsArray), [defaultSuboption]);
       });
       setSelectedSuboptions(_selectedSuboptions);
       setDependsSuboptions(_dependsSuboptions);
