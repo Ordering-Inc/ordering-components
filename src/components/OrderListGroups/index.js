@@ -821,7 +821,7 @@ export const OrderListGroups = (props) => {
     } else if (!ordersGroup[currentTabSelected]?.fetched && props.isNetConnected) {
       loadOrders({ newFetchCurrent: true })
     }
-  }, [currentTabSelected])
+  }, [currentTabSelected, props.isNetConnected])
 
   useEffect(() => {
     if (currentFilters && !isDriverApp) {
