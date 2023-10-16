@@ -1224,7 +1224,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
         newFetchCurrent: true
       });
     }
-  }, [currentTabSelected]);
+  }, [currentTabSelected, props.isNetConnected]);
   (0, _react.useEffect)(function () {
     if (currentFilters && !isDriverApp) {
       loadOrders({

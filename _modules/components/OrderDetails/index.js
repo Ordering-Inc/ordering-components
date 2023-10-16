@@ -355,7 +355,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
   var handleChangeOrderStatus = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(status) {
       var isAcceptOrReject,
-        _ref5,
+        options,
         dataToSave,
         _orderState$order6,
         order,
@@ -374,9 +374,10 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
             isAcceptOrReject = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : {};
-            _ref5 = _args4.length > 2 ? _args4[2] : undefined, dataToSave = _ref5.dataToSave;
+            options = _args4.length > 2 ? _args4[2] : undefined;
+            dataToSave = options === null || options === void 0 ? void 0 : options.dataToSave;
             if (!dataToSave) {
-              _context4.next = 6;
+              _context4.next = 7;
               break;
             }
             order = Object.assign(orderState.order, _objectSpread(_objectSpread({}, dataToSave), {}, {
@@ -386,23 +387,23 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
               order: order
             }));
             return _context4.abrupt("return", order);
-          case 6:
-            _context4.prev = 6;
+          case 7:
+            _context4.prev = 7;
             bodyToSend = Object.keys(isAcceptOrReject || {}).length > 0 ? isAcceptOrReject : {
               status: status
             };
             setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
               loading: true
             }));
-            _context4.next = 11;
+            _context4.next = 12;
             return ordering.setAccessToken(token).orders((_orderState$order$id = (_orderState$order7 = orderState.order) === null || _orderState$order7 === void 0 ? void 0 : _orderState$order7.id) !== null && _orderState$order$id !== void 0 ? _orderState$order$id : orderId).save(bodyToSend);
-          case 11:
+          case 12:
             _yield$ordering$setAc = _context4.sent;
             _yield$ordering$setAc2 = _yield$ordering$setAc.content;
             result = _yield$ordering$setAc2.result;
             error = _yield$ordering$setAc2.error;
             if (error) {
-              _context4.next = 18;
+              _context4.next = 19;
               break;
             }
             setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
@@ -410,9 +411,9 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
               loading: false
             }));
             return _context4.abrupt("return", Object.assign(orderState.order, result));
-          case 18:
+          case 19:
             if (!error) {
-              _context4.next = 22;
+              _context4.next = 23;
               break;
             }
             selected = result.includes(deliveryMessages.delivery.text) ? deliveryMessages.delivery : result.includes(deliveryMessages.pickup.text) ? deliveryMessages.pickup : null;
@@ -431,29 +432,29 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
               }));
             }
             return _context4.abrupt("return", null);
-          case 22:
-            _context4.next = 28;
+          case 23:
+            _context4.next = 29;
             break;
-          case 24:
-            _context4.prev = 24;
-            _context4.t0 = _context4["catch"](6);
+          case 25:
+            _context4.prev = 25;
+            _context4.t0 = _context4["catch"](7);
             setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
               loading: false,
               error: [(_context4.t0 === null || _context4.t0 === void 0 ? void 0 : _context4.t0.message) || t('NETWORK_ERROR', 'Network Error')]
             }));
             return _context4.abrupt("return", null);
-          case 28:
+          case 29:
           case "end":
             return _context4.stop();
         }
-      }, _callee4, null, [[6, 24]]);
+      }, _callee4, null, [[7, 25]]);
     }));
     return function handleChangeOrderStatus(_x5) {
       return _ref4.apply(this, arguments);
     };
   }();
   var updateDriverPosition = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var newLocation,
         _yield$ordering$setAc3,
         _yield$ordering$setAc4,
@@ -502,7 +503,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       }, _callee5, null, [[1, 12]]);
     }));
     return function updateDriverPosition() {
-      return _ref6.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
 
@@ -510,7 +511,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
      * Method to assign a driver for order
   */
   var handleAssignDriver = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(driverId) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(driverId) {
       var _orderState$order$id2, _orderState$order8, bodyToSend, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, _drivers$error;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -550,7 +551,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       }, _callee6, null, [[0, 12]]);
     }));
     return function handleAssignDriver(_x6) {
-      return _ref7.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }();
 
@@ -558,8 +559,8 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
    * handler send message with spot info
    * @param {number} param0
    */
-  var handlerSubmitSpotNumber = function handlerSubmitSpotNumber(_ref8) {
-    var spot = _ref8.spot;
+  var handlerSubmitSpotNumber = function handlerSubmitSpotNumber(_ref7) {
+    var spot = _ref7.spot;
     sendMessage(spot);
   };
 
@@ -567,7 +568,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
    * Method to get order from API
    */
   var getOrder = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
       var source, options, _result, result, error, response, res, _yield$ordering$setAc7, content, order, err, businessData, _err, _yield$ordering$setAc8, _content, _e$message, _order$id, _e$message2;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -676,11 +677,11 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       }, _callee7, null, [[6, 46], [30, 39]]);
     }));
     return function getOrder() {
-      return _ref9.apply(this, arguments);
+      return _ref8.apply(this, arguments);
     };
   }();
   var readMessages = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
       var _messages$messages, _messages$messages2;
       var messageId, _orderState$order9, _orderState$order10, response, _yield$response$json3, result;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
@@ -726,11 +727,11 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       }, _callee8, null, [[3, 15]]);
     }));
     return function readMessages() {
-      return _ref10.apply(this, arguments);
+      return _ref9.apply(this, arguments);
     };
   }();
   var getDrivers = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(orderId) {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(orderId) {
       var _yield$ordering$setAc9, _yield$ordering$setAc10, error, result, _drivers$error2;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) switch (_context9.prev = _context9.next) {
@@ -767,11 +768,11 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       }, _callee9, null, [[0, 11]]);
     }));
     return function getDrivers(_x7) {
-      return _ref11.apply(this, arguments);
+      return _ref10.apply(this, arguments);
     };
   }();
   var handleReorder = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(orderId) {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(orderId) {
       var _yield$reorder, error, result;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {
@@ -821,7 +822,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       }, _callee10, null, [[2, 12]]);
     }));
     return function handleReorder(_x8) {
-      return _ref12.apply(this, arguments);
+      return _ref11.apply(this, arguments);
     };
   }();
 
@@ -829,7 +830,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
   * Method to remove products from cart
   */
   var handleRemoveCart = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
       var _carts;
       var uuid, content, _orderState$order11;
       return _regeneratorRuntime().wrap(function _callee11$(_context11) {
@@ -878,7 +879,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       }, _callee11, null, [[3, 11]]);
     }));
     return function handleRemoveCart() {
-      return _ref13.apply(this, arguments);
+      return _ref12.apply(this, arguments);
     };
   }();
   (0, _react.useEffect)(function () {
@@ -925,9 +926,9 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       }));
       events.emit('order_updated', Object.assign(orderState.order, order));
     };
-    var handleTrackingDriver = function handleTrackingDriver(_ref14) {
+    var handleTrackingDriver = function handleTrackingDriver(_ref13) {
       var _orderState$order16;
-      var location = _ref14.location;
+      var location = _ref13.location;
       var newLocation = location !== null && location !== void 0 ? location : {
         lat: -37.9722342,
         lng: 144.7729561
