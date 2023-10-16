@@ -24,7 +24,8 @@ export const ProductForm = (props) => {
     professionalList,
     handleUpdateProducts,
     handleUpdateProfessionals,
-    handleChangeProfessional
+    handleChangeProfessional,
+    setProductLoading
   } = props
 
   const requestsState = {}
@@ -547,46 +548,57 @@ export const ProductForm = (props) => {
    * Handle when click on save product
    */
   const handleSave = async (values) => {
-    if (handleCustomSave) {
-      handleCustomSave && handleCustomSave()
-    }
-    const errors = checkErrors()
-    if (Object.keys(errors).length === 0 || isService) {
-      let successful = true
-      if (useOrderContext) {
-        successful = false
-        const changes = cart || { business_id: props.businessId }
-        const currentProduct = !isService
-          ? { ...productCart }
-          : {
-            ...productCart,
-            professional_id: values?.professional?.id,
-            service_start: values?.serviceTime ?? orderState.options?.moment
+    try {
+      setProductLoading && setProductLoading(true)
+      if (handleCustomSave) {
+        handleCustomSave && handleCustomSave()
+      }
+      const errors = checkErrors()
+      if (Object.keys(errors).length === 0 || isService) {
+        let successful = true
+        if (useOrderContext) {
+          successful = false
+          const changes = cart || { business_id: props.businessId }
+          const currentProduct = !isService
+            ? { ...productCart }
+            : {
+              ...productCart,
+              professional_id: values?.professional?.id,
+              service_start: values?.serviceTime ?? orderState.options?.moment
+            }
+          onSave(productCart, !props.productCart?.code)
+          if (!props.productCart?.code) {
+            successful = await addProduct(currentProduct, changes, false)
+          } else {
+            successful = await updateProduct(currentProduct, changes, false)
+            if (successful) {
+              events.emit('product_edited', currentProduct)
+            }
           }
-        if (!props.productCart?.code) {
-          successful = await addProduct(currentProduct, changes, false)
+        }
+        if (successful) {
+          if (isService) {
+            const updatedProfessional = JSON.parse(JSON.stringify(values?.professional))
+            const duration = product?.product?.duration
+            updatedProfessional.busy_times.push({
+              start: values?.serviceTime,
+              end: moment(values?.serviceTime).add(duration, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
+              duration
+            })
+            handleUpdateProfessionals && handleUpdateProfessionals(updatedProfessional)
+            handleChangeProfessional && handleChangeProfessional(updatedProfessional)
+          }
         } else {
-          successful = await updateProduct(currentProduct, changes, false)
-          if (successful) {
-            events.emit('product_edited', currentProduct)
-          }
+          showToast(
+            ToastType.Error,
+            !props.productCart?.code ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'),
+            5000
+          )
         }
       }
-      if (successful) {
-        onSave(productCart, !props.productCart?.code)
-
-        if (isService) {
-          const updatedProfessional = JSON.parse(JSON.stringify(values?.professional))
-          const duration = product?.product?.duration
-          updatedProfessional.busy_times.push({
-            start: values?.serviceTime,
-            end: moment(values?.serviceTime).add(duration, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
-            duration
-          })
-          handleUpdateProfessionals && handleUpdateProfessionals(updatedProfessional)
-          handleChangeProfessional && handleChangeProfessional(updatedProfessional)
-        }
-      }
+      setProductLoading && setProductLoading(false)
+    } catch (err) {
+      setProductLoading && setProductLoading(false)
     }
   }
 
