@@ -179,7 +179,8 @@ export const OrderDetails = (props) => {
   /**
    * Method to update differents orders status
   */
-  const handleChangeOrderStatus = async (status, isAcceptOrReject = {}, { dataToSave }) => {
+  const handleChangeOrderStatus = async (status, isAcceptOrReject = {}, options) => {
+    const dataToSave = options?.dataToSave
     if (dataToSave) {
       const order = Object.assign(orderState.order, { ...dataToSave, oldStatus: orderState.order?.status })
       setOrderState({ ...orderState, order })
