@@ -163,12 +163,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
   /**
    * pizza type and position
    */
-  var _useState19 = (0, _react.useState)({
-      type: '',
-      left: false,
-      right: false,
-      center: false
-    }),
+  var _useState19 = (0, _react.useState)(null),
     _useState20 = _slicedToArray(_useState19, 2),
     pizzaType = _useState20[0],
     setPizzaType = _useState20[1];
@@ -1041,23 +1036,8 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
       return (suboption === null || suboption === void 0 || (_suboption$name = suboption.name) === null || _suboption$name === void 0 || (_suboption$name$toLow = _suboption$name.toLowerCase) === null || _suboption$name$toLow === void 0 ? void 0 : _suboption$name$toLow.call(_suboption$name)) === 'completa' || (suboption === null || suboption === void 0 || (_suboption$name2 = suboption.name) === null || _suboption$name2 === void 0 || (_suboption$name2$toLo = _suboption$name2.toLowerCase) === null || _suboption$name2$toLo === void 0 ? void 0 : _suboption$name2$toLo.call(_suboption$name2)) === 'mitad y mitad';
     });
     if (pizzaTypeSubtoption) {
-      var _Object$values2, _Object$values4, _Object$values5, _pizzaTypeSubtoption$, _pizzaTypeSubtoption$2, _pizzaTypeSubtoption$3, _pizzaTypeSubtoption$4, _pizzaTypeSubtoption$5, _pizzaTypeSubtoption$6;
-      var option = (_Object$values2 = Object.values((newProductCart === null || newProductCart === void 0 ? void 0 : newProductCart.options) || {})) === null || _Object$values2 === void 0 ? void 0 : _Object$values2.find(function (option) {
-        var _option$name, _option$name$toLowerC, _Object$values3;
-        return (option === null || option === void 0 || (_option$name = option.name) === null || _option$name === void 0 || (_option$name$toLowerC = _option$name.toLowerCase) === null || _option$name$toLowerC === void 0 ? void 0 : _option$name$toLowerC.call(_option$name)) === 'elige tus ingredientes' && ((_Object$values3 = Object.values(option === null || option === void 0 ? void 0 : option.suboptions)) === null || _Object$values3 === void 0 ? void 0 : _Object$values3.length) > 0;
-      });
-      var suboption1 = (_Object$values4 = Object.values((option === null || option === void 0 ? void 0 : option.suboptions) || {})) === null || _Object$values4 === void 0 || (_Object$values4 = _Object$values4.map(function (suboption) {
-        return suboption;
-      })) === null || _Object$values4 === void 0 ? void 0 : _Object$values4[0];
-      var suboption2 = (_Object$values5 = Object.values((option === null || option === void 0 ? void 0 : option.suboptions) || {})) === null || _Object$values5 === void 0 || (_Object$values5 = _Object$values5.map(function (suboption) {
-        return suboption;
-      })) === null || _Object$values5 === void 0 ? void 0 : _Object$values5[1];
-      setPizzaType(_objectSpread(_objectSpread({}, pizzaType), {}, {
-        type: pizzaTypeSubtoption === null || pizzaTypeSubtoption === void 0 ? void 0 : pizzaTypeSubtoption.name,
-        center: (pizzaTypeSubtoption === null || pizzaTypeSubtoption === void 0 || (_pizzaTypeSubtoption$ = pizzaTypeSubtoption.name) === null || _pizzaTypeSubtoption$ === void 0 || (_pizzaTypeSubtoption$2 = _pizzaTypeSubtoption$.toLowerCase) === null || _pizzaTypeSubtoption$2 === void 0 ? void 0 : _pizzaTypeSubtoption$2.call(_pizzaTypeSubtoption$)) === 'completa',
-        left: (pizzaTypeSubtoption === null || pizzaTypeSubtoption === void 0 || (_pizzaTypeSubtoption$3 = pizzaTypeSubtoption.name) === null || _pizzaTypeSubtoption$3 === void 0 || (_pizzaTypeSubtoption$4 = _pizzaTypeSubtoption$3.toLowerCase) === null || _pizzaTypeSubtoption$4 === void 0 ? void 0 : _pizzaTypeSubtoption$4.call(_pizzaTypeSubtoption$3)) === 'mitad y mitad' && suboption1,
-        right: (pizzaTypeSubtoption === null || pizzaTypeSubtoption === void 0 || (_pizzaTypeSubtoption$5 = pizzaTypeSubtoption.name) === null || _pizzaTypeSubtoption$5 === void 0 || (_pizzaTypeSubtoption$6 = _pizzaTypeSubtoption$5.toLowerCase) === null || _pizzaTypeSubtoption$6 === void 0 ? void 0 : _pizzaTypeSubtoption$6.call(_pizzaTypeSubtoption$5)) === 'mitad y mitad' && suboption2
-      }));
+      var _pizzaTypeSubtoption$, _pizzaTypeSubtoption$2;
+      setPizzaType(pizzaTypeSubtoption === null || pizzaTypeSubtoption === void 0 || (_pizzaTypeSubtoption$ = pizzaTypeSubtoption.name) === null || _pizzaTypeSubtoption$ === void 0 || (_pizzaTypeSubtoption$2 = _pizzaTypeSubtoption$.toLowerCase) === null || _pizzaTypeSubtoption$2 === void 0 ? void 0 : _pizzaTypeSubtoption$2.call(_pizzaTypeSubtoption$));
     }
   };
 
@@ -1150,10 +1130,10 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         _iterator9.f();
       }
       if (editMode && props !== null && props !== void 0 && props.productCart) {
-        var _Object$values6, _props$productCart10;
-        (_Object$values6 = Object.values(props === null || props === void 0 || (_props$productCart10 = props.productCart) === null || _props$productCart10 === void 0 ? void 0 : _props$productCart10.options)) === null || _Object$values6 === void 0 || _Object$values6.map(function (option) {
-          var _Object$values7;
-          return (_Object$values7 = Object.values(option === null || option === void 0 ? void 0 : option.suboptions)) === null || _Object$values7 === void 0 ? void 0 : _Object$values7.map(function (suboption) {
+        var _Object$values2, _props$productCart10;
+        (_Object$values2 = Object.values(props === null || props === void 0 || (_props$productCart10 = props.productCart) === null || _props$productCart10 === void 0 ? void 0 : _props$productCart10.options)) === null || _Object$values2 === void 0 || _Object$values2.map(function (option) {
+          var _Object$values3;
+          return (_Object$values3 = Object.values(option === null || option === void 0 ? void 0 : option.suboptions)) === null || _Object$values3 === void 0 ? void 0 : _Object$values3.map(function (suboption) {
             _selectedSuboptions["suboption:".concat(suboption.id)] = true;
           });
         });
@@ -1200,10 +1180,10 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
       }
       var states = {};
       if (editMode && props !== null && props !== void 0 && props.productCart) {
-        var _Object$values8, _props$productCart11;
-        var cartSuboptions = (_Object$values8 = Object.values(props === null || props === void 0 || (_props$productCart11 = props.productCart) === null || _props$productCart11 === void 0 ? void 0 : _props$productCart11.options)) === null || _Object$values8 === void 0 || (_Object$values8 = _Object$values8.map(function (option) {
+        var _Object$values4, _props$productCart11;
+        var cartSuboptions = (_Object$values4 = Object.values(props === null || props === void 0 || (_props$productCart11 = props.productCart) === null || _props$productCart11 === void 0 ? void 0 : _props$productCart11.options)) === null || _Object$values4 === void 0 || (_Object$values4 = _Object$values4.map(function (option) {
           return Object.values(option === null || option === void 0 ? void 0 : option.suboptions);
-        })) === null || _Object$values8 === void 0 ? void 0 : _Object$values8.flat();
+        })) === null || _Object$values4 === void 0 ? void 0 : _Object$values4.flat();
         states = cartSuboptions.map(function (suboption, i) {
           var _preselectedOptions$i3;
           var price = (_preselectedOptions$i3 = preselectedOptions[i]) !== null && _preselectedOptions$i3 !== void 0 && _preselectedOptions$i3.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
