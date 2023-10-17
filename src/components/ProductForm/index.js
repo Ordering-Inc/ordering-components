@@ -598,6 +598,11 @@ export const ProductForm = (props) => {
       }
       setProductLoading && setProductLoading(false)
     } catch (err) {
+      showToast(
+        ToastType.Error,
+        !props.productCart?.code ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'),
+        5000
+      )
       setProductLoading && setProductLoading(false)
     }
   }
