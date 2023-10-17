@@ -85,7 +85,7 @@ export const ProductForm = (props) => {
   /**
    * pizza type and position
    */
-  const [pizzaType, setPizzaType] = useState({ type: '', left: false, right: false, center: false })
+  const [pizzaType, setPizzaType] = useState(null)
 
   /**
    * Edit mode
@@ -719,16 +719,7 @@ export const ProductForm = (props) => {
   const handleVerifyPizzaType = (newProductCart) => {
     const pizzaTypeSubtoption = Object.values(newProductCart?.options || {})?.map(option => Object.values(option?.suboptions || {}))?.flat()?.find?.(suboption => suboption?.name?.toLowerCase?.() === 'completa' || suboption?.name?.toLowerCase?.() === 'mitad y mitad')
     if (pizzaTypeSubtoption) {
-      const option = Object.values(newProductCart?.options || {})?.find(option => option?.name?.toLowerCase?.() === 'elige tus ingredientes' && Object.values(option?.suboptions)?.length > 0)
-      const suboption1 = Object.values(option?.suboptions || {})?.map(suboption => suboption)?.[0]
-      const suboption2 = Object.values(option?.suboptions || {})?.map(suboption => suboption)?.[1]
-      setPizzaType({
-        ...pizzaType,
-        type: pizzaTypeSubtoption?.name,
-        center: pizzaTypeSubtoption?.name?.toLowerCase?.() === 'completa',
-        left: pizzaTypeSubtoption?.name?.toLowerCase?.() === 'mitad y mitad' && suboption1,
-        right: pizzaTypeSubtoption?.name?.toLowerCase?.() === 'mitad y mitad' && suboption2
-      })
+      setPizzaType(pizzaTypeSubtoption?.name?.toLowerCase?.())
     }
   }
 
