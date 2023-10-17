@@ -791,7 +791,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    */
   var handleSave = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
-      var _errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, _props$productCart7, changes, currentProduct, _product$product9, updatedProfessional, duration, _props$productCart8;
+      var _errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, _props$productCart7, changes, currentProduct, _product$product9, updatedProfessional, duration, _props$productCart8, _props$productCart9;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -855,13 +855,14 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
             }
           case 22:
             setProductLoading && setProductLoading(false);
-            _context3.next = 28;
+            _context3.next = 29;
             break;
           case 25:
             _context3.prev = 25;
             _context3.t0 = _context3["catch"](0);
+            showToast(_ToastContext.ToastType.Error, !((_props$productCart9 = props.productCart) !== null && _props$productCart9 !== void 0 && _props$productCart9.code) ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'), 5000);
             setProductLoading && setProductLoading(false);
-          case 28:
+          case 29:
           case "end":
             return _context3.stop();
         }
@@ -1126,9 +1127,9 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
                 _step12;
               try {
                 for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
-                  var _option$suboptions6, _props$productCart11;
+                  var _option$suboptions6, _props$productCart12;
                   var suboption = _step12.value;
-                  _selectedSuboptions["suboption:".concat(suboption.id)] = (suboption.preselected || (option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1 && (option === null || option === void 0 || (_option$suboptions6 = option.suboptions) === null || _option$suboptions6 === void 0 ? void 0 : _option$suboptions6.length) === 1) && (!editMode || !!((_props$productCart11 = props.productCart) !== null && _props$productCart11 !== void 0 && (_props$productCart11 = _props$productCart11.options["id:".concat(option === null || option === void 0 ? void 0 : option.id)]) !== null && _props$productCart11 !== void 0 && _props$productCart11.suboptions["id:".concat(suboption === null || suboption === void 0 ? void 0 : suboption.id)]));
+                  _selectedSuboptions["suboption:".concat(suboption.id)] = (suboption.preselected || (option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1 && (option === null || option === void 0 || (_option$suboptions6 = option.suboptions) === null || _option$suboptions6 === void 0 ? void 0 : _option$suboptions6.length) === 1) && (!editMode || !!((_props$productCart12 = props.productCart) !== null && _props$productCart12 !== void 0 && (_props$productCart12 = _props$productCart12.options["id:".concat(option === null || option === void 0 ? void 0 : option.id)]) !== null && _props$productCart12 !== void 0 && _props$productCart12.suboptions["id:".concat(suboption === null || suboption === void 0 ? void 0 : suboption.id)]));
                   _dependsSuboptions["suboption:".concat(suboption.id)] = option !== null && option !== void 0 && option.conditioned && (option === null || option === void 0 ? void 0 : option.respect_to) !== null ? option === null || option === void 0 ? void 0 : option.respect_to : null;
                 }
               } catch (err) {
@@ -1149,8 +1150,8 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         _iterator9.f();
       }
       if (editMode && props !== null && props !== void 0 && props.productCart) {
-        var _Object$values6, _props$productCart9;
-        (_Object$values6 = Object.values(props === null || props === void 0 || (_props$productCart9 = props.productCart) === null || _props$productCart9 === void 0 ? void 0 : _props$productCart9.options)) === null || _Object$values6 === void 0 || _Object$values6.map(function (option) {
+        var _Object$values6, _props$productCart10;
+        (_Object$values6 = Object.values(props === null || props === void 0 || (_props$productCart10 = props.productCart) === null || _props$productCart10 === void 0 ? void 0 : _props$productCart10.options)) === null || _Object$values6 === void 0 || _Object$values6.map(function (option) {
           var _Object$values7;
           return (_Object$values7 = Object.values(option === null || option === void 0 ? void 0 : option.suboptions)) === null || _Object$values7 === void 0 ? void 0 : _Object$values7.map(function (suboption) {
             _selectedSuboptions["suboption:".concat(suboption.id)] = true;
@@ -1199,8 +1200,8 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
       }
       var states = {};
       if (editMode && props !== null && props !== void 0 && props.productCart) {
-        var _Object$values8, _props$productCart10;
-        var cartSuboptions = (_Object$values8 = Object.values(props === null || props === void 0 || (_props$productCart10 = props.productCart) === null || _props$productCart10 === void 0 ? void 0 : _props$productCart10.options)) === null || _Object$values8 === void 0 || (_Object$values8 = _Object$values8.map(function (option) {
+        var _Object$values8, _props$productCart11;
+        var cartSuboptions = (_Object$values8 = Object.values(props === null || props === void 0 || (_props$productCart11 = props.productCart) === null || _props$productCart11 === void 0 ? void 0 : _props$productCart11.options)) === null || _Object$values8 === void 0 || (_Object$values8 = _Object$values8.map(function (option) {
           return Object.values(option === null || option === void 0 ? void 0 : option.suboptions);
         })) === null || _Object$values8 === void 0 ? void 0 : _Object$values8.flat();
         states = cartSuboptions.map(function (suboption, i) {
