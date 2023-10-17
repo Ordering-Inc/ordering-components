@@ -1305,7 +1305,8 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
             actionOrderToTab(orderFound, newOrderStatus, 'add');
           }
         } else {
-          actionOrderToTab(orderFound, newOrderStatus, 'remove');
+          var _orderFound3;
+          !_currentFilter.includes(orderFound.status) || ((_orderFound3 = orderFound) === null || _orderFound3 === void 0 ? void 0 : _orderFound3.driver) === null && isDriverApp ? actionOrderToTab(orderFound, newOrderStatus, 'remove') : actionOrderToTab(orderFound, newOrderStatus, 'update');
         }
       }
     };
@@ -1465,8 +1466,8 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
         if (orderFound) break;
       }
       if (orderFound) {
-        var _getStatusById5, _orderFound3;
-        var newOrderStatus = (_getStatusById5 = getStatusById((_orderFound3 = orderFound) === null || _orderFound3 === void 0 ? void 0 : _orderFound3.status)) !== null && _getStatusById5 !== void 0 ? _getStatusById5 : '';
+        var _getStatusById5, _orderFound4;
+        var newOrderStatus = (_getStatusById5 = getStatusById((_orderFound4 = orderFound) === null || _orderFound4 === void 0 ? void 0 : _orderFound4.status)) !== null && _getStatusById5 !== void 0 ? _getStatusById5 : '';
         orderFound.user_review = review;
         actionOrderToTab(orderFound, newOrderStatus, 'update');
       }
