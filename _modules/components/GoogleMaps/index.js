@@ -321,40 +321,7 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
           position: window.google.maps.ControlPosition.TOP_LEFT
         }, mapControls === null || mapControls === void 0 ? void 0 : mapControls.mapTypeControlOptions)
       });
-      var marker = null;
       setGoogleMap(map);
-      if (locations) {
-        if (locations.length > 0) {
-          generateMarkers(map);
-        }
-        if (businessMap) {
-          marker = new window.google.maps.Marker({
-            position: new window.google.maps.LatLng(center.lat, center.lng),
-            map: map
-          });
-          map.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
-        } else {
-          var _locations$3;
-          marker = new window.google.maps.Marker({
-            position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
-            map: map,
-            draggable: useMapWithBusinessZones,
-            zIndex: 9999,
-            icon: useMapWithBusinessZones ? undefined : {
-              url: (_locations$3 = locations[0]) === null || _locations$3 === void 0 ? void 0 : _locations$3.icon,
-              scaledSize: new window.google.maps.Size(35, 35)
-            }
-          });
-        }
-        setGoogleMapMarker(marker);
-      } else {
-        marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
-          map: map,
-          draggable: !!(mapControls !== null && mapControls !== void 0 && mapControls.isMarkerDraggable)
-        });
-        setGoogleMapMarker(marker);
-      }
       if ((businessZones === null || businessZones === void 0 ? void 0 : businessZones.length) > 0) {
         var bounds = new window.google.maps.LatLngBounds();
         var _iterator4 = _createForOfIteratorHelper(businessZones),
@@ -386,7 +353,43 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
         }
       }
     }
-  }, [googleReady, JSON.stringify(locations)]);
+  }, [googleReady]);
+  (0, _react.useEffect)(function () {
+    if (!googleMap || (markers === null || markers === void 0 ? void 0 : markers.length) > 0 || googleMapMarker) return;
+    var marker = null;
+    if (locations) {
+      if (locations.length > 0) {
+        generateMarkers(googleMap);
+      }
+      if (businessMap) {
+        marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(center.lat, center.lng),
+          googleMap: googleMap
+        });
+        googleMap.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
+      } else {
+        var _locations$3;
+        marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
+          googleMap: googleMap,
+          draggable: useMapWithBusinessZones,
+          zIndex: 9999,
+          icon: useMapWithBusinessZones ? undefined : {
+            url: (_locations$3 = locations[0]) === null || _locations$3 === void 0 ? void 0 : _locations$3.icon,
+            scaledSize: new window.google.maps.Size(35, 35)
+          }
+        });
+      }
+      setGoogleMapMarker(marker);
+    } else {
+      marker = new window.google.maps.Marker({
+        position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
+        googleMap: googleMap,
+        draggable: !!(mapControls !== null && mapControls !== void 0 && mapControls.isMarkerDraggable)
+      });
+      setGoogleMapMarker(marker);
+    }
+  }, [googleMap, locations]);
   (0, _react.useEffect)(function () {
     if (!businessMap) {
       if (googleReady && googleMap && googleMapMarker) {
