@@ -379,8 +379,6 @@ export const ProductForm = (props) => {
                 } else {
                   _selectedSuboptions[`suboption:${suboption.id}`] = false
                 }
-              } else {
-                _selectedSuboptions[`suboption:${suboption.id}`] = suboption?.preselected || (option?.max === 1 && option?.min === 1 && option?.suboptions?.length === 1)
               }
             }
           }
@@ -430,12 +428,12 @@ export const ProductForm = (props) => {
         return count + suboption.quantity
       }, 0)
     }
-
+    const hasPreselectedFlow = suboptionsArray.filter(state => state?.suboption?.preselected)
     if (newBalance <= option.max) {
       newProductCart.options[`id:${option.id}`].balance = newBalance
       newProductCart.unitTotal = getUnitTotal(newProductCart)
       newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
-      if (state.selected && suboptionsArray?.length > 0) {
+      if (state.selected && hasPreselectedFlow?.length > 0) {
         handleChangeSuboptionDefault(suboptionsArray)
         setSelectedSuboptions(_selectedSuboptions)
       } else {
