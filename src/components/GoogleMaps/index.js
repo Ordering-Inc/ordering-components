@@ -244,41 +244,7 @@ export const GoogleMaps = (props) => {
           ...mapControls?.mapTypeControlOptions
         }
       })
-
-      let marker = null
       setGoogleMap(map)
-
-      if (locations) {
-        if (locations.length > 0) {
-          generateMarkers(map)
-        }
-        if (businessMap) {
-          marker = new window.google.maps.Marker({
-            position: new window.google.maps.LatLng(center.lat, center.lng),
-            map
-          })
-          map.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
-        } else {
-          marker = new window.google.maps.Marker({
-            position: new window.google.maps.LatLng(center?.lat, center?.lng),
-            map,
-            draggable: useMapWithBusinessZones,
-            zIndex: 9999,
-            icon: useMapWithBusinessZones ? undefined : {
-              url: locations[0]?.icon,
-              scaledSize: new window.google.maps.Size(35, 35)
-            }
-          })
-        }
-        setGoogleMapMarker(marker)
-      } else {
-        marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(center?.lat, center?.lng),
-          map,
-          draggable: !!mapControls?.isMarkerDraggable
-        })
-        setGoogleMapMarker(marker)
-      }
 
       if (businessZones?.length > 0) {
         const bounds = new window.google.maps.LatLngBounds()
@@ -293,7 +259,43 @@ export const GoogleMaps = (props) => {
         }
       }
     }
-  }, [googleReady, JSON.stringify(locations)])
+  }, [googleReady])
+
+  useEffect(() => {
+    if (!googleMap || markers?.length > 0 || googleMapMarker) return
+    let marker = null
+    if (locations) {
+      if (locations.length > 0) {
+        generateMarkers(googleMap)
+      }
+      if (businessMap) {
+        marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(center.lat, center.lng),
+          googleMap
+        })
+        googleMap.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
+      } else {
+        marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(center?.lat, center?.lng),
+          googleMap,
+          draggable: useMapWithBusinessZones,
+          zIndex: 9999,
+          icon: useMapWithBusinessZones ? undefined : {
+            url: locations[0]?.icon,
+            scaledSize: new window.google.maps.Size(35, 35)
+          }
+        })
+      }
+      setGoogleMapMarker(marker)
+    } else {
+      marker = new window.google.maps.Marker({
+        position: new window.google.maps.LatLng(center?.lat, center?.lng),
+        googleMap,
+        draggable: !!mapControls?.isMarkerDraggable
+      })
+      setGoogleMapMarker(marker)
+    }
+  }, [googleMap, locations])
 
   useEffect(() => {
     if (!businessMap) {
