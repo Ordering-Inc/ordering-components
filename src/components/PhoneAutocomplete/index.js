@@ -14,11 +14,12 @@ export const PhoneAutocomplete = (props) => {
   const [{ user, token }] = useSession()
   const [orderState, { setUserCustomerOptions }] = useOrder()
   const [businessState] = useBusiness()
+  const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
 
   const [phone, setPhone] = useState('')
   const [openModal, setOpenModal] = useState({ customer: false, signup: false, error: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
-  const [customersPhones, setCustomersPhones] = useState({ users: [], loading: urlPhone ? true : false, error: null })
+  const [customersPhones, setCustomersPhones] = useState({ users: userCustomer ? [userCustomer] : [], loading: urlPhone ? true : false, error: null })
   const [businessAddress, setBusinessAddress] = useState(null)
   const [alertState, setAlertState] = useState({ open: true, content: [] })
   const [optionsState, setOptionsState] = useState({ loading: false })
@@ -159,7 +160,7 @@ export const PhoneAutocomplete = (props) => {
       getUsers()
     }
     if ((phone && phone.length < 7) || !phone) {
-      setCustomersPhones({ ...customersPhones, users: [] })
+      setCustomersPhones({ ...customersPhones, users: userCustomer ? [userCustomer] : [] })
     }
   }, [phone])
 
