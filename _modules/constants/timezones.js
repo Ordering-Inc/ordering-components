@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.TIMEZONES = void 0;
-var TIMEZONES = exports.TIMEZONES = {
+var TIMEZONES = {
   'Europe/Andorra': 'Andorra',
   'Asia/Dubai': 'United Arab Emirates',
   'Asia/Kabul': 'Afghanistan',
@@ -431,3 +431,4 @@ var TIMEZONES = exports.TIMEZONES = {
   'Africa/Lusaka': 'Zambia',
   'Africa/Harare': 'Zimbabwe'
 };
+exports.TIMEZONES = TIMEZONES;
