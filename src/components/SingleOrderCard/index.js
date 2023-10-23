@@ -12,7 +12,8 @@ export const SingleOrderCard = (props) => {
     UIComponent,
     order,
     handleReorder,
-    handleUpdateOrderList
+    handleUpdateOrderList,
+    isCustomerMode
   } = props
 
   const [ordering] = useApi()
@@ -89,7 +90,8 @@ export const SingleOrderCard = (props) => {
       for (const item of uuids) {
         let _error = null
         if (item.uuid) {
-          const { error, result } = await clearCart(item.uuid)
+          const disableLoading = isCustomerMode
+          const { error, result } = await clearCart(item.uuid, { disableLoading })
           _error = error ? result[0] : false
         }
         _error && errors.push(_error)

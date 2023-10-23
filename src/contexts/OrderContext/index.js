@@ -572,9 +572,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Clear products of cart
    */
-  const clearCart = async (uuid) => {
+  const clearCart = async (uuid, configurations = {}) => {
     try {
-      setState({ ...state, loading: true })
+      setState({ ...state, loading: !configurations?.disableLoading })
       const countryCode = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
@@ -1094,9 +1094,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Reorder an order and get cart
    */
-  const reorder = async (orderId, offAlert) => {
+  const reorder = async (orderId, offAlert, configurations = {}) => {
     try {
-      setState({ ...state, loading: true })
+      setState({ ...state, loading: !configurations?.disableLoading })
       const countryCode = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id

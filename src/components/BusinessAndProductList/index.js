@@ -6,6 +6,7 @@ import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 dayjs.extend(utc)
 
 export const BusinessAndProductList = (props) => {
@@ -24,7 +25,8 @@ export const BusinessAndProductList = (props) => {
     location,
     avoidProductDuplicate,
     isApp,
-    isFetchAllProducts
+    isFetchAllProducts,
+    isCustomerMode
   } = props
 
   const [orderState, { removeProduct }] = useOrder()
@@ -32,7 +34,7 @@ export const BusinessAndProductList = (props) => {
   const [{ configs }] = useConfig()
   const [, { showToast }] = useToast()
   const [languageState, t] = useLanguage()
-
+  const [customerState] = useCustomer()
   const [categorySelected, setCategorySelected] = useState({ id: null, name: t('ALL', 'All') })
   const [searchValue, setSearchValue] = useState(null)
   const [sortByValue, setSortByValue] = useState(null)
@@ -716,6 +718,10 @@ export const BusinessAndProductList = (props) => {
         parameters.professional_id = professionalSelected?.id
       }
 
+      if (isCustomerMode && customerState?.user?.id) {
+        parameters.user_id = customerState?.user?.id
+      }
+
       const { content: { result } } = await ordering.businesses(slug).select(businessProps).parameters(parameters).get({ cancelToken: source })
 
       setErrorQuantityProducts(!result?.categories || result?.categories?.length === 0)
@@ -814,7 +820,6 @@ export const BusinessAndProductList = (props) => {
       showToast(ToastType.Error, err.message)
     }
   }
-
 
   const updateStoreCategory = async (categoryId, updateParams = {}) => {
     try {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
-import { useUtils } from '../../contexts/UtilsContext'
 import { useConfig } from '../../contexts/ConfigContext'
 
 /**
@@ -14,10 +13,11 @@ export const AddressDetails = (props) => {
     UIComponent,
     mapConfigs,
     isMultiCheckout,
-    openCarts
+    openCarts,
+    cart,
+    primaryColor
   } = props
   const [orderState] = useOrder()
-  const [{ optimizeImage }] = useUtils()
   const [{ configs }] = useConfig()
   const GM_API_KEY = apiKey || configs?.google_maps_api_key?.value
   const requestsState = {}
@@ -35,21 +35,25 @@ export const AddressDetails = (props) => {
   /**
    * Method to format google url for business location
    */
-  const formatUrlMethod = (location) => {
+
+  const formatUrlMethod = (businessLocation) => {
     const orderLocation = props.orderLocation || orderState?.options?.address?.location
     let businessesMarkers = ''
+    let firstLetterBusinessName = ''
     if (isMultiCheckout) {
       openCarts.forEach(cart => {
-        businessesMarkers += `&markers=icon:${optimizeImage(cart.business?.logo, 'w_60,h_60,r_max')}%7Ccolor:white%7C${cart.business?.location?.lat},${cart.business?.location?.lng}`
+        firstLetterBusinessName = cart?.business?.name?.charAt(0)?.toUpperCase?.() ?? 'S'
+        businessesMarkers += `&markers=label:${firstLetterBusinessName}%7Ccolor:${primaryColor}%7C${cart.business?.location?.lat},${cart.business?.location?.lng}`
       })
+    } else {
+      firstLetterBusinessName = cart?.business?.name?.charAt(0)?.toUpperCase?.() ?? 'S'
+      businessesMarkers = `&markers=label:${firstLetterBusinessName}%7Ccolor:${primaryColor}%7C${cart.business?.location?.lat ?? businessLocation?.location?.lat},${cart.business?.location?.lng ?? businessLocation?.location?.lng}`
     }
     const staticmapUrl = isMultiCheckout
-      ? `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&zoom=10&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}${businessesMarkers}&key=${GM_API_KEY}`
-      : `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&center=${location?.lat},${location?.lng}&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&markers=icon:%7Ccolor:red%7C${location?.lat},${location?.lng}&key=${GM_API_KEY}`
+      ? `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}${businessesMarkers}&key=${GM_API_KEY}`
+      : `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=color:red%7C${orderLocation?.lat},${orderLocation?.lng}${businessesMarkers}&key=${GM_API_KEY}`
 
-    return orderState.options.type === 1
-      ? `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&center=${orderLocation?.lat},${orderLocation?.lng}&zoom=${mapConfigs?.mapZoom || 15}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&key=${GM_API_KEY}`
-      : staticmapUrl
+    return staticmapUrl
   }
   /**
    * Method to get business location from API
@@ -140,5 +144,6 @@ AddressDetails.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  primaryColor: 'red'
 }
