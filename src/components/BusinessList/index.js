@@ -63,6 +63,7 @@ export const BusinessList = (props) => {
   const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
   const [{ configs }] = useConfig()
   const [franchiseEnabled, setFranchiseEnabled] = useState(false)
+  const [firstLoad, setFirstLoad] = useState(false)
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
   const advancedSearchEnabled = configs?.advanced_business_search_enabled?.value === '1'
@@ -305,6 +306,7 @@ export const BusinessList = (props) => {
         result,
         fetched: true
       })
+      setFirstLoad(true)
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
         setBusinessesList({
@@ -314,6 +316,7 @@ export const BusinessList = (props) => {
           fetched: true,
           result: [err.message]
         })
+        setFirstLoad(true)
       }
     }
   }
@@ -460,7 +463,9 @@ export const BusinessList = (props) => {
   }, [showCities])
 
   useEffect(() => {
-    handleChangeSearch(searchValueCustom)
+    if (firstLoad) {
+      handleChangeSearch(searchValueCustom)
+    }
   }, [searchValueCustom])
 
   /**
