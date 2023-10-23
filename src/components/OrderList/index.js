@@ -35,7 +35,8 @@ export const OrderList = props => {
     isBusiness,
     noGiftCardOrders,
     propsToFetch,
-    handleRedirectToCheckout
+    handleRedirectToCheckout,
+    isCustomerMode
   } = props
 
   const [ordering] = useApi()
@@ -74,10 +75,10 @@ export const OrderList = props => {
 
     try {
       setReorderState({ ...reorderState, loading: true })
-
+      const disableLoading = isCustomerMode
       const fetchOrders = async (ids) => {
         const promises = ids.map(async id => {
-          const res = await reorder(id, ids?.length > 1)
+          const res = await reorder(id, ids?.length > 1, { disableLoading })
           return res
         })
         const data = await Promise.all(promises)
@@ -394,7 +395,7 @@ export const OrderList = props => {
   }, [isBusiness])
 
   useEffect(() => {
-    if (orderList.loading) return
+    if (orderList.loading || isCustomerMode) return
     const handleUpdateOrder = (order) => {
       setOrderList({ ...orderList, loading: true })
       const found = orderList.orders.find(_order => _order.id === order.id)
@@ -457,10 +458,10 @@ export const OrderList = props => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('orders_register', handleAddNewOrder)
     }
-  }, [orderList.orders, pagination, socket, session])
+  }, [orderList.orders, pagination, socket, session, isCustomerMode])
 
   useEffect(() => {
-    if (!session.user) return
+    if (!session.user || isCustomerMode) return
     socket.on('disconnect', (reason) => {
       const ordersRoom = !props.isAsCustomer && session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
       socket.join(ordersRoom)
@@ -470,7 +471,7 @@ export const OrderList = props => {
     return () => {
       socket.leave(ordersRoom)
     }
-  }, [socket, session, userCustomerId])
+  }, [socket, session, userCustomerId, isCustomerMode])
 
   const loadMoreOrders = async (searchByOtherStatus) => {
     setOrderList({ ...orderList, loading: true })
