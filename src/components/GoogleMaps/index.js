@@ -242,6 +242,38 @@ export const GoogleMaps = (props) => {
         }
       })
       setGoogleMap(map)
+      let marker = null
+      if (locations) {
+        if (locations.length > 0) {
+          generateMarkers(map)
+        }
+        if (businessMap) {
+          marker = new window.google.maps.Marker({
+            position: new window.google.maps.LatLng(center.lat, center.lng),
+            map
+          })
+          map.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
+        } else {
+          marker = new window.google.maps.Marker({
+            position: new window.google.maps.LatLng(center?.lat, center?.lng),
+            map,
+            draggable: useMapWithBusinessZones,
+            zIndex: 9999,
+            icon: useMapWithBusinessZones ? undefined : {
+              url: locations[0]?.icon,
+              scaledSize: new window.google.maps.Size(35, 35)
+            }
+          })
+        }
+        setGoogleMapMarker(marker)
+      } else {
+        marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(center?.lat, center?.lng),
+          map,
+          draggable: !!mapControls?.isMarkerDraggable
+        })
+        setGoogleMapMarker(marker)
+      }
 
       if (businessZones?.length > 0) {
         const bounds = new window.google.maps.LatLngBounds()
@@ -256,10 +288,10 @@ export const GoogleMaps = (props) => {
         }
       }
     }
-  }, [googleReady])
+  }, [googleReady, JSON.stringify(businessZones)])
 
   useEffect(() => {
-    if (!googleMap || markers?.length > 0 || googleMapMarker) return
+    if (!googleMap || markers?.length > 0 || googleMapMarker || useMapWithBusinessZones) return
     let marker = null
     if (locations) {
       if (locations.length > 0) {
