@@ -1,6 +1,6 @@
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -13,19 +13,19 @@ var _ToastContext = require("../../contexts/ToastContext");
 var _LanguageContext = require("../../contexts/LanguageContext");
 var _EventContext = require("../../contexts/EventContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator.return && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, catch: function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
@@ -33,10 +33,10 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-var OrderListGroups = function OrderListGroups(props) {
-  var _props$combineTabs, _configs$combine_pend, _configs$logistic_mod, _configs$notification, _configs$notification2, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _orderGroupStatusCust5, _paginationSettings$p, _ordersGroup$currentT18;
+var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) {
+  var _props$combineTabs, _configs$combine_pend, _configs$logistic_mod, _configs$notification, _configs$notification2, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _orderGroupStatusCust5, _paginationSettings$p, _ordersGroup$currentT14;
   var UIComponent = props.UIComponent,
     orderBy = props.orderBy,
     isIos = props.isIos,
@@ -67,16 +67,16 @@ var OrderListGroups = function OrderListGroups(props) {
   var _useConfig = (0, _ConfigContext.useConfig)(),
     _useConfig2 = _slicedToArray(_useConfig, 1),
     configs = _useConfig2[0].configs;
-  var _combineTabs = (_props$combineTabs = props.combineTabs) !== null && _props$combineTabs !== void 0 ? _props$combineTabs : (configs === null || configs === void 0 ? void 0 : (_configs$combine_pend = configs.combine_pending_and_progress_orders) === null || _configs$combine_pend === void 0 ? void 0 : _configs$combine_pend.value) === '1';
+  var _combineTabs = (_props$combineTabs = props.combineTabs) !== null && _props$combineTabs !== void 0 ? _props$combineTabs : (configs === null || configs === void 0 || (_configs$combine_pend = configs.combine_pending_and_progress_orders) === null || _configs$combine_pend === void 0 ? void 0 : _configs$combine_pend.value) === '1';
   var _useState = (0, _react.useState)(_combineTabs),
     _useState2 = _slicedToArray(_useState, 2),
     combineTabs = _useState2[0],
     setCombineTabsState = _useState2[1];
-  var isLogisticActivated = configs === null || configs === void 0 ? void 0 : (_configs$logistic_mod = configs.logistic_module) === null || _configs$logistic_mod === void 0 ? void 0 : _configs$logistic_mod.value;
+  var isLogisticActivated = configs === null || configs === void 0 || (_configs$logistic_mod = configs.logistic_module) === null || _configs$logistic_mod === void 0 ? void 0 : _configs$logistic_mod.value;
   var ordersStatusArray = combineTabs ? ['active', 'completed', 'cancelled'] : ['pending', 'inProgress', 'completed', 'cancelled'];
-  var notificationStatusses = props.isDriverApp ? (configs === null || configs === void 0 ? void 0 : (_configs$notification = configs.notification_driver_states) === null || _configs$notification === void 0 ? void 0 : _configs$notification.value.split('|').map(function (value) {
+  var notificationStatusses = props.isDriverApp ? (configs === null || configs === void 0 || (_configs$notification = configs.notification_driver_states) === null || _configs$notification === void 0 ? void 0 : _configs$notification.value.split('|').map(function (value) {
     return Number(value);
-  })) || [] : (configs === null || configs === void 0 ? void 0 : (_configs$notification2 = configs.notification_business_states) === null || _configs$notification2 === void 0 ? void 0 : _configs$notification2.value.split('|').map(function (value) {
+  })) || [] : (configs === null || configs === void 0 || (_configs$notification2 = configs.notification_business_states) === null || _configs$notification2 === void 0 ? void 0 : _configs$notification2.value.split('|').map(function (value) {
     return Number(value);
   })) || [];
   var ordersGroupStatus = {
@@ -191,7 +191,7 @@ var OrderListGroups = function OrderListGroups(props) {
   var getOrders = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
       var _filtered$customer, _filtered$customer2, _filtered$date, _filtered$date3;
-      var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, _ordersGroup$currentT, _ordersGroup$currentT2, _ordersGroup$currentT3, _ordersGroup$currentT4, _paymethodResult, paymethodResult, _filtered$driver_grou, _filtered$customer3, _filtered$customer6, customerOptions, _filtered$customer4, _filtered$customer5, _filtered$customer7, _filtered$customer8, _filtered$date2, _filtered$date4, source, functionFetch;
+      var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, _ordersGroup$currentT, _ordersGroup$currentT2, _paymethodResult, paymethodResult, _filtered$driver_grou, _filtered$customer3, _filtered$customer6, customerOptions, _filtered$customer4, _filtered$customer5, _filtered$customer7, _filtered$customer8, _filtered$date2, _filtered$date4, source, functionFetch;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -211,7 +211,7 @@ var OrderListGroups = function OrderListGroups(props) {
                   value: orderStatus
                 });
               }
-              if (((_ordersGroup$currentT = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT === void 0 ? void 0 : (_ordersGroup$currentT2 = _ordersGroup$currentT.orders) === null || _ordersGroup$currentT2 === void 0 ? void 0 : _ordersGroup$currentT2.length) > 0 && !newFetch) {
+              if (((_ordersGroup$currentT = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT === void 0 || (_ordersGroup$currentT = _ordersGroup$currentT.orders) === null || _ordersGroup$currentT === void 0 ? void 0 : _ordersGroup$currentT.length) > 0 && !newFetch) {
                 options.query = _objectSpread(_objectSpread({}, options.query), {}, {
                   page: 1
                 });
@@ -220,7 +220,7 @@ var OrderListGroups = function OrderListGroups(props) {
                     attribute: 'id',
                     value: {
                       condition: '!=',
-                      value: (_ordersGroup$currentT3 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT3 === void 0 ? void 0 : (_ordersGroup$currentT4 = _ordersGroup$currentT3.orders) === null || _ordersGroup$currentT4 === void 0 ? void 0 : _ordersGroup$currentT4.map(function (o) {
+                      value: (_ordersGroup$currentT2 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT2 === void 0 || (_ordersGroup$currentT2 = _ordersGroup$currentT2.orders) === null || _ordersGroup$currentT2 === void 0 ? void 0 : _ordersGroup$currentT2.map(function (o) {
                         return o.id;
                       })
                     }
@@ -289,7 +289,7 @@ var OrderListGroups = function OrderListGroups(props) {
             if (filtered !== null && filtered !== void 0 && filtered.driver_groups) {
               options.query.where.push({
                 attribute: 'driver_id',
-                value: filtered === null || filtered === void 0 ? void 0 : (_filtered$driver_grou = filtered.driver_groups) === null || _filtered$driver_grou === void 0 ? void 0 : _filtered$driver_grou.drivers
+                value: filtered === null || filtered === void 0 || (_filtered$driver_grou = filtered.driver_groups) === null || _filtered$driver_grou === void 0 ? void 0 : _filtered$driver_grou.drivers
               });
             }
             if (filtered !== null && filtered !== void 0 && (_filtered$customer = filtered.customer) !== null && _filtered$customer !== void 0 && _filtered$customer.email || filtered !== null && filtered !== void 0 && (_filtered$customer2 = filtered.customer) !== null && _filtered$customer2 !== void 0 && _filtered$customer2.phone) {
@@ -299,7 +299,7 @@ var OrderListGroups = function OrderListGroups(props) {
                   attribute: 'email',
                   value: {
                     condition: 'ilike',
-                    value: isIos ? "%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer4 = filtered.customer) === null || _filtered$customer4 === void 0 ? void 0 : _filtered$customer4.email, "%") : encodeURI("%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer5 = filtered.customer) === null || _filtered$customer5 === void 0 ? void 0 : _filtered$customer5.email, "%"))
+                    value: isIos ? "%".concat(filtered === null || filtered === void 0 || (_filtered$customer4 = filtered.customer) === null || _filtered$customer4 === void 0 ? void 0 : _filtered$customer4.email, "%") : encodeURI("%".concat(filtered === null || filtered === void 0 || (_filtered$customer5 = filtered.customer) === null || _filtered$customer5 === void 0 ? void 0 : _filtered$customer5.email, "%"))
                   }
                 });
               }
@@ -308,7 +308,7 @@ var OrderListGroups = function OrderListGroups(props) {
                   attribute: 'cellphone',
                   value: {
                     condition: 'ilike',
-                    value: isIos ? "%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer7 = filtered.customer) === null || _filtered$customer7 === void 0 ? void 0 : _filtered$customer7.phone, "%") : encodeURI("%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer8 = filtered.customer) === null || _filtered$customer8 === void 0 ? void 0 : _filtered$customer8.phone, "%"))
+                    value: isIos ? "%".concat(filtered === null || filtered === void 0 || (_filtered$customer7 = filtered.customer) === null || _filtered$customer7 === void 0 ? void 0 : _filtered$customer7.phone, "%") : encodeURI("%".concat(filtered === null || filtered === void 0 || (_filtered$customer8 = filtered.customer) === null || _filtered$customer8 === void 0 ? void 0 : _filtered$customer8.phone, "%"))
                   }
                 });
               }
@@ -328,7 +328,7 @@ var OrderListGroups = function OrderListGroups(props) {
                 attribute: 'delivery_datetime',
                 value: {
                   condition: '>=',
-                  value: filtered === null || filtered === void 0 ? void 0 : (_filtered$date2 = filtered.date) === null || _filtered$date2 === void 0 ? void 0 : _filtered$date2.from
+                  value: filtered === null || filtered === void 0 || (_filtered$date2 = filtered.date) === null || _filtered$date2 === void 0 ? void 0 : _filtered$date2.from
                 }
               });
             }
@@ -337,7 +337,7 @@ var OrderListGroups = function OrderListGroups(props) {
                 attribute: 'delivery_datetime',
                 value: {
                   condition: '<=',
-                  value: filtered === null || filtered === void 0 ? void 0 : (_filtered$date4 = filtered.date) === null || _filtered$date4 === void 0 ? void 0 : _filtered$date4.to
+                  value: filtered === null || filtered === void 0 || (_filtered$date4 = filtered.date) === null || _filtered$date4 === void 0 ? void 0 : _filtered$date4.to
                 }
               });
             }
@@ -361,13 +361,13 @@ var OrderListGroups = function OrderListGroups(props) {
         }
       }, _callee);
     }));
-    return function getOrders(_x2) {
+    return function getOrders(_x) {
       return _ref2.apply(this, arguments);
     };
   }();
   var getControls = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var _result$paymethods, _result$paymethods$fi, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, obj, _controlsState$error;
+      var _result$paymethods, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, obj, _controlsState$error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -384,9 +384,9 @@ var OrderListGroups = function OrderListGroups(props) {
             result = _yield$ordering$setAc2.result;
             obj = _objectSpread(_objectSpread({}, controlsState), {}, {
               loading: false,
-              paymethods: result === null || result === void 0 ? void 0 : (_result$paymethods = result.paymethods) === null || _result$paymethods === void 0 ? void 0 : (_result$paymethods$fi = _result$paymethods.filter(function (p) {
+              paymethods: result === null || result === void 0 || (_result$paymethods = result.paymethods) === null || _result$paymethods === void 0 || (_result$paymethods = _result$paymethods.filter(function (p) {
                 return customPaymethods === null || customPaymethods === void 0 ? void 0 : customPaymethods.includes(p.name);
-              })) === null || _result$paymethods$fi === void 0 ? void 0 : _result$paymethods$fi.map(function (pay) {
+              })) === null || _result$paymethods === void 0 ? void 0 : _result$paymethods.map(function (pay) {
                 return pay.id;
               }),
               error: error ? result : null
@@ -415,11 +415,11 @@ var OrderListGroups = function OrderListGroups(props) {
       var _ref5,
         newFetch,
         newFetchCurrent,
-        _ordersGroup$currentT5,
+        _ordersGroup$currentT3,
         pageSize,
+        _ordersGroup$currentT4,
+        _ordersGroup$currentT5,
         _ordersGroup$currentT6,
-        _ordersGroup$currentT7,
-        _ordersGroup$currentT8,
         _yield$getOrders,
         _yield$getOrders$cont,
         error,
@@ -439,7 +439,7 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context3.abrupt("return");
           case 3:
             if (newFetch) {
-              ordersStatusArray === null || ordersStatusArray === void 0 ? void 0 : ordersStatusArray.map(function (tab) {
+              ordersStatusArray === null || ordersStatusArray === void 0 || ordersStatusArray.map(function (tab) {
                 ordersGroup = _objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, tab, _objectSpread(_objectSpread({}, orderStructure), {}, {
                   defaultFilter: ordersGroupStatus[tab],
                   currentFilter: ordersGroup[tab].currentFilter,
@@ -449,7 +449,7 @@ var OrderListGroups = function OrderListGroups(props) {
             } else if (newFetchCurrent) {
               ordersGroup = _objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, orderStructure), {}, {
                 defaultFilter: ordersGroupStatus[currentTabSelected],
-                currentFilter: (_ordersGroup$currentT5 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT5 === void 0 ? void 0 : _ordersGroup$currentT5.currentFilter
+                currentFilter: (_ordersGroup$currentT3 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT3 === void 0 ? void 0 : _ordersGroup$currentT3.currentFilter
               })));
             }
             pageSize = paginationSettings.pageSize;
@@ -461,7 +461,7 @@ var OrderListGroups = function OrderListGroups(props) {
             return getOrders({
               page: 1,
               pageSize: pageSize,
-              orderStatus: (_ordersGroup$currentT6 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT6 === void 0 ? void 0 : _ordersGroup$currentT6.currentFilter,
+              orderStatus: (_ordersGroup$currentT4 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT4 === void 0 ? void 0 : _ordersGroup$currentT4.currentFilter,
               newFetch: newFetch || newFetchCurrent
             });
           case 9:
@@ -470,7 +470,7 @@ var OrderListGroups = function OrderListGroups(props) {
             error = _yield$getOrders$cont.error;
             result = _yield$getOrders$cont.result;
             pagination = _yield$getOrders$cont.pagination;
-            _ordersCleaned = error ? newFetch || newFetchCurrent ? [] : sortOrders((_ordersGroup$currentT7 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT7 === void 0 ? void 0 : _ordersGroup$currentT7.orders) : newFetch || newFetchCurrent ? sortOrders(result) : sortOrders((_ordersGroup$currentT8 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT8 === void 0 ? void 0 : _ordersGroup$currentT8.orders.concat(result));
+            _ordersCleaned = error ? newFetch || newFetchCurrent ? [] : sortOrders((_ordersGroup$currentT5 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT5 === void 0 ? void 0 : _ordersGroup$currentT5.orders) : newFetch || newFetchCurrent ? sortOrders(result) : sortOrders((_ordersGroup$currentT6 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT6 === void 0 ? void 0 : _ordersGroup$currentT6.orders.concat(result));
             setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
               loading: false,
               orders: _ordersCleaned,
@@ -508,7 +508,7 @@ var OrderListGroups = function OrderListGroups(props) {
   }();
   var loadMoreOrders = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-      var _ordersGroup$currentT9, _ordersGroup$currentT10, _ordersGroup$currentT11, _ordersGroup$currentT12, _yield$getOrders2, _yield$getOrders2$con, error, result, pagination, _ordersCleaned, _err$message2;
+      var _ordersGroup$currentT7, _ordersGroup$currentT8, _ordersGroup$currentT9, _yield$getOrders2, _yield$getOrders2$con, error, result, pagination, _ordersCleaned, _err$message2;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
@@ -519,7 +519,7 @@ var OrderListGroups = function OrderListGroups(props) {
             _context4.next = 4;
             return getOrders({
               page: ordersGroup[currentTabSelected].pagination.currentPage + 1,
-              orderStatus: (_ordersGroup$currentT9 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT9 === void 0 ? void 0 : _ordersGroup$currentT9.currentFilter,
+              orderStatus: (_ordersGroup$currentT7 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT7 === void 0 ? void 0 : _ordersGroup$currentT7.currentFilter,
               newFetch: true
             });
           case 4:
@@ -528,7 +528,7 @@ var OrderListGroups = function OrderListGroups(props) {
             error = _yield$getOrders2$con.error;
             result = _yield$getOrders2$con.result;
             pagination = _yield$getOrders2$con.pagination;
-            _ordersCleaned = error ? sortOrders((_ordersGroup$currentT10 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT10 === void 0 ? void 0 : _ordersGroup$currentT10.orders) : sortOrders((_ordersGroup$currentT11 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT11 === void 0 ? void 0 : (_ordersGroup$currentT12 = _ordersGroup$currentT11.orders) === null || _ordersGroup$currentT12 === void 0 ? void 0 : _ordersGroup$currentT12.concat(result));
+            _ordersCleaned = error ? sortOrders((_ordersGroup$currentT8 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT8 === void 0 ? void 0 : _ordersGroup$currentT8.orders) : sortOrders((_ordersGroup$currentT9 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT9 === void 0 || (_ordersGroup$currentT9 = _ordersGroup$currentT9.orders) === null || _ordersGroup$currentT9 === void 0 ? void 0 : _ordersGroup$currentT9.concat(result));
             setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
               loading: false,
               orders: _ordersCleaned,
@@ -619,13 +619,13 @@ var OrderListGroups = function OrderListGroups(props) {
         }
       }, _callee5, null, [[0, 14]]);
     }));
-    return function loadMessages(_x3) {
+    return function loadMessages(_x2) {
       return _ref7.apply(this, arguments);
     };
   }();
   var deleteOrders = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderIds) {
-      var _ordersGroup$currentT13, _ordersGroup$currentT14, _ordersGroup$currentT15, errorState, _yield$ordering$setAc3, error, _iterator, _step, id, _yield$ordering$setAc4, multiError, isError, idsDeleted, _err$message3;
+      var _ordersGroup$currentT10, _ordersGroup$currentT11, errorState, _yield$ordering$setAc3, error, _iterator, _step, id, _yield$ordering$setAc4, multiError, isError, idsDeleted, _err$message3;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
@@ -701,9 +701,9 @@ var OrderListGroups = function OrderListGroups(props) {
               loading: false
             }));
             setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
-              orders: idsDeleted.length ? sortOrders((_ordersGroup$currentT13 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT13 === void 0 ? void 0 : (_ordersGroup$currentT14 = _ordersGroup$currentT13.orders) === null || _ordersGroup$currentT14 === void 0 ? void 0 : _ordersGroup$currentT14.filter(function (order) {
+              orders: idsDeleted.length ? sortOrders((_ordersGroup$currentT10 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT10 === void 0 || (_ordersGroup$currentT10 = _ordersGroup$currentT10.orders) === null || _ordersGroup$currentT10 === void 0 ? void 0 : _ordersGroup$currentT10.filter(function (order) {
                 return !idsDeleted.includes(order.id);
-              })) : sortOrders((_ordersGroup$currentT15 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT15 === void 0 ? void 0 : _ordersGroup$currentT15.orders)
+              })) : sortOrders((_ordersGroup$currentT11 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT11 === void 0 ? void 0 : _ordersGroup$currentT11.orders)
             }))));
             _context6.next = 42;
             break;
@@ -722,7 +722,7 @@ var OrderListGroups = function OrderListGroups(props) {
         }
       }, _callee6, null, [[0, 39], [13, 26, 29, 32]]);
     }));
-    return function deleteOrders(_x4) {
+    return function deleteOrders(_x3) {
       return _ref8.apply(this, arguments);
     };
   }();
@@ -762,8 +762,8 @@ var OrderListGroups = function OrderListGroups(props) {
             setlogisticOrders(_objectSpread(_objectSpread({}, logisticOrders), {}, {
               loading: false,
               orders: result.filter(function (order) {
-                var _order$order_group, _order$order_group$or;
-                return !(order !== null && order !== void 0 && order.order_group && (order === null || order === void 0 ? void 0 : (_order$order_group = order.order_group) === null || _order$order_group === void 0 ? void 0 : (_order$order_group$or = _order$order_group.orders) === null || _order$order_group$or === void 0 ? void 0 : _order$order_group$or.length) === 0);
+                var _order$order_group;
+                return !(order !== null && order !== void 0 && order.order_group && (order === null || order === void 0 || (_order$order_group = order.order_group) === null || _order$order_group === void 0 || (_order$order_group = _order$order_group.orders) === null || _order$order_group === void 0 ? void 0 : _order$order_group.length) === 0);
               })
             }));
             return _context7.abrupt("return");
@@ -789,7 +789,7 @@ var OrderListGroups = function OrderListGroups(props) {
         }
       }, _callee7, null, [[0, 17]]);
     }));
-    return function loadLogisticOrders(_x5) {
+    return function loadLogisticOrders(_x4) {
       return _ref9.apply(this, arguments);
     };
   }();
@@ -905,7 +905,7 @@ var OrderListGroups = function OrderListGroups(props) {
     var order = _objectSpread(_objectSpread({}, orderAux), {}, {
       showNotification: false
     });
-    var ordersGroups = order === null || order === void 0 ? void 0 : (_order$order_group2 = order.order_group) === null || _order$order_group2 === void 0 ? void 0 : _order$order_group2.orders;
+    var ordersGroups = order === null || order === void 0 || (_order$order_group2 = order.order_group) === null || _order$order_group2 === void 0 ? void 0 : _order$order_group2.orders;
     if (!ordersGroups) {
       var _ordersGroup$status2;
       var status = getStatusById(order === null || order === void 0 ? void 0 : order.status);
@@ -918,10 +918,10 @@ var OrderListGroups = function OrderListGroups(props) {
         orders: sortOrders(orderList)
       }))));
     } else {
-      var _order$order_group3, _order$order_group3$o, _order$order_group3$o2;
-      var _status = getStatusById(order === null || order === void 0 ? void 0 : (_order$order_group3 = order.order_group) === null || _order$order_group3 === void 0 ? void 0 : (_order$order_group3$o = _order$order_group3.orders) === null || _order$order_group3$o === void 0 ? void 0 : (_order$order_group3$o2 = _order$order_group3$o[0]) === null || _order$order_group3$o2 === void 0 ? void 0 : _order$order_group3$o2.status);
+      var _order$order_group3;
+      var _status = getStatusById(order === null || order === void 0 || (_order$order_group3 = order.order_group) === null || _order$order_group3 === void 0 || (_order$order_group3 = _order$order_group3.orders) === null || _order$order_group3 === void 0 || (_order$order_group3 = _order$order_group3[0]) === null || _order$order_group3 === void 0 ? void 0 : _order$order_group3.status);
       var _orderList;
-      ordersGroups === null || ordersGroups === void 0 ? void 0 : ordersGroups.map(function (order) {
+      ordersGroups === null || ordersGroups === void 0 || ordersGroups.map(function (order) {
         var _ordersGroup$_status, _orderList2;
         _orderList = (_ordersGroup$_status = ordersGroup[_status]) === null || _ordersGroup$_status === void 0 ? void 0 : _ordersGroup$_status.orders;
         var indexToUpdate = (_orderList2 = _orderList) === null || _orderList2 === void 0 ? void 0 : _orderList2.findIndex(function (o) {
@@ -965,10 +965,10 @@ var OrderListGroups = function OrderListGroups(props) {
               _context8.next = 15;
               break;
             }
-            order = logisticOrders === null || logisticOrders === void 0 ? void 0 : (_logisticOrders$order = logisticOrders.orders) === null || _logisticOrders$order === void 0 ? void 0 : _logisticOrders$order.find(function (order) {
+            order = logisticOrders === null || logisticOrders === void 0 || (_logisticOrders$order = logisticOrders.orders) === null || _logisticOrders$order === void 0 ? void 0 : _logisticOrders$order.find(function (order) {
               return (order === null || order === void 0 ? void 0 : order.id) === orderId;
             });
-            newOrders = sortOrders(logisticOrders === null || logisticOrders === void 0 ? void 0 : (_logisticOrders$order2 = logisticOrders.orders) === null || _logisticOrders$order2 === void 0 ? void 0 : _logisticOrders$order2.filter(function (_order) {
+            newOrders = sortOrders(logisticOrders === null || logisticOrders === void 0 || (_logisticOrders$order2 = logisticOrders.orders) === null || _logisticOrders$order2 === void 0 ? void 0 : _logisticOrders$order2.filter(function (_order) {
               return (_order === null || _order === void 0 ? void 0 : _order.id) !== orderId;
             }));
             setlogisticOrders(_objectSpread(_objectSpread({}, logisticOrders), {}, {
@@ -976,9 +976,9 @@ var OrderListGroups = function OrderListGroups(props) {
             }));
             if (status === 1) {
               handleClickOrder((_order$order = order === null || order === void 0 ? void 0 : order.order) !== null && _order$order !== void 0 ? _order$order : order);
-              showToast(_ToastContext.ToastType.Success, t('SPECIFIC_ORDER_ACCEPTED', 'Your accepted the order number _NUMBER_').replace('_NUMBER_', (_order$order$id = order === null || order === void 0 ? void 0 : (_order$order2 = order.order) === null || _order$order2 === void 0 ? void 0 : _order$order2.id) !== null && _order$order$id !== void 0 ? _order$order$id : order === null || order === void 0 ? void 0 : order.id));
+              showToast(_ToastContext.ToastType.Success, t('SPECIFIC_ORDER_ACCEPTED', 'Your accepted the order number _NUMBER_').replace('_NUMBER_', (_order$order$id = order === null || order === void 0 || (_order$order2 = order.order) === null || _order$order2 === void 0 ? void 0 : _order$order2.id) !== null && _order$order$id !== void 0 ? _order$order$id : order === null || order === void 0 ? void 0 : order.id));
             } else {
-              showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_REJECTED', 'Your rejected the order number _NUMBER_').replace('_NUMBER_', (_order$order$id2 = order === null || order === void 0 ? void 0 : (_order$order3 = order.order) === null || _order$order3 === void 0 ? void 0 : _order$order3.id) !== null && _order$order$id2 !== void 0 ? _order$order$id2 : order === null || order === void 0 ? void 0 : order.id));
+              showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_REJECTED', 'Your rejected the order number _NUMBER_').replace('_NUMBER_', (_order$order$id2 = order === null || order === void 0 || (_order$order3 = order.order) === null || _order$order3 === void 0 ? void 0 : _order$order3.id) !== null && _order$order$id2 !== void 0 ? _order$order$id2 : order === null || order === void 0 ? void 0 : order.id));
             }
             return _context8.abrupt("return");
           case 15:
@@ -998,7 +998,7 @@ var OrderListGroups = function OrderListGroups(props) {
         }
       }, _callee8, null, [[0, 18]]);
     }));
-    return function handleClickLogisticOrder(_x6, _x7) {
+    return function handleClickLogisticOrder(_x5, _x6) {
       return _ref10.apply(this, arguments);
     };
   }();
@@ -1046,7 +1046,7 @@ var OrderListGroups = function OrderListGroups(props) {
                   }
                 }, _callee9, null, [[0, 10]]);
               }));
-              return function setOrderStatus(_x10) {
+              return function setOrderStatus(_x9) {
                 return _ref12.apply(this, arguments);
               };
             }();
@@ -1067,7 +1067,7 @@ var OrderListGroups = function OrderListGroups(props) {
         }
       }, _callee10, null, [[1, 11]]);
     }));
-    return function handleChangeOrderStatus(_x8, _x9) {
+    return function handleChangeOrderStatus(_x7, _x8) {
       return _ref11.apply(this, arguments);
     };
   }();
@@ -1116,7 +1116,7 @@ var OrderListGroups = function OrderListGroups(props) {
                   }
                 }, _callee11, null, [[0, 12]]);
               }));
-              return function setCustomerReview(_x12) {
+              return function setCustomerReview(_x11) {
                 return _ref15.apply(this, arguments);
               };
             }();
@@ -1131,7 +1131,7 @@ var OrderListGroups = function OrderListGroups(props) {
             result = _context12.sent;
             if (result !== null && result !== void 0 && result.length) {
               orders = ordersGroup[currentTabSelected].orders;
-              result === null || result === void 0 ? void 0 : result.map(function (order) {
+              result === null || result === void 0 || result.map(function (order) {
                 var orderFound = orders.find(function (o) {
                   return o.id === order.order_id;
                 });
@@ -1162,7 +1162,7 @@ var OrderListGroups = function OrderListGroups(props) {
         }
       }, _callee12, null, [[1, 11]]);
     }));
-    return function handleSendCustomerReview(_x11) {
+    return function handleSendCustomerReview(_x10) {
       return _ref14.apply(this, arguments);
     };
   }();
@@ -1211,15 +1211,15 @@ var OrderListGroups = function OrderListGroups(props) {
   }();
   (0, _react.useEffect)(function () {
     var _session$user4;
-    if ((session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) !== 2) return;
+    if ((session === null || session === void 0 || (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) !== 2) return;
     getBusinessesIDs();
   }, []);
   (0, _react.useEffect)(function () {
-    var _ordersGroup$currentT16, _ordersGroup$currentT17;
-    setCurrentFilters((_ordersGroup$currentT16 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT16 === void 0 ? void 0 : _ordersGroup$currentT16.currentFilter);
+    var _ordersGroup$currentT12, _ordersGroup$currentT13;
+    setCurrentFilters((_ordersGroup$currentT12 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT12 === void 0 ? void 0 : _ordersGroup$currentT12.currentFilter);
     if (currentTabSelected === 'logisticOrders') {
       loadLogisticOrders(!!(logisticOrders !== null && logisticOrders !== void 0 && logisticOrders.orders));
-    } else if (!((_ordersGroup$currentT17 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT17 !== void 0 && _ordersGroup$currentT17.fetched) && props.isNetConnected) {
+    } else if (!((_ordersGroup$currentT13 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT13 !== void 0 && _ordersGroup$currentT13.fetched) && props.isNetConnected) {
       loadOrders({
         newFetchCurrent: true
       });
@@ -1249,18 +1249,18 @@ var OrderListGroups = function OrderListGroups(props) {
     events.emit(evts[event], value);
   };
   (0, _react.useEffect)(function () {
-    var _socket$socket, _session$user7, _session$user8, _socket$socket2, _socket$socket2$_call, _socket$socket2$_call2, _socket$socket3, _socket$socket3$_call, _socket$socket4, _socket$socket4$_call, _socket$socket4$_call2, _socket$socket5, _socket$socket5$_call, _socket$socket5$_call2, _socket$socket6, _socket$socket6$_call, _socket$socket6$_call2;
+    var _socket$socket, _session$user7, _session$user8, _socket$socket2, _socket$socket3, _socket$socket4, _socket$socket5, _socket$socket6;
     if (!(socket !== null && socket !== void 0 && socket.socket) || !(socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && _socket$socket.connected)) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      var _session$user5, _orderFound, _orderFound$driver, _order$driver, _session$user6;
-      if ((session === null || session === void 0 ? void 0 : (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.level) === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return;
+      var _session$user5, _orderFound, _order$driver, _session$user6;
+      if ((session === null || session === void 0 || (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.level) === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return;
       events.emit('order_updated', order);
       var orderFound = null;
       for (var i = 0; i < ordersStatusArray.length; i++) {
         var status = ordersStatusArray[i];
         if (order !== null && order !== void 0 && order.products) {
-          var _ordersGroup$status3, _ordersGroup$status3$;
-          orderFound = (_ordersGroup$status3 = ordersGroup[status]) === null || _ordersGroup$status3 === void 0 ? void 0 : (_ordersGroup$status3$ = _ordersGroup$status3.orders) === null || _ordersGroup$status3$ === void 0 ? void 0 : _ordersGroup$status3$.find(function (_order) {
+          var _ordersGroup$status3;
+          orderFound = (_ordersGroup$status3 = ordersGroup[status]) === null || _ordersGroup$status3 === void 0 || (_ordersGroup$status3 = _ordersGroup$status3.orders) === null || _ordersGroup$status3 === void 0 ? void 0 : _ordersGroup$status3.find(function (_order) {
             return _order.id === order.id;
           });
         }
@@ -1282,7 +1282,7 @@ var OrderListGroups = function OrderListGroups(props) {
         !currentFilter.includes(order.status) ? actionOrderToTab(order, getStatusById(order === null || order === void 0 ? void 0 : order.status), 'remove') : actionOrderToTab(order, getStatusById(order === null || order === void 0 ? void 0 : order.status), 'add');
         return;
       }
-      if (orderFound.id === order.id && ((_orderFound = orderFound) === null || _orderFound === void 0 ? void 0 : (_orderFound$driver = _orderFound.driver) === null || _orderFound$driver === void 0 ? void 0 : _orderFound$driver.id) !== (order === null || order === void 0 ? void 0 : (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) && (session === null || session === void 0 ? void 0 : (_session$user6 = session.user) === null || _session$user6 === void 0 ? void 0 : _session$user6.level) === 4) {
+      if (orderFound.id === order.id && ((_orderFound = orderFound) === null || _orderFound === void 0 || (_orderFound = _orderFound.driver) === null || _orderFound === void 0 ? void 0 : _orderFound.id) !== (order === null || order === void 0 || (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) && (session === null || session === void 0 || (_session$user6 = session.user) === null || _session$user6 === void 0 ? void 0 : _session$user6.level) === 4) {
         actionOrderToTab(orderFound, getStatusById(orderFound.status), 'remove');
       }
       if (orderFound.id === order.id) {
@@ -1326,22 +1326,22 @@ var OrderListGroups = function OrderListGroups(props) {
         setRecentlyReceivedMessage(message);
       }
     };
-    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user8 = session.user) === null || _session$user8 === void 0 ? void 0 : _session$user8.id);
+    var ordersRoom = (session === null || session === void 0 || (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user8 = session.user) === null || _session$user8 === void 0 ? void 0 : _session$user8.id);
     socket.join(ordersRoom);
-    if ((socket === null || socket === void 0 ? void 0 : (_socket$socket2 = socket.socket) === null || _socket$socket2 === void 0 ? void 0 : (_socket$socket2$_call = _socket$socket2._callbacks) === null || _socket$socket2$_call === void 0 ? void 0 : (_socket$socket2$_call2 = _socket$socket2$_call.$orders_register) === null || _socket$socket2$_call2 === void 0 ? void 0 : _socket$socket2$_call2.length) < 2) {
+    if ((socket === null || socket === void 0 || (_socket$socket2 = socket.socket) === null || _socket$socket2 === void 0 || (_socket$socket2 = _socket$socket2._callbacks) === null || _socket$socket2 === void 0 || (_socket$socket2 = _socket$socket2.$orders_register) === null || _socket$socket2 === void 0 ? void 0 : _socket$socket2.length) < 2) {
       socket.on('orders_register', handleAddNewOrder);
     }
-    if (!(socket !== null && socket !== void 0 && (_socket$socket3 = socket.socket) !== null && _socket$socket3 !== void 0 && (_socket$socket3$_call = _socket$socket3._callbacks) !== null && _socket$socket3$_call !== void 0 && _socket$socket3$_call.$order_assigned) || socket !== null && socket !== void 0 && (_socket$socket4 = socket.socket) !== null && _socket$socket4 !== void 0 && (_socket$socket4$_call = _socket$socket4._callbacks) !== null && _socket$socket4$_call !== void 0 && (_socket$socket4$_call2 = _socket$socket4$_call.$order_assigned) !== null && _socket$socket4$_call2 !== void 0 && _socket$socket4$_call2.find(function (func) {
+    if (!(socket !== null && socket !== void 0 && (_socket$socket3 = socket.socket) !== null && _socket$socket3 !== void 0 && (_socket$socket3 = _socket$socket3._callbacks) !== null && _socket$socket3 !== void 0 && _socket$socket3.$order_assigned) || socket !== null && socket !== void 0 && (_socket$socket4 = socket.socket) !== null && _socket$socket4 !== void 0 && (_socket$socket4 = _socket$socket4._callbacks) !== null && _socket$socket4 !== void 0 && (_socket$socket4 = _socket$socket4.$order_assigned) !== null && _socket$socket4 !== void 0 && _socket$socket4.find(function (func) {
       return (func === null || func === void 0 ? void 0 : func.name) !== 'handleAddNewOrder';
     })) {
       socket.on('order_assigned', handleAddNewOrder);
     }
-    if (socket !== null && socket !== void 0 && (_socket$socket5 = socket.socket) !== null && _socket$socket5 !== void 0 && (_socket$socket5$_call = _socket$socket5._callbacks) !== null && _socket$socket5$_call !== void 0 && (_socket$socket5$_call2 = _socket$socket5$_call.$update_order) !== null && _socket$socket5$_call2 !== void 0 && _socket$socket5$_call2.find(function (func) {
+    if (socket !== null && socket !== void 0 && (_socket$socket5 = socket.socket) !== null && _socket$socket5 !== void 0 && (_socket$socket5 = _socket$socket5._callbacks) !== null && _socket$socket5 !== void 0 && (_socket$socket5 = _socket$socket5.$update_order) !== null && _socket$socket5 !== void 0 && _socket$socket5.find(function (func) {
       return (func === null || func === void 0 ? void 0 : func.name) !== 'handleUpdateOrder';
     })) {
       socket.on('update_order', handleUpdateOrder);
     }
-    if ((socket === null || socket === void 0 ? void 0 : (_socket$socket6 = socket.socket) === null || _socket$socket6 === void 0 ? void 0 : (_socket$socket6$_call = _socket$socket6._callbacks) === null || _socket$socket6$_call === void 0 ? void 0 : (_socket$socket6$_call2 = _socket$socket6$_call.$message) === null || _socket$socket6$_call2 === void 0 ? void 0 : _socket$socket6$_call2.length) < 2) {
+    if ((socket === null || socket === void 0 || (_socket$socket6 = socket.socket) === null || _socket$socket6 === void 0 || (_socket$socket6 = _socket$socket6._callbacks) === null || _socket$socket6 === void 0 || (_socket$socket6 = _socket$socket6.$message) === null || _socket$socket6 === void 0 ? void 0 : _socket$socket6.length) < 2) {
       socket.on('message', handleReceiveMessage);
     }
     return function () {
@@ -1369,7 +1369,7 @@ var OrderListGroups = function OrderListGroups(props) {
         }))
       });
     });
-    showToast(_ToastContext.ToastType.Info, t('SPECIFIC_LOGISTIC_ORDER_ORDERED', 'Logisitc order _NUMBER_ has been ordered').replace('_NUMBER_', (_order$order$id3 = order === null || order === void 0 ? void 0 : (_order$order4 = order.order) === null || _order$order4 === void 0 ? void 0 : _order$order4.id) !== null && _order$order$id3 !== void 0 ? _order$order$id3 : order.id), 1000);
+    showToast(_ToastContext.ToastType.Info, t('SPECIFIC_LOGISTIC_ORDER_ORDERED', 'Logisitc order _NUMBER_ has been ordered').replace('_NUMBER_', (_order$order$id3 = order === null || order === void 0 || (_order$order4 = order.order) === null || _order$order4 === void 0 ? void 0 : _order$order4.id) !== null && _order$order$id3 !== void 0 ? _order$order$id3 : order.id), 1000);
   }, [logisticOrders]);
   var handleDeleteAssignRequest = (0, _react.useCallback)(function (order) {
     setlogisticOrders(function (prevState) {
@@ -1377,9 +1377,9 @@ var OrderListGroups = function OrderListGroups(props) {
       return _objectSpread(_objectSpread({}, prevState), {}, {
         orders: prevState !== null && prevState !== void 0 && (_prevState$orders = prevState.orders) !== null && _prevState$orders !== void 0 && _prevState$orders.some(function (_order) {
           return (_order === null || _order === void 0 ? void 0 : _order.id) === (order === null || order === void 0 ? void 0 : order.id);
-        }) ? sortOrders([].concat(_toConsumableArray(prevState === null || prevState === void 0 ? void 0 : (_prevState$orders2 = prevState.orders) === null || _prevState$orders2 === void 0 ? void 0 : _prevState$orders2.filter(function (_order) {
+        }) ? sortOrders([].concat(_toConsumableArray(prevState === null || prevState === void 0 || (_prevState$orders2 = prevState.orders) === null || _prevState$orders2 === void 0 ? void 0 : _prevState$orders2.filter(function (_order) {
           return (_order === null || _order === void 0 ? void 0 : _order.id) !== (order === null || order === void 0 ? void 0 : order.id);
-        })), [_objectSpread(_objectSpread({}, prevState === null || prevState === void 0 ? void 0 : (_prevState$orders3 = prevState.orders) === null || _prevState$orders3 === void 0 ? void 0 : _prevState$orders3.find(function (_order) {
+        })), [_objectSpread(_objectSpread({}, prevState === null || prevState === void 0 || (_prevState$orders3 = prevState.orders) === null || _prevState$orders3 === void 0 ? void 0 : _prevState$orders3.find(function (_order) {
           return (_order === null || _order === void 0 ? void 0 : _order.id) === (order === null || order === void 0 ? void 0 : order.id);
         })), {}, {
           expired: true
@@ -1399,14 +1399,14 @@ var OrderListGroups = function OrderListGroups(props) {
       return _objectSpread(_objectSpread({}, prevState), {}, {
         orders: prevState !== null && prevState !== void 0 && (_prevState$orders4 = prevState.orders) !== null && _prevState$orders4 !== void 0 && _prevState$orders4.some(function (_order) {
           return (_order === null || _order === void 0 ? void 0 : _order.id) === (order === null || order === void 0 ? void 0 : order.id);
-        }) ? sortOrders([].concat(_toConsumableArray(prevState === null || prevState === void 0 ? void 0 : (_prevState$orders5 = prevState.orders) === null || _prevState$orders5 === void 0 ? void 0 : _prevState$orders5.filter(function (_order) {
+        }) ? sortOrders([].concat(_toConsumableArray(prevState === null || prevState === void 0 || (_prevState$orders5 = prevState.orders) === null || _prevState$orders5 === void 0 ? void 0 : _prevState$orders5.filter(function (_order) {
           return (_order === null || _order === void 0 ? void 0 : _order.id) !== (order === null || order === void 0 ? void 0 : order.id);
-        })), [_objectSpread(_objectSpread({}, prevState === null || prevState === void 0 ? void 0 : (_prevState$orders6 = prevState.orders) === null || _prevState$orders6 === void 0 ? void 0 : _prevState$orders6.find(function (_order) {
+        })), [_objectSpread(_objectSpread({}, prevState === null || prevState === void 0 || (_prevState$orders6 = prevState.orders) === null || _prevState$orders6 === void 0 ? void 0 : _prevState$orders6.find(function (_order) {
           return (_order === null || _order === void 0 ? void 0 : _order.id) === (order === null || order === void 0 ? void 0 : order.id);
         })), order)])) : sortOrders(prevState === null || prevState === void 0 ? void 0 : prevState.orders)
       });
     });
-    showToast(_ToastContext.ToastType.Info, t('SPECIFIC_LOGISTIC_ORDER_UPDATED', 'Your logisitc order number _NUMBER_ has updated').replace('_NUMBER_', (_order$order$id4 = order === null || order === void 0 ? void 0 : (_order$order5 = order.order) === null || _order$order5 === void 0 ? void 0 : _order$order5.id) !== null && _order$order$id4 !== void 0 ? _order$order$id4 : order.id), 1000);
+    showToast(_ToastContext.ToastType.Info, t('SPECIFIC_LOGISTIC_ORDER_UPDATED', 'Your logisitc order number _NUMBER_ has updated').replace('_NUMBER_', (_order$order$id4 = order === null || order === void 0 || (_order$order5 = order.order) === null || _order$order5 === void 0 ? void 0 : _order$order5.id) !== null && _order$order$id4 !== void 0 ? _order$order$id4 : order.id), 1000);
   }, [logisticOrders]);
   (0, _react.useEffect)(function () {
     if (isLogisticActivated) {
@@ -1425,18 +1425,18 @@ var OrderListGroups = function OrderListGroups(props) {
     if (!session.user) return;
     socket.on('disconnect', function () {
       var _session$user9, _session$user10, _session$user11, _session$user12, _session$user13, _session$user14;
-      var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user9 = session.user) === null || _session$user9 === void 0 ? void 0 : _session$user9.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user10 = session.user) === null || _session$user10 === void 0 ? void 0 : _session$user10.id);
+      var ordersRoom = (session === null || session === void 0 || (_session$user9 = session.user) === null || _session$user9 === void 0 ? void 0 : _session$user9.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user10 = session.user) === null || _session$user10 === void 0 ? void 0 : _session$user10.id);
       socket.join(ordersRoom);
-      var requestsRoom = "requests_".concat(session === null || session === void 0 ? void 0 : (_session$user11 = session.user) === null || _session$user11 === void 0 ? void 0 : _session$user11.id);
+      var requestsRoom = "requests_".concat(session === null || session === void 0 || (_session$user11 = session.user) === null || _session$user11 === void 0 ? void 0 : _session$user11.id);
       socket.join(requestsRoom);
-      var groupsRoom = "ordergroups_".concat(session === null || session === void 0 ? void 0 : (_session$user12 = session.user) === null || _session$user12 === void 0 ? void 0 : _session$user12.id);
+      var groupsRoom = "ordergroups_".concat(session === null || session === void 0 || (_session$user12 = session.user) === null || _session$user12 === void 0 ? void 0 : _session$user12.id);
       socket.join(groupsRoom);
-      socket.join((session === null || session === void 0 ? void 0 : (_session$user13 = session.user) === null || _session$user13 === void 0 ? void 0 : _session$user13.level) === 0 ? 'messages_orders' : "messages_orders_".concat(session === null || session === void 0 ? void 0 : (_session$user14 = session.user) === null || _session$user14 === void 0 ? void 0 : _session$user14.id));
+      socket.join((session === null || session === void 0 || (_session$user13 = session.user) === null || _session$user13 === void 0 ? void 0 : _session$user13.level) === 0 ? 'messages_orders' : "messages_orders_".concat(session === null || session === void 0 || (_session$user14 = session.user) === null || _session$user14 === void 0 ? void 0 : _session$user14.id));
     });
-    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user15 = session.user) === null || _session$user15 === void 0 ? void 0 : _session$user15.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user16 = session.user) === null || _session$user16 === void 0 ? void 0 : _session$user16.id);
-    var messagesOrdersRoom = (session === null || session === void 0 ? void 0 : (_session$user17 = session.user) === null || _session$user17 === void 0 ? void 0 : _session$user17.level) === 0 ? 'messages_orders' : "messages_orders_".concat(session === null || session === void 0 ? void 0 : (_session$user18 = session.user) === null || _session$user18 === void 0 ? void 0 : _session$user18.id);
-    var requestsRoom = "requests_".concat(session === null || session === void 0 ? void 0 : (_session$user19 = session.user) === null || _session$user19 === void 0 ? void 0 : _session$user19.id);
-    var groupsRoom = "ordergroups_".concat(session === null || session === void 0 ? void 0 : (_session$user20 = session.user) === null || _session$user20 === void 0 ? void 0 : _session$user20.id);
+    var ordersRoom = (session === null || session === void 0 || (_session$user15 = session.user) === null || _session$user15 === void 0 ? void 0 : _session$user15.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user16 = session.user) === null || _session$user16 === void 0 ? void 0 : _session$user16.id);
+    var messagesOrdersRoom = (session === null || session === void 0 || (_session$user17 = session.user) === null || _session$user17 === void 0 ? void 0 : _session$user17.level) === 0 ? 'messages_orders' : "messages_orders_".concat(session === null || session === void 0 || (_session$user18 = session.user) === null || _session$user18 === void 0 ? void 0 : _session$user18.id);
+    var requestsRoom = "requests_".concat(session === null || session === void 0 || (_session$user19 = session.user) === null || _session$user19 === void 0 ? void 0 : _session$user19.id);
+    var groupsRoom = "ordergroups_".concat(session === null || session === void 0 || (_session$user20 = session.user) === null || _session$user20 === void 0 ? void 0 : _session$user20.id);
     socket.join(ordersRoom);
     socket.join(requestsRoom);
     socket.join(groupsRoom);
@@ -1458,9 +1458,9 @@ var OrderListGroups = function OrderListGroups(props) {
     var handleCustomerReviewed = function handleCustomerReviewed(review) {
       var orderFound = null;
       for (var i = 0; i < ordersStatusArray.length; i++) {
-        var _ordersGroup$status4, _ordersGroup$status4$;
+        var _ordersGroup$status4;
         var status = ordersStatusArray[i];
-        orderFound = (_ordersGroup$status4 = ordersGroup[status]) === null || _ordersGroup$status4 === void 0 ? void 0 : (_ordersGroup$status4$ = _ordersGroup$status4.orders) === null || _ordersGroup$status4$ === void 0 ? void 0 : _ordersGroup$status4$.find(function (_order) {
+        orderFound = (_ordersGroup$status4 = ordersGroup[status]) === null || _ordersGroup$status4 === void 0 || (_ordersGroup$status4 = _ordersGroup$status4.orders) === null || _ordersGroup$status4 === void 0 ? void 0 : _ordersGroup$status4.find(function (_order) {
           return _order.id === review.order_id;
         });
         if (orderFound) break;
@@ -1501,11 +1501,10 @@ var OrderListGroups = function OrderListGroups(props) {
     onFiltered: setFiltered,
     handleChangeOrderStatus: handleChangeOrderStatus,
     handleSendCustomerReview: handleSendCustomerReview,
-    ordersFormatted: formatOrdersGrouped((_ordersGroup$currentT18 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT18 === void 0 ? void 0 : _ordersGroup$currentT18.orders),
+    ordersFormatted: formatOrdersGrouped((_ordersGroup$currentT14 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT14 === void 0 ? void 0 : _ordersGroup$currentT14.orders),
     isLogisticActivated: isLogisticActivated
   })));
 };
-exports.OrderListGroups = OrderListGroups;
 OrderListGroups.defaultProps = {
   orderBy: '-id',
   orderDirection: 'desc',
