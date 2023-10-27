@@ -431,7 +431,7 @@ export const ProductForm = (props) => {
       }, 0)
     }
     const hasPreselectedFlow = suboptionsArray.filter(state => state?.suboption?.preselected)
-    if (newBalance <= option.max || (newPizzaState?.[`option:${option?.id}`]?.value <= option.max && option?.with_half_option)) { // agregar validacion de las pizzas 
+    if (newBalance <= option.max || (newPizzaState?.[`option:${option?.id}`]?.value <= option.max && option?.with_half_option)) {
       newProductCart.options[`id:${option.id}`].balance = newBalance
       newProductCart.unitTotal = getUnitTotal(newProductCart)
       newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
