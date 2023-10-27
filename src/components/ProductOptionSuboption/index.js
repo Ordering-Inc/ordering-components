@@ -11,7 +11,8 @@ export const ProductOptionSuboption = (props) => {
     option,
     suboption,
     onChange,
-    isOrigin
+    isOrigin,
+    pizzaState
   } = props
 
   /**
@@ -24,9 +25,9 @@ export const ProductOptionSuboption = (props) => {
   } else if (selected) {
     quantity = 1
   }
-  const position = props.state.position || 'whole'
+  const position = props.state.position || 'left'
   const price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price
-
+  const usePizzaValidation = (pizzaState?.[`option:${option?.id}`]?.value === option?.max)
   /**
    * Set current state
    */
@@ -45,7 +46,8 @@ export const ProductOptionSuboption = (props) => {
    */
   const toggleSelect = () => {
     const selectStatus = isOrigin ? !state.selected : state.selected
-    if (selectStatus && option.limit_suboptions_by_max && balance === option.max && !(option?.max === 1 && option?.min === 1)) {
+    const minMaxValidation = option.with_half_option ? usePizzaValidation : (balance === option.max && !(option?.max === 1 && option?.min === 1))
+    if (selectStatus && option.limit_suboptions_by_max && minMaxValidation) {
       return
     }
     changeState({
@@ -109,6 +111,7 @@ export const ProductOptionSuboption = (props) => {
           <UIComponent
             {...props}
             state={state}
+            usePizzaValidation={usePizzaValidation}
             increment={increment}
             decrement={decrement}
             changePosition={changePosition}

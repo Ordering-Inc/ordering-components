@@ -85,7 +85,7 @@ export const ProductForm = (props) => {
   /**
    * pizza type and position
    */
-  const [pizzaType, setPizzaType] = useState(null)
+  const [pizzaState, setPizzaState] = useState({})
 
   /**
    * Edit mode
@@ -306,6 +306,7 @@ export const ProductForm = (props) => {
           }
           if (productCart.options[`id:${_option.id}`]) {
             productCart.options[`id:${_option.id}`].suboptions = {}
+            pizzaState[`option:${_option.id}`] = {}
           }
         }
       })
@@ -344,6 +345,7 @@ export const ProductForm = (props) => {
         suboptions: {}
       }
     }
+    const newPizzaState = handleVerifyPizzaState(state, suboption, option)
     if (!state.selected) {
       delete newProductCart.options[`id:${option.id}`].suboptions[`id:${suboption.id}`]
       removeRelatedOptions(newProductCart, suboption.id)
@@ -429,12 +431,12 @@ export const ProductForm = (props) => {
       }, 0)
     }
     const hasPreselectedFlow = suboptionsArray.filter(state => state?.suboption?.preselected)
-    if (newBalance <= option.max) {
+    if (newBalance <= option.max || (newPizzaState?.[`option:${option?.id}`]?.value <= option.max && option?.with_half_option)) {
       newProductCart.options[`id:${option.id}`].balance = newBalance
       newProductCart.unitTotal = getUnitTotal(newProductCart)
       newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
       if (state.selected && hasPreselectedFlow?.length > 0) {
-        handleChangeSuboptionDefault(suboptionsArray)
+        handleChangeSuboptionDefault(suboptionsArray, newPizzaState)
         setSelectedSuboptions(_selectedSuboptions)
       } else {
         setProductCart(newProductCart)
@@ -442,7 +444,7 @@ export const ProductForm = (props) => {
     }
   }
 
-  const handleChangeSuboptionDefault = (defaultOptions) => {
+  const handleChangeSuboptionDefault = (defaultOptions, newPizzaState) => {
     const newProductCart = JSON.parse(JSON.stringify(productCart))
     if (!newProductCart.options) {
       newProductCart.options = {}
@@ -477,13 +479,12 @@ export const ProductForm = (props) => {
         }, 0)
       }
 
-      if (newBalance <= option.max) {
+      if (newBalance <= option.max || (newPizzaState?.[`option:${option.id}`]?.value <= option.max && option?.with_half_option)) {
         newProductCart.options[`id:${option.id}`].balance = newBalance
         newProductCart.unitTotal = getUnitTotal(newProductCart)
         newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
       }
     })
-    handleVerifyPizzaType(newProductCart)
     setProductCart(newProductCart)
   }
 
@@ -512,10 +513,13 @@ export const ProductForm = (props) => {
       extra.options.map(option => {
         const suboptions = productCart.options[`id:${option.id}`]?.suboptions
         const quantity = suboptions
-          ? (option.limit_suboptions_by_max
-            ? Object.values(suboptions).reduce((count, suboption) => {
-              return count + suboption.quantity
-            }, 0) : Object.keys(suboptions)?.length)
+          ? option?.with_half_option
+            ? pizzaState?.[`option:${option?.id}`]?.value
+            : (option.limit_suboptions_by_max
+              ? Object.values(suboptions).reduce((count, suboption) => {
+                return count + suboption.quantity
+              }, 0)
+              : Object.keys(suboptions)?.length)
           : 0
         let evaluateRespectTo = false
         if (option.respect_to && productCart.options) {
@@ -719,13 +723,45 @@ export const ProductForm = (props) => {
    * function to verify position of pizza ingredients
    * @param {object} newProductCart cart updated with suboptions
    */
-  const handleVerifyPizzaType = (newProductCart) => {
-    const pizzaTypeSubtoption = Object.values(newProductCart?.options || {})?.map(option => Object.values(option?.suboptions || {}))?.flat()?.find?.(suboption => suboption?.name?.toLowerCase?.() === 'completa' || suboption?.name?.toLowerCase?.() === 'mitad y mitad')
-    if (pizzaTypeSubtoption) {
-      setPizzaType(pizzaTypeSubtoption?.name?.toLowerCase?.())
+  const handleVerifyPizzaState = (state, suboption, option) => {
+    if (!option?.with_half_option) return
+    let newPizzaState = {}
+    if (state?.selected) {
+      newPizzaState = {
+        ...pizzaState,
+        [`option:${option?.id}`]: {
+          ...pizzaState?.[`option:${option?.id}`],
+          [`suboption:${suboption?.id}`]: (state?.position === 'whole' ? 1 : 0.5) * state.quantity,
+          value: 0
+        }
+      }
+      const value = Object?.values(newPizzaState?.[`option:${option?.id}`] || {})?.reduce((acc, value) => acc + value, 0)
+      newPizzaState[`option:${option?.id}`].value = value
+      if (value > option?.max) {
+        return {
+          ...newPizzaState,
+          [`option:${option?.id}`]: {
+            ...newPizzaState[`option:${option?.id}`],
+            maxError: true
+          }
+        }
+      }
+      setPizzaState(newPizzaState)
+    } else {
+      newPizzaState = {
+        ...pizzaState,
+        [`option:${option?.id}`]: {
+          ...pizzaState[`option:${option?.id}`],
+          value: 0
+        }
+      }
+      delete newPizzaState?.[`option:${option?.id}`]?.[`suboption:${suboption?.id}`]
+      const value = Object?.values(newPizzaState?.[`option:${option?.id}`] || {})?.reduce((acc, value) => acc + value, 0)
+      newPizzaState[`option:${option?.id}`].value = value
+      setPizzaState(newPizzaState)
     }
+    return newPizzaState
   }
-
   /**
    * Init product cart when product changed
    */
@@ -840,6 +876,7 @@ export const ProductForm = (props) => {
       }
 
       let suboptionsArray = []
+      let newPizzaState = {}
       preselectedOptions.map((option, i) => {
         const defaultSuboption = {
           option: option,
@@ -847,7 +884,21 @@ export const ProductForm = (props) => {
           state: states[i]
         }
         suboptionsArray = [...suboptionsArray, defaultSuboption]
+
+        if (option?.with_half_option) {
+          newPizzaState = {
+            ...newPizzaState,
+            [`option:${option?.id}`]: {
+              ...newPizzaState?.[`option:${option?.id}`],
+              [`suboption:${preselectedSuboptions[i]?.id}`]: (states[i]?.position === 'whole' ? 1 : 0.5) * states[i].quantity
+            }
+          }
+          const value = Object?.values(newPizzaState?.[`option:${option?.id}`] || {})?.reduce((acc, value) => acc + value, 0)
+          newPizzaState[`option:${option?.id}`].value = value
+        }
       })
+
+      setPizzaState(newPizzaState)
       setSelectedSuboptions(_selectedSuboptions)
       setDependsSuboptions(_dependsSuboptions)
       setDefaultSubOptions(suboptionsArray)
@@ -948,8 +999,8 @@ export const ProductForm = (props) => {
             isSoldOut={isSoldOut}
             actionStatus={actionStatus}
             maxProductQuantity={maxProductQuantity}
-            pizzaType={pizzaType}
-            setPizzaType={setPizzaType}
+            pizzaState={pizzaState}
+            setPizzaState={setPizzaState}
             increment={increment}
             decrement={decrement}
             handleChangeProductCartQuantity={handleChangeProductCartQuantity}
