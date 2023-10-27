@@ -10,14 +10,14 @@ export const Messages = (props) => {
     orderId,
     customHandleSend,
     messages,
-    setMessages
+    setMessages,
+    notificationApp
   } = props
 
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [{ token }] = useSession()
   const accessToken = props.accessToken || token
-
   const [canRead, setCanRead] = useState({ administrator: true, business: true, customer: true, driver: true })
   const [message, setMessage] = useState('')
   const [sendMessage, setSendMessages] = useState({ loading: false, error: null })
@@ -59,7 +59,8 @@ export const Messages = (props) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
           'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
+          'X-Socket-Id-X': socket?.getId(),
+          appType: notificationApp
         },
         body: JSON.stringify(body)
       })
@@ -75,7 +76,7 @@ export const Messages = (props) => {
       }
       setSendMessages({ loading: false, error: error ? result : null })
     } catch (error) {
-      setSendMessages({ loading: false, error: [error.Messages] })
+      setSendMessages({ loading: false, error: [error.message] })
     }
   }
 
