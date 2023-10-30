@@ -53,15 +53,18 @@ export const Messages = (props) => {
         body.type = 3
         body.file = image
       }
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        'X-App-X': ordering.appId,
+        'X-Socket-Id-X': socket?.getId(),
+      }
+      if (notificationApp) {
+        headers.appType = notificationApp
+      }
       const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId(),
-          appType: notificationApp
-        },
+        headers,
         body: JSON.stringify(body)
       })
       const { error, result } = await response.json()
