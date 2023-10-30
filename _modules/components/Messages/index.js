@@ -37,7 +37,8 @@ var Messages = exports.Messages = function Messages(props) {
     orderId = props.orderId,
     customHandleSend = props.customHandleSend,
     messages = props.messages,
-    setMessages = props.setMessages;
+    setMessages = props.setMessages,
+    notificationApp = props.notificationApp;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -75,7 +76,7 @@ var Messages = exports.Messages = function Messages(props) {
    */
   var handleSend = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _canRead, body, response, _yield$response$json, error, result;
+      var _canRead, body, headers, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -112,22 +113,26 @@ var Messages = exports.Messages = function Messages(props) {
               body.type = 3;
               body.file = image;
             }
-            _context.next = 13;
+            headers = {
+              'Content-Type': 'application/json',
+              Authorization: "Bearer ".concat(accessToken),
+              'X-App-X': ordering.appId,
+              'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+            };
+            if (notificationApp) {
+              headers.appType = notificationApp;
+            }
+            _context.next = 15;
             return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages"), {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(accessToken),
-                'X-App-X': ordering.appId,
-                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-              },
+              headers: headers,
               body: JSON.stringify(body)
             });
-          case 13:
+          case 15:
             response = _context.sent;
-            _context.next = 16;
+            _context.next = 18;
             return response.json();
-          case 16:
+          case 18:
             _yield$response$json = _context.sent;
             error = _yield$response$json.error;
             result = _yield$response$json.result;
@@ -140,20 +145,20 @@ var Messages = exports.Messages = function Messages(props) {
               loading: false,
               error: error ? result : null
             });
-            _context.next = 26;
+            _context.next = 28;
             break;
-          case 23:
-            _context.prev = 23;
+          case 25:
+            _context.prev = 25;
             _context.t0 = _context["catch"](2);
             setSendMessages({
               loading: false,
-              error: [_context.t0.Messages]
+              error: [_context.t0.message]
             });
-          case 26:
+          case 28:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[2, 23]]);
+      }, _callee, null, [[2, 25]]);
     }));
     return function handleSend() {
       return _ref.apply(this, arguments);
