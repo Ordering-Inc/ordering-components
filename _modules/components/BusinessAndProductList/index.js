@@ -482,7 +482,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
             source = {};
             requestsState.products = source;
             promises = [];
-            functionFetch = categorySelected.id && categorySelected.id !== 'featured' ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : !isUseParentCategory ? ordering.businesses(businessState.business.id).products() : !(((_where = where) === null || _where === void 0 || (_where = _where.conditions) === null || _where === void 0 ? void 0 : _where.length) > 0) ? ordering.businesses(businessState.business.id).categories() : ordering.businesses(businessState.business.id).products();
+            functionFetch = categorySelected.id && categorySelected.id !== 'featured' ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : ((_where = where) === null || _where === void 0 || (_where = _where.conditions) === null || _where === void 0 ? void 0 : _where.length) === 0 ? ordering.businesses(businessState.business.id).categories() : ordering.businesses(businessState.business.id).products();
             productEndpoint = ((_where2 = where) === null || _where2 === void 0 || (_where2 = _where2.conditions) === null || _where2 === void 0 ? void 0 : _where2.length) > 0 ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
             _context2.t0 = promises;
             _context2.next = 20;
@@ -642,7 +642,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               setErrorQuantityProducts(!((_featureState$product = featureState.products) !== null && _featureState$product !== void 0 && _featureState$product.length));
               categoriesState.featured = featureState;
             }
-            if (categorySelected.id && categorySelected.id !== 'featured' || !isUseParentCategory) {
+            if (categorySelected.id && categorySelected.id !== 'featured') {
               newcategoryState = {
                 pagination: _objectSpread(_objectSpread({}, curCategoryState.pagination), {}, {
                   currentPage: pagination.current_page,
@@ -664,7 +664,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               }));
               setFeaturedProducts(isFeatured);
             }
-            if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
+            if (!(categorySelected.id && categorySelected.id !== 'featured')) {
               productsList = searchValue ? _toConsumableArray(result) : (_ref9 = []).concat.apply(_ref9, _toConsumableArray(result.map(function (category) {
                 return category === null || category === void 0 ? void 0 : category.products;
               }))).filter(function (item) {
@@ -768,7 +768,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               };
               categoriesState.featured = featureState;
             }
-            if (categorySelected.id && categorySelected.id !== 'featured' || !isUseParentCategory) {
+            if (categorySelected.id && categorySelected.id !== 'featured') {
               newcategoryState = {
                 pagination: _objectSpread(_objectSpread({}, curCategoryState === null || curCategoryState === void 0 ? void 0 : curCategoryState.pagination), {}, {
                   currentPage: pagination === null || pagination === void 0 ? void 0 : pagination.current_page,
@@ -789,7 +789,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               }));
               setFeaturedProducts(isFeatured);
             }
-            if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
+            if (!(categorySelected.id && categorySelected.id !== 'featured')) {
               productsList = (_ref11 = []).concat.apply(_ref11, _toConsumableArray(result.map(function (category) {
                 return category === null || category === void 0 ? void 0 : category.products;
               }))).filter(function (item) {
