@@ -57,7 +57,7 @@ export const Messages = (props) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
         'X-App-X': ordering.appId,
-        'X-Socket-Id-X': socket?.getId(),
+        'X-Socket-Id-X': socket?.getId()
       }
       if (notificationApp) {
         headers.appType = notificationApp
