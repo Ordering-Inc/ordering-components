@@ -386,9 +386,7 @@ export const BusinessAndProductList = (props) => {
 
     const functionFetch = categorySelected.id && categorySelected.id !== 'featured'
       ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products()
-      : !isUseParentCategory
-        ? ordering.businesses(businessState.business.id).products()
-        : !(where?.conditions?.length > 0) ? ordering.businesses(businessState.business.id).categories() : ordering.businesses(businessState.business.id).products()
+      : where?.conditions?.length === 0 ? ordering.businesses(businessState.business.id).categories() : ordering.businesses(businessState.business.id).products()
 
     let productEndpoint = where?.conditions?.length > 0
       ? functionFetch.parameters(parameters).where(where)
@@ -471,7 +469,7 @@ export const BusinessAndProductList = (props) => {
         categoriesState.featured = featureState
       }
 
-      if ((categorySelected.id && categorySelected.id !== 'featured') || !isUseParentCategory) {
+      if (categorySelected.id && categorySelected.id !== 'featured') {
         const newcategoryState = {
           pagination: {
             ...curCategoryState.pagination,
@@ -493,7 +491,7 @@ export const BusinessAndProductList = (props) => {
         setFeaturedProducts(isFeatured)
       }
 
-      if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
+      if (!(categorySelected.id && categorySelected.id !== 'featured')) {
         const productsList = searchValue ? [...result] : [].concat(...result.map(category => category?.products)).filter(item => item)
         const productsListFeatured = featuredRes?.content?.result ?? []
         const paginationData = categorySelected.id === 'featured'
@@ -543,7 +541,6 @@ export const BusinessAndProductList = (props) => {
       const [lazyRes, featuredRes] = await getLazyProducts({
         page: curCategoryState.pagination.currentPage + 1
       })
-
       const { content } = lazyRes
       const error = content?.error
       const result = content?.result
@@ -578,7 +575,7 @@ export const BusinessAndProductList = (props) => {
         categoriesState.featured = featureState
       }
 
-      if ((categorySelected.id && categorySelected.id !== 'featured') || !isUseParentCategory) {
+      if ((categorySelected.id && categorySelected.id !== 'featured')) {
         const newcategoryState = {
           pagination: {
             ...curCategoryState?.pagination,
@@ -600,7 +597,7 @@ export const BusinessAndProductList = (props) => {
         setFeaturedProducts(isFeatured)
       }
 
-      if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
+      if (!(categorySelected.id && categorySelected.id !== 'featured')) {
         const productsList = [].concat(...result.map(category => category?.products)).filter(item => item)
         const productsListFeatured = featuredRes?.content?.result ?? []
         const paginationData = categorySelected.id === 'featured'
