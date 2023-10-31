@@ -65,7 +65,8 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
     cityId = props.cityId,
     actualSlug = props.actualSlug,
     searchValueCustom = props.searchValueCustom,
-    isKiosk = props.isKiosk;
+    isKiosk = props.isKiosk,
+    isCustomerMode = props.isCustomerMode;
   var avoidFetchData = !token || isKiosk;
   var _useState = (0, _react.useState)({
       businesses: [],
@@ -191,6 +192,9 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
               location: !customLocation ? isAllowUnaddressOrderType && !((_orderState$options3 = orderState.options) !== null && _orderState$options3 !== void 0 && (_orderState$options3 = _orderState$options3.address) !== null && _orderState$options3 !== void 0 && _orderState$options3.location) ? defaultLocation : "".concat((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 || (_orderState$options4 = _orderState$options4.address) === null || _orderState$options4 === void 0 || (_orderState$options4 = _orderState$options4.location) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.lat, ",").concat((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 || (_orderState$options5 = _orderState$options5.address) === null || _orderState$options5 === void 0 || (_orderState$options5 = _orderState$options5.location) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.lng) : "".concat(customLocation.lat, ",").concat(customLocation.lng),
               type: !initialOrderType ? ((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.type) || 1 : initialOrderType
             };
+            if (isCustomerMode) {
+              parameters.disabled_business = true;
+            }
             if (orderByValue) {
               parameters = _objectSpread(_objectSpread({}, parameters), {}, {
                 orderBy: orderByValue
@@ -330,12 +334,12 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
             requestsState.businesses = source;
             setRequestsState(_objectSpread({}, requestsState));
             fetchEndpoint = advancedSearchEnabled && (searchValue === null || searchValue === void 0 ? void 0 : searchValue.length) >= 3 || !where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters) : where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard() : where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard();
-            _context.next = 30;
+            _context.next = 31;
             return fetchEndpoint.get({
               cancelToken: source,
               advancedSearch: advancedSearchEnabled && (searchValue === null || searchValue === void 0 ? void 0 : searchValue.length) >= 3
             });
-          case 30:
+          case 31:
             _yield$fetchEndpoint$ = _context.sent;
             _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
             error = _yield$fetchEndpoint$2.error;
@@ -384,10 +388,10 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
               fetched: true
             }));
             setFirstLoad(true);
-            _context.next = 45;
+            _context.next = 46;
             break;
-          case 42:
-            _context.prev = 42;
+          case 43:
+            _context.prev = 43;
             _context.t0 = _context["catch"](0);
             if (_context.t0.constructor.name !== 'Cancel') {
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
@@ -398,11 +402,11 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
               }));
               setFirstLoad(true);
             }
-          case 45:
+          case 46:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 42]]);
+      }, _callee, null, [[0, 43]]);
     }));
     return function getBusinesses(_x, _x2, _x3) {
       return _ref2.apply(this, arguments);
