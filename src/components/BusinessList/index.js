@@ -36,9 +36,12 @@ export const BusinessList = (props) => {
     businessId,
     cityId,
     actualSlug,
-    searchValueCustom
+    searchValueCustom,
+    isKiosk,
+    isCustomerMode
   } = props
 
+  const avoidFetchData = !token || isKiosk
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
   const [paginationProps, setPaginationProps] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
@@ -61,6 +64,7 @@ export const BusinessList = (props) => {
   const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
   const [{ configs }] = useConfig()
   const [franchiseEnabled, setFranchiseEnabled] = useState(false)
+  const [firstLoad, setFirstLoad] = useState(false)
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
   const advancedSearchEnabled = configs?.advanced_business_search_enabled?.value === '1'
@@ -101,6 +105,9 @@ export const BusinessList = (props) => {
             : `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
           : `${customLocation.lat},${customLocation.lng}`,
         type: !initialOrderType ? (orderState.options?.type || 1) : initialOrderType
+      }
+      if (isCustomerMode) {
+        parameters.disabled_business = true
       }
       if (orderByValue) {
         parameters = {
@@ -303,6 +310,7 @@ export const BusinessList = (props) => {
         result,
         fetched: true
       })
+      setFirstLoad(true)
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
         setBusinessesList({
@@ -312,6 +320,7 @@ export const BusinessList = (props) => {
           fetched: true,
           result: [err.message]
         })
+        setFirstLoad(true)
       }
     }
   }
@@ -458,7 +467,9 @@ export const BusinessList = (props) => {
   }, [showCities])
 
   useEffect(() => {
-    handleChangeSearch(searchValueCustom)
+    if (firstLoad) {
+      handleChangeSearch(searchValueCustom)
+    }
   }, [searchValueCustom])
 
   /**
@@ -600,7 +611,7 @@ export const BusinessList = (props) => {
   }
 
   useEffect(() => {
-    if(!token) return
+    if (avoidFetchData) return
     refreshUserInfo()
   }, [auth])
 
@@ -629,6 +640,7 @@ export const BusinessList = (props) => {
             franchiseEnabled={franchiseEnabled}
             handleUpdateBusinessList={handleUpdateBusinessList}
             getCities={getCities}
+            setPaginationProps={setPaginationProps}
             citiesState={citiesState}
           />
         )
