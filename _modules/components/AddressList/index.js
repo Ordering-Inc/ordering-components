@@ -68,6 +68,7 @@ var AddressList = exports.AddressList = function AddressList(props) {
     setActionStatus = _useState4[1];
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
+    options = _useOrder2[0].options,
     changeAddress = _useOrder2[1].changeAddress;
   var requestsState = {};
 
@@ -183,7 +184,8 @@ var AddressList = exports.AddressList = function AddressList(props) {
               });
               if (changeOrderAddressWithDefault) {
                 changeAddress(content.result.id, {
-                  country_code: (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.country_code
+                  country_code: (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.country_code,
+                  type: options === null || options === void 0 ? void 0 : options.type
                 });
               }
               setAddressList(_objectSpread({}, addressList));
