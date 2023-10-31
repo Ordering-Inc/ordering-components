@@ -226,25 +226,30 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       return
     }
 
+    const _params = { country_code: params?.country_code }
+
+    params?.type && (_params.type = params?.type)
+
     if (params && params?.address && !checkAddress(params?.address)) {
-      await updateOrderOptions({ address_id: params?.address?.id, country_code: params?.country_code })
+      _params.address_id = params?.address?.id
+      await updateOrderOptions(_params)
       if (isCountryCodeChanged) {
         events.emit('country_code_changed', params?.country_code)
       }
       return
     }
-
+    addressId && (_params.address_id = addressId)
     if (params && params?.isEdit) {
       if (addressId !== state.options.address_id) {
         return
       }
-      await updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+      await updateOrderOptions(_params)
       if (isCountryCodeChanged) {
         events.emit('country_code_changed', params?.country_code)
       }
       return
     }
-    await updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+    await updateOrderOptions(_params)
     if (isCountryCodeChanged) {
       events.emit('country_code_changed', params?.country_code)
     }
