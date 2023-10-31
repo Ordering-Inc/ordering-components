@@ -146,6 +146,7 @@ export const AddressForm = (props) => {
           changeAddress(content.result.id, {
             address: isEdit ? null : content.result,
             country_code: content.result?.country_code,
+            type: options?.type,
             isEdit
           })
         }
