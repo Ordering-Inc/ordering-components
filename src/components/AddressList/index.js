@@ -25,7 +25,7 @@ export const AddressList = (props) => {
 
   const [addressList, setAddressList] = useState({ loading: true, error: null, addresses: [] })
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
-  const [, { changeAddress }] = useOrder()
+  const [{ options }, { changeAddress }] = useOrder()
   const requestsState = {}
 
   /**
@@ -92,7 +92,10 @@ export const AddressList = (props) => {
           return _address
         })
         if (changeOrderAddressWithDefault) {
-          changeAddress(content.result.id, { country_code: content.result?.country_code })
+          changeAddress(content.result.id, {
+            country_code: content.result?.country_code,
+            type: options?.type
+          })
         }
         setAddressList({ ...addressList })
       }
