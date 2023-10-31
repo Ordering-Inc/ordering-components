@@ -37,7 +37,8 @@ export const BusinessList = (props) => {
     cityId,
     actualSlug,
     searchValueCustom,
-    isKiosk
+    isKiosk,
+    isCustomerMode
   } = props
 
   const avoidFetchData = !token || isKiosk
@@ -104,6 +105,9 @@ export const BusinessList = (props) => {
             : `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
           : `${customLocation.lat},${customLocation.lng}`,
         type: !initialOrderType ? (orderState.options?.type || 1) : initialOrderType
+      }
+      if (isCustomerMode) {
+        parameters.disabled_business = true
       }
       if (orderByValue) {
         parameters = {
