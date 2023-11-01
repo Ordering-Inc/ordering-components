@@ -18,12 +18,14 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
  * Component to render product option suboption
  */
 var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOptionSuboption(props) {
+  var _pizzaState;
   var UIComponent = props.UIComponent,
     balance = props.balance,
     option = props.option,
     suboption = props.suboption,
     onChange = props.onChange,
-    isOrigin = props.isOrigin;
+    isOrigin = props.isOrigin,
+    pizzaState = props.pizzaState;
 
   /**
    * Predefine default values for suboption state
@@ -35,9 +37,9 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
   } else if (selected) {
     quantity = 1;
   }
-  var position = props.state.position || 'whole';
+  var position = props.state.position || 'left';
   var price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price;
-
+  var usePizzaValidation = (pizzaState === null || pizzaState === void 0 || (_pizzaState = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState === void 0 ? void 0 : _pizzaState.value) === (option === null || option === void 0 ? void 0 : option.max);
   /**
    * Set current state
    */
@@ -64,7 +66,8 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
    */
   var toggleSelect = function toggleSelect() {
     var selectStatus = isOrigin ? !state.selected : state.selected;
-    if (selectStatus && option.limit_suboptions_by_max && balance === option.max && !((option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1)) {
+    var minMaxValidation = option.with_half_option ? usePizzaValidation : balance === option.max && !((option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1);
+    if (selectStatus && option.limit_suboptions_by_max && minMaxValidation) {
       return;
     }
     changeState(_objectSpread(_objectSpread({}, state), {}, {
@@ -118,6 +121,7 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
   };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     state: state,
+    usePizzaValidation: usePizzaValidation,
     increment: increment,
     decrement: decrement,
     changePosition: changePosition,
