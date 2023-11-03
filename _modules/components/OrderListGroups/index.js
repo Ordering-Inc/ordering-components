@@ -347,15 +347,27 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
                 value: filtered === null || filtered === void 0 ? void 0 : filtered.timeStatus
               });
             }
+            if (!isDriverApp) {
+              options.query.where.push({
+                attribute: 'products',
+                conditions: [{
+                  attribute: 'type',
+                  value: {
+                    condition: '=',
+                    value: 'item'
+                  }
+                }]
+              });
+            }
             source = {};
             requestsState.orders = source;
             options.cancelToken = source;
             functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-            _context.next = 28;
+            _context.next = 29;
             return functionFetch.get(options);
-          case 28:
-            return _context.abrupt("return", _context.sent);
           case 29:
+            return _context.abrupt("return", _context.sent);
+          case 30:
           case "end":
             return _context.stop();
         }
