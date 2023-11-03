@@ -529,21 +529,22 @@ export const OrderDetails = (props) => {
         ? 'orders'
         : `orders_${userCustomerId || user?.id}`
 
+    const driverRoom = `drivers_${!token ? hashKey : orderState.order?.driver_id}`
+
     if (!isDisabledOrdersRoom) socket.join(ordersRoom)
     if (orderState.order?.driver_id) {
-      socket.join(`drivers_${orderState.order?.driver_id}`)
+      socket.join(driverRoom)
     }
     socket.socket.on('connect', () => {
       if (!isDisabledOrdersRoom) socket.join(ordersRoom)
       if (orderState.order?.driver_id) {
-        socket.join(`drivers_${orderState.order?.driver_id}`)
+        socket.join(driverRoom)
       }
     })
     socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom)
-      // socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
     }
