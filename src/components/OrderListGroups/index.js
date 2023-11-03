@@ -255,6 +255,19 @@ export const OrderListGroups = (props) => {
       })
     }
 
+    if (!isDriverApp) {
+      options.query.where.push({
+        attribute: 'products',
+        conditions: [{
+          attribute: 'type',
+          value: {
+            condition: '=',
+            value: 'item'
+          }
+        }]
+      })
+    }
+
     const source = {}
     requestsState.orders = source
     options.cancelToken = source
