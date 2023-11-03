@@ -43,7 +43,8 @@ export const ProductForm = (props) => {
   /**
    * Original product state
    */
-  const [product, setProduct] = useState({ product: props.product, loading: false, error: null })
+  const availableLazyLoad = props.product?.load_type === 'lazy' && props.businessId && props.categoryId && props.productId
+  const [product, setProduct] = useState({ product: availableLazyLoad ? null : props.product, loading: false, error: null })
 
   /**
    * Product cart state
@@ -782,6 +783,7 @@ export const ProductForm = (props) => {
    * Listening product changes
    */
   useEffect(() => {
+    if (props?.product?.load_type === 'lazy') return
     setProduct({ ...product, product: props.product })
   }, [props.product])
 
@@ -963,7 +965,9 @@ export const ProductForm = (props) => {
     if (!props.product && (!props.businessId || !props.categoryId || !props.productId)) {
       throw new Error('`businessId` && `categoryId` && `productId` are required if `product` was not provided.')
     }
-    if (!props.product && props.businessId && props.categoryId && props.productId) {
+    if ((props.product && props.product?.load_type === 'lazy' && props.businessId && props.categoryId && props.productId) ||
+      (!props.product && props.businessId && props.categoryId && props.productId)
+    ) {
       loadProductWithOptions()
     }
     return () => {
