@@ -5,6 +5,8 @@ import { useApi } from '../../contexts/ApiContext'
 import { useCustomer } from '../../contexts/CustomerContext'
 import { useValidationFields as useValidationsFieldsController } from '../../contexts/ValidationsFieldsContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+import parsePhoneNumber from 'libphonenumber-js'
+const CONDITIONAL_CODES = ['1787']
 
 /**
  * Component to manage user form details behavior without UI component
@@ -107,9 +109,22 @@ export const UserFormDetails = (props) => {
     try {
       let response
       setFormState({ ...formState, loading: true })
-      if (changes) {
-        formState.changes = { ...formState.changes, ...changes }
+      const _changes = { ...formState.changes, ...(changes ?? {}) }
+
+      if (!_changes?.country_code && _changes?.country_phone_code && _changes?.cellphone) {
+        const parsedNumber = parsePhoneNumber(`+${_changes?.country_phone_code}${_changes?.cellphone}`)
+        _changes.country_code = parsedNumber.country
       }
+
+      if (CONDITIONAL_CODES.includes(_changes?.country_phone_code)) {
+        if (_changes?.country_code === 'PR') {
+          _changes.cellphone = `787${_changes.cellphone}`
+          _changes.country_phone_code = '1'
+        }
+      }
+
+      formState.changes = _changes
+
       if (isImage) {
         response = await ordering.users(props?.userData?.id || userState.result.result.id).save({ photo: image || formState.changes.photo }, {
           accessToken: accessToken
