@@ -355,6 +355,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
               break;
             }
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+              generate: true,
               result: {
                 error: true,
                 result: t('RECAPTCHA_VALIDATION_IS_REQUIRED', 'The ReCaptcha validation is required.')
@@ -423,6 +424,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
           case 23:
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: false,
+              generate: true,
               result: {
                 error: true,
                 result: result
@@ -435,6 +437,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
             _context3.t0 = _context3["catch"](8);
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: false,
+              generate: true,
               result: {
                 error: true,
                 result: _context3.t0.message
