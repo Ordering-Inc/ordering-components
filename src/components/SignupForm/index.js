@@ -7,6 +7,7 @@ import { useConfig } from '../../contexts/ConfigContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+import parsePhoneNumber from 'libphonenumber-js'
 
 /**
  * Component to manage signup behavior without UI component
@@ -25,6 +26,7 @@ export const SignupForm = (props) => {
     isGuest
   } = props
   const requestsState = {}
+  const CONDITIONAL_CODES = ['1787']
 
   const [events] = useEvent()
   const [ordering] = useApi()
@@ -91,6 +93,19 @@ export const SignupForm = (props) => {
       data.phone = data.cellphone
     }
     const newData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== ''))
+
+    if (!newData?.country_code && newData?.country_phone_code && newData?.cellphone) {
+      const parsedNumber = parsePhoneNumber(`+${newData?.country_phone_code}${newData?.cellphone}`)
+      newData.country_code = parsedNumber.country
+    }
+
+    if (CONDITIONAL_CODES.includes(newData?.country_phone_code)) {
+      if (newData?.country_code === 'PR') {
+        newData.cellphone = `787${newData.cellphone}`
+        newData.country_phone_code = '1'
+      }
+    }
+
     try {
       setFormState({ ...formState, loading: true })
       const source = {}
