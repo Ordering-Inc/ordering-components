@@ -14,6 +14,7 @@ var _ConfigContext = require("../../contexts/ConfigContext");
 var _LanguageContext = require("../../contexts/LanguageContext");
 var _EventContext = require("../../contexts/EventContext");
 var _WebsocketContext = require("../../contexts/WebsocketContext");
+var _libphonenumberJs = _interopRequireDefault(require("libphonenumber-js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
@@ -48,6 +49,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
     numOtpInputs = props.numOtpInputs,
     isGuest = props.isGuest;
   var requestsState = {};
+  var CONDITIONAL_CODES = ['1787'];
   var _useEvent = (0, _EventContext.useEvent)(),
     _useEvent2 = _slicedToArray(_useEvent, 1),
     events = _useEvent2[0];
@@ -139,7 +141,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
    */
   var handleSignupClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
-      var data, newData, source, response;
+      var data, newData, parsedNumber, source, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -197,17 +199,27 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 v = _ref3[1];
               return v !== '';
             }));
-            _context.prev = 17;
+            if (!(newData !== null && newData !== void 0 && newData.country_code) && newData !== null && newData !== void 0 && newData.country_phone_code && newData !== null && newData !== void 0 && newData.cellphone) {
+              parsedNumber = (0, _libphonenumberJs.default)("+".concat(newData === null || newData === void 0 ? void 0 : newData.country_phone_code).concat(newData === null || newData === void 0 ? void 0 : newData.cellphone));
+              newData.country_code = parsedNumber.country;
+            }
+            if (CONDITIONAL_CODES.includes(newData === null || newData === void 0 ? void 0 : newData.country_phone_code)) {
+              if ((newData === null || newData === void 0 ? void 0 : newData.country_code) === 'PR') {
+                newData.cellphone = "787".concat(newData.cellphone);
+                newData.country_phone_code = '1';
+              }
+            }
+            _context.prev = 19;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: true
             }));
             source = {};
             requestsState.signup = source;
-            _context.next = 23;
+            _context.next = 25;
             return ordering.users().save(newData, {
               cancelToken: source
             });
-          case 23:
+          case 25:
             response = _context.sent;
             setFormState({
               result: response.content,
@@ -219,11 +231,11 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 handleSuccessSignup(response.content.result);
               }
             }
-            _context.next = 31;
+            _context.next = 33;
             break;
-          case 28:
-            _context.prev = 28;
-            _context.t0 = _context["catch"](17);
+          case 30:
+            _context.prev = 30;
+            _context.t0 = _context["catch"](19);
             if (_context.t0.constructor.name !== 'Cancel') {
               setFormState({
                 result: {
@@ -233,11 +245,11 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 loading: false
               });
             }
-          case 31:
+          case 33:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[17, 28]]);
+      }, _callee, null, [[19, 30]]);
     }));
     return function handleSignupClick(_x) {
       return _ref.apply(this, arguments);

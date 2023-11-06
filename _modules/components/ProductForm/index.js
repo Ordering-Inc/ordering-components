@@ -41,7 +41,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var ProductForm = exports.ProductForm = function ProductForm(props) {
-  var _props$productCart, _orderState$carts, _product$product, _product$product2, _product$product3, _product$product4;
+  var _props$product, _props$productCart, _orderState$carts, _product$product, _product$product2, _product$product3, _product$product4;
   var UIComponent = props.UIComponent,
     useOrderContext = props.useOrderContext,
     onSave = props.onSave,
@@ -81,8 +81,9 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
   /**
    * Original product state
    */
+  var availableLazyLoad = ((_props$product = props.product) === null || _props$product === void 0 ? void 0 : _props$product.load_type) === 'lazy' && props.businessId && props.categoryId && props.productId;
   var _useState = (0, _react.useState)({
-      product: props.product,
+      product: availableLazyLoad ? null : props.product,
       loading: false,
       error: null
     }),
@@ -1080,6 +1081,8 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    * Listening product changes
    */
   (0, _react.useEffect)(function () {
+    var _props$product2;
+    if ((props === null || props === void 0 || (_props$product2 = props.product) === null || _props$product2 === void 0 ? void 0 : _props$product2.load_type) === 'lazy') return;
     setProduct(_objectSpread(_objectSpread({}, product), {}, {
       product: props.product
     }));
@@ -1311,10 +1314,11 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    * Load product on component mounted
    */
   (0, _react.useEffect)(function () {
+    var _props$product3;
     if (!props.product && (!props.businessId || !props.categoryId || !props.productId)) {
       throw new Error('`businessId` && `categoryId` && `productId` are required if `product` was not provided.');
     }
-    if (!props.product && props.businessId && props.categoryId && props.productId) {
+    if (props.product && ((_props$product3 = props.product) === null || _props$product3 === void 0 ? void 0 : _props$product3.load_type) === 'lazy' && props.businessId && props.categoryId && props.productId || !props.product && props.businessId && props.categoryId && props.productId) {
       loadProductWithOptions();
     }
     return function () {
