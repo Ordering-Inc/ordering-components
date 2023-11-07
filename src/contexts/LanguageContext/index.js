@@ -33,6 +33,29 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
 
   const [ordering, apiHelper] = useApi()
 
+  const updateLanguageContext = async () => {
+    try {
+      !state.loading && setState({ ...state, loading: true })
+      const _language = await strategy.getItem('language', true)
+      let dictionary = {}
+      const { content: { error: errDict, result: resDict } } = await ordering.translations().asDictionary().get()
+      dictionary = errDict ? {} : resDict
+
+      const { content: { error, result } } = await ordering.languages().where([{ attribute: _language ? _language?.code : 'default', value: true }]).get()
+      const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
+      apiHelper.setLanguage(result[0].code)
+      setState({
+        ...state,
+        loading: false,
+        error: error ? typeof result === 'string' ? result : result?.[0] : null,
+        dictionary,
+        language
+      })
+    } catch {
+      setState({ ...state, loading: false })
+    }
+  }
+
   const refreshTranslations = async () => {
     try {
       !state.loading && setState({ ...state, loading: true })
@@ -48,7 +71,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
   }
 
   const loadDefaultLanguage = async () => {
-const _language = await strategy.getItem('language', true)
+    const _language = await strategy.getItem('language', true)
     try {
       const { content: { error, result } } = await ordering.languages().where([{ attribute: _language ? _language?.code : 'default', value: true }]).get()
       if (error) {
@@ -60,7 +83,7 @@ const _language = await strategy.getItem('language', true)
         return
       }
       const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
-            apiHelper.setLanguage(result[0].code)
+      apiHelper.setLanguage(result[0].code)
       setState({
         ...state,
         language
@@ -83,7 +106,7 @@ const _language = await strategy.getItem('language', true)
    */
   useEffect(() => {
     if (state.language?.code && state.language?.code === ordering.language) {
-      refreshTranslations()
+      settings?.use_root_point ? updateLanguageContext() : refreshTranslations()
     }
   }, [state.language?.code, ordering])
 
