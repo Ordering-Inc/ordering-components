@@ -436,16 +436,11 @@ export const OrderList = props => {
     }
 
     const handleAddNewOrder = (order) => {
-      setOrderList({
-        ...orderList,
-        loading: true
-      })
       showToast(ToastType.Info, t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id))
       const newOrder = [order, ...orderList.orders]
       setOrderList({
         ...orderList,
-        orders: newOrder,
-        loading: false
+        orders: newOrder
       })
     }
 
