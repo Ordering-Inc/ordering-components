@@ -440,7 +440,8 @@ export const OrderList = props => {
       const newOrder = [order, ...orderList.orders]
       setOrderList({
         ...orderList,
-        orders: newOrder
+        orders: newOrder,
+        loading: false
       })
     }
 
