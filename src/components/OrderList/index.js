@@ -35,7 +35,8 @@ export const OrderList = props => {
     isBusiness,
     noGiftCardOrders,
     propsToFetch,
-    handleRedirectToCheckout
+    handleRedirectToCheckout,
+    isCustomerMode
   } = props
 
   const [ordering] = useApi()
@@ -74,10 +75,10 @@ export const OrderList = props => {
 
     try {
       setReorderState({ ...reorderState, loading: true })
-
+      const disableLoading = isCustomerMode
       const fetchOrders = async (ids) => {
         const promises = ids.map(async id => {
-          const res = await reorder(id, ids?.length > 1)
+          const res = await reorder(id, ids?.length > 1, { disableLoading })
           return res
         })
         const data = await Promise.all(promises)
@@ -394,13 +395,12 @@ export const OrderList = props => {
   }, [isBusiness])
 
   useEffect(() => {
-    if (orderList.loading) return
+    if (orderList.loading || isCustomerMode || !socket?.socket) return
     const handleUpdateOrder = (order) => {
-      setOrderList({ ...orderList, loading: true })
       const found = orderList.orders.find(_order => _order.id === order.id)
       let orders = []
       if (found) {
-        showToast(ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id))
+        showToast(ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id), 1000)
         orders = orderList.orders.filter(_order => {
           if (_order.id === order.id && _order?.driver?.id !== order?.driver?.id && session?.user?.level === 4) {
             return false
@@ -436,10 +436,6 @@ export const OrderList = props => {
     }
 
     const handleAddNewOrder = (order) => {
-      setOrderList({
-        ...orderList,
-        loading: true
-      })
       showToast(ToastType.Info, t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id))
       const newOrder = [order, ...orderList.orders]
       setOrderList({
@@ -449,18 +445,22 @@ export const OrderList = props => {
       })
     }
 
-    socket.on('orders_register', handleAddNewOrder)
-    socket.on('update_order', handleUpdateOrder)
     const ordersRoom = !props.isAsCustomer && session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
+    if (socket?.socket?._callbacks?.$orders_register?.find(func => func?.name !== 'handleAddNewOrder')) {
+      socket.on('orders_register', handleAddNewOrder)
+    }
+    if (socket?.socket?._callbacks?.$update_order?.find(func => func?.name !== 'handleUpdateOrder')) {
+      socket.on('update_order', handleUpdateOrder)
+    }
     return () => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('orders_register', handleAddNewOrder)
     }
-  }, [orderList.orders, pagination, socket, session])
+  }, [orderList.loading, socket?.socket, session, isCustomerMode])
 
   useEffect(() => {
-    if (!session.user) return
+    if (!session.user || isCustomerMode) return
     socket.on('disconnect', (reason) => {
       const ordersRoom = !props.isAsCustomer && session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
       socket.join(ordersRoom)
@@ -470,7 +470,7 @@ export const OrderList = props => {
     return () => {
       socket.leave(ordersRoom)
     }
-  }, [socket, session, userCustomerId])
+  }, [socket, session, userCustomerId, isCustomerMode])
 
   const loadMoreOrders = async (searchByOtherStatus) => {
     setOrderList({ ...orderList, loading: true })
