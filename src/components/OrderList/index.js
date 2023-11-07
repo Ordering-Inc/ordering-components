@@ -395,13 +395,12 @@ export const OrderList = props => {
   }, [isBusiness])
 
   useEffect(() => {
-    if (orderList.loading || isCustomerMode) return
+    if (orderList.loading || isCustomerMode || !socket?.socket) return
     const handleUpdateOrder = (order) => {
-      setOrderList({ ...orderList, loading: true })
       const found = orderList.orders.find(_order => _order.id === order.id)
       let orders = []
       if (found) {
-        showToast(ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id))
+        showToast(ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id), 1000)
         orders = orderList.orders.filter(_order => {
           if (_order.id === order.id && _order?.driver?.id !== order?.driver?.id && session?.user?.level === 4) {
             return false
@@ -450,15 +449,19 @@ export const OrderList = props => {
       })
     }
 
-    socket.on('orders_register', handleAddNewOrder)
-    socket.on('update_order', handleUpdateOrder)
     const ordersRoom = !props.isAsCustomer && session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
+    if (socket?.socket?._callbacks?.$orders_register?.find(func => func?.name !== 'handleAddNewOrder')) {
+      socket.on('orders_register', handleAddNewOrder)
+    }
+    if (socket?.socket?._callbacks?.$update_order?.find(func => func?.name !== 'handleUpdateOrder')) {
+      socket.on('update_order', handleUpdateOrder)
+    }
     return () => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('orders_register', handleAddNewOrder)
     }
-  }, [orderList.orders, pagination, socket, session, isCustomerMode])
+  }, [orderList.loading, socket?.socket, session, isCustomerMode])
 
   useEffect(() => {
     if (!session.user || isCustomerMode) return

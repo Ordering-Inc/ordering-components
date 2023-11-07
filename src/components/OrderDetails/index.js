@@ -494,7 +494,7 @@ export const OrderDetails = (props) => {
 
   useEffect(() => {
     if (orderState.loading || loading || !socket?.socket) return
-    const handleUpdateOrder = (order) => {
+    const handleUpdateOrderDetails = (order) => {
       if (order?.id !== orderState.order?.id) return
       showToast(ToastType.Info, t('UPDATING_ORDER', 'Updating order...'), 1000)
       delete order.total
@@ -540,14 +540,16 @@ export const OrderDetails = (props) => {
       }
     })
     socket.on('tracking_driver', handleTrackingDriver)
-    socket.on('update_order', handleUpdateOrder)
+    if (socket?.socket?._callbacks?.$update_order?.find(func => func?.name !== 'handleUpdateOrderDetails')) {
+      socket.on('update_order', handleUpdateOrderDetails)
+    }
     return () => {
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom)
       // socket.leave(`drivers_${orderState.order?.driver_id}`)
-      socket.off('update_order', handleUpdateOrder)
+      socket.off('update_order', handleUpdateOrderDetails)
       socket.off('tracking_driver', handleTrackingDriver)
     }
-  }, [orderState.order, socket?.socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id, hashKey])
+  }, [orderState?.order, socket?.socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id, hashKey])
 
   useEffect(() => {
     if (messages.loading) return
