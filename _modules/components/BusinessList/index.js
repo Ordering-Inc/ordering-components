@@ -64,7 +64,10 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
     businessId = props.businessId,
     cityId = props.cityId,
     actualSlug = props.actualSlug,
-    searchValueCustom = props.searchValueCustom;
+    searchValueCustom = props.searchValueCustom,
+    isKiosk = props.isKiosk,
+    isCustomerMode = props.isCustomerMode;
+  var avoidFetchData = !token || isKiosk;
   var _useState = (0, _react.useState)({
       businesses: [],
       loading: true,
@@ -141,6 +144,10 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
     _useState22 = _slicedToArray(_useState21, 2),
     franchiseEnabled = _useState22[0],
     setFranchiseEnabled = _useState22[1];
+  var _useState23 = (0, _react.useState)(false),
+    _useState24 = _slicedToArray(_useState23, 2),
+    firstLoad = _useState24[0],
+    setFirstLoad = _useState24[1];
   var isValidMoment = function isValidMoment(date, format) {
     return _dayjs.default.utc(date, format).format(format) === date;
   };
@@ -185,6 +192,9 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
               location: !customLocation ? isAllowUnaddressOrderType && !((_orderState$options3 = orderState.options) !== null && _orderState$options3 !== void 0 && (_orderState$options3 = _orderState$options3.address) !== null && _orderState$options3 !== void 0 && _orderState$options3.location) ? defaultLocation : "".concat((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 || (_orderState$options4 = _orderState$options4.address) === null || _orderState$options4 === void 0 || (_orderState$options4 = _orderState$options4.location) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.lat, ",").concat((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 || (_orderState$options5 = _orderState$options5.address) === null || _orderState$options5 === void 0 || (_orderState$options5 = _orderState$options5.location) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.lng) : "".concat(customLocation.lat, ",").concat(customLocation.lng),
               type: !initialOrderType ? ((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.type) || 1 : initialOrderType
             };
+            if (isCustomerMode) {
+              parameters.disabled_business = true;
+            }
             if (orderByValue) {
               parameters = _objectSpread(_objectSpread({}, parameters), {}, {
                 orderBy: orderByValue
@@ -324,12 +334,12 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
             requestsState.businesses = source;
             setRequestsState(_objectSpread({}, requestsState));
             fetchEndpoint = advancedSearchEnabled && (searchValue === null || searchValue === void 0 ? void 0 : searchValue.length) >= 3 || !where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters) : where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard() : where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard();
-            _context.next = 30;
+            _context.next = 31;
             return fetchEndpoint.get({
               cancelToken: source,
               advancedSearch: advancedSearchEnabled && (searchValue === null || searchValue === void 0 ? void 0 : searchValue.length) >= 3
             });
-          case 30:
+          case 31:
             _yield$fetchEndpoint$ = _context.sent;
             _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
             error = _yield$fetchEndpoint$2.error;
@@ -377,10 +387,11 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
               result: result,
               fetched: true
             }));
-            _context.next = 44;
+            setFirstLoad(true);
+            _context.next = 46;
             break;
-          case 41:
-            _context.prev = 41;
+          case 43:
+            _context.prev = 43;
             _context.t0 = _context["catch"](0);
             if (_context.t0.constructor.name !== 'Cancel') {
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
@@ -389,12 +400,13 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
                 fetched: true,
                 result: [_context.t0.message]
               }));
+              setFirstLoad(true);
             }
-          case 44:
+          case 46:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 41]]);
+      }, _callee, null, [[0, 43]]);
     }));
     return function getBusinesses(_x, _x2, _x3) {
       return _ref2.apply(this, arguments);
@@ -574,7 +586,9 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
     }
   }, [showCities]);
   (0, _react.useEffect)(function () {
-    handleChangeSearch(searchValueCustom);
+    if (firstLoad) {
+      handleChangeSearch(searchValueCustom);
+    }
   }, [searchValueCustom]);
 
   /**
@@ -702,7 +716,7 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
     }));
   };
   (0, _react.useEffect)(function () {
-    if (!token) return;
+    if (avoidFetchData) return;
     refreshUserInfo();
   }, [auth]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
@@ -725,6 +739,7 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
     franchiseEnabled: franchiseEnabled,
     handleUpdateBusinessList: handleUpdateBusinessList,
     getCities: getCities,
+    setPaginationProps: setPaginationProps,
     citiesState: citiesState
   })));
 };
