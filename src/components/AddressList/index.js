@@ -76,7 +76,12 @@ export const AddressList = (props) => {
       return handleClickSetDefault(address)
     }
     if (sameAddress) {
-      changeAddress(address?.id, { country_code: address?.country_code })
+      changeAddress(address?.id,
+        {
+          country_code: address?.country_code,
+          type: options?.type
+        }
+      )
       return
     }
     try {
