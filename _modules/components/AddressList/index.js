@@ -158,7 +158,8 @@ var AddressList = exports.AddressList = function AddressList(props) {
               break;
             }
             changeAddress(address === null || address === void 0 ? void 0 : address.id, {
-              country_code: address === null || address === void 0 ? void 0 : address.country_code
+              country_code: address === null || address === void 0 ? void 0 : address.country_code,
+              type: options === null || options === void 0 ? void 0 : options.type
             });
             return _context2.abrupt("return");
           case 6:
