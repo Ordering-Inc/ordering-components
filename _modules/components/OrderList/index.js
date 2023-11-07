@@ -653,18 +653,15 @@ var OrderList = exports.OrderList = function OrderList(props) {
     };
   }, [isBusiness]);
   (0, _react.useEffect)(function () {
-    var _session$user2, _session$user3;
-    if (orderList.loading || isCustomerMode) return;
+    var _session$user2, _session$user3, _socket$socket, _socket$socket2;
+    if (orderList.loading || isCustomerMode || !(socket !== null && socket !== void 0 && socket.socket)) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-        loading: true
-      }));
       var found = orderList.orders.find(function (_order) {
         return _order.id === order.id;
       });
       var orders = [];
       if (found) {
-        showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id));
+        showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id), 1000);
         orders = orderList.orders.filter(function (_order) {
           var _order$driver, _order$driver2, _session$user;
           if (_order.id === order.id && (_order === null || _order === void 0 || (_order$driver = _order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) !== (order === null || order === void 0 || (_order$driver2 = order.driver) === null || _order$driver2 === void 0 ? void 0 : _order$driver2.id) && (session === null || session === void 0 || (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 4) {
@@ -693,9 +690,6 @@ var OrderList = exports.OrderList = function OrderList(props) {
       }));
     };
     var handleAddNewOrder = function handleAddNewOrder(order) {
-      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-        loading: true
-      }));
       showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id));
       var newOrder = [order].concat(_toConsumableArray(orderList.orders));
       setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
@@ -703,15 +697,23 @@ var OrderList = exports.OrderList = function OrderList(props) {
         loading: false
       }));
     };
-    socket.on('orders_register', handleAddNewOrder);
-    socket.on('update_order', handleUpdateOrder);
     var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 || (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
     socket.join(ordersRoom);
+    if (socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && (_socket$socket = _socket$socket._callbacks) !== null && _socket$socket !== void 0 && (_socket$socket = _socket$socket.$orders_register) !== null && _socket$socket !== void 0 && _socket$socket.find(function (func) {
+      return (func === null || func === void 0 ? void 0 : func.name) !== 'handleAddNewOrder';
+    })) {
+      socket.on('orders_register', handleAddNewOrder);
+    }
+    if (socket !== null && socket !== void 0 && (_socket$socket2 = socket.socket) !== null && _socket$socket2 !== void 0 && (_socket$socket2 = _socket$socket2._callbacks) !== null && _socket$socket2 !== void 0 && (_socket$socket2 = _socket$socket2.$update_order) !== null && _socket$socket2 !== void 0 && _socket$socket2.find(function (func) {
+      return (func === null || func === void 0 ? void 0 : func.name) !== 'handleUpdateOrder';
+    })) {
+      socket.on('update_order', handleUpdateOrder);
+    }
     return function () {
       socket.off('update_order', handleUpdateOrder);
       socket.off('orders_register', handleAddNewOrder);
     };
-  }, [orderList.orders, pagination, socket, session, isCustomerMode]);
+  }, [orderList.loading, socket === null || socket === void 0 ? void 0 : socket.socket, session, isCustomerMode]);
   (0, _react.useEffect)(function () {
     var _session$user6, _session$user7;
     if (!session.user || isCustomerMode) return;

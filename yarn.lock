@@ -2687,14 +2687,14 @@
   integrity sha512-IFQTJARgMUBF+xVd2b+hIgXWrZEjND3vJtRCvIelcFB5SIXfjV4bOHbHJ0eXKh+0COrBRc8MqteKAz/j88rE0A==
 
 "@types/sizzle@^2.3.2":
-  version "2.3.5"
-  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.5.tgz#d93dd29cdcd5801d90be968073b09a6b370780e4"
-  integrity sha512-tAe4Q+OLFOA/AMD+0lq8ovp8t3ysxAOeaScnfNdZpUxaGl51ZMDEITxkvFl1STudQ58mz6gzVGl9VhMKhwRnZQ==
+  version "2.3.6"
+  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.6.tgz#e39b7123dac4631001939bd4c2a26d46010f2275"
+  integrity sha512-m04Om5Gz6kbjUwAQ7XJJQ30OdEFsSmAVsvn4NYwcTRyMVpKKa1aPuESw1n2CxS5fYkOQv3nHgDKeNa8e76fUkw==
 
 "@types/source-list-map@*":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@types/source-list-map/-/source-list-map-0.1.4.tgz#a3d4e4791606f40a833ab1caf41f77463c8d72ff"
-  integrity sha512-Kdfm7Sk5VX8dFW7Vbp18+fmAatBewzBILa1raHYxrGEFXT0jNl9x3LWfuW7bTbjEKFNey9Dfkj/UzT6z/NvRlg==
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@types/source-list-map/-/source-list-map-0.1.5.tgz#1ec07192b889558a410833b237e595a906e5e349"
+  integrity sha512-cHBTLeIGIREJx839cDfMLKWao+FaJOlaPz4mnFHXUzShS8sXhzw6irhvIpYvp28TbTmTeAt3v+QgHMANsGbQtA==
 
 "@types/tapable@^1", "@types/tapable@^1.0.5":
   version "1.0.10"
@@ -4484,9 +4484,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.535:
-  version "1.4.577"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.577.tgz#a732f11cf4532be96e5e3f1197dcda54c2cec7ad"
-  integrity sha512-/5xHPH6f00SxhHw6052r+5S1xO7gHNc89hV7tqlvnStvKbSrDqc/u6AlwPvVWWNj+s4/KL6T6y8ih+nOY0qYNA==
+  version "1.4.578"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.578.tgz#7a3510f333bcd55e87882799ebeb7518d6ab4d95"
+  integrity sha512-V0ZhSu1BQZKfG0yNEL6Dadzik8E1vAzfpVOapdSiT9F6yapEJ3Bk+4tZ4SMPdWiUchCgnM/ByYtBzp5ntzDMIA==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"

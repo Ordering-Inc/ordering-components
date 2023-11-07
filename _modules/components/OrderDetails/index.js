@@ -913,9 +913,9 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     }
   }, [orderId, isDriverNotification]);
   (0, _react.useEffect)(function () {
-    var _orderState$order17;
+    var _orderState$order17, _socket$socket;
     if (orderState.loading || loading || !(socket !== null && socket !== void 0 && socket.socket)) return;
-    var handleUpdateOrder = function handleUpdateOrder(order) {
+    var handleUpdateOrderDetails = function handleUpdateOrderDetails(order) {
       var _orderState$order15;
       if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order15 = orderState.order) === null || _orderState$order15 === void 0 ? void 0 : _orderState$order15.id)) return;
       showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER', 'Updating order...'), 1000);
@@ -962,14 +962,18 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       }
     });
     socket.on('tracking_driver', handleTrackingDriver);
-    socket.on('update_order', handleUpdateOrder);
+    if (socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && (_socket$socket = _socket$socket._callbacks) !== null && _socket$socket !== void 0 && (_socket$socket = _socket$socket.$update_order) !== null && _socket$socket !== void 0 && _socket$socket.find(function (func) {
+      return (func === null || func === void 0 ? void 0 : func.name) !== 'handleUpdateOrderDetails';
+    })) {
+      socket.on('update_order', handleUpdateOrderDetails);
+    }
     return function () {
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom);
       // socket.leave(`drivers_${orderState.order?.driver_id}`)
-      socket.off('update_order', handleUpdateOrder);
+      socket.off('update_order', handleUpdateOrderDetails);
       socket.off('tracking_driver', handleTrackingDriver);
     };
-  }, [orderState.order, socket === null || socket === void 0 ? void 0 : socket.socket, loading, userCustomerId, (_orderState$order21 = orderState.order) === null || _orderState$order21 === void 0 ? void 0 : _orderState$order21.driver_id, (_orderState$order22 = orderState.order) === null || _orderState$order22 === void 0 ? void 0 : _orderState$order22.id, hashKey]);
+  }, [orderState === null || orderState === void 0 ? void 0 : orderState.order, socket === null || socket === void 0 ? void 0 : socket.socket, loading, userCustomerId, (_orderState$order21 = orderState.order) === null || _orderState$order21 === void 0 ? void 0 : _orderState$order21.driver_id, (_orderState$order22 = orderState.order) === null || _orderState$order22 === void 0 ? void 0 : _orderState$order22.id, hashKey]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
     var handleNewMessage = function handleNewMessage(message) {
