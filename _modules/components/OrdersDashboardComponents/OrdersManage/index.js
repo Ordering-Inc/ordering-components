@@ -154,13 +154,21 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
       colSpan: 1,
       order: 2
     },
+    agent: {
+      visable: false,
+      title: t('AGENT', 'Agent'),
+      className: 'agent',
+      draggable: true,
+      colSpan: 1,
+      order: 3
+    },
     cartGroupId: {
       visable: true,
       title: t('GROUP_ORDER', 'Group Order'),
       className: 'groupOrderId',
       draggable: true,
       colSpan: 1,
-      order: 3
+      order: 4
     },
     driverGroupId: {
       visable: true,
@@ -168,7 +176,7 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
       className: 'driverGroupId',
       draggable: true,
       colSpan: 1,
-      order: 4
+      order: 5
     },
     business: {
       visable: true,
@@ -176,7 +184,7 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
       className: 'businessInfo',
       draggable: true,
       colSpan: 1,
-      order: 5
+      order: 6
     },
     customer: {
       visable: true,
@@ -184,7 +192,7 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
       className: 'customerInfo',
       draggable: true,
       colSpan: 1,
-      order: 6
+      order: 7
     },
     driver: {
       visable: true,
@@ -192,7 +200,7 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
       className: 'driverInfo',
       draggable: true,
       colSpan: 1,
-      order: 7
+      order: 8
     },
     advanced: {
       visable: true,
@@ -200,7 +208,7 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
       className: 'advanced',
       draggable: true,
       colSpan: 3,
-      order: 8
+      order: 9
     },
     timer: {
       visable: false,
@@ -208,7 +216,7 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
       className: 'timer',
       draggable: true,
       colSpan: 1,
-      order: 9
+      order: 10
     },
     eta: {
       visable: true,
@@ -216,7 +224,7 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
       className: 'eta',
       draggable: true,
       colSpan: 1,
-      order: 10
+      order: 11
     },
     total: {
       visable: true,
@@ -224,7 +232,7 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
       className: '',
       draggable: false,
       colSpan: 1,
-      order: 11
+      order: 12
     }
   };
   var _useState19 = (0, _react.useState)(allowColumnsModel),
