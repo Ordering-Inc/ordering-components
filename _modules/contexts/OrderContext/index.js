@@ -1237,7 +1237,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var applyOffer = /*#__PURE__*/function () {
     var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(offerData) {
-      var _offerData$force, response, result, alertInfo;
+      var _offerData$force, _offerData, response, result, alertInfo;
 
       return _regeneratorRuntime().wrap(function _callee11$(_context11) {
         while (1) {
@@ -1263,15 +1263,17 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
-              _context11.next = 8;
+              _offerData = {
+                user_id: offerData === null || offerData === void 0 ? void 0 : offerData.userId,
+                business_id: offerData === null || offerData === void 0 ? void 0 : offerData.business_id,
+                force: (_offerData$force = offerData === null || offerData === void 0 ? void 0 : offerData.force) !== null && _offerData$force !== void 0 ? _offerData$force : false
+              };
+              if (offerData !== null && offerData !== void 0 && offerData.coupon) _offerData.coupon = offerData.coupon;
+              if (offerData !== null && offerData !== void 0 && offerData.offer_id) _offerData.offer_id = offerData.offer_id;
+              _context11.next = 11;
               return fetch("".concat(ordering.root, "/carts/add_offer"), {
                 method: 'POST',
-                body: JSON.stringify({
-                  user_id: offerData.userId,
-                  business_id: offerData.business_id,
-                  coupon: offerData.coupon,
-                  force: (_offerData$force = offerData.force) !== null && _offerData$force !== void 0 ? _offerData$force : false
-                }),
+                body: JSON.stringify(_offerData),
                 headers: {
                   'Content-Type': 'application/json',
                   Authorization: "Bearer ".concat(session.token),
@@ -1279,12 +1281,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 }
               });
 
-            case 8:
+            case 11:
               response = _context11.sent;
-              _context11.next = 11;
+              _context11.next = 14;
               return response.json();
 
-            case 11:
+            case 14:
               result = _context11.sent;
 
               if (!result.error) {
@@ -1317,20 +1319,20 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context11.abrupt("return", !result.error);
 
-            case 17:
-              _context11.prev = 17;
+            case 20:
+              _context11.prev = 20;
               _context11.t0 = _context11["catch"](4);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context11.abrupt("return", false);
 
-            case 21:
+            case 24:
             case "end":
               return _context11.stop();
           }
         }
-      }, _callee11, null, [[4, 17]]);
+      }, _callee11, null, [[4, 20]]);
     }));
 
     return function applyOffer(_x19) {
