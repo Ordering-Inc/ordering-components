@@ -563,7 +563,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     if (!offerData.business_id) {
       throw new Error('`business_id` is required.')
     }
-    if (typeof offerData.coupon === 'undefined') {
+    if (typeof offerData.coupon === 'undefined' && typeof offerData.offer_id === 'undefined') {
       throw new Error('`coupon` is required.')
     }
     try {

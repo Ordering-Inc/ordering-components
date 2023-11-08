@@ -1251,7 +1251,7 @@ var OrderProvider = function OrderProvider(_ref) {
               throw new Error('`business_id` is required.');
 
             case 2:
-              if (!(typeof offerData.coupon === 'undefined')) {
+              if (!(typeof offerData.coupon === 'undefined' && typeof offerData.offer_id === 'undefined')) {
                 _context11.next = 4;
                 break;
               }
