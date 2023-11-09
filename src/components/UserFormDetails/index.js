@@ -25,7 +25,9 @@ export const UserFormDetails = (props) => {
     isCustomerMode,
     isSuccess,
     onClose,
-    dontToggleEditMode
+    dontToggleEditMode,
+    isOrderTypeValidationField,
+    checkoutFields
   } = props
 
   const [ordering] = useApi()
@@ -253,11 +255,19 @@ export const UserFormDetails = (props) => {
    * @param {string} fieldName Field name
    */
   const isRequiredField = (fieldName) => {
-    return useValidationFields &&
-      !validationFields.loading &&
-      validationFields.fields?.checkout?.[fieldName] &&
-      validationFields.fields?.checkout?.[fieldName]?.enabled &&
-      validationFields.fields?.checkout?.[fieldName]?.required
+    let checkoutRequiredFields = null
+    if (isOrderTypeValidationField) {
+      checkoutRequiredFields = session?.user?.guest_id
+        ? checkoutFields?.filter(field => field?.enabled && field?.required_with_guest)?.map(field => field?.validation_field?.code)
+        : checkoutFields?.filter(field => field?.enabled && field?.required)?.map(field => field?.validation_field?.code)
+    }
+    return isOrderTypeValidationField
+      ? checkoutRequiredFields?.includes(fieldName)
+      : (useValidationFields &&
+        !validationFields.loading &&
+        validationFields.fields?.checkout?.[fieldName] &&
+        validationFields.fields?.checkout?.[fieldName]?.enabled &&
+        validationFields.fields?.checkout?.[fieldName]?.required)
   }
 
   const handleToggleAvalaibleStatusDriver = async (newValue) => {
