@@ -1244,11 +1244,9 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         };
         suboptionsArray = [].concat(_toConsumableArray(suboptionsArray), [defaultSuboption]);
         if (option !== null && option !== void 0 && option.with_half_option) {
-          var _newPizzaState6, _preselectedSuboption, _states$i, _Object$values6, _newPizzaState7;
+          var _newPizzaState6, _preselectedSuboption, _states$i, _states$i2;
           newPizzaState = _objectSpread(_objectSpread({}, newPizzaState), {}, _defineProperty({}, "option:".concat(option === null || option === void 0 ? void 0 : option.id), _objectSpread(_objectSpread({}, (_newPizzaState6 = newPizzaState) === null || _newPizzaState6 === void 0 ? void 0 : _newPizzaState6["option:".concat(option === null || option === void 0 ? void 0 : option.id)]), {}, _defineProperty({}, "suboption:".concat((_preselectedSuboption = preselectedSuboptions[i]) === null || _preselectedSuboption === void 0 ? void 0 : _preselectedSuboption.id), (((_states$i = states[i]) === null || _states$i === void 0 ? void 0 : _states$i.position) === 'whole' ? 1 : 0.5) * states[i].quantity))));
-          var value = Object === null || Object === void 0 || (_Object$values6 = Object.values(((_newPizzaState7 = newPizzaState) === null || _newPizzaState7 === void 0 ? void 0 : _newPizzaState7["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) || {})) === null || _Object$values6 === void 0 ? void 0 : _Object$values6.reduce(function (acc, value) {
-            return acc + value;
-          }, 0);
+          var value = (((_states$i2 = states[i]) === null || _states$i2 === void 0 ? void 0 : _states$i2.position) === 'whole' ? 1 : 0.5) * states[i].quantity + (newPizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)].value || 0);
           newPizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)].value = value;
         }
       });
