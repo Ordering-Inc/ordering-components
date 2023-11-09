@@ -458,6 +458,22 @@ export const OrderDetails = (props) => {
     }
   }
 
+  /**
+   * Method to get room socket
+   * @param {String} roomType drivers, orders
+   * @returns socket room
+   */
+  const getRoom = (roomType) => !token
+    ? {
+      room: roomType,
+      project: ordering.project,
+      role: 'public',
+      user_id: hashKey
+    }
+    : roomType === 'orders'
+      ? user?.level === 0 ? 'orders' : `orders_${userCustomerId || user?.id}`
+      : `drivers_${orderState.order?.driver_id}`
+
   useEffect(() => {
     !orderState.loading && loadMessages()
   }, [orderState?.order?.id, orderState?.order?.status, orderState.loading])
@@ -519,24 +535,15 @@ export const OrderDetails = (props) => {
         }
       })
     }
-    const ordersRoom = !token
-      ? {
-        room: 'orders',
-        project: ordering.project,
-        role: 'public',
-        user_id: hashKey
-      } : user?.level === 0
-        ? 'orders'
-        : `orders_${userCustomerId || user?.id}`
 
-    if (!isDisabledOrdersRoom) socket.join(ordersRoom)
+    if (!isDisabledOrdersRoom) socket.join(getRoom('orders'))
     if (orderState.order?.driver_id) {
-      socket.join(`drivers_${orderState.order?.driver_id}`)
+      socket.join(getRoom('drivers'))
     }
     socket.socket.on('connect', () => {
-      if (!isDisabledOrdersRoom) socket.join(ordersRoom)
+      if (!isDisabledOrdersRoom) socket.join(getRoom('orders'))
       if (orderState.order?.driver_id) {
-        socket.join(`drivers_${orderState.order?.driver_id}`)
+        socket.join(getRoom('drivers'))
       }
     })
     socket.on('tracking_driver', handleTrackingDriver)
@@ -544,8 +551,7 @@ export const OrderDetails = (props) => {
       socket.on('update_order', handleUpdateOrderDetails)
     }
     return () => {
-      if (!isDisabledOrdersRoom) socket.leave(ordersRoom)
-      // socket.leave(`drivers_${orderState.order?.driver_id}`)
+      if (!isDisabledOrdersRoom) socket.leave(getRoom('orders'))
       socket.off('update_order', handleUpdateOrderDetails)
       socket.off('tracking_driver', handleTrackingDriver)
     }
