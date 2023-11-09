@@ -37,7 +37,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
-  var _props$order, _props$order2, _orderState$order, _orderState$order12, _orderState$order13, _orderState$order14, _orderState$order21, _orderState$order22, _orderState$order23;
+  var _props$order, _props$order2, _orderState$order, _orderState$order13, _orderState$order14, _orderState$order15, _orderState$order20, _orderState$order21, _orderState$order22;
   var orderId = props.orderId,
     orderAssingId = props.orderAssingId,
     hashKey = props.hashKey,
@@ -882,9 +882,24 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       return _ref12.apply(this, arguments);
     };
   }();
+
+  /**
+   * Method to get room socket
+   * @param {String} roomType drivers, orders
+   * @returns socket room
+   */
+  var getRoom = function getRoom(roomType) {
+    var _orderState$order12;
+    return !token ? {
+      room: roomType,
+      project: ordering.project,
+      role: 'public',
+      user_id: hashKey
+    } : roomType === 'orders' ? (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)) : "drivers_".concat((_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.driver_id);
+  };
   (0, _react.useEffect)(function () {
     !orderState.loading && loadMessages();
-  }, [orderState === null || orderState === void 0 || (_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.id, orderState === null || orderState === void 0 || (_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.status, orderState.loading]);
+  }, [orderState === null || orderState === void 0 || (_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.id, orderState === null || orderState === void 0 || (_orderState$order14 = orderState.order) === null || _orderState$order14 === void 0 ? void 0 : _orderState$order14.status, orderState.loading]);
   (0, _react.useEffect)(function () {
     if (props.order && !isDriverNotification) {
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
@@ -906,18 +921,18 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
         requestsState.business.cancel();
       }
     };
-  }, [props.order, (_orderState$order14 = orderState.order) === null || _orderState$order14 === void 0 ? void 0 : _orderState$order14.id]);
+  }, [props.order, (_orderState$order15 = orderState.order) === null || _orderState$order15 === void 0 ? void 0 : _orderState$order15.id]);
   (0, _react.useEffect)(function () {
     if (orderId && isDriverNotification) {
       getOrder();
     }
   }, [orderId, isDriverNotification]);
   (0, _react.useEffect)(function () {
-    var _orderState$order17, _socket$socket;
+    var _orderState$order18, _socket$socket;
     if (orderState.loading || loading || !(socket !== null && socket !== void 0 && socket.socket)) return;
     var handleUpdateOrderDetails = function handleUpdateOrderDetails(order) {
-      var _orderState$order15;
-      if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order15 = orderState.order) === null || _orderState$order15 === void 0 ? void 0 : _orderState$order15.id)) return;
+      var _orderState$order16;
+      if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order16 = orderState.order) === null || _orderState$order16 === void 0 ? void 0 : _orderState$order16.id)) return;
       showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER', 'Updating order...'), 1000);
       delete order.total;
       delete order.subtotal;
@@ -927,7 +942,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       events.emit('order_updated', Object.assign(orderState.order, order));
     };
     var handleTrackingDriver = function handleTrackingDriver(_ref13) {
-      var _orderState$order16;
+      var _orderState$order17;
       var location = _ref13.location;
       var newLocation = location !== null && location !== void 0 ? location : {
         lat: -37.9722342,
@@ -936,29 +951,21 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       setDriverLocation(newLocation);
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
         order: _objectSpread(_objectSpread({}, orderState.order), {}, {
-          driver: _objectSpread(_objectSpread({}, (_orderState$order16 = orderState.order) === null || _orderState$order16 === void 0 ? void 0 : _orderState$order16.driver), {}, {
+          driver: _objectSpread(_objectSpread({}, (_orderState$order17 = orderState.order) === null || _orderState$order17 === void 0 ? void 0 : _orderState$order17.driver), {}, {
             location: newLocation
           })
         })
       }));
     };
-    var ordersRoom = !token ? {
-      room: 'orders',
-      project: ordering.project,
-      role: 'public',
-      user_id: hashKey
-    } : (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
-    if (!isDisabledOrdersRoom) socket.join(ordersRoom);
-    if ((_orderState$order17 = orderState.order) !== null && _orderState$order17 !== void 0 && _orderState$order17.driver_id) {
-      var _orderState$order18;
-      socket.join("drivers_".concat((_orderState$order18 = orderState.order) === null || _orderState$order18 === void 0 ? void 0 : _orderState$order18.driver_id));
+    if (!isDisabledOrdersRoom) socket.join(getRoom('orders'));
+    if ((_orderState$order18 = orderState.order) !== null && _orderState$order18 !== void 0 && _orderState$order18.driver_id) {
+      socket.join(getRoom('drivers'));
     }
     socket.socket.on('connect', function () {
       var _orderState$order19;
-      if (!isDisabledOrdersRoom) socket.join(ordersRoom);
+      if (!isDisabledOrdersRoom) socket.join(getRoom('orders'));
       if ((_orderState$order19 = orderState.order) !== null && _orderState$order19 !== void 0 && _orderState$order19.driver_id) {
-        var _orderState$order20;
-        socket.join("drivers_".concat((_orderState$order20 = orderState.order) === null || _orderState$order20 === void 0 ? void 0 : _orderState$order20.driver_id));
+        socket.join(getRoom('drivers'));
       }
     });
     socket.on('tracking_driver', handleTrackingDriver);
@@ -968,12 +975,11 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       socket.on('update_order', handleUpdateOrderDetails);
     }
     return function () {
-      if (!isDisabledOrdersRoom) socket.leave(ordersRoom);
-      // socket.leave(`drivers_${orderState.order?.driver_id}`)
+      if (!isDisabledOrdersRoom) socket.leave(getRoom('orders'));
       socket.off('update_order', handleUpdateOrderDetails);
       socket.off('tracking_driver', handleTrackingDriver);
     };
-  }, [orderState === null || orderState === void 0 ? void 0 : orderState.order, socket === null || socket === void 0 ? void 0 : socket.socket, loading, userCustomerId, (_orderState$order21 = orderState.order) === null || _orderState$order21 === void 0 ? void 0 : _orderState$order21.driver_id, (_orderState$order22 = orderState.order) === null || _orderState$order22 === void 0 ? void 0 : _orderState$order22.id, hashKey]);
+  }, [orderState === null || orderState === void 0 ? void 0 : orderState.order, socket === null || socket === void 0 ? void 0 : socket.socket, loading, userCustomerId, (_orderState$order20 = orderState.order) === null || _orderState$order20 === void 0 ? void 0 : _orderState$order20.driver_id, (_orderState$order21 = orderState.order) === null || _orderState$order21 === void 0 ? void 0 : _orderState$order21.id, hashKey]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
     var handleNewMessage = function handleNewMessage(message) {
@@ -995,7 +1001,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     return function () {
       socket.off('message', handleNewMessage);
     };
-  }, [messages, socket, (_orderState$order23 = orderState.order) === null || _orderState$order23 === void 0 ? void 0 : _orderState$order23.status, userCustomerId]);
+  }, [messages, socket, (_orderState$order22 = orderState.order) === null || _orderState$order22 === void 0 ? void 0 : _orderState$order22.status, userCustomerId]);
   (0, _react.useEffect)(function () {
     if (!(socket !== null && socket !== void 0 && socket.socket)) return;
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
