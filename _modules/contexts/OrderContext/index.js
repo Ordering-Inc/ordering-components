@@ -1315,7 +1315,6 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
       var _state$carts2;
       var driverTipRate,
         isFixedPrice,
-        _body,
         countryCode,
         customerFromLocalStorage,
         userCustomerId,
@@ -1361,9 +1360,9 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
           case 15:
             customerFromLocalStorage = _context14.sent;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-            body = (_body = {
+            body = _defineProperty(_defineProperty({
               business_id: businessId
-            }, _defineProperty(_body, isFixedPrice ? 'driver_tip' : 'driver_tip_rate', driverTipRate), _defineProperty(_body, "user_id", userCustomerId || session.user.id), _body);
+            }, isFixedPrice ? 'driver_tip' : 'driver_tip_rate', driverTipRate), "user_id", userCustomerId || session.user.id);
             _context14.next = 20;
             return ordering.setAccessToken(session.token).carts().changeDriverTip(body, {
               headers: {

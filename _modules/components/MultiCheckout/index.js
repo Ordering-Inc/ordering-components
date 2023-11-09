@@ -123,6 +123,14 @@ var MultiCheckout = exports.MultiCheckout = function MultiCheckout(props) {
     _useState14 = _slicedToArray(_useState13, 2),
     walletState = _useState14[0],
     setWalletState = _useState14[1];
+  var _useState15 = (0, _react.useState)({
+      fields: [],
+      loading: false,
+      error: null
+    }),
+    _useState16 = _slicedToArray(_useState15, 2),
+    checkoutFieldsState = _useState16[0],
+    setCheckoutFieldsState = _useState16[1];
   var openCarts = (cartGroup === null || cartGroup === void 0 || (_cartGroup$result = cartGroup.result) === null || _cartGroup$result === void 0 || (_cartGroup$result = _cartGroup$result.carts) === null || _cartGroup$result === void 0 ? void 0 : _cartGroup$result.filter(function (cart) {
     return (cart === null || cart === void 0 ? void 0 : cart.valid) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 1 && (cart === null || cart === void 0 ? void 0 : cart.business_id);
   })) || null || [];
@@ -577,6 +585,61 @@ var MultiCheckout = exports.MultiCheckout = function MultiCheckout(props) {
       return _ref8.apply(this, arguments);
     };
   }();
+  var getValidationFieldOrderTypes = /*#__PURE__*/function () {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+      var requestOptions, response, content;
+      return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+        while (1) switch (_context9.prev = _context9.next) {
+          case 0:
+            _context9.prev = 0;
+            setCheckoutFieldsState(_objectSpread(_objectSpread({}, checkoutFieldsState), {}, {
+              loading: true
+            }));
+            requestOptions = {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(token)
+              }
+            };
+            _context9.next = 5;
+            return fetch("".concat(ordering.root, "/validation_field_order_types"), requestOptions);
+          case 5:
+            response = _context9.sent;
+            _context9.next = 8;
+            return response.json();
+          case 8:
+            content = _context9.sent;
+            if (!(content !== null && content !== void 0 && content.error)) {
+              setCheckoutFieldsState({
+                fields: content === null || content === void 0 ? void 0 : content.result,
+                loading: false
+              });
+            } else {
+              setCheckoutFieldsState(_objectSpread(_objectSpread({}, checkoutFieldsState), {}, {
+                loading: false,
+                error: content === null || content === void 0 ? void 0 : content.result
+              }));
+            }
+            _context9.next = 15;
+            break;
+          case 12:
+            _context9.prev = 12;
+            _context9.t0 = _context9["catch"](0);
+            setCheckoutFieldsState(_objectSpread(_objectSpread({}, checkoutFieldsState), {}, {
+              loading: false,
+              error: [_context9.t0.message]
+            }));
+          case 15:
+          case "end":
+            return _context9.stop();
+        }
+      }, _callee9, null, [[0, 12]]);
+    }));
+    return function getValidationFieldOrderTypes() {
+      return _ref9.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     if (deliveryOptionSelected === undefined) {
       setDeliveryOptionSelected(null);
@@ -584,6 +647,7 @@ var MultiCheckout = exports.MultiCheckout = function MultiCheckout(props) {
   }, [instructionsOptions]);
   (0, _react.useEffect)(function () {
     Promise.any([getDeliveryOptions(), getLoyaltyPlans()]);
+    getValidationFieldOrderTypes();
   }, []);
   (0, _react.useEffect)(function () {
     getMultiCart();
@@ -605,7 +669,8 @@ var MultiCheckout = exports.MultiCheckout = function MultiCheckout(props) {
     cartGroup: cartGroup,
     walletState: walletState,
     totalCartsFee: totalCartsFee,
-    cartsInvalid: cartsInvalid
+    cartsInvalid: cartsInvalid,
+    checkoutFieldsState: checkoutFieldsState
   })));
 };
 MultiCheckout.propTypes = {

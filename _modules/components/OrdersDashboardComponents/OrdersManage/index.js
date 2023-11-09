@@ -940,15 +940,15 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
                   return orderStatuesList[curr].indexOf(ele === null || ele === void 0 ? void 0 : ele.status) >= 0;
                 });
                 if (index === 1) {
-                  var _sumRe$, _currRe$, _ref6;
+                  var _sumRe$, _currRe$;
                   var _sumRe = content === null || content === void 0 ? void 0 : content.result.filter(function (ele) {
                     return orderStatuesList[sum].indexOf(ele === null || ele === void 0 ? void 0 : ele.status) >= 0;
                   });
-                  return _ref6 = {}, _defineProperty(_ref6, sum, _sumRe.length > 1 ? _sumRe.reduce(function (_sum, _curr) {
+                  return _defineProperty(_defineProperty({}, sum, _sumRe.length > 1 ? _sumRe.reduce(function (_sum, _curr) {
                     return Number((_sum === null || _sum === void 0 ? void 0 : _sum.quantity) || _sum || 0) + Number(_curr === null || _curr === void 0 ? void 0 : _curr.quantity);
-                  }) : ((_sumRe$ = _sumRe[0]) === null || _sumRe$ === void 0 ? void 0 : _sumRe$.quantity) || 0), _defineProperty(_ref6, curr, _currRe.length > 1 ? _currRe.reduce(function (_sum, _curr) {
+                  }) : ((_sumRe$ = _sumRe[0]) === null || _sumRe$ === void 0 ? void 0 : _sumRe$.quantity) || 0), curr, _currRe.length > 1 ? _currRe.reduce(function (_sum, _curr) {
                     return Number((_sum === null || _sum === void 0 ? void 0 : _sum.quantity) || _sum || 0) + Number(_curr === null || _curr === void 0 ? void 0 : _curr.quantity);
-                  }) : ((_currRe$ = _currRe[0]) === null || _currRe$ === void 0 ? void 0 : _currRe$.quantity) || 0), _ref6;
+                  }) : ((_currRe$ = _currRe[0]) === null || _currRe$ === void 0 ? void 0 : _currRe$.quantity) || 0);
                 } else {
                   var _currRe$2;
                   return _objectSpread(_objectSpread({}, sum), {}, _defineProperty({}, curr, _currRe.length > 1 ? _currRe.reduce(function (_sum, _curr) {

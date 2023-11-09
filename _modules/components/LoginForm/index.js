@@ -139,7 +139,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
    */
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
-      var _credentials4, _window, _credentials, _credentials2, _credentials3, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, level, session, accessToken, _yield$ordering$setAc, logoutResp, _result$session, _result$session2;
+      var _credentials4, _window, _credentials, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, level, session, accessToken, _yield$ordering$setAc, logoutResp, _result$session, _result$session2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -156,14 +156,14 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
                 device_code: values === null || values === void 0 ? void 0 : values.device_code
               };
             } else if (loginTab === 'otp') {
-              _credentials = (_credentials2 = {}, _defineProperty(_credentials2, otpType, values && values[otpType] || credentials[otpType]), _defineProperty(_credentials2, "one_time_password", values && (values === null || values === void 0 ? void 0 : values.code) || otpState), _credentials2);
+              _credentials = _defineProperty(_defineProperty({}, otpType, values && values[otpType] || credentials[otpType]), "one_time_password", values && (values === null || values === void 0 ? void 0 : values.code) || otpState);
               if (otpType === 'cellphone') {
                 _credentials = _objectSpread(_objectSpread({}, _credentials), {}, {
                   country_phone_code: values && (values === null || values === void 0 ? void 0 : values.country_phone_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_phone_code)
                 });
               }
             } else {
-              _credentials = (_credentials3 = {}, _defineProperty(_credentials3, loginTab, values && values[loginTab] || credentials[loginTab]), _defineProperty(_credentials3, "password", values && (values === null || values === void 0 ? void 0 : values.password) || credentials.password), _credentials3);
+              _credentials = _defineProperty(_defineProperty({}, loginTab, values && values[loginTab] || credentials[loginTab]), "password", values && (values === null || values === void 0 ? void 0 : values.password) || credentials.password);
             }
             if (!isReCaptchaEnable) {
               _context.next = 13;
