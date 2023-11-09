@@ -895,7 +895,7 @@ export const ProductForm = (props) => {
               [`suboption:${preselectedSuboptions[i]?.id}`]: (states[i]?.position === 'whole' ? 1 : 0.5) * states[i].quantity
             }
           }
-          const value = Object?.values(newPizzaState?.[`option:${option?.id}`] || {})?.reduce((acc, value) => acc + value, 0)
+          const value = ((states[i]?.position === 'whole' ? 1 : 0.5) * states[i].quantity) + (newPizzaState[`option:${option?.id}`].value || 0)
           newPizzaState[`option:${option?.id}`].value = value
         }
       })
