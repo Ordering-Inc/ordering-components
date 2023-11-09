@@ -69,6 +69,7 @@ var OrderingProvider = exports.OrderingProvider = function OrderingProvider(_ref
   }, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
     strategy: webStrategy
   }, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
+    isAlsea: isAlsea,
     strategy: webStrategy,
     settings: Object.assign(settings.socket, restOfSettings)
   }, /*#__PURE__*/_react.default.createElement(_CustomerContext.CustomerProvider, {

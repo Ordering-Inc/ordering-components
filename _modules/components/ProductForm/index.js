@@ -1035,8 +1035,8 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
     if (!(option !== null && option !== void 0 && option.with_half_option)) return;
     var newPizzaState = {};
     if (state !== null && state !== void 0 && state.selected) {
-      var _objectSpread2, _Object$values, _newPizzaState3;
-      newPizzaState = _objectSpread(_objectSpread({}, pizzaState), {}, _defineProperty({}, "option:".concat(option === null || option === void 0 ? void 0 : option.id), _objectSpread(_objectSpread({}, pizzaState === null || pizzaState === void 0 ? void 0 : pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]), {}, (_objectSpread2 = {}, _defineProperty(_objectSpread2, "suboption:".concat(suboption === null || suboption === void 0 ? void 0 : suboption.id), ((state === null || state === void 0 ? void 0 : state.position) === 'whole' ? 1 : 0.5) * state.quantity), _defineProperty(_objectSpread2, "value", 0), _objectSpread2))));
+      var _Object$values, _newPizzaState3;
+      newPizzaState = _objectSpread(_objectSpread({}, pizzaState), {}, _defineProperty({}, "option:".concat(option === null || option === void 0 ? void 0 : option.id), _objectSpread(_objectSpread({}, pizzaState === null || pizzaState === void 0 ? void 0 : pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]), {}, _defineProperty(_defineProperty({}, "suboption:".concat(suboption === null || suboption === void 0 ? void 0 : suboption.id), ((state === null || state === void 0 ? void 0 : state.position) === 'whole' ? 1 : 0.5) * state.quantity), "value", 0))));
       var value = Object === null || Object === void 0 || (_Object$values = Object.values(((_newPizzaState3 = newPizzaState) === null || _newPizzaState3 === void 0 ? void 0 : _newPizzaState3["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) || {})) === null || _Object$values === void 0 ? void 0 : _Object$values.reduce(function (acc, value) {
         return acc + value;
       }, 0);

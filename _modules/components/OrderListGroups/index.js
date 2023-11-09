@@ -891,13 +891,12 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
       });
     }
     setOrdersGroup(function (prevState) {
-      var _objectSpread12;
-      return _objectSpread(_objectSpread({}, prevState), {}, (_objectSpread12 = {
+      return _objectSpread(_objectSpread({}, prevState), {}, _defineProperty(_defineProperty({
         orders: filterByIdUnique(sortOrders(orders))
-      }, _defineProperty(_objectSpread12, status, _objectSpread(_objectSpread({}, prevState[status]), {}, {
+      }, status, _objectSpread(_objectSpread({}, prevState[status]), {}, {
         orders: sortOrders(orders),
         pagination: _pagination
-      })), _defineProperty(_objectSpread12, "pagination", _pagination), _objectSpread12));
+      })), "pagination", _pagination));
     });
   };
   var handleClickOrder = function handleClickOrder(orderAux) {
