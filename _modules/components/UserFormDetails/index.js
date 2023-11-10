@@ -52,7 +52,9 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
     isCustomerMode = props.isCustomerMode,
     isSuccess = props.isSuccess,
     onClose = props.onClose,
-    dontToggleEditMode = props.dontToggleEditMode;
+    dontToggleEditMode = props.dontToggleEditMode,
+    isOrderTypeValidationField = props.isOrderTypeValidationField,
+    checkoutFields = props.checkoutFields;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -345,12 +347,27 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
    * @param {string} fieldName Field name
    */
   var isRequiredField = function isRequiredField(fieldName) {
-    var _validationFields$fie4, _validationFields$fie5, _validationFields$fie6;
-    return useValidationFields && !validationFields.loading && ((_validationFields$fie4 = validationFields.fields) === null || _validationFields$fie4 === void 0 || (_validationFields$fie4 = _validationFields$fie4.checkout) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4[fieldName]) && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 || (_validationFields$fie5 = _validationFields$fie5.checkout) === null || _validationFields$fie5 === void 0 || (_validationFields$fie5 = _validationFields$fie5[fieldName]) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5.enabled) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 || (_validationFields$fie6 = _validationFields$fie6.checkout) === null || _validationFields$fie6 === void 0 || (_validationFields$fie6 = _validationFields$fie6[fieldName]) === null || _validationFields$fie6 === void 0 ? void 0 : _validationFields$fie6.required);
+    var _checkoutRequiredFiel, _validationFields$fie4, _validationFields$fie5, _validationFields$fie6;
+    var checkoutRequiredFields = null;
+    if (isOrderTypeValidationField) {
+      var _session$user, _checkoutFields$filte, _checkoutFields$filte2;
+      checkoutRequiredFields = session !== null && session !== void 0 && (_session$user = session.user) !== null && _session$user !== void 0 && _session$user.guest_id ? checkoutFields === null || checkoutFields === void 0 || (_checkoutFields$filte = checkoutFields.filter(function (field) {
+        return (field === null || field === void 0 ? void 0 : field.enabled) && (field === null || field === void 0 ? void 0 : field.required_with_guest);
+      })) === null || _checkoutFields$filte === void 0 ? void 0 : _checkoutFields$filte.map(function (field) {
+        var _field$validation_fie;
+        return field === null || field === void 0 || (_field$validation_fie = field.validation_field) === null || _field$validation_fie === void 0 ? void 0 : _field$validation_fie.code;
+      }) : checkoutFields === null || checkoutFields === void 0 || (_checkoutFields$filte2 = checkoutFields.filter(function (field) {
+        return (field === null || field === void 0 ? void 0 : field.enabled) && (field === null || field === void 0 ? void 0 : field.required);
+      })) === null || _checkoutFields$filte2 === void 0 ? void 0 : _checkoutFields$filte2.map(function (field) {
+        var _field$validation_fie2;
+        return field === null || field === void 0 || (_field$validation_fie2 = field.validation_field) === null || _field$validation_fie2 === void 0 ? void 0 : _field$validation_fie2.code;
+      });
+    }
+    return isOrderTypeValidationField ? (_checkoutRequiredFiel = checkoutRequiredFields) === null || _checkoutRequiredFiel === void 0 ? void 0 : _checkoutRequiredFiel.includes(fieldName) : useValidationFields && !validationFields.loading && ((_validationFields$fie4 = validationFields.fields) === null || _validationFields$fie4 === void 0 || (_validationFields$fie4 = _validationFields$fie4.checkout) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4[fieldName]) && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 || (_validationFields$fie5 = _validationFields$fie5.checkout) === null || _validationFields$fie5 === void 0 || (_validationFields$fie5 = _validationFields$fie5[fieldName]) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5.enabled) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 || (_validationFields$fie6 = _validationFields$fie6.checkout) === null || _validationFields$fie6 === void 0 || (_validationFields$fie6 = _validationFields$fie6[fieldName]) === null || _validationFields$fie6 === void 0 ? void 0 : _validationFields$fie6.required);
   };
   var handleToggleAvalaibleStatusDriver = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(newValue) {
-      var _session$user, response;
+      var _session$user2, response;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -359,7 +376,7 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               loadingDriver: true
             }));
             _context2.next = 4;
-            return ordering.users(session === null || session === void 0 || (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id).save({
+            return ordering.users(session === null || session === void 0 || (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id).save({
               available: newValue
             }, {
               accessToken: accessToken
