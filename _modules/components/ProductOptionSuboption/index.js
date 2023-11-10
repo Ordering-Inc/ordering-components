@@ -37,9 +37,10 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
   } else if (selected) {
     quantity = 1;
   }
-  var position = props.state.position || 'left';
+  var position = props.state.position || (option.with_half_option ? 'left' : 'whole');
   var price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price;
   var usePizzaValidation = (pizzaState === null || pizzaState === void 0 || (_pizzaState = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState === void 0 ? void 0 : _pizzaState.value) === (option === null || option === void 0 ? void 0 : option.max);
+
   /**
    * Set current state
    */
@@ -80,10 +81,13 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
    * Increment suboption quantity
    */
   var increment = function increment() {
-    if (option.limit_suboptions_by_max && (balance === option.max || state.quantity === suboption.max)) {
+    if (!(option !== null && option !== void 0 && option.with_half_option) && option.limit_suboptions_by_max && (balance === option.max || state.quantity === suboption.max)) {
       return;
     }
-    if (!option.limit_suboptions_by_max && state.quantity === suboption.max) {
+    if (!(option !== null && option !== void 0 && option.with_half_option) && !option.limit_suboptions_by_max && state.quantity === suboption.max) {
+      return;
+    }
+    if (option !== null && option !== void 0 && option.with_half_option && usePizzaValidation) {
       return;
     }
     changeState(_objectSpread(_objectSpread({}, state), {}, {
