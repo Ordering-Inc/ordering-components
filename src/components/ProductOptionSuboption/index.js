@@ -25,9 +25,10 @@ export const ProductOptionSuboption = (props) => {
   } else if (selected) {
     quantity = 1
   }
-  const position = props.state.position || 'left'
+  const position = props.state.position || (option.with_half_option ? 'left' : 'whole')
   const price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price
   const usePizzaValidation = (pizzaState?.[`option:${option?.id}`]?.value === option?.max)
+
   /**
    * Set current state
    */
@@ -61,10 +62,13 @@ export const ProductOptionSuboption = (props) => {
    * Increment suboption quantity
    */
   const increment = () => {
-    if (option.limit_suboptions_by_max && (balance === option.max || state.quantity === suboption.max)) {
+    if (!option?.with_half_option && option.limit_suboptions_by_max && (balance === option.max || state.quantity === suboption.max)) {
       return
     }
-    if (!option.limit_suboptions_by_max && state.quantity === suboption.max) {
+    if (!option?.with_half_option && !option.limit_suboptions_by_max && state.quantity === suboption.max) {
+      return
+    }
+    if (option?.with_half_option && usePizzaValidation) {
       return
     }
     changeState({
