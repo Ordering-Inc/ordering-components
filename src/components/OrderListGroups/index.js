@@ -861,6 +861,8 @@ export const OrderListGroups = (props) => {
   useEffect(() => {
     if (!socket?.socket || !socket?.socket?.connected) return
     const handleUpdateOrder = (order) => {
+      const isGiftCard = order?.products?.some(product => product?.type === 'gift_card')
+      if (isGiftCard && !isDriverApp) return
       if (session?.user?.level === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return
       events.emit('order_updated', order)
       let orderFound = null
@@ -943,6 +945,8 @@ export const OrderListGroups = (props) => {
     }
 
     const handleAddNewOrder = (order) => {
+      const isGiftCard = order?.products?.some(product => product?.type === 'gift_card')
+      if (isGiftCard && !isDriverApp) return
       events.emit('order_added', order)
       handleActionEvent('order_added', order)
       if (notificationStatusses.includes(order?.status)) {
