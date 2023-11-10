@@ -106,7 +106,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
    */
   useEffect(() => {
     if (state.language?.code && state.language?.code === ordering.language) {
-      settings?.use_root_point ? updateLanguageContext() : refreshTranslations()
+      settings?.use_root_point && settings?.force_update_lang ? updateLanguageContext() : refreshTranslations()
     }
   }, [state.language?.code, ordering])
 
