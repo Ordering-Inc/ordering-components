@@ -48,7 +48,8 @@ var OrderingProvider = exports.OrderingProvider = function OrderingProvider(_ref
     appId: settings.app_id,
     use_root_point: settings.use_root_point,
     countryCode: settings.countryCode,
-    useOptimizeLoad: settings === null || settings === void 0 ? void 0 : settings.useOptimizeLoad
+    useOptimizeLoad: settings === null || settings === void 0 ? void 0 : settings.useOptimizeLoad,
+    force_update_lang: settings === null || settings === void 0 ? void 0 : settings.force_update_lang
   };
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, restOfSettings)
