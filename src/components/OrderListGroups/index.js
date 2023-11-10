@@ -841,7 +841,7 @@ export const OrderListGroups = (props) => {
       loadOrders({ newFetchCurrent: true })
     }
   }, [currentFilters])
-  console.log(ordersGroup)
+
   useEffect(() => {
     if (!filtered) return
     loadOrders({ newFetch: true })
