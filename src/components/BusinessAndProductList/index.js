@@ -160,7 +160,7 @@ export const BusinessAndProductList = (props) => {
         (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)
       )
     }
-    setCategoriesState({ ...categoriesState, products: array })
+    setCategoryState({ ...categoryState, products: _array })
   }
 
   const subCategoriesList = []
