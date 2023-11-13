@@ -235,6 +235,7 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
                 changeAddress(content.result.id, {
                   address: isEdit ? null : content.result,
                   country_code: (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.country_code,
+                  type: options === null || options === void 0 ? void 0 : options.type,
                   isEdit: isEdit
                 });
               }

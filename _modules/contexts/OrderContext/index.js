@@ -341,7 +341,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
   var changeAddress = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(addressId, params) {
       var _state$options8;
-      var isCountryCodeChanged, optionsStorage, options, _state$options9, _params$address;
+      var isCountryCodeChanged, optionsStorage, options, _state$options9, _params, _params$address;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -368,52 +368,49 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             }));
             return _context2.abrupt("return");
           case 11:
-            if (!(params && params !== null && params !== void 0 && params.address && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
-              _context2.next = 16;
-              break;
-            }
-            _context2.next = 14;
-            return updateOrderOptions({
-              address_id: params === null || params === void 0 || (_params$address = params.address) === null || _params$address === void 0 ? void 0 : _params$address.id,
+            _params = {
               country_code: params === null || params === void 0 ? void 0 : params.country_code
-            });
-          case 14:
-            if (isCountryCodeChanged) {
-              events.emit('country_code_changed', params === null || params === void 0 ? void 0 : params.country_code);
-            }
-            return _context2.abrupt("return");
-          case 16:
-            if (!(params && params !== null && params !== void 0 && params.isEdit)) {
-              _context2.next = 23;
-              break;
-            }
-            if (!(addressId !== state.options.address_id)) {
+            };
+            (params === null || params === void 0 ? void 0 : params.type) && (_params.type = params === null || params === void 0 ? void 0 : params.type);
+            if (!(params && params !== null && params !== void 0 && params.address && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
               _context2.next = 19;
               break;
             }
-            return _context2.abrupt("return");
-          case 19:
-            _context2.next = 21;
-            return updateOrderOptions({
-              address_id: addressId,
-              country_code: params === null || params === void 0 ? void 0 : params.country_code
-            });
-          case 21:
+            _params.address_id = params === null || params === void 0 || (_params$address = params.address) === null || _params$address === void 0 ? void 0 : _params$address.id;
+            _context2.next = 17;
+            return updateOrderOptions(_params);
+          case 17:
             if (isCountryCodeChanged) {
               events.emit('country_code_changed', params === null || params === void 0 ? void 0 : params.country_code);
+            }
+            return _context2.abrupt("return");
+          case 19:
+            addressId && (_params.address_id = addressId);
+            if (!(params && params !== null && params !== void 0 && params.isEdit)) {
+              _context2.next = 27;
+              break;
+            }
+            if (!(addressId !== state.options.address_id)) {
+              _context2.next = 23;
+              break;
             }
             return _context2.abrupt("return");
           case 23:
             _context2.next = 25;
-            return updateOrderOptions({
-              address_id: addressId,
-              country_code: params === null || params === void 0 ? void 0 : params.country_code
-            });
+            return updateOrderOptions(_params);
           case 25:
             if (isCountryCodeChanged) {
               events.emit('country_code_changed', params === null || params === void 0 ? void 0 : params.country_code);
             }
-          case 26:
+            return _context2.abrupt("return");
+          case 27:
+            _context2.next = 29;
+            return updateOrderOptions(_params);
+          case 29:
+            if (isCountryCodeChanged) {
+              events.emit('country_code_changed', params === null || params === void 0 ? void 0 : params.country_code);
+            }
+          case 30:
           case "end":
             return _context2.stop();
         }
