@@ -866,7 +866,7 @@ export const ProductForm = (props) => {
           return {
             id: suboption.id,
             name: suboption.name,
-            position: suboption.position || 'whole',
+            position: suboption.position || preselectedOptions[i]?.with_half_option ? 'left' : 'whole',
             price,
             quantity: 1,
             selected: true,
