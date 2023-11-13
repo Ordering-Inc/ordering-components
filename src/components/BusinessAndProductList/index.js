@@ -149,14 +149,15 @@ export const BusinessAndProductList = (props) => {
   }
 
   const sortProductsArray = (option, array) => {
+    let _array
     if (option === 'rank' || option === null) {
-      return array.sort((a, b) => a.rank - b.rank)
+      _array = array.sort((a, b) => a.rank - b.rank)
     }
     if (option === 'rank_desc') {
-      return array.sort((a, b) => b.rank - a.rank)
+      _array = array.sort((a, b) => b.rank - a.rank)
     }
     if (option === 'a-z') {
-      return array.sort((a, b) =>
+      _array = array.sort((a, b) =>
         (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)
       )
     }
