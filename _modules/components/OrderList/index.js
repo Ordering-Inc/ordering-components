@@ -62,7 +62,8 @@ var OrderList = exports.OrderList = function OrderList(props) {
     isBusiness = props.isBusiness,
     noGiftCardOrders = props.noGiftCardOrders,
     propsToFetch = props.propsToFetch,
-    handleRedirectToCheckout = props.handleRedirectToCheckout;
+    handleRedirectToCheckout = props.handleRedirectToCheckout,
+    isCustomerMode = props.isCustomerMode;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -150,7 +151,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
   };
   var handleReorder = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(value) {
-      var orderId, _reordersArray$, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, fetchOrders, reordersArray, error, result, choosedOrder, _businessId, _businessData, _businessSlug, orderResult;
+      var orderId, _reordersArray$, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, disableLoading, fetchOrders, reordersArray, error, result, choosedOrder, _businessId, _businessData, _businessSlug, orderResult;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -165,6 +166,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
             setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
               loading: true
             }));
+            disableLoading = isCustomerMode;
             fetchOrders = /*#__PURE__*/function () {
               var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
                 var promises, data;
@@ -178,7 +180,9 @@ var OrderList = exports.OrderList = function OrderList(props) {
                             while (1) switch (_context.prev = _context.next) {
                               case 0:
                                 _context.next = 2;
-                                return reorder(id, (ids === null || ids === void 0 ? void 0 : ids.length) > 1);
+                                return reorder(id, (ids === null || ids === void 0 ? void 0 : ids.length) > 1, {
+                                  disableLoading: disableLoading
+                                });
                               case 2:
                                 res = _context.sent;
                                 return _context.abrupt("return", res);
@@ -207,9 +211,9 @@ var OrderList = exports.OrderList = function OrderList(props) {
                 return _ref2.apply(this, arguments);
               };
             }();
-            _context3.next = 8;
+            _context3.next = 9;
             return fetchOrders(orderId);
-          case 8:
+          case 9:
             reordersArray = _context3.sent;
             error = reordersArray.length && reordersArray.every(function (obj) {
               return obj.error;
@@ -224,13 +228,13 @@ var OrderList = exports.OrderList = function OrderList(props) {
               return (_order === null || _order === void 0 ? void 0 : _order.id) === orderId[0];
             });
             _businessId = (_choosedOrder$busines = choosedOrder === null || choosedOrder === void 0 ? void 0 : choosedOrder.business_id) !== null && _choosedOrder$busines !== void 0 ? _choosedOrder$busines : choosedOrder === null || choosedOrder === void 0 || (_choosedOrder$origina = choosedOrder.original) === null || _choosedOrder$origina === void 0 ? void 0 : _choosedOrder$origina.business_id;
-            _context3.next = 15;
+            _context3.next = 16;
             return ordering.businesses(_businessId).select(['slug']).get();
-          case 15:
+          case 16:
             _businessData = _context3.sent;
-            _context3.next = 18;
+            _context3.next = 19;
             return _businessData === null || _businessData === void 0 || (_businessData$content = _businessData.content) === null || _businessData$content === void 0 || (_businessData$content = _businessData$content.result) === null || _businessData$content === void 0 ? void 0 : _businessData$content.slug;
-          case 18:
+          case 19:
             _businessSlug = _context3.sent;
             orderResult = {
               orderId: orderId[0],
@@ -249,21 +253,21 @@ var OrderList = exports.OrderList = function OrderList(props) {
                 orderId: orderId[0]
               })
             }));
-            _context3.next = 27;
+            _context3.next = 28;
             break;
-          case 24:
-            _context3.prev = 24;
+          case 25:
+            _context3.prev = 25;
             _context3.t0 = _context3["catch"](3);
             setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
               loading: false,
               error: true,
               result: [_context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message]
             }));
-          case 27:
+          case 28:
           case "end":
             return _context3.stop();
         }
-      }, _callee3, null, [[3, 24]]);
+      }, _callee3, null, [[3, 25]]);
     }));
     return function handleReorder(_x) {
       return _ref.apply(this, arguments);
@@ -649,18 +653,15 @@ var OrderList = exports.OrderList = function OrderList(props) {
     };
   }, [isBusiness]);
   (0, _react.useEffect)(function () {
-    var _session$user2, _session$user3;
-    if (orderList.loading) return;
+    var _session$user2, _session$user3, _socket$socket, _socket$socket2;
+    if (orderList.loading || isCustomerMode || !(socket !== null && socket !== void 0 && socket.socket)) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-        loading: true
-      }));
       var found = orderList.orders.find(function (_order) {
         return _order.id === order.id;
       });
       var orders = [];
       if (found) {
-        showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id));
+        showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id), 1000);
         orders = orderList.orders.filter(function (_order) {
           var _order$driver, _order$driver2, _session$user;
           if (_order.id === order.id && (_order === null || _order === void 0 || (_order$driver = _order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) !== (order === null || order === void 0 || (_order$driver2 = order.driver) === null || _order$driver2 === void 0 ? void 0 : _order$driver2.id) && (session === null || session === void 0 || (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 4) {
@@ -689,9 +690,6 @@ var OrderList = exports.OrderList = function OrderList(props) {
       }));
     };
     var handleAddNewOrder = function handleAddNewOrder(order) {
-      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-        loading: true
-      }));
       showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id));
       var newOrder = [order].concat(_toConsumableArray(orderList.orders));
       setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
@@ -699,18 +697,26 @@ var OrderList = exports.OrderList = function OrderList(props) {
         loading: false
       }));
     };
-    socket.on('orders_register', handleAddNewOrder);
-    socket.on('update_order', handleUpdateOrder);
     var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 || (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
     socket.join(ordersRoom);
+    if (socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && (_socket$socket = _socket$socket._callbacks) !== null && _socket$socket !== void 0 && (_socket$socket = _socket$socket.$orders_register) !== null && _socket$socket !== void 0 && _socket$socket.find(function (func) {
+      return (func === null || func === void 0 ? void 0 : func.name) !== 'handleAddNewOrder';
+    })) {
+      socket.on('orders_register', handleAddNewOrder);
+    }
+    if (socket !== null && socket !== void 0 && (_socket$socket2 = socket.socket) !== null && _socket$socket2 !== void 0 && (_socket$socket2 = _socket$socket2._callbacks) !== null && _socket$socket2 !== void 0 && (_socket$socket2 = _socket$socket2.$update_order) !== null && _socket$socket2 !== void 0 && _socket$socket2.find(function (func) {
+      return (func === null || func === void 0 ? void 0 : func.name) !== 'handleUpdateOrder';
+    })) {
+      socket.on('update_order', handleUpdateOrder);
+    }
     return function () {
       socket.off('update_order', handleUpdateOrder);
       socket.off('orders_register', handleAddNewOrder);
     };
-  }, [orderList.orders, pagination, socket, session]);
+  }, [orderList.loading, socket === null || socket === void 0 ? void 0 : socket.socket, session, isCustomerMode]);
   (0, _react.useEffect)(function () {
     var _session$user6, _session$user7;
-    if (!session.user) return;
+    if (!session.user || isCustomerMode) return;
     socket.on('disconnect', function (reason) {
       var _session$user4, _session$user5;
       var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 || (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.id);
@@ -721,7 +727,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
     return function () {
       socket.leave(ordersRoom);
     };
-  }, [socket, session, userCustomerId]);
+  }, [socket, session, userCustomerId, isCustomerMode]);
   var loadMoreOrders = /*#__PURE__*/function () {
     var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(searchByOtherStatus) {
       var response;
