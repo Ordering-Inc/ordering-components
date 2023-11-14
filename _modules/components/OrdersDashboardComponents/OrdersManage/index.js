@@ -66,7 +66,7 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
   var requestsState = {};
   var orderStatuesList = {
     pending: [0, 13],
-    inProgress: [7, 8, 4, 9, 3, 14, 18, 19, 20, 21, 22, 23],
+    inProgress: [7, 8, 4, 9, 3, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26],
     completed: [1, 11, 15],
     cancelled: [2, 5, 6, 10, 12, 16, 17]
   };
@@ -307,7 +307,7 @@ var OrdersManage = exports.OrdersManage = function OrdersManage(props) {
       inProgress: orderStatuesList.inProgress,
       completed: orderStatuesList.completed,
       cancelled: orderStatuesList.cancelled,
-      all: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+      all: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
     }),
     _useState34 = _slicedToArray(_useState33, 2),
     selectedSubOrderStatus = _useState34[0],

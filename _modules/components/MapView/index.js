@@ -73,7 +73,7 @@ var MapView = exports.MapView = function MapView(props) {
               query: {
                 where: [{
                   attribute: 'status',
-                  value: [0, 13, 7, 4, 3, 8, 9, 14, 18, 19, 20, 21]
+                  value: [0, 13, 7, 4, 3, 8, 9, 14, 18, 19, 20, 21, 23, 26]
                 }]
               }
             };
