@@ -307,6 +307,12 @@ export const UtilsProviders = ({ children }) => {
         return t('ORDER_LOOKING_FOR_DRIVER', 'Looking for driver')
       case 23:
         return t('ORDER_DRIVER_ON_WAY', 'Driver on way')
+      case 24:
+        return t('ORDER_DRIVER_WAITING_FOR_ORDER', 'Driver waiting for order')
+      case 25:
+        return t('ORDER_ACCEPTED_BY_DRIVER_COMPANY', 'Accepted by driver company')
+      case 26:
+        return t('ORDER_DRIVER_ARRIVED_CUSTOMER', 'Driver arrived to customer')
       default:
         return 'N/A'
     }
