@@ -147,18 +147,19 @@ export const BusinessAndProductList = (props) => {
   }
 
   const sortProductsArray = (option, array) => {
+    let _array
     if (option === 'rank' || option === null) {
-      return array.sort((a, b) => a.rank - b.rank)
+      _array = array.sort((a, b) => a.rank - b.rank)
     }
     if (option === 'rank_desc') {
-      return array.sort((a, b) => b.rank - a.rank)
+      _array = array.sort((a, b) => b.rank - a.rank)
     }
     if (option === 'a-z') {
-      return array.sort((a, b) =>
+      _array = array.sort((a, b) =>
         (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)
       )
     }
-    setCategoriesState({...categoriesState, products: array })
+    setCategoryState({ ...categoryState, products: _array })
   }
 
   const subCategoriesList = []
@@ -289,7 +290,7 @@ export const BusinessAndProductList = (props) => {
     setErrorQuantityProducts(!categoryState.products?.length)
     setCategoryState({ ...categoryState })
   }
-  
+
   const getLazyProducts = async ({ page, pageSize = categoryStateDefault.pagination.pageSize }) => {
     const parameters = {
       type: orderState.options?.type ?? 1,
@@ -801,7 +802,7 @@ export const BusinessAndProductList = (props) => {
             }
           }
           return product
-        }) 
+        })
         setCategoryState({ ...categoryState, products: updatedProducts })
         showToast(ToastType.Success, result?.enabled
           ? t('ENABLED_PRODUCT', 'Enabled product')
@@ -813,7 +814,7 @@ export const BusinessAndProductList = (props) => {
       showToast(ToastType.Error, err.message)
     }
   }
-  
+
 
   const updateStoreCategory = async (categoryId, updateParams = {}) => {
     try {
