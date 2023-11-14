@@ -234,23 +234,24 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
     return false;
   };
   var sortProductsArray = function sortProductsArray(option, array) {
+    var _array;
     if (option === 'rank' || option === null) {
-      return array.sort(function (a, b) {
+      _array = array.sort(function (a, b) {
         return a.rank - b.rank;
       });
     }
     if (option === 'rank_desc') {
-      return array.sort(function (a, b) {
+      _array = array.sort(function (a, b) {
         return b.rank - a.rank;
       });
     }
     if (option === 'a-z') {
-      return array.sort(function (a, b) {
+      _array = array.sort(function (a, b) {
         return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
       });
     }
-    setCategoriesState(_objectSpread(_objectSpread({}, categoriesState), {}, {
-      products: array
+    setCategoryState(_objectSpread(_objectSpread({}, categoryState), {}, {
+      products: _array
     }));
   };
   var subCategoriesList = [];
