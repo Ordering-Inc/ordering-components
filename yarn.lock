@@ -1654,9 +1654,9 @@
     tslib "^2.4.1"
 
 "@segment/analytics-next@^1.35.1":
-  version "1.60.0"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.60.0.tgz#8126b437c4f84fe758f6d635c9dfe239f15ace18"
-  integrity sha512-ujYs5kbDBsRqX7KrkrLZ8hizXKZfng2vrUEUoStGekUkAwDYYV9ZaKm7WEXZbIzzBh9R/C0l7ihK3DGN7PA2UQ==
+  version "1.61.0"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.61.0.tgz#d21330a26f6c788e95a09a2c3bfdbd84e0651831"
+  integrity sha512-cPZ2YDqOzjGQEanEID09Fz7To71ep8GUb46ggY4pgbtYefM3uwUzSKeV8cdVJenun3Rzmyqz2s6Z1/qZkDTu7Q==
   dependencies:
     "@lukeed/uuid" "^2.0.0"
     "@segment/analytics-core" "1.3.2"
@@ -4529,9 +4529,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.535:
-  version "1.4.582"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.582.tgz#4908215182266793499ac57d80e2680d7dd9b3db"
-  integrity sha512-89o0MGoocwYbzqUUjc+VNpeOFSOK9nIdC5wY4N+PVUarUK0MtjyTjks75AZS2bW4Kl8MdewdFsWaH0jLy+JNoA==
+  version "1.4.584"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.584.tgz#a54374ff58cb13a32f7acf3b1762e8684f2b43a1"
+  integrity sha512-rXCtDiXCBtfTfEegkthruCvyWZnr1/FCrUGY/nYQiF+lSZDmwQBDxp0rivZxV8trXb6cbgojhcSTW5xsDcHQ8g==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"

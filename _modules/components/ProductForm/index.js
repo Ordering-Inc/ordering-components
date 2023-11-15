@@ -1221,12 +1221,12 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         });
       } else {
         states = preselectedSuboptions.map(function (suboption, i) {
-          var _preselectedOptions$i4;
+          var _preselectedOptions$i4, _preselectedOptions$i5;
           var price = (_preselectedOptions$i4 = preselectedOptions[i]) !== null && _preselectedOptions$i4 !== void 0 && _preselectedOptions$i4.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
           return {
             id: suboption.id,
             name: suboption.name,
-            position: suboption.position || 'whole',
+            position: suboption.position || (_preselectedOptions$i5 = preselectedOptions[i]) !== null && _preselectedOptions$i5 !== void 0 && _preselectedOptions$i5.with_half_option ? 'left' : 'whole',
             price: price,
             quantity: 1,
             selected: true,
