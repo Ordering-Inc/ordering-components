@@ -928,7 +928,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     }
   }, [orderId, isDriverNotification]);
   (0, _react.useEffect)(function () {
-    var _orderState$order18, _socket$socket;
+    var _orderState$order18, _socket$socket, _socket$socket2;
     if (orderState.loading || loading || !(socket !== null && socket !== void 0 && socket.socket)) return;
     var handleUpdateOrderDetails = function handleUpdateOrderDetails(order) {
       var _orderState$order16;
@@ -969,7 +969,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       }
     });
     socket.on('tracking_driver', handleTrackingDriver);
-    if (socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && (_socket$socket = _socket$socket._callbacks) !== null && _socket$socket !== void 0 && (_socket$socket = _socket$socket.$update_order) !== null && _socket$socket !== void 0 && _socket$socket.find(function (func) {
+    if (!(socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && (_socket$socket = _socket$socket._callbacks) !== null && _socket$socket !== void 0 && _socket$socket.$update_order) || socket !== null && socket !== void 0 && (_socket$socket2 = socket.socket) !== null && _socket$socket2 !== void 0 && (_socket$socket2 = _socket$socket2._callbacks) !== null && _socket$socket2 !== void 0 && (_socket$socket2 = _socket$socket2.$update_order) !== null && _socket$socket2 !== void 0 && _socket$socket2.find(function (func) {
       return (func === null || func === void 0 ? void 0 : func.name) !== 'handleUpdateOrderDetails';
     })) {
       socket.on('update_order', handleUpdateOrderDetails);
