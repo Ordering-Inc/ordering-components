@@ -39,9 +39,9 @@ export const OrderListGroups = (props) => {
     ? configs?.notification_driver_states?.value.split('|').map(value => Number(value)) || []
     : configs?.notification_business_states?.value.split('|').map(value => Number(value)) || []
   const ordersGroupStatus = {
-    active: orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25],
+    active: orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26],
     pending: orderGroupStatusCustom?.pending ?? [0, 13],
-    inProgress: orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23, 24, 25],
+    inProgress: orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26],
     completed: orderGroupStatusCustom?.completed ?? [1, 11, 15],
     cancelled: orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
   }
@@ -604,9 +604,9 @@ export const OrderListGroups = (props) => {
 
   const getStatusById = (id) => {
     if (!id && id !== 0) return
-    const active = orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21]
+    const active = orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26]
     const pending = orderGroupStatusCustom?.pending ?? [0, 13]
-    const inProgress = orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21]
+    const inProgress = orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26]
     const completed = orderGroupStatusCustom?.completed ?? [1, 11, 15]
     // const cancelled = orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
 
@@ -859,7 +859,7 @@ export const OrderListGroups = (props) => {
   }
 
   useEffect(() => {
-    if (!socket?.socket || !socket?.socket?.connected) return
+    if (!socket?.socket) return
     const handleUpdateOrder = (order) => {
       const isGiftCard = order?.products?.some(product => product?.type === 'gift_card')
       if (isGiftCard && !isDriverApp) return
@@ -968,16 +968,16 @@ export const OrderListGroups = (props) => {
     }
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
-    if (socket?.socket?._callbacks?.$orders_register?.length < 2) {
+    if (!socket?.socket?._callbacks?.$orders_register || socket?.socket?._callbacks?.$orders_register?.find(func => func?.name !== 'handleAddNewOrder')) {
       socket.on('orders_register', handleAddNewOrder)
     }
     if (!socket?.socket?._callbacks?.$order_assigned || socket?.socket?._callbacks?.$order_assigned?.find(func => func?.name !== 'handleAddNewOrder')) {
       socket.on('order_assigned', handleAddNewOrder)
     }
-    if (socket?.socket?._callbacks?.$update_order?.find(func => func?.name !== 'handleUpdateOrder')) {
+    if (!socket?.socket?._callbacks?.$update_order || socket?.socket?._callbacks?.$update_order?.find(func => func?.name !== 'handleUpdateOrder')) {
       socket.on('update_order', handleUpdateOrder)
     }
-    if (socket?.socket?._callbacks?.$message?.length < 2) {
+    if (!socket?.socket?._callbacks?.$message || socket?.socket?._callbacks?.$message?.find(func => func?.name !== 'handleReceiveMessage')) {
       socket.on('message', handleReceiveMessage)
     }
     return () => {
@@ -1115,6 +1115,10 @@ export const OrderListGroups = (props) => {
       events.off('customer_reviewed', handleCustomerReviewed)
     }
   }, [ordersGroup])
+
+  useEffect(() => {
+    setCurrentTabSelected(combineTabs ? 'active' : 'pending')
+  }, [combineTabs])
 
   return (
     <>
