@@ -979,7 +979,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       socket.off('update_order', handleUpdateOrderDetails);
       socket.off('tracking_driver', handleTrackingDriver);
     };
-  }, [orderState === null || orderState === void 0 ? void 0 : orderState.order, socket === null || socket === void 0 ? void 0 : socket.socket, loading, userCustomerId, (_orderState$order20 = orderState.order) === null || _orderState$order20 === void 0 ? void 0 : _orderState$order20.driver_id, (_orderState$order21 = orderState.order) === null || _orderState$order21 === void 0 ? void 0 : _orderState$order21.id, hashKey]);
+  }, [orderState === null || orderState === void 0 ? void 0 : orderState.loading, socket === null || socket === void 0 ? void 0 : socket.socket, loading, userCustomerId, (_orderState$order20 = orderState.order) === null || _orderState$order20 === void 0 ? void 0 : _orderState$order20.driver_id, (_orderState$order21 = orderState.order) === null || _orderState$order21 === void 0 ? void 0 : _orderState$order21.id, hashKey]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
     var handleNewMessage = function handleNewMessage(message) {
