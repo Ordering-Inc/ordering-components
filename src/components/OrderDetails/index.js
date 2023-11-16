@@ -555,7 +555,7 @@ export const OrderDetails = (props) => {
       socket.off('update_order', handleUpdateOrderDetails)
       socket.off('tracking_driver', handleTrackingDriver)
     }
-  }, [orderState?.order, socket?.socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id, hashKey])
+  }, [orderState?.loading, socket?.socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id, hashKey])
 
   useEffect(() => {
     if (messages.loading) return
