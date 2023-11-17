@@ -742,7 +742,7 @@ export const ProductForm = (props) => {
               [`suboption:${preselectedSuboptions[i]?.id}`]: (states[i]?.position === 'whole' ? 1 : 0.5) * states[i].quantity
             }
           }
-          const value = ((states[i]?.position === 'whole' ? 1 : 0.5) * states[i].quantity) + (newPizzaState[`option:${option?.id}`].value || 0)
+          const value = ((states[i]?.position === 'whole' || (option?.max === 1 && option?.min === 1) ? 1 : 0.5) * states[i].quantity) + (newPizzaState[`option:${option?.id}`].value || 0)
           newPizzaState[`option:${option?.id}`].value = value
         }
       })
@@ -863,10 +863,11 @@ export const ProductForm = (props) => {
           const price = preselectedOptions[i]?.with_half_option && suboption?.half_price && suboption?.position !== 'whole'
             ? suboption.half_price
             : suboption.price
+
           return {
             id: suboption.id,
             name: suboption.name,
-            position: suboption.position || preselectedOptions[i]?.with_half_option ? 'left' : 'whole',
+            position: suboption.position || 'whole',
             price,
             quantity: 1,
             selected: true,
