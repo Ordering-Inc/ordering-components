@@ -1043,7 +1043,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         if (option !== null && option !== void 0 && option.with_half_option) {
           var _newPizzaState3, _preselectedSuboption, _states$i, _states$i2;
           newPizzaState = _objectSpread(_objectSpread({}, newPizzaState), {}, _defineProperty({}, "option:".concat(option === null || option === void 0 ? void 0 : option.id), _objectSpread(_objectSpread({}, (_newPizzaState3 = newPizzaState) === null || _newPizzaState3 === void 0 ? void 0 : _newPizzaState3["option:".concat(option === null || option === void 0 ? void 0 : option.id)]), {}, _defineProperty({}, "suboption:".concat((_preselectedSuboption = preselectedSuboptions[i]) === null || _preselectedSuboption === void 0 ? void 0 : _preselectedSuboption.id), (((_states$i = states[i]) === null || _states$i === void 0 ? void 0 : _states$i.position) === 'whole' ? 1 : 0.5) * states[i].quantity))));
-          var value = (((_states$i2 = states[i]) === null || _states$i2 === void 0 ? void 0 : _states$i2.position) === 'whole' ? 1 : 0.5) * states[i].quantity + (newPizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)].value || 0);
+          var value = (((_states$i2 = states[i]) === null || _states$i2 === void 0 ? void 0 : _states$i2.position) === 'whole' || (option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1 ? 1 : 0.5) * states[i].quantity + (newPizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)].value || 0);
           newPizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)].value = value;
         }
       });
@@ -1221,12 +1221,12 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         });
       } else {
         states = preselectedSuboptions.map(function (suboption, i) {
-          var _preselectedOptions$i4, _preselectedOptions$i5;
+          var _preselectedOptions$i4;
           var price = (_preselectedOptions$i4 = preselectedOptions[i]) !== null && _preselectedOptions$i4 !== void 0 && _preselectedOptions$i4.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
           return {
             id: suboption.id,
             name: suboption.name,
-            position: suboption.position || (_preselectedOptions$i5 = preselectedOptions[i]) !== null && _preselectedOptions$i5 !== void 0 && _preselectedOptions$i5.with_half_option ? 'left' : 'whole',
+            position: suboption.position || 'whole',
             price: price,
             quantity: 1,
             selected: true,
