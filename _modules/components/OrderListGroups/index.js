@@ -347,15 +347,27 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
                 value: filtered === null || filtered === void 0 ? void 0 : filtered.timeStatus
               });
             }
+            if (!isDriverApp) {
+              options.query.where.push({
+                attribute: 'products',
+                conditions: [{
+                  attribute: 'type',
+                  value: {
+                    condition: '=',
+                    value: 'item'
+                  }
+                }]
+              });
+            }
             source = {};
             requestsState.orders = source;
             options.cancelToken = source;
             functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-            _context.next = 28;
+            _context.next = 29;
             return functionFetch.get(options);
-          case 28:
-            return _context.abrupt("return", _context.sent);
           case 29:
+            return _context.abrupt("return", _context.sent);
+          case 30:
           case "end":
             return _context.stop();
         }
@@ -1251,7 +1263,11 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     var _socket$socket, _session$user7, _session$user8, _socket$socket2, _socket$socket3, _socket$socket4, _socket$socket5, _socket$socket6;
     if (!(socket !== null && socket !== void 0 && socket.socket) || !(socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && _socket$socket.connected)) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      var _session$user5, _orderFound, _order$driver, _session$user6;
+      var _order$products, _session$user5, _orderFound, _order$driver, _session$user6;
+      var isGiftCard = order === null || order === void 0 || (_order$products = order.products) === null || _order$products === void 0 ? void 0 : _order$products.some(function (product) {
+        return (product === null || product === void 0 ? void 0 : product.type) === 'gift_card';
+      });
+      if (isGiftCard && !isDriverApp) return;
       if ((session === null || session === void 0 || (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.level) === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return;
       events.emit('order_updated', order);
       var orderFound = null;
@@ -1310,7 +1326,11 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
       }
     };
     var handleAddNewOrder = function handleAddNewOrder(order) {
-      var _getStatusById4;
+      var _order$products2, _getStatusById4;
+      var isGiftCard = order === null || order === void 0 || (_order$products2 = order.products) === null || _order$products2 === void 0 ? void 0 : _order$products2.some(function (product) {
+        return (product === null || product === void 0 ? void 0 : product.type) === 'gift_card';
+      });
+      if (isGiftCard && !isDriverApp) return;
       events.emit('order_added', order);
       handleActionEvent('order_added', order);
       if (notificationStatusses.includes(order === null || order === void 0 ? void 0 : order.status)) {

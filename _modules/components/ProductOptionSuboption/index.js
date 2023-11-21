@@ -37,9 +37,9 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
   } else if (selected) {
     quantity = 1;
   }
-  var position = props.state.position || (option.with_half_option ? 'left' : 'whole');
+  var position = props.state.position || 'whole';
   var price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price;
-  var usePizzaValidation = (pizzaState === null || pizzaState === void 0 || (_pizzaState = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState === void 0 ? void 0 : _pizzaState.value) === (option === null || option === void 0 ? void 0 : option.max);
+  var usePizzaValidation = (pizzaState === null || pizzaState === void 0 || (_pizzaState = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState === void 0 ? void 0 : _pizzaState.value) === (option === null || option === void 0 ? void 0 : option.max) && !((option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1);
 
   /**
    * Set current state
@@ -66,14 +66,17 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
    * Select/unselect the suboption
    */
   var toggleSelect = function toggleSelect() {
+    var _pizzaState2;
     var selectStatus = isOrigin ? !state.selected : state.selected;
     var minMaxValidation = option.with_half_option ? usePizzaValidation : balance === option.max && !((option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1);
-    if (selectStatus && option.limit_suboptions_by_max && minMaxValidation) {
+    var canBeSelectedByHalf = (pizzaState === null || pizzaState === void 0 || (_pizzaState2 = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState2 === void 0 ? void 0 : _pizzaState2.value) === option.max - 0.5 && option.with_half_option;
+    if (selectStatus && option.limit_suboptions_by_max && minMaxValidation && !canBeSelectedByHalf) {
       return;
     }
     changeState(_objectSpread(_objectSpread({}, state), {}, {
       quantity: state.selected ? 0 : 1,
-      selected: !state.selected
+      selected: !state.selected,
+      position: canBeSelectedByHalf ? 'left' : 'whole'
     }));
   };
 
