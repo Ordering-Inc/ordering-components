@@ -4,6 +4,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useBusiness } from '../../contexts/BusinessContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 import { CODES } from '../../constants/code-numbers'
 import { TIMEZONES } from '../../constants/timezones'
 
@@ -14,54 +15,88 @@ export const PhoneAutocomplete = (props) => {
   const [{ user, token }] = useSession()
   const [orderState, { setUserCustomerOptions }] = useOrder()
   const [businessState] = useBusiness()
+  const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
 
   const [phone, setPhone] = useState('')
+  const [, t] = useLanguage()
   const [openModal, setOpenModal] = useState({ customer: false, signup: false, error: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
-  const [customersPhones, setCustomersPhones] = useState({ users: [], loading: urlPhone ? true : false, error: null })
+  const [customersPhones, setCustomersPhones] = useState({ users: userCustomer ? [userCustomer] : [], loading: !!urlPhone, error: null })
   const [businessAddress, setBusinessAddress] = useState(null)
   const [alertState, setAlertState] = useState({ open: true, content: [] })
   const [optionsState, setOptionsState] = useState({ loading: false })
   const [localPhoneCode, setLocalPhoneCode] = useState(null)
+
+  const reqState = {}
   /**
    * Get users from API
    */
   const getUsers = async () => {
-    setCustomersPhones({ ...customersPhones, loading: true })
-    const conditions = {
-      conector: 'AND',
-      conditions: [{
-        attribute: 'enabled',
-        value: isIos ? true : encodeURI(true)
-      },
-      {
-        conector: 'OR',
-        conditions: [{
-          attribute: 'cellphone',
-          value: {
-            condition: 'ilike',
-            value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
-          }
-        },
-        {
-          attribute: 'phone',
-          value: {
-            condition: 'ilike',
-            value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
-          }
-        }]
-      }]
-    }
-    try {
-      const { content: { result } } = await ordering
-        .setAccessToken(token)
-        .users()
-        .select(propsToFetch)
-        .where(conditions)
-        .get()
-      setCustomersPhones({ ...customersPhones, users: result, loading: false })
-    } catch (e) {
-      setCustomersPhones({ ...customersPhones, loading: false, error: e.message })
+    const maxRetries = 3
+    const waitTime = 1000
+
+    for (let retryAttempt = 1; retryAttempt <= maxRetries; retryAttempt++) {
+      try {
+        setCustomersPhones({ ...customersPhones, loading: true })
+        const conditions = {
+          conector: 'AND',
+          conditions: [{
+            attribute: 'enabled',
+            value: isIos ? true : encodeURI(true)
+          },
+          {
+            conector: 'OR',
+            conditions: [{
+              attribute: 'cellphone',
+              value: {
+                condition: 'ilike',
+                value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
+              }
+            },
+            {
+              attribute: 'phone',
+              value: {
+                condition: 'ilike',
+                value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
+              }
+            }]
+          }]
+        }
+        const source = {}
+        reqState.users = source
+        const request = ordering
+          .setAccessToken(token)
+          .users()
+          .select(propsToFetch)
+          .where(conditions)
+          .get({ cancelToken: source })
+
+        const timer = new Promise((resolve, reject) => {
+          setTimeout(() => reject(new Error('Timeout exceeded')), waitTime)
+        })
+
+        const response = await Promise.race([request, timer])
+
+        if (response.content && response.content.result) {
+          const { result } = response.content
+          setCustomersPhones({ ...customersPhones, users: result, loading: false })
+          break
+        } else {
+          throw new Error('Error')
+        }
+      } catch {
+        reqState.users?.cancel && reqState.users.cancel()
+        if (retryAttempt < maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, waitTime))
+        }
+        if (retryAttempt === maxRetries) {
+          setCustomersPhones({
+            ...customersPhones,
+            loading: false,
+            error: t('ERROR_MULTIPLE_FETCH', 'Exceeded the maximum number of retries. Reload the page.')
+          })
+        }
+      }
     }
   }
   /**
@@ -130,7 +165,7 @@ export const PhoneAutocomplete = (props) => {
         }
       }
 
-      let options = { type }
+      const options = { type }
       if (addressSelected && !checkAddress(orderState?.options?.address, addressSelected)) {
         options.address_id = addressSelected?.id
       }
@@ -159,7 +194,7 @@ export const PhoneAutocomplete = (props) => {
       getUsers()
     }
     if ((phone && phone.length < 7) || !phone) {
-      setCustomersPhones({ ...customersPhones, users: [] })
+      setCustomersPhones({ ...customersPhones, users: userCustomer ? [userCustomer] : [] })
     }
   }, [phone])
 
@@ -171,7 +206,6 @@ export const PhoneAutocomplete = (props) => {
     if ((urlPhone && urlPhone.length < 7)) {
       setOpenModal({ ...openModal, error: true })
       setCustomersPhones({ ...customersPhones, users: [], loading: false })
-      return
     }
   }, [urlPhone])
 
