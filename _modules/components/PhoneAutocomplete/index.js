@@ -11,6 +11,7 @@ var _ApiContext = require("../../contexts/ApiContext");
 var _SessionContext = require("../../contexts/SessionContext");
 var _OrderContext = require("../../contexts/OrderContext");
 var _BusinessContext = require("../../contexts/BusinessContext");
+var _LanguageContext = require("../../contexts/LanguageContext");
 var _codeNumbers = require("../../constants/code-numbers");
 var _timezones = require("../../constants/timezones");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -57,6 +58,9 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
     _useState2 = _slicedToArray(_useState, 2),
     phone = _useState2[0],
     setPhone = _useState2[1];
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+    _useLanguage2 = _slicedToArray(_useLanguage, 2),
+    t = _useLanguage2[1];
   var _useState3 = (0, _react.useState)({
       customer: false,
       signup: false,
@@ -76,7 +80,7 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
     setCustomerState = _useState6[1];
   var _useState7 = (0, _react.useState)({
       users: userCustomer ? [userCustomer] : [],
-      loading: urlPhone ? true : false,
+      loading: !!urlPhone,
       error: null
     }),
     _useState8 = _slicedToArray(_useState7, 2),
@@ -103,15 +107,25 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
     _useState16 = _slicedToArray(_useState15, 2),
     localPhoneCode = _useState16[0],
     setLocalPhoneCode = _useState16[1];
+  var reqState = {};
   /**
    * Get users from API
    */
   var getUsers = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var conditions, _yield$ordering$setAc, result;
+      var maxRetries, waitTime, retryAttempt, conditions, source, request, timer, response, result, _reqState$users;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
+            maxRetries = 3;
+            waitTime = 1000;
+            retryAttempt = 1;
+          case 3:
+            if (!(retryAttempt <= maxRetries)) {
+              _context.next = 33;
+              break;
+            }
+            _context.prev = 4;
             setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
               loading: true
             }));
@@ -137,30 +151,63 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
                 }]
               }]
             };
-            _context.prev = 2;
-            _context.next = 5;
-            return ordering.setAccessToken(token).users().select(propsToFetch).where(conditions).get();
-          case 5:
-            _yield$ordering$setAc = _context.sent;
-            result = _yield$ordering$setAc.content.result;
+            source = {};
+            reqState.users = source;
+            request = ordering.setAccessToken(token).users().select(propsToFetch).where(conditions).get({
+              cancelToken: source
+            });
+            timer = new Promise(function (resolve, reject) {
+              setTimeout(function () {
+                return reject(new Error('Timeout exceeded'));
+              }, waitTime);
+            });
+            _context.next = 13;
+            return Promise.race([request, timer]);
+          case 13:
+            response = _context.sent;
+            if (!(response.content && response.content.result)) {
+              _context.next = 20;
+              break;
+            }
+            result = response.content.result;
             setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
               users: result,
               loading: false
             }));
-            _context.next = 13;
+            return _context.abrupt("break", 33);
+          case 20:
+            throw new Error('Error');
+          case 21:
+            _context.next = 30;
             break;
-          case 10:
-            _context.prev = 10;
-            _context.t0 = _context["catch"](2);
-            setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
-              loading: false,
-              error: _context.t0.message
-            }));
-          case 13:
+          case 23:
+            _context.prev = 23;
+            _context.t0 = _context["catch"](4);
+            ((_reqState$users = reqState.users) === null || _reqState$users === void 0 ? void 0 : _reqState$users.cancel) && reqState.users.cancel();
+            if (!(retryAttempt < maxRetries)) {
+              _context.next = 29;
+              break;
+            }
+            _context.next = 29;
+            return new Promise(function (resolve) {
+              return setTimeout(resolve, waitTime);
+            });
+          case 29:
+            if (retryAttempt === maxRetries) {
+              setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
+                loading: false,
+                error: t('ERROR_MULTIPLE_FETCH', 'Exceeded the maximum number of retries. Reload the page.')
+              }));
+            }
+          case 30:
+            retryAttempt++;
+            _context.next = 3;
+            break;
+          case 33:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[2, 10]]);
+      }, _callee, null, [[4, 23]]);
     }));
     return function getUsers() {
       return _ref.apply(this, arguments);
@@ -367,7 +414,6 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
         users: [],
         loading: false
       }));
-      return;
     }
   }, [urlPhone]);
   (0, _react.useEffect)(function () {
