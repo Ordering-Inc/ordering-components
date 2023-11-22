@@ -859,7 +859,7 @@ export const OrderListGroups = (props) => {
   }
 
   useEffect(() => {
-    if (!socket?.socket || !socket?.socket?.connected) return
+    if (!socket?.socket) return
     const handleUpdateOrder = (order) => {
       const isGiftCard = order?.products?.some(product => product?.type === 'gift_card')
       if (isGiftCard && !isDriverApp) return
