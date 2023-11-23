@@ -419,8 +419,13 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       const countryCode = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
-
+      const isMultiProduct = JSON.parse(product?.meta || '')?.external_type === 'coupon'
+      console.log('aqui', product?.meta)
       let body
+      const headers = {
+        'X-Socket-Id-X': socket?.getId(),
+        'X-Country-Code-X': countryCode
+      }
       if (!isPlatformProduct) {
         body = {
           product,
@@ -432,12 +437,16 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           platform_product: { ...product }
         }
       }
-      const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, {
-        headers: {
-          'X-Socket-Id-X': socket?.getId(),
-          'X-Country-Code-X': countryCode
-        }
-      })
+
+      const { content: { error, result } } = !isMultiProduct
+        ? await ordering.setAccessToken(session.token).carts().addProduct(body, { headers })
+        : await fetch(`${ordering.root}/carts/multi_product`, {
+          body: {
+            ...body,
+            product: [product]
+          },
+          headers
+        })
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_product_added', product, result)
