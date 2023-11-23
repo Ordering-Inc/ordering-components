@@ -413,14 +413,19 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * @param {object} cart cart of the product
    * @param {boolean} isQuickAddProduct option to add product when clicks
    */
-  const addProduct = async (product, cart, isQuickAddProduct, isPlatformProduct = false) => {
+  const addProduct = async (
+    product,
+    cart,
+    isQuickAddProduct,
+    isPlatformProduct = false,
+    isMultiProduct = false
+  ) => {
     try {
       setState({ ...state, loading: true })
       const countryCode = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
-      const isMultiProduct = JSON.parse(product?.meta || '')?.external_type === 'coupon'
-      console.log('aqui', product?.meta)
+      console.log('aqui', isMultiProduct)
       let body
       const headers = {
         'X-Socket-Id-X': socket?.getId(),
