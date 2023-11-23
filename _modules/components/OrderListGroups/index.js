@@ -80,9 +80,9 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     return Number(value);
   })) || [];
   var ordersGroupStatus = {
-    active: (_orderGroupStatusCust = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.active) !== null && _orderGroupStatusCust !== void 0 ? _orderGroupStatusCust : [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25],
+    active: (_orderGroupStatusCust = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.active) !== null && _orderGroupStatusCust !== void 0 ? _orderGroupStatusCust : [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26],
     pending: (_orderGroupStatusCust2 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.pending) !== null && _orderGroupStatusCust2 !== void 0 ? _orderGroupStatusCust2 : [0, 13],
-    inProgress: (_orderGroupStatusCust3 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust3 !== void 0 ? _orderGroupStatusCust3 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23, 24, 25],
+    inProgress: (_orderGroupStatusCust3 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust3 !== void 0 ? _orderGroupStatusCust3 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26],
     completed: (_orderGroupStatusCust4 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.completed) !== null && _orderGroupStatusCust4 !== void 0 ? _orderGroupStatusCust4 : [1, 11, 15],
     cancelled: (_orderGroupStatusCust5 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.cancelled) !== null && _orderGroupStatusCust5 !== void 0 ? _orderGroupStatusCust5 : [2, 5, 6, 10, 12, 16, 17]
   };
@@ -864,9 +864,9 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
   var getStatusById = function getStatusById(id) {
     var _orderGroupStatusCust6, _orderGroupStatusCust7, _orderGroupStatusCust8, _orderGroupStatusCust9;
     if (!id && id !== 0) return;
-    var active = (_orderGroupStatusCust6 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.active) !== null && _orderGroupStatusCust6 !== void 0 ? _orderGroupStatusCust6 : [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21];
+    var active = (_orderGroupStatusCust6 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.active) !== null && _orderGroupStatusCust6 !== void 0 ? _orderGroupStatusCust6 : [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26];
     var pending = (_orderGroupStatusCust7 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.pending) !== null && _orderGroupStatusCust7 !== void 0 ? _orderGroupStatusCust7 : [0, 13];
-    var inProgress = (_orderGroupStatusCust8 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust8 !== void 0 ? _orderGroupStatusCust8 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21];
+    var inProgress = (_orderGroupStatusCust8 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust8 !== void 0 ? _orderGroupStatusCust8 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26];
     var completed = (_orderGroupStatusCust9 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.completed) !== null && _orderGroupStatusCust9 !== void 0 ? _orderGroupStatusCust9 : [1, 11, 15];
     // const cancelled = orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
 
@@ -1260,8 +1260,8 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     events.emit(evts[event], value);
   };
   (0, _react.useEffect)(function () {
-    var _socket$socket, _session$user7, _session$user8, _socket$socket2, _socket$socket3, _socket$socket4, _socket$socket5, _socket$socket6;
-    if (!(socket !== null && socket !== void 0 && socket.socket) || !(socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && _socket$socket.connected)) return;
+    var _session$user7, _session$user8, _socket$socket, _socket$socket2, _socket$socket3, _socket$socket4, _socket$socket5, _socket$socket6, _socket$socket7, _socket$socket8;
+    if (!(socket !== null && socket !== void 0 && socket.socket)) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
       var _order$products, _session$user5, _orderFound, _order$driver, _session$user6;
       var isGiftCard = order === null || order === void 0 || (_order$products = order.products) === null || _order$products === void 0 ? void 0 : _order$products.some(function (product) {
@@ -1347,7 +1347,9 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     };
     var ordersRoom = (session === null || session === void 0 || (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user8 = session.user) === null || _session$user8 === void 0 ? void 0 : _session$user8.id);
     socket.join(ordersRoom);
-    if ((socket === null || socket === void 0 || (_socket$socket2 = socket.socket) === null || _socket$socket2 === void 0 || (_socket$socket2 = _socket$socket2._callbacks) === null || _socket$socket2 === void 0 || (_socket$socket2 = _socket$socket2.$orders_register) === null || _socket$socket2 === void 0 ? void 0 : _socket$socket2.length) < 2) {
+    if (!(socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && (_socket$socket = _socket$socket._callbacks) !== null && _socket$socket !== void 0 && _socket$socket.$orders_register) || socket !== null && socket !== void 0 && (_socket$socket2 = socket.socket) !== null && _socket$socket2 !== void 0 && (_socket$socket2 = _socket$socket2._callbacks) !== null && _socket$socket2 !== void 0 && (_socket$socket2 = _socket$socket2.$orders_register) !== null && _socket$socket2 !== void 0 && _socket$socket2.find(function (func) {
+      return (func === null || func === void 0 ? void 0 : func.name) !== 'handleAddNewOrder';
+    })) {
       socket.on('orders_register', handleAddNewOrder);
     }
     if (!(socket !== null && socket !== void 0 && (_socket$socket3 = socket.socket) !== null && _socket$socket3 !== void 0 && (_socket$socket3 = _socket$socket3._callbacks) !== null && _socket$socket3 !== void 0 && _socket$socket3.$order_assigned) || socket !== null && socket !== void 0 && (_socket$socket4 = socket.socket) !== null && _socket$socket4 !== void 0 && (_socket$socket4 = _socket$socket4._callbacks) !== null && _socket$socket4 !== void 0 && (_socket$socket4 = _socket$socket4.$order_assigned) !== null && _socket$socket4 !== void 0 && _socket$socket4.find(function (func) {
@@ -1355,12 +1357,14 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     })) {
       socket.on('order_assigned', handleAddNewOrder);
     }
-    if (socket !== null && socket !== void 0 && (_socket$socket5 = socket.socket) !== null && _socket$socket5 !== void 0 && (_socket$socket5 = _socket$socket5._callbacks) !== null && _socket$socket5 !== void 0 && (_socket$socket5 = _socket$socket5.$update_order) !== null && _socket$socket5 !== void 0 && _socket$socket5.find(function (func) {
+    if (!(socket !== null && socket !== void 0 && (_socket$socket5 = socket.socket) !== null && _socket$socket5 !== void 0 && (_socket$socket5 = _socket$socket5._callbacks) !== null && _socket$socket5 !== void 0 && _socket$socket5.$update_order) || socket !== null && socket !== void 0 && (_socket$socket6 = socket.socket) !== null && _socket$socket6 !== void 0 && (_socket$socket6 = _socket$socket6._callbacks) !== null && _socket$socket6 !== void 0 && (_socket$socket6 = _socket$socket6.$update_order) !== null && _socket$socket6 !== void 0 && _socket$socket6.find(function (func) {
       return (func === null || func === void 0 ? void 0 : func.name) !== 'handleUpdateOrder';
     })) {
       socket.on('update_order', handleUpdateOrder);
     }
-    if ((socket === null || socket === void 0 || (_socket$socket6 = socket.socket) === null || _socket$socket6 === void 0 || (_socket$socket6 = _socket$socket6._callbacks) === null || _socket$socket6 === void 0 || (_socket$socket6 = _socket$socket6.$message) === null || _socket$socket6 === void 0 ? void 0 : _socket$socket6.length) < 2) {
+    if (!(socket !== null && socket !== void 0 && (_socket$socket7 = socket.socket) !== null && _socket$socket7 !== void 0 && (_socket$socket7 = _socket$socket7._callbacks) !== null && _socket$socket7 !== void 0 && _socket$socket7.$message) || socket !== null && socket !== void 0 && (_socket$socket8 = socket.socket) !== null && _socket$socket8 !== void 0 && (_socket$socket8 = _socket$socket8._callbacks) !== null && _socket$socket8 !== void 0 && (_socket$socket8 = _socket$socket8.$message) !== null && _socket$socket8 !== void 0 && _socket$socket8.find(function (func) {
+      return (func === null || func === void 0 ? void 0 : func.name) !== 'handleReceiveMessage';
+    })) {
       socket.on('message', handleReceiveMessage);
     }
     return function () {
@@ -1496,6 +1500,9 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
       events.off('customer_reviewed', handleCustomerReviewed);
     };
   }, [ordersGroup]);
+  (0, _react.useEffect)(function () {
+    setCurrentTabSelected(combineTabs ? 'active' : 'pending');
+  }, [combineTabs]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     currentFilters: currentFilters,
     setCurrentFilters: setCurrentFilters,
