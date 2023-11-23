@@ -37,7 +37,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
-  var _props$order, _props$order2, _orderState$order, _orderState$order13, _orderState$order14, _orderState$order15, _orderState$order20, _orderState$order21, _orderState$order22;
+  var _props$order, _props$order2, _orderState$order, _orderState$order13, _orderState$order14, _orderState$order15, _orderState$order21, _orderState$order22, _orderState$order23;
   var orderId = props.orderId,
     orderAssingId = props.orderAssingId,
     hashKey = props.hashKey,
@@ -928,7 +928,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     }
   }, [orderId, isDriverNotification]);
   (0, _react.useEffect)(function () {
-    var _orderState$order18, _socket$socket, _socket$socket2;
+    var _orderState$order19, _socket$socket, _socket$socket2;
     if (orderState.loading || loading || !(socket !== null && socket !== void 0 && socket.socket)) return;
     var handleUpdateOrderDetails = function handleUpdateOrderDetails(order) {
       var _orderState$order16;
@@ -941,9 +941,11 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       }));
       events.emit('order_updated', Object.assign(orderState.order, order));
     };
-    var handleTrackingDriver = function handleTrackingDriver(_ref13) {
-      var _orderState$order17;
-      var location = _ref13.location;
+    var handleTrackingDriver = function handleTrackingDriver(props) {
+      var _orderState$order17, _orderState$order18;
+      var location = props.location;
+      var driverId = props.driver_id;
+      if (driverId !== (orderState === null || orderState === void 0 || (_orderState$order17 = orderState.order) === null || _orderState$order17 === void 0 ? void 0 : _orderState$order17.driver_id)) return;
       var newLocation = location !== null && location !== void 0 ? location : {
         lat: -37.9722342,
         lng: 144.7729561
@@ -951,20 +953,20 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       setDriverLocation(newLocation);
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
         order: _objectSpread(_objectSpread({}, orderState.order), {}, {
-          driver: _objectSpread(_objectSpread({}, (_orderState$order17 = orderState.order) === null || _orderState$order17 === void 0 ? void 0 : _orderState$order17.driver), {}, {
+          driver: _objectSpread(_objectSpread({}, (_orderState$order18 = orderState.order) === null || _orderState$order18 === void 0 ? void 0 : _orderState$order18.driver), {}, {
             location: newLocation
           })
         })
       }));
     };
     if (!isDisabledOrdersRoom) socket.join(getRoom('orders'));
-    if ((_orderState$order18 = orderState.order) !== null && _orderState$order18 !== void 0 && _orderState$order18.driver_id) {
+    if ((_orderState$order19 = orderState.order) !== null && _orderState$order19 !== void 0 && _orderState$order19.driver_id) {
       socket.join(getRoom('drivers'));
     }
     socket.socket.on('connect', function () {
-      var _orderState$order19;
+      var _orderState$order20;
       if (!isDisabledOrdersRoom) socket.join(getRoom('orders'));
-      if ((_orderState$order19 = orderState.order) !== null && _orderState$order19 !== void 0 && _orderState$order19.driver_id) {
+      if ((_orderState$order20 = orderState.order) !== null && _orderState$order20 !== void 0 && _orderState$order20.driver_id) {
         socket.join(getRoom('drivers'));
       }
     });
@@ -979,7 +981,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
       socket.off('update_order', handleUpdateOrderDetails);
       socket.off('tracking_driver', handleTrackingDriver);
     };
-  }, [orderState === null || orderState === void 0 ? void 0 : orderState.loading, socket === null || socket === void 0 ? void 0 : socket.socket, loading, userCustomerId, (_orderState$order20 = orderState.order) === null || _orderState$order20 === void 0 ? void 0 : _orderState$order20.driver_id, (_orderState$order21 = orderState.order) === null || _orderState$order21 === void 0 ? void 0 : _orderState$order21.id, hashKey]);
+  }, [orderState === null || orderState === void 0 ? void 0 : orderState.loading, socket === null || socket === void 0 ? void 0 : socket.socket, loading, userCustomerId, (_orderState$order21 = orderState.order) === null || _orderState$order21 === void 0 ? void 0 : _orderState$order21.driver_id, (_orderState$order22 = orderState.order) === null || _orderState$order22 === void 0 ? void 0 : _orderState$order22.id, hashKey]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
     var handleNewMessage = function handleNewMessage(message) {
@@ -1001,7 +1003,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     return function () {
       socket.off('message', handleNewMessage);
     };
-  }, [messages, socket, (_orderState$order22 = orderState.order) === null || _orderState$order22 === void 0 ? void 0 : _orderState$order22.status, userCustomerId]);
+  }, [messages, socket, (_orderState$order23 = orderState.order) === null || _orderState$order23 === void 0 ? void 0 : _orderState$order23.status, userCustomerId]);
   (0, _react.useEffect)(function () {
     if (!(socket !== null && socket !== void 0 && socket.socket)) return;
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
