@@ -718,32 +718,35 @@ var OrderProvider = function OrderProvider(_ref) {
               };
             }
             if (isMultiProduct) {
-              _context7.next = 20;
+              delete body.product;
+            }
+            if (isMultiProduct) {
+              _context7.next = 21;
               break;
             }
-            _context7.next = 17;
+            _context7.next = 18;
             return ordering.setAccessToken(session.token).carts().addProduct(body, {
               headers: headers
             });
-          case 17:
+          case 18:
             _context7.t0 = _context7.sent;
-            _context7.next = 23;
+            _context7.next = 24;
             break;
-          case 20:
-            _context7.next = 22;
+          case 21:
+            _context7.next = 23;
             return fetch("".concat(ordering.root, "/carts/multi_product"), {
               method: 'POST',
               body: JSON.stringify(_objectSpread(_objectSpread({}, body), {}, {
-                products: [product]
+                products: JSON.stringify([product])
               })),
               headers: _objectSpread(_objectSpread({}, headers), {}, {
                 Authorization: "Bearer ".concat(session.token),
                 'Content-Type': 'application/json'
               })
             });
-          case 22:
-            _context7.t0 = _context7.sent;
           case 23:
+            _context7.t0 = _context7.sent;
+          case 24:
             _ref10 = _context7.t0;
             _ref10$content = _ref10.content;
             error = _ref10$content.error;
@@ -767,40 +770,40 @@ var OrderProvider = function OrderProvider(_ref) {
               loading: false
             }));
             if (!isPlatformProduct) {
-              _context7.next = 33;
+              _context7.next = 34;
               break;
             }
             return _context7.abrupt("return", {
               error: error,
               result: result
             });
-          case 33:
-            return _context7.abrupt("return", !error);
           case 34:
-            _context7.next = 45;
+            return _context7.abrupt("return", !error);
+          case 35:
+            _context7.next = 46;
             break;
-          case 36:
-            _context7.prev = 36;
+          case 37:
+            _context7.prev = 37;
             _context7.t1 = _context7["catch"](2);
             console.log(_context7.t1);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
             if (!isPlatformProduct) {
-              _context7.next = 44;
+              _context7.next = 45;
               break;
             }
             return _context7.abrupt("return", {
               error: true,
               result: _context7.t1.message
             });
-          case 44:
-            return _context7.abrupt("return", false);
           case 45:
+            return _context7.abrupt("return", false);
+          case 46:
           case "end":
             return _context7.stop();
         }
-      }, _callee7, null, [[2, 36]]);
+      }, _callee7, null, [[2, 37]]);
     }));
     return function addProduct(_x8, _x9, _x10) {
       return _ref9.apply(this, arguments);
