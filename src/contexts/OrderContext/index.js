@@ -449,7 +449,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           method: 'POST',
           body: JSON.stringify({
             ...body,
-            product: [product]
+            products: [product]
           }),
           headers: {
             ...headers,
