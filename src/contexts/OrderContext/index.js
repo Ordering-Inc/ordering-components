@@ -442,14 +442,16 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           platform_product: { ...product }
         }
       }
-
+      if (isMultiProduct) {
+        delete body.product
+      }
       const { content: { error, result } } = !isMultiProduct
         ? await ordering.setAccessToken(session.token).carts().addProduct(body, { headers })
         : await fetch(`${ordering.root}/carts/multi_product`, {
           method: 'POST',
           body: JSON.stringify({
             ...body,
-            products: [product]
+            products: JSON.stringify([product])
           }),
           headers: {
             ...headers,
