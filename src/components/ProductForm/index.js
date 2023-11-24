@@ -96,7 +96,7 @@ export const ProductForm = (props) => {
   /**
    * Order context manager
    */
-  const [orderState, { addProduct, updateProduct }] = useOrder()
+  const [orderState, { addProduct, updateProduct, addMultiProduct }] = useOrder()
 
   /**
    * Remove to balances in edit mode
@@ -576,8 +576,12 @@ export const ProductForm = (props) => {
               service_start: values?.serviceTime ?? orderState.options?.moment
             }
           onSave(productCart, !props.productCart?.code)
+          const isMultiProduct = JSON.parse(product?.product?.meta || '{}')?.external_type === 'coupon'
           if (!props.productCart?.code) {
-            successful = await addProduct(currentProduct, changes, false)
+            successful =
+              isMultiProduct
+                ? await addMultiProduct(currentProduct, changes, false)
+                : await addProduct(currentProduct, changes, false)
           } else {
             successful = await updateProduct(currentProduct, changes, false)
             if (successful) {
