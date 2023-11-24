@@ -524,7 +524,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       setState({ ...state, loading: false })
       return !error
     } catch (err) {
-      console.log(err)
       setState({ ...state, loading: false })
       return false
     }
