@@ -732,10 +732,14 @@ var OrderProvider = function OrderProvider(_ref) {
           case 20:
             _context7.next = 22;
             return fetch("".concat(ordering.root, "/carts/multi_product"), {
-              body: _objectSpread(_objectSpread({}, body), {}, {
+              method: 'POST',
+              body: JSON.stringify(_objectSpread(_objectSpread({}, body), {}, {
                 product: [product]
-              }),
-              headers: headers
+              })),
+              headers: _objectSpread(_objectSpread({}, headers), {}, {
+                Authorization: "Bearer ".concat(session.token),
+                'Content-Type': 'application/json'
+              })
             });
           case 22:
             _context7.t0 = _context7.sent;
@@ -773,25 +777,26 @@ var OrderProvider = function OrderProvider(_ref) {
           case 33:
             return _context7.abrupt("return", !error);
           case 34:
-            _context7.next = 44;
+            _context7.next = 45;
             break;
           case 36:
             _context7.prev = 36;
             _context7.t1 = _context7["catch"](2);
+            console.log(_context7.t1);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
             if (!isPlatformProduct) {
-              _context7.next = 43;
+              _context7.next = 44;
               break;
             }
             return _context7.abrupt("return", {
               error: true,
               result: _context7.t1.message
             });
-          case 43:
-            return _context7.abrupt("return", false);
           case 44:
+            return _context7.abrupt("return", false);
+          case 45:
           case "end":
             return _context7.stop();
         }
