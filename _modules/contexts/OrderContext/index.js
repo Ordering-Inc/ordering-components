@@ -672,11 +672,10 @@ var OrderProvider = function OrderProvider(_ref) {
   var addProduct = /*#__PURE__*/function () {
     var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product, cart, isQuickAddProduct) {
       var isPlatformProduct,
-        _JSON$parse,
+        isMultiProduct,
         countryCode,
         customerFromLocalStorage,
         userCustomerId,
-        isMultiProduct,
         body,
         headers,
         _ref10,
@@ -688,21 +687,21 @@ var OrderProvider = function OrderProvider(_ref) {
         while (1) switch (_context7.prev = _context7.next) {
           case 0:
             isPlatformProduct = _args7.length > 3 && _args7[3] !== undefined ? _args7[3] : false;
-            _context7.prev = 1;
+            isMultiProduct = _args7.length > 4 && _args7[4] !== undefined ? _args7[4] : false;
+            _context7.prev = 2;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context7.next = 5;
+            _context7.next = 6;
             return strategy.getItem('country-code');
-          case 5:
+          case 6:
             countryCode = _context7.sent;
-            _context7.next = 8;
+            _context7.next = 9;
             return strategy.getItem('user-customer', true);
-          case 8:
+          case 9:
             customerFromLocalStorage = _context7.sent;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-            isMultiProduct = ((_JSON$parse = JSON.parse((product === null || product === void 0 ? void 0 : product.meta) || '')) === null || _JSON$parse === void 0 ? void 0 : _JSON$parse.external_type) === 'coupon';
-            console.log('aqui', product === null || product === void 0 ? void 0 : product.meta);
+            console.log('aqui', isMultiProduct);
             headers = {
               'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
               'X-Country-Code-X': countryCode
@@ -778,7 +777,7 @@ var OrderProvider = function OrderProvider(_ref) {
             break;
           case 36:
             _context7.prev = 36;
-            _context7.t1 = _context7["catch"](1);
+            _context7.t1 = _context7["catch"](2);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
@@ -796,7 +795,7 @@ var OrderProvider = function OrderProvider(_ref) {
           case "end":
             return _context7.stop();
         }
-      }, _callee7, null, [[1, 36]]);
+      }, _callee7, null, [[2, 36]]);
     }));
     return function addProduct(_x8, _x9, _x10) {
       return _ref9.apply(this, arguments);
