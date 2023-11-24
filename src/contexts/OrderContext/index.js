@@ -446,11 +446,16 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       const { content: { error, result } } = !isMultiProduct
         ? await ordering.setAccessToken(session.token).carts().addProduct(body, { headers })
         : await fetch(`${ordering.root}/carts/multi_product`, {
-          body: {
+          method: 'POST',
+          body: JSON.stringify({
             ...body,
             product: [product]
-          },
-          headers
+          }),
+          headers: {
+            ...headers,
+            Authorization: `Bearer ${session.token}`,
+            'Content-Type': 'application/json'
+          }
         })
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
@@ -471,6 +476,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         return !error
       }
     } catch (err) {
+      console.log(err)
       setState({ ...state, loading: false })
       if (isPlatformProduct) {
         return { error: true, result: err.message }
