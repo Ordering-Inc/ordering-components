@@ -413,14 +413,22 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * @param {object} cart cart of the product
    * @param {boolean} isQuickAddProduct option to add product when clicks
    */
-  const addProduct = async (product, cart, isQuickAddProduct, isPlatformProduct = false) => {
+  const addProduct = async (
+    product,
+    cart,
+    isQuickAddProduct,
+    isPlatformProduct = false
+  ) => {
     try {
       setState({ ...state, loading: true })
       const countryCode = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
-
       let body
+      const headers = {
+        'X-Socket-Id-X': socket?.getId(),
+        'X-Country-Code-X': countryCode
+      }
       if (!isPlatformProduct) {
         body = {
           product,
@@ -432,12 +440,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           platform_product: { ...product }
         }
       }
-      const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, {
-        headers: {
-          'X-Socket-Id-X': socket?.getId(),
-          'X-Country-Code-X': countryCode
-        }
-      })
+
+      const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers })
+
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_product_added', product, result)
@@ -463,6 +468,64 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       } else {
         return false
       }
+    }
+  }
+
+  /**
+   * Add multi products to cart / (domino's)
+   * @param {object} product product for add
+   * @param {object} cart cart of the product
+   * @param {boolean} isQuickAddProduct option to add product when clicks
+   */
+  const addMultiProduct = async (
+    product,
+    cart,
+    isQuickAddProduct
+  ) => {
+    try {
+      setState({ ...state, loading: true })
+      const countryCode = await strategy.getItem('country-code')
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
+      const headers = {
+        'X-Socket-Id-X': socket?.getId(),
+        'X-Country-Code-X': countryCode
+      }
+      const body = {
+        products: JSON.stringify(product),
+        business_id: cart.business_id,
+        user_id: userCustomerId || session.user.id
+      }
+      const response = await fetch(`${ordering.root}/carts/multi_product`, {
+        method: 'POST',
+        body: JSON.stringify({
+          ...body,
+          products: JSON.stringify([product])
+        }),
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${session.token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      const { result, error } = await response.json()
+      if (!error) {
+        state.carts[`businessId:${result.business_id}`] = result
+        events.emit('cart_product_added', product, result)
+        if (product?.favorite) {
+          events.emit('wishlist_product_added_to_cart', product, result)
+        }
+        events.emit('cart_updated', result)
+        events.emit('product_added', product, result)
+        isQuickAddProduct && !isDisableToast && showToast(ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name))
+      } else {
+        setAlert({ show: true, content: result })
+      }
+      setState({ ...state, loading: false })
+      return !error
+    } catch (err) {
+      setState({ ...state, loading: false })
+      return false
     }
   }
 
@@ -1327,7 +1390,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     placeMultiCarts,
     getLastOrderHasNoReview,
     changeCityFilter,
-    confirmMultiCarts
+    confirmMultiCarts,
+    addMultiProduct
   }
 
   const copyState = JSON.parse(JSON.stringify(state))
