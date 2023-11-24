@@ -15,7 +15,9 @@ export const PaymentOptionOpenPay = (props) => {
     merchantId,
     isSandbox,
     businessId,
-    isApplyMasterCoupon
+    isApplyMasterCoupon,
+    fromProfile,
+    deUnaApiKey
   } = props
 
   const [{ token, user }] = useSession()
@@ -27,14 +29,13 @@ export const PaymentOptionOpenPay = (props) => {
   const [{ configs }] = useConfig()
   const [events] = useEvent()
 
+  const isDeUna = configs?.webview_checkout_deuna?.value === '1' || configs?.webview_checkout_deuna?.value === true
   const isAlsea = ordering.project === 'alsea'
+
+  const DEUNA_URL = isAlsea ? 'https://api.deuna.com' : 'https://api.stg.deuna.io'
 
   useEffect(() => {
     if (!merchantId || !publicKey) return
-    if (window?.OpenPay?.deviceData?.setup) {
-      setIsSdkReady(true)
-      return
-    }
     const scripts = [
       'https://js.openpay.mx/openpay.v1.min.js',
       'https://resources.openpay.mx/lib/openpay-data-js/1.2.38/openpay-data.v1.min.js'
@@ -59,6 +60,9 @@ export const PaymentOptionOpenPay = (props) => {
       }
       document.body.appendChild(script)
     })
+    if (window?.OpenPay?.deviceData?.setup) {
+      setIsSdkReady(true)
+    }
   }, [merchantId, publicKey])
 
   const getCards = async () => {
@@ -68,21 +72,51 @@ export const PaymentOptionOpenPay = (props) => {
         loading: true,
         error: null
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/api/openpay/cards/cards.php?language=${ordering.language}&user_id=${user?.id}`, {
+
+      const localDeUnaToken = JSON.parse(localStorage.getItem('de_una_token'))
+
+      const fetchURL = isDeUna
+        ? `${DEUNA_URL}/users/${localDeUnaToken?.user_data?.user?.id}/cards` 
+        : `https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/api/openpay/cards/cards.php?language=${ordering.language}&user_id=${user?.id}`
+
+      const params = {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
           'X-APP-X': ordering.appId
         }
-      })
+      }
+      if (isDeUna) {
+        params.headers = {
+          ...params,
+          'X-API-KEY': deUnaApiKey,
+          Authorization: `Bearer ${localDeUnaToken.token}`
+        }
+      }
+      const response = await fetch(fetchURL, params)
       const result = await response.json()
-      if (result.error) {
+      if (result?.error) {
         setCardsList({
           loading: false,
           cards: [],
           error: result?.result
         })
         events.emit('general_errors', result?.result)
+      } else if (isDeUna) {
+        if (result?.data?.length === 0) return
+        setCardsList({
+          loading: false,
+          cards: result?.data?.map((card) => {
+            const cardData = {
+              id: card.id,
+              last4: card.last_four,
+              enabled: true,
+              brandCardName: card.company
+            }
+            return cardData
+          }),
+          error: null
+        })
       } else {
         setCardsList({
           loading: false,
@@ -90,7 +124,7 @@ export const PaymentOptionOpenPay = (props) => {
             ...card,
             data: {
               card_id: card?.id,
-              device_session_id: window.OpenPay.deviceData.setup()
+              device_session_id: window?.OpenPay.deviceData.setup()
             }
           })),
           error: null
@@ -106,6 +140,7 @@ export const PaymentOptionOpenPay = (props) => {
   }
 
   const handleCardClick = (card) => {
+    if (isDeUna) return
     setCardSelected({
       id: card.id,
       type: 'card',
@@ -139,6 +174,10 @@ export const PaymentOptionOpenPay = (props) => {
   }
 
   const handleNewCard = async (data) => {
+    if (isDeUna) {
+      handleClick()
+      return
+    }
     try {
       setCardsList({
         ...cardsList,
@@ -204,6 +243,28 @@ export const PaymentOptionOpenPay = (props) => {
     }
   }
 
+  const handleClick = () => {
+    const VaultWidget = window.VaultWidget
+    const localDeUnaToken = JSON.parse(localStorage.getItem('de_una_token'))
+
+    VaultWidget.configure({
+      checkoutConfig: {
+        publicApiKey: deUnaApiKey,
+        env: 'staging',
+        authToken: localDeUnaToken.token
+      },
+      onExit: () => {
+        console.log('onExit')
+      }
+    })
+    VaultWidget.show({
+      mode: 'modal',
+      modalParams: {
+        desktop: { size: 'container', modalPosition: 'center' },
+        mobile: { size: 'container', modalPosition: 'center' },
+      }
+    })
+  }
   const addCardPlugin = async (tokenId, deviceSessionId) => {
     const responseCard = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/api/openpay/cards/add.php`, {
       method: 'POST',
@@ -262,7 +323,14 @@ export const PaymentOptionOpenPay = (props) => {
         loading: true,
         error: null
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/api/openpay/cards/delete.php`, {
+
+      const localDeUnaToken = JSON.parse(localStorage.getItem('de_una_token'))
+
+      const fetchURL = isDeUna
+        ? `${DEUNA_URL}/users/${localDeUnaToken?.user_data?.user?.id}/cards/${card?.id}`
+        : `https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/api/openpay/cards/delete.php`
+
+      const params = {
         method: 'POST',
         body: JSON.stringify({
           language: ordering.language,
@@ -273,8 +341,19 @@ export const PaymentOptionOpenPay = (props) => {
           Authorization: `Bearer ${token}`,
           'X-APP-X': ordering.appId
         }
-      })
+      }
+      if (isDeUna) {
+        delete params.body
+        params.method = 'DELETE'
+        params.headers = {
+          ...params,
+          'X-API-KEY': deUnaApiKey,
+          Authorization: `Bearer ${localDeUnaToken.token}`
+        }
+      }
+      const response = await fetch(fetchURL, params)
       const result = await response.json()
+      if (isDeUna) return
       if (result?.result === 'OK') {
         setCardsList({
           cards: cardsList?.cards?.filter(_card => _card?.id !== card?.id),
@@ -290,6 +369,14 @@ export const PaymentOptionOpenPay = (props) => {
         })
       }
     } catch (err) {
+      if (isDeUna) {
+        setCardsList({
+          cards: cardsList?.cards?.filter(_card => _card?.id !== card?.id),
+          loading: false,
+          error: null
+        })
+        return
+      }
       events.emit('general_errors', err?.message)
       setCardsList({
         ...cardsList,
@@ -316,10 +403,10 @@ export const PaymentOptionOpenPay = (props) => {
   }
 
   useEffect(() => {
-    if (isSdkReady) {
+    if (isSdkReady || fromProfile) {
       getCards()
     }
-  }, [isSdkReady])
+  }, [isSdkReady, fromProfile])
 
   return (
     UIComponent && (
