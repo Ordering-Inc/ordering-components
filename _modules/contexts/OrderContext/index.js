@@ -734,7 +734,7 @@ var OrderProvider = function OrderProvider(_ref) {
             return fetch("".concat(ordering.root, "/carts/multi_product"), {
               method: 'POST',
               body: JSON.stringify(_objectSpread(_objectSpread({}, body), {}, {
-                product: [product]
+                products: [product]
               })),
               headers: _objectSpread(_objectSpread({}, headers), {}, {
                 Authorization: "Bearer ".concat(session.token),
