@@ -182,7 +182,8 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
     orderState = _useOrder2[0],
     _useOrder2$ = _useOrder2[1],
     addProduct = _useOrder2$.addProduct,
-    updateProduct = _useOrder2$.updateProduct;
+    updateProduct = _useOrder2$.updateProduct,
+    addMultiProduct = _useOrder2$.addMultiProduct;
 
   /**
    * Remove to balances in edit mode
@@ -795,7 +796,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    */
   var handleSave = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
-      var _errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, _props$productCart7, changes, currentProduct, _product$product9, updatedProfessional, duration, _props$productCart8, _props$productCart9;
+      var _errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, _JSON$parse, _product$product9, _props$productCart7, changes, currentProduct, isMultiProduct, _product$product10, updatedProfessional, duration, _props$productCart8, _props$productCart9;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -806,12 +807,12 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
             }
             _errors = checkErrors();
             if (!(Object.keys(_errors).length === 0 || isService)) {
-              _context3.next = 22;
+              _context3.next = 30;
               break;
             }
             successful = true;
             if (!useOrderContext) {
-              _context3.next = 21;
+              _context3.next = 29;
               break;
             }
             successful = false;
@@ -823,29 +824,43 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
               service_start: (_values$serviceTime = values === null || values === void 0 ? void 0 : values.serviceTime) !== null && _values$serviceTime !== void 0 ? _values$serviceTime : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.moment
             });
             onSave(productCart, !((_props$productCart6 = props.productCart) !== null && _props$productCart6 !== void 0 && _props$productCart6.code));
+            isMultiProduct = ((_JSON$parse = JSON.parse((product === null || product === void 0 || (_product$product9 = product.product) === null || _product$product9 === void 0 ? void 0 : _product$product9.meta) || '{}')) === null || _JSON$parse === void 0 ? void 0 : _JSON$parse.external_type) === 'coupon';
             if ((_props$productCart7 = props.productCart) !== null && _props$productCart7 !== void 0 && _props$productCart7.code) {
-              _context3.next = 17;
+              _context3.next = 25;
               break;
             }
-            _context3.next = 14;
-            return addProduct(currentProduct, changes, false);
-          case 14:
-            successful = _context3.sent;
-            _context3.next = 21;
+            if (!isMultiProduct) {
+              _context3.next = 19;
+              break;
+            }
+            _context3.next = 16;
+            return addMultiProduct(currentProduct, changes, false);
+          case 16:
+            _context3.t0 = _context3.sent;
+            _context3.next = 22;
             break;
-          case 17:
-            _context3.next = 19;
-            return updateProduct(currentProduct, changes, false);
           case 19:
+            _context3.next = 21;
+            return addProduct(currentProduct, changes, false);
+          case 21:
+            _context3.t0 = _context3.sent;
+          case 22:
+            successful = _context3.t0;
+            _context3.next = 29;
+            break;
+          case 25:
+            _context3.next = 27;
+            return updateProduct(currentProduct, changes, false);
+          case 27:
             successful = _context3.sent;
             if (successful) {
               events.emit('product_edited', currentProduct);
             }
-          case 21:
+          case 29:
             if (successful) {
               if (isService) {
                 updatedProfessional = JSON.parse(JSON.stringify(values === null || values === void 0 ? void 0 : values.professional));
-                duration = product === null || product === void 0 || (_product$product9 = product.product) === null || _product$product9 === void 0 ? void 0 : _product$product9.duration;
+                duration = product === null || product === void 0 || (_product$product10 = product.product) === null || _product$product10 === void 0 ? void 0 : _product$product10.duration;
                 updatedProfessional.busy_times.push({
                   start: values === null || values === void 0 ? void 0 : values.serviceTime,
                   end: (0, _moment.default)(values === null || values === void 0 ? void 0 : values.serviceTime).add(duration, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
@@ -857,20 +872,20 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
             } else {
               showToast(_ToastContext.ToastType.Error, !((_props$productCart8 = props.productCart) !== null && _props$productCart8 !== void 0 && _props$productCart8.code) ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'), 5000);
             }
-          case 22:
+          case 30:
             setProductLoading && setProductLoading(false);
-            _context3.next = 29;
+            _context3.next = 37;
             break;
-          case 25:
-            _context3.prev = 25;
-            _context3.t0 = _context3["catch"](0);
+          case 33:
+            _context3.prev = 33;
+            _context3.t1 = _context3["catch"](0);
             showToast(_ToastContext.ToastType.Error, !((_props$productCart9 = props.productCart) !== null && _props$productCart9 !== void 0 && _props$productCart9.code) ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'), 5000);
             setProductLoading && setProductLoading(false);
-          case 29:
+          case 37:
           case "end":
             return _context3.stop();
         }
-      }, _callee3, null, [[0, 25]]);
+      }, _callee3, null, [[0, 33]]);
     }));
     return function handleSave(_x2) {
       return _ref4.apply(this, arguments);
@@ -1109,8 +1124,8 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
     return checkSuboptionsSelected(respectTo, _selectedSuboptions, _dependsSuboptions, count++);
   };
   (0, _react.useEffect)(function () {
-    var _product$product10;
-    if (!(product !== null && product !== void 0 && product.loading) && product !== null && product !== void 0 && product.product && ((_product$product10 = product.product) === null || _product$product10 === void 0 || (_product$product10 = _product$product10.extras) === null || _product$product10 === void 0 ? void 0 : _product$product10.length) > 0) {
+    var _product$product11;
+    if (!(product !== null && product !== void 0 && product.loading) && product !== null && product !== void 0 && product.product && ((_product$product11 = product.product) === null || _product$product11 === void 0 || (_product$product11 = _product$product11.extras) === null || _product$product11 === void 0 ? void 0 : _product$product11.length) > 0) {
       var _selectedSuboptions = {};
       var _dependsSuboptions = {};
       var preselectedOptions = [];
