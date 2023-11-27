@@ -83,7 +83,7 @@ export const AddressDetails = (props) => {
   useEffect(() => {
     if (!logo || !location) return
     setFormatUrl(formatUrlMethod(location))
-  }, [logo, location])
+  }, [logo, JSON.stringify(location), JSON.stringify(orderState?.options?.address?.address)])
 
   return (
     <>

@@ -48,9 +48,10 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
                   <SiteProvider appId={settings.app_id}>
                     <UtilsProviders>
                       <ToastProvider>
-                        <ValidationFieldsProvider>
+                        <ValidationFieldsProvider appId={settings.app_id}>
                           <SessionProvider strategy={webStrategy}>
                             <WebsocketProvider
+                              isAlsea={isAlsea}
                               strategy={webStrategy}
                               settings={Object.assign(settings.socket, restOfSettings)}
                             >

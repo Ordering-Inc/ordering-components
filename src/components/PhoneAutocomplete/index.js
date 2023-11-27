@@ -8,7 +8,7 @@ import { CODES } from '../../constants/code-numbers'
 import { TIMEZONES } from '../../constants/timezones'
 
 export const PhoneAutocomplete = (props) => {
-  const { UIComponent, isIos, businessSlug } = props
+  const { UIComponent, isIos, businessSlug, urlPhone, propsToFetch } = props
 
   const [ordering] = useApi()
   const [{ user, token }] = useSession()
@@ -16,9 +16,9 @@ export const PhoneAutocomplete = (props) => {
   const [businessState] = useBusiness()
 
   const [phone, setPhone] = useState('')
-  const [openModal, setOpenModal] = useState({ customer: false, signup: false })
+  const [openModal, setOpenModal] = useState({ customer: false, signup: false, error: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
-  const [customersPhones, setCustomersPhones] = useState({ users: [], loading: false, error: null })
+  const [customersPhones, setCustomersPhones] = useState({ users: [], loading: urlPhone ? true : false, error: null })
   const [businessAddress, setBusinessAddress] = useState(null)
   const [alertState, setAlertState] = useState({ open: true, content: [] })
   const [optionsState, setOptionsState] = useState({ loading: false })
@@ -56,6 +56,7 @@ export const PhoneAutocomplete = (props) => {
       const { content: { result } } = await ordering
         .setAccessToken(token)
         .users()
+        .select(propsToFetch)
         .where(conditions)
         .get()
       setCustomersPhones({ ...customersPhones, users: result, loading: false })
@@ -149,6 +150,7 @@ export const PhoneAutocomplete = (props) => {
   }
 
   useEffect(() => {
+    if (urlPhone) return
     if (
       phone &&
       phone.length >= 7 &&
@@ -160,6 +162,18 @@ export const PhoneAutocomplete = (props) => {
       setCustomersPhones({ ...customersPhones, users: [] })
     }
   }, [phone])
+
+  useEffect(() => {
+    if (urlPhone) {
+      getUsers()
+      return
+    }
+    if ((urlPhone && urlPhone.length < 7)) {
+      setOpenModal({ ...openModal, error: true })
+      setCustomersPhones({ ...customersPhones, users: [], loading: false })
+      return
+    }
+  }, [urlPhone])
 
   useEffect(() => {
     if (businessSlug && !businessState?.business?.id) {
@@ -233,5 +247,6 @@ PhoneAutocomplete.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  propsToFetch: ['name', 'lastname', 'email', 'phone', 'photo', 'cellphone', 'country_phone_code', 'city_id', 'city', 'address', 'addresses', 'address_notes', 'dropdown_option_id', 'dropdown_option', 'location', 'zipcode', 'level', 'enabled', 'middle_name', 'second_lastname', 'metadata']
 }

@@ -39,6 +39,7 @@ export const BusinessAndProductList = (props) => {
   const [filterByMenus, setFilterByMenus] = useState(null)
   const [professionalSelected, setProfessionalSelected] = useState(null)
   const [businessState, setBusinessState] = useState({ business: {}, menus: null, loading: !props.avoidBusinessLoading, error: null })
+  const [loadedFirstTime, setLoadedFirstTime] = useState(false)
   const [categoriesState, setCategoriesState] = useState({})
   const [orderOptions, setOrderOptions] = useState({})
   const [productModal, setProductModal] = useState({ product: null, loading: false, error: null })
@@ -146,18 +147,19 @@ export const BusinessAndProductList = (props) => {
   }
 
   const sortProductsArray = (option, array) => {
+    let _array
     if (option === 'rank' || option === null) {
-      return array.sort((a, b) => a.rank - b.rank)
+      _array = array.sort((a, b) => a.rank - b.rank)
     }
     if (option === 'rank_desc') {
-      return array.sort((a, b) => b.rank - a.rank)
+      _array = array.sort((a, b) => b.rank - a.rank)
     }
     if (option === 'a-z') {
-      return array.sort((a, b) =>
+      _array = array.sort((a, b) =>
         (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)
       )
     }
-    setCategoriesState({...categoriesState, products: array })
+    setCategoryState({ ...categoryState, products: _array })
   }
 
   const subCategoriesList = []
@@ -288,7 +290,7 @@ export const BusinessAndProductList = (props) => {
     setErrorQuantityProducts(!categoryState.products?.length)
     setCategoryState({ ...categoryState })
   }
-  
+
   const getLazyProducts = async ({ page, pageSize = categoryStateDefault.pagination.pageSize }) => {
     const parameters = {
       type: orderState.options?.type ?? 1,
@@ -385,9 +387,7 @@ export const BusinessAndProductList = (props) => {
 
     const functionFetch = categorySelected.id && categorySelected.id !== 'featured'
       ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products()
-      : !isUseParentCategory
-        ? ordering.businesses(businessState.business.id).products()
-        : !(where?.conditions?.length > 0) ? ordering.businesses(businessState.business.id).categories() : ordering.businesses(businessState.business.id).products()
+      : where?.conditions?.length === 0 ? ordering.businesses(businessState.business.id).categories() : ordering.businesses(businessState.business.id).products()
 
     let productEndpoint = where?.conditions?.length > 0
       ? functionFetch.parameters(parameters).where(where)
@@ -470,7 +470,7 @@ export const BusinessAndProductList = (props) => {
         categoriesState.featured = featureState
       }
 
-      if ((categorySelected.id && categorySelected.id !== 'featured') || !isUseParentCategory) {
+      if (categorySelected.id && categorySelected.id !== 'featured') {
         const newcategoryState = {
           pagination: {
             ...curCategoryState.pagination,
@@ -492,7 +492,7 @@ export const BusinessAndProductList = (props) => {
         setFeaturedProducts(isFeatured)
       }
 
-      if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
+      if (!(categorySelected.id && categorySelected.id !== 'featured')) {
         const productsList = searchValue ? [...result] : [].concat(...result.map(category => category?.products)).filter(item => item)
         const productsListFeatured = featuredRes?.content?.result ?? []
         const paginationData = categorySelected.id === 'featured'
@@ -542,7 +542,6 @@ export const BusinessAndProductList = (props) => {
       const [lazyRes, featuredRes] = await getLazyProducts({
         page: curCategoryState.pagination.currentPage + 1
       })
-
       const { content } = lazyRes
       const error = content?.error
       const result = content?.result
@@ -577,7 +576,7 @@ export const BusinessAndProductList = (props) => {
         categoriesState.featured = featureState
       }
 
-      if ((categorySelected.id && categorySelected.id !== 'featured') || !isUseParentCategory) {
+      if ((categorySelected.id && categorySelected.id !== 'featured')) {
         const newcategoryState = {
           pagination: {
             ...curCategoryState?.pagination,
@@ -599,7 +598,7 @@ export const BusinessAndProductList = (props) => {
         setFeaturedProducts(isFeatured)
       }
 
-      if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
+      if (!(categorySelected.id && categorySelected.id !== 'featured')) {
         const productsList = [].concat(...result.map(category => category?.products)).filter(item => item)
         const productsListFeatured = featuredRes?.content?.result ?? []
         const paginationData = categorySelected.id === 'featured'
@@ -738,12 +737,14 @@ export const BusinessAndProductList = (props) => {
       }
 
       setBusinessState(data)
+      setLoadedFirstTime(true)
     } catch (err) {
       setBusinessState({
         ...businessState,
         loading: false,
         error: [err.message]
       })
+      setLoadedFirstTime(true)
     }
   }
 
@@ -801,7 +802,7 @@ export const BusinessAndProductList = (props) => {
             }
           }
           return product
-        }) 
+        })
         setCategoryState({ ...categoryState, products: updatedProducts })
         showToast(ToastType.Success, result?.enabled
           ? t('ENABLED_PRODUCT', 'Enabled product')
@@ -813,7 +814,7 @@ export const BusinessAndProductList = (props) => {
       showToast(ToastType.Error, err.message)
     }
   }
-  
+
 
   const updateStoreCategory = async (categoryId, updateParams = {}) => {
     try {
@@ -862,13 +863,13 @@ export const BusinessAndProductList = (props) => {
   }, [priceFilterValues])
 
   useEffect(() => {
-    if (!orderState.loading && orderOptions && !languageState.loading && !props.avoidBusinessLoading) {
+    if (!orderState.loading && Object.keys(orderOptions || {})?.length > 0 && !languageState.loading && !props.avoidBusinessLoading) {
       getBusiness()
     }
   }, [JSON.stringify(orderOptions), languageState.loading, slug, filterByMenus, professionalSelected])
 
   useEffect(() => {
-    if (!orderState.loading && orderOptions && !languageState.loading && !businessState.loading && props.avoidBusinessLoading) {
+    if (!orderState.loading && Object.keys(orderOptions || {})?.length > 0 && !languageState.loading && !businessState.loading && props.avoidBusinessLoading) {
       getBusiness()
     }
   }, [JSON.stringify(orderOptions), languageState.loading, slug, filterByMenus, professionalSelected])
@@ -957,6 +958,7 @@ export const BusinessAndProductList = (props) => {
           setNotFound={setNotFound}
           updateStoreCategory={updateStoreCategory}
           updateStoreProduct={updateStoreProduct}
+          loadedFirstTime={loadedFirstTime}
         />
       )}
     </>

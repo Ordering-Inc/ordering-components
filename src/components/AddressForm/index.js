@@ -14,7 +14,8 @@ export const AddressForm = (props) => {
     useValidationFileds,
     onSaveAddress,
     isSelectedAfterAdd,
-    onSaveCustomAddress
+    onSaveCustomAddress,
+    franchiseId
   } = props
 
   const [ordering] = useApi()
@@ -145,6 +146,7 @@ export const AddressForm = (props) => {
           changeAddress(content.result.id, {
             address: isEdit ? null : content.result,
             country_code: content.result?.country_code,
+            type: options?.type,
             isEdit
           })
         }
@@ -161,6 +163,7 @@ export const AddressForm = (props) => {
   }
 
   const getBusinessDeliveryZones = async (location) => {
+    if(!location) return
     try {
       setBusinessesList({
         ...businessesList,
@@ -170,16 +173,12 @@ export const AddressForm = (props) => {
       let where = null
       const conditions = []
       const parameters = {
-        location,
+        location: `${location?.lat},${location?.lng}`,
         type: options?.type
       }
-      conditions.push({
-        attribute: 'types',
-        conditions: [{
-          attribute: 'id',
-          value: options?.type
-        }]
-      })
+      if (franchiseId) {
+        conditions.push({ attribute: 'franchise_id', value: franchiseId })
+      }
       where = {
         conditions,
         conector: 'AND'

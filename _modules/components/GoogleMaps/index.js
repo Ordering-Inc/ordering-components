@@ -1,6 +1,6 @@
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -11,21 +11,21 @@ var _WrapperGoogleMaps = require("../WrapperGoogleMaps");
 var _EventContext = require("../../contexts/EventContext");
 var _UtilsContext = require("../../contexts/UtilsContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-var GoogleMaps = function GoogleMaps(props) {
+var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
   var googleReady = props.googleReady,
     locations = props.locations,
     mapControls = props.mapControls,
@@ -40,8 +40,10 @@ var GoogleMaps = function GoogleMaps(props) {
     noDistanceValidation = props.noDistanceValidation,
     businessZones = props.businessZones,
     fillStyle = props.fillStyle,
-    useLocationPin = props.useLocationPin,
-    deactiveAlerts = props.deactiveAlerts;
+    useMapWithBusinessZones = props.useMapWithBusinessZones,
+    deactiveAlerts = props.deactiveAlerts,
+    fallbackIcon = props.fallbackIcon,
+    manualZoom = props.manualZoom;
   var _useUtils = (0, _UtilsContext.useUtils)(),
     _useUtils2 = _slicedToArray(_useUtils, 1),
     optimizeImage = _useUtils2[0].optimizeImage;
@@ -89,7 +91,7 @@ var GoogleMaps = function GoogleMaps(props) {
     var businessesNear = 0;
     var locationMarkers = [];
     var _loop = function _loop(i) {
-      var _locations$i2, _locations$i3, _locations$i4, _locations$i5, _locations$i6;
+      var _locations$i2, _locations$i3, _locations$i4, _locations$i5;
       var formatUrl = null;
       if (i === 1 || businessMap) {
         var _locations$i;
@@ -99,10 +101,10 @@ var GoogleMaps = function GoogleMaps(props) {
         position: new window.google.maps.LatLng((_locations$i2 = locations[i]) === null || _locations$i2 === void 0 ? void 0 : _locations$i2.lat, (_locations$i3 = locations[i]) === null || _locations$i3 === void 0 ? void 0 : _locations$i3.lng),
         map: map,
         title: (_locations$i4 = locations[i]) === null || _locations$i4 === void 0 ? void 0 : _locations$i4.slug,
-        icon: (_locations$i5 = locations[i]) !== null && _locations$i5 !== void 0 && _locations$i5.icon ? {
-          url: formatUrl || ((_locations$i6 = locations[i]) === null || _locations$i6 === void 0 ? void 0 : _locations$i6.icon),
+        icon: {
+          url: formatUrl || ((_locations$i5 = locations[i]) === null || _locations$i5 === void 0 ? void 0 : _locations$i5.icon) || fallbackIcon,
           scaledSize: new window.google.maps.Size(35, 35)
-        } : null
+        }
       });
       if (businessMap && !noDistanceValidation) {
         var isNear = validateResult(googleMap, marker, marker.getPosition());
@@ -116,15 +118,15 @@ var GoogleMaps = function GoogleMaps(props) {
             markerRef.current = infowindow;
           }
           marker.addListener('click', function () {
-            var _locations$i7;
-            if ((_locations$i7 = locations[i]) !== null && _locations$i7 !== void 0 && _locations$i7.markerPopup) {
-              var _locations$i8;
+            var _locations$i6;
+            if ((_locations$i6 = locations[i]) !== null && _locations$i6 !== void 0 && _locations$i6.markerPopup) {
+              var _locations$i7;
               var _infowindow = new window.google.maps.InfoWindow();
-              _infowindow.setContent((_locations$i8 = locations[i]) === null || _locations$i8 === void 0 ? void 0 : _locations$i8.markerPopup);
+              _infowindow.setContent((_locations$i7 = locations[i]) === null || _locations$i7 === void 0 ? void 0 : _locations$i7.markerPopup);
               _infowindow.open(map, marker);
             } else {
-              var _locations$i9;
-              onBusinessClick((_locations$i9 = locations[i]) === null || _locations$i9 === void 0 ? void 0 : _locations$i9.slug);
+              var _locations$i8;
+              onBusinessClick((_locations$i8 = locations[i]) === null || _locations$i8 === void 0 ? void 0 : _locations$i8.slug);
             }
           });
           bounds.extend(marker.position);
@@ -162,6 +164,9 @@ var GoogleMaps = function GoogleMaps(props) {
     }
     if (!deactiveAlerts) {
       businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES');
+    }
+    if (useMapWithBusinessZones) {
+      bounds.extend(center);
     }
     map.fitBounds(bounds);
     setBoundMap(bounds);
@@ -263,18 +268,16 @@ var GoogleMaps = function GoogleMaps(props) {
       }));
       newCircleZone.setMap(map);
       bounds.union(newCircleZone.getBounds());
-      map.fitBounds(bounds);
     }
     if (deliveryZone.type === 5 && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data3 = deliveryZone.data) !== null && _deliveryZone$data3 !== void 0 && _deliveryZone$data3.distance) {
       var _deliveryZone$data4;
       var _newCircleZone = new window.google.maps.Circle(_objectSpread(_objectSpread({}, fillStyle), {}, {
         editable: false,
         center: center,
-        radius: (deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.distance) * units[deliveryZone === null || deliveryZone === void 0 ? void 0 : (_deliveryZone$data4 = deliveryZone.data) === null || _deliveryZone$data4 === void 0 ? void 0 : _deliveryZone$data4.unit]
+        radius: (deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.distance) * units[deliveryZone === null || deliveryZone === void 0 || (_deliveryZone$data4 = deliveryZone.data) === null || _deliveryZone$data4 === void 0 ? void 0 : _deliveryZone$data4.unit]
       }));
       _newCircleZone.setMap(map);
       bounds.union(_newCircleZone.getBounds());
-      map.fitBounds(bounds);
     }
     if ((deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.type) === 2 && Array.isArray(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data)) {
       var newPolygonZone = new window.google.maps.Polygon(_objectSpread(_objectSpread({}, fillStyle), {}, {
@@ -295,7 +298,6 @@ var GoogleMaps = function GoogleMaps(props) {
         } finally {
           _iterator3.f();
         }
-        map.fitBounds(bounds);
       }
     }
   };
@@ -315,8 +317,8 @@ var GoogleMaps = function GoogleMaps(props) {
           position: window.google.maps.ControlPosition.TOP_LEFT
         }, mapControls === null || mapControls === void 0 ? void 0 : mapControls.mapTypeControlOptions)
       });
-      var marker = null;
       setGoogleMap(map);
+      var marker = null;
       if (locations) {
         if (locations.length > 0) {
           generateMarkers(map);
@@ -332,7 +334,9 @@ var GoogleMaps = function GoogleMaps(props) {
           marker = new window.google.maps.Marker({
             position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
             map: map,
-            icon: useLocationPin ? undefined : {
+            draggable: useMapWithBusinessZones,
+            zIndex: 9999,
+            icon: useMapWithBusinessZones ? undefined : {
               url: (_locations$3 = locations[0]) === null || _locations$3 === void 0 ? void 0 : _locations$3.icon,
               scaledSize: new window.google.maps.Size(35, 35)
             }
@@ -378,7 +382,43 @@ var GoogleMaps = function GoogleMaps(props) {
         }
       }
     }
-  }, [googleReady, locations]);
+  }, [googleReady, JSON.stringify(businessZones)]);
+  (0, _react.useEffect)(function () {
+    if (!googleMap || (markers === null || markers === void 0 ? void 0 : markers.length) > 0 || googleMapMarker || useMapWithBusinessZones) return;
+    var marker = null;
+    if (locations) {
+      if (locations.length > 0) {
+        generateMarkers(googleMap);
+      }
+      if (businessMap) {
+        marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(center.lat, center.lng),
+          googleMap: googleMap
+        });
+        googleMap.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
+      } else {
+        var _locations$4;
+        marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
+          googleMap: googleMap,
+          draggable: useMapWithBusinessZones,
+          zIndex: 9999,
+          icon: useMapWithBusinessZones ? undefined : {
+            url: (_locations$4 = locations[0]) === null || _locations$4 === void 0 ? void 0 : _locations$4.icon,
+            scaledSize: new window.google.maps.Size(35, 35)
+          }
+        });
+      }
+      setGoogleMapMarker(marker);
+    } else {
+      marker = new window.google.maps.Marker({
+        position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
+        googleMap: googleMap,
+        draggable: !!(mapControls !== null && mapControls !== void 0 && mapControls.isMarkerDraggable)
+      });
+      setGoogleMapMarker(marker);
+    }
+  }, [googleMap, locations]);
   (0, _react.useEffect)(function () {
     if (!businessMap) {
       if (googleReady && googleMap && googleMapMarker) {
@@ -388,7 +428,7 @@ var GoogleMaps = function GoogleMaps(props) {
         window.google.maps.event.addListener(googleMapMarker, 'drag', function () {
           events.emit('map_is_dragging', true);
         });
-        if (mapControls !== null && mapControls !== void 0 && mapControls.isMarkerDraggable) {
+        if (mapControls !== null && mapControls !== void 0 && mapControls.isMarkerDraggable && !useMapWithBusinessZones) {
           window.google.maps.event.addListener(googleMap, 'drag', function () {
             googleMapMarker.setPosition(googleMap.getCenter());
             events.emit('map_is_dragging', true);
@@ -411,7 +451,7 @@ var GoogleMaps = function GoogleMaps(props) {
       if (businessMap && googleMap) {
         if (markerRef !== null && markerRef !== void 0 && markerRef.current) {
           var _markerRef$current;
-          (markerRef === null || markerRef === void 0 ? void 0 : (_markerRef$current = markerRef.current) === null || _markerRef$current === void 0 ? void 0 : _markerRef$current.close) && markerRef.current.close();
+          (markerRef === null || markerRef === void 0 || (_markerRef$current = markerRef.current) === null || _markerRef$current === void 0 ? void 0 : _markerRef$current.close) && markerRef.current.close();
         }
         markers.forEach(function (marker) {
           marker.setMap(null);
@@ -422,18 +462,18 @@ var GoogleMaps = function GoogleMaps(props) {
       center.lng = location === null || location === void 0 ? void 0 : location.lng;
       var newPos = new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng);
       googleMapMarker && googleMapMarker.setPosition(newPos);
-      (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newPos);
+      !useMapWithBusinessZones && (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newPos);
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
     }
   }, [location, locations]);
   (0, _react.useEffect)(function () {
-    if (!businessMap) {
+    if (!businessMap && !manualZoom) {
       var interval = setInterval(function () {
         if (googleReady && !userActivity) {
-          var driverLocation = locations === null || locations === void 0 ? void 0 : locations[0];
+          var driverLocation = useMapWithBusinessZones ? center : locations === null || locations === void 0 ? void 0 : locations[0];
           if (driverLocation) {
             var newLocation = new window.google.maps.LatLng(driverLocation === null || driverLocation === void 0 ? void 0 : driverLocation.lat, driverLocation === null || driverLocation === void 0 ? void 0 : driverLocation.lng);
-            (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newLocation);
+            useMapWithBusinessZones ? boundMap.extend(newLocation) : (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newLocation);
             (markers === null || markers === void 0 ? void 0 : markers.length) > 0 && markers.forEach(function (marker) {
               return boundMap.extend(marker.position);
             });
@@ -466,7 +506,6 @@ var GoogleMaps = function GoogleMaps(props) {
     }
   });
 };
-exports.GoogleMaps = GoogleMaps;
 GoogleMaps.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
@@ -507,8 +546,7 @@ GoogleMaps.defaultProps = {
   beforeElements: [],
   afterElements: []
 };
-var GoogleMapsMap = (0, _WrapperGoogleMaps.WrapperGoogleMaps)(GoogleMaps);
-exports.GoogleMapsMap = GoogleMapsMap;
+var GoogleMapsMap = exports.GoogleMapsMap = (0, _WrapperGoogleMaps.WrapperGoogleMaps)(GoogleMaps);
 GoogleMapsMap.propTypes = {
   /**
    * You Google Maps api key

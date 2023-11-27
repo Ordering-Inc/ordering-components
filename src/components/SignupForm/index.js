@@ -7,6 +7,7 @@ import { useConfig } from '../../contexts/ConfigContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+import parsePhoneNumber from 'libphonenumber-js'
 
 /**
  * Component to manage signup behavior without UI component
@@ -25,6 +26,7 @@ export const SignupForm = (props) => {
     isGuest
   } = props
   const requestsState = {}
+  const CONDITIONAL_CODES = ['1787']
 
   const [events] = useEvent()
   const [ordering] = useApi()
@@ -91,6 +93,19 @@ export const SignupForm = (props) => {
       data.phone = data.cellphone
     }
     const newData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== ''))
+
+    if (!newData?.country_code && newData?.country_phone_code && newData?.cellphone) {
+      const parsedNumber = parsePhoneNumber(`+${newData?.country_phone_code}${newData?.cellphone}`)
+      newData.country_code = parsedNumber.country
+    }
+
+    if (CONDITIONAL_CODES.includes(newData?.country_phone_code)) {
+      if (newData?.country_code === 'PR') {
+        newData.cellphone = `787${newData.cellphone}`
+        newData.country_phone_code = '1'
+      }
+    }
+
     try {
       setFormState({ ...formState, loading: true })
       const source = {}
@@ -214,7 +229,14 @@ export const SignupForm = (props) => {
 
   const generateOtpCode = async (values) => {
     if (isReCaptchaEnable && reCaptchaValue === null) {
-      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: true, result: t('RECAPTCHA_VALIDATION_IS_REQUIRED', 'The ReCaptcha validation is required.') } })
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        generate: true,
+        result: {
+          error: true,
+          result: t('RECAPTCHA_VALIDATION_IS_REQUIRED', 'The ReCaptcha validation is required.')
+        }
+      })
       return
     }
     const body = {
@@ -233,7 +255,11 @@ export const SignupForm = (props) => {
       country_phone_code: countryPhoneCode
     })
     try {
-      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true, result: { error: false, result: null } })
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: true,
+        result: { error: false, result: null }
+      })
       setWillVerifyOtpState(true)
       if (signUpTab === 'otpCellphone') {
         body.country_phone_code = countryPhoneCode
@@ -252,12 +278,26 @@ export const SignupForm = (props) => {
       })
       const { result, error } = await response.json()
       if (!error) {
-        setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false, result: { result: result, error: null } })
+        setCheckPhoneCodeState({
+          ...checkPhoneCodeState,
+          loading: false,
+          result: { result: result, error: null }
+        })
         return
       }
-      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false, result: { error: true, result: result } })
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        generate: true,
+        result: { error: true, result: result }
+      })
     } catch (err) {
-      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false, result: { error: true, result: err.message } })
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        generate: true,
+        result: { error: true, result: err.message }
+      })
     }
   }
   const handleSetCheckPhoneCodeState = (data) => {

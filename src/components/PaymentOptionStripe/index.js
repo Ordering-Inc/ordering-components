@@ -14,7 +14,8 @@ export const PaymentOptionStripe = (props) => {
     setCardList,
     gateway,
     onPaymentChange,
-    paySelected
+    paySelected,
+    newCardAdded
   } = props
 
   const [{ token, user }] = useSession()
@@ -53,7 +54,7 @@ export const PaymentOptionStripe = (props) => {
       requestState.paymentCards = source
       // The order of paymentCards params is businessId, userId. This sdk needs to be improved in the future,
       const { content: { result } } = await ordering.setAccessToken(token).paymentCards(businessId, user.id).get({ cancelToken: source })
-      const defaultCard = result?.find(card => card.default)
+      const defaultCard = result?.find(card => card.default || card?.id === newCardAdded?.paymentMethodId)
       if (defaultCard) {
         setCardDefault({
           id: defaultCard.id,
@@ -107,7 +108,7 @@ export const PaymentOptionStripe = (props) => {
         setCardsList({
           ...cardsList
         })
-        if (cardSelected?.id === card?.id) {
+        if (paySelected?.data?.id === card?.id) {
           setCardSelected(null)
           onPaymentChange && onPaymentChange(null)
         }
@@ -216,6 +217,12 @@ export const PaymentOptionStripe = (props) => {
       }
     }
   }, [token, businessId, paySelected?.data])
+
+  useEffect(() => {
+    if (newCardAdded) {
+      getCards()
+    }
+  }, [JSON.stringify(newCardAdded)])
 
   return (
     <>

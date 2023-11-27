@@ -29,16 +29,19 @@ export const OrderListGroups = (props) => {
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
   const [{ configs }] = useConfig()
+
+  const _combineTabs = props.combineTabs ?? configs?.combine_pending_and_progress_orders?.value === '1'
+  const [combineTabs, setCombineTabsState] = useState(_combineTabs)
+
   const isLogisticActivated = configs?.logistic_module?.value
-  const combineTabs = configs?.combine_pending_and_progress_orders?.value === '1'
   const ordersStatusArray = combineTabs ? ['active', 'completed', 'cancelled'] : ['pending', 'inProgress', 'completed', 'cancelled']
   const notificationStatusses = props.isDriverApp
     ? configs?.notification_driver_states?.value.split('|').map(value => Number(value)) || []
     : configs?.notification_business_states?.value.split('|').map(value => Number(value)) || []
   const ordersGroupStatus = {
-    active: orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23],
+    active: orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26],
     pending: orderGroupStatusCustom?.pending ?? [0, 13],
-    inProgress: orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23],
+    inProgress: orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26],
     completed: orderGroupStatusCustom?.completed ?? [1, 11, 15],
     cancelled: orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
   }
@@ -60,37 +63,45 @@ export const OrderListGroups = (props) => {
     active: {
       ...orderStructure,
       defaultFilter: ordersGroupStatus.active,
-      currentFilter: ordersGroupStatus.active
+      currentFilter: ordersGroupStatus.active,
+      fetched: false
     },
     pending: {
       ...orderStructure,
       defaultFilter: ordersGroupStatus.pending,
-      currentFilter: ordersGroupStatus.pending
+      currentFilter: ordersGroupStatus.pending,
+      fetched: false
     },
     inProgress: {
       ...orderStructure,
       defaultFilter: ordersGroupStatus.inProgress,
-      currentFilter: ordersGroupStatus.inProgress
+      currentFilter: ordersGroupStatus.inProgress,
+      fetched: false
     },
     completed: {
       ...orderStructure,
       defaultFilter: ordersGroupStatus.completed,
-      currentFilter: ordersGroupStatus.completed
+      currentFilter: ordersGroupStatus.completed,
+      fetched: false
     },
     cancelled: {
       ...orderStructure,
       defaultFilter: ordersGroupStatus.cancelled,
-      currentFilter: ordersGroupStatus.cancelled
+      currentFilter: ordersGroupStatus.cancelled,
+      fetched: false
     }
   })
   const [currentTabSelected, setCurrentTabSelected] = useState(combineTabs ? 'active' : 'pending')
-  const [logisticOrders, setlogisticOrders] = useState({ loading: false, error: null, orders: null })
+  const [logisticOrders, setlogisticOrders] = useState({ loading: false, error: null, orders: [] })
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [currentFilters, setCurrentFilters] = useState(null)
   const [filtered, setFiltered] = useState(null)
   const [ordersDeleted, setOrdersDeleted] = useState({ loading: false, error: null, result: [] })
   const [controlsState, setControlsState] = useState({ loading: true, error: null, paymethods: [] })
   const [businessIDs, setBusinessIDs] = useState([])
+  const [orderLogisticAdded, setOrderLogisticAdded] = useState(null)
+  const [orderLogisticUpdated, setOrderLogisticUpdated] = useState(null)
+  const [recentlyReceivedMessage, setRecentlyReceivedMessage] = useState(null)
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -244,6 +255,19 @@ export const OrderListGroups = (props) => {
       })
     }
 
+    if (!isDriverApp) {
+      options.query.where.push({
+        attribute: 'products',
+        conditions: [{
+          attribute: 'type',
+          value: {
+            condition: '=',
+            value: 'item'
+          }
+        }]
+      })
+    }
+
     const source = {}
     requestsState.orders = source
     options.cancelToken = source
@@ -296,7 +320,8 @@ export const OrderListGroups = (props) => {
           [tab]: {
             ...orderStructure,
             defaultFilter: ordersGroupStatus[tab],
-            currentFilter: ordersGroup[tab].currentFilter
+            currentFilter: ordersGroup[tab].currentFilter,
+            orders: ordersGroup[tab].orders
           }
         }
       })
@@ -325,7 +350,7 @@ export const OrderListGroups = (props) => {
         page: 1,
         pageSize,
         orderStatus: ordersGroup[currentTabSelected]?.currentFilter,
-        newFetch
+        newFetch: (newFetch || newFetchCurrent)
       })
 
       const _ordersCleaned = error
@@ -343,6 +368,7 @@ export const OrderListGroups = (props) => {
           loading: false,
           orders: _ordersCleaned,
           error: error ? result : null,
+          fetched: true,
           pagination: {
             ...ordersGroup[currentTabSelected].pagination,
             currentPage: pagination.current_page,
@@ -578,9 +604,9 @@ export const OrderListGroups = (props) => {
 
   const getStatusById = (id) => {
     if (!id && id !== 0) return
-    const active = orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21]
+    const active = orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26]
     const pending = orderGroupStatusCustom?.pending ?? [0, 13]
-    const inProgress = orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21]
+    const inProgress = orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26]
     const completed = orderGroupStatusCustom?.completed ?? [1, 11, 15]
     // const cancelled = orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
 
@@ -617,23 +643,23 @@ export const OrderListGroups = (props) => {
         ? [{ ...order, action: type + order?.status }, ...orderList]
         : orderList.filter((_order) => _order.id !== order.id)
     }
-
-    ordersGroup[status].orders = sortOrders(orders)
     let _pagination = ordersGroup[status].pagination
-
     if (type !== 'update') {
       _pagination = {
         ...ordersGroup[status].pagination,
         total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
       }
-      ordersGroup[status].pagination = _pagination
     }
-
-    setOrdersGroup({
-      ...ordersGroup,
+    setOrdersGroup((prevState) => ({
+      ...prevState,
       orders: filterByIdUnique(sortOrders(orders)),
+      [status]: {
+        ...prevState[status],
+        orders: sortOrders(orders),
+        pagination: _pagination
+      },
       pagination: _pagination
-    })
+    }))
   }
 
   const handleClickOrder = (orderAux) => {
@@ -805,12 +831,10 @@ export const OrderListGroups = (props) => {
     setCurrentFilters(ordersGroup[currentTabSelected]?.currentFilter)
     if (currentTabSelected === 'logisticOrders') {
       loadLogisticOrders(!!logisticOrders?.orders)
-    } else {
-      loadOrders({
-        newFetchCurrent: ordersGroup[currentTabSelected]?.pagination?.total === null
-      })
+    } else if (!ordersGroup[currentTabSelected]?.fetched && props.isNetConnected) {
+      loadOrders({ newFetchCurrent: true })
     }
-  }, [currentTabSelected])
+  }, [currentTabSelected, props.isNetConnected])
 
   useEffect(() => {
     if (currentFilters && !isDriverApp) {
@@ -835,9 +859,10 @@ export const OrderListGroups = (props) => {
   }
 
   useEffect(() => {
-    if (ordersGroup[currentTabSelected]?.loading || !socket?.socket) return
-
+    if (!socket?.socket) return
     const handleUpdateOrder = (order) => {
+      const isGiftCard = order?.products?.some(product => product?.type === 'gift_card')
+      if (isGiftCard && !isDriverApp) return
       if (session?.user?.level === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return
       events.emit('order_updated', order)
       let orderFound = null
@@ -863,7 +888,7 @@ export const OrderListGroups = (props) => {
           typeof order?.status !== 'number' ||
           !order?.customer ||
           !order?.business ||
-          !order?.paymethod
+          (!order?.paymethod && !order?.payment_events?.some(e => e.event === 'payment'))
         ) {
           return
         }
@@ -912,12 +937,16 @@ export const OrderListGroups = (props) => {
             actionOrderToTab(orderFound, newOrderStatus, 'add')
           }
         } else {
-          actionOrderToTab(orderFound, newOrderStatus, 'remove')
+          !currentFilter.includes(orderFound.status) || (orderFound?.driver === null && isDriverApp)
+            ? actionOrderToTab(orderFound, newOrderStatus, 'remove')
+            : actionOrderToTab(orderFound, newOrderStatus, 'update')
         }
       }
     }
 
     const handleAddNewOrder = (order) => {
+      const isGiftCard = order?.products?.some(product => product?.type === 'gift_card')
+      if (isGiftCard && !isDriverApp) return
       events.emit('order_added', order)
       handleActionEvent('order_added', order)
       if (notificationStatusses.includes(order?.status)) {
@@ -931,40 +960,41 @@ export const OrderListGroups = (props) => {
       actionOrderToTab(order, status, 'add')
     }
 
-    socket.on('orders_register', handleAddNewOrder)
-    socket.on('update_order', handleUpdateOrder)
-    socket.off('message', (e) => handleActionEvent('messages', e))
+    const handleReceiveMessage = (message) => {
+      if (message?.id !== recentlyReceivedMessage?.id) {
+        handleActionEvent('messages', message)
+        setRecentlyReceivedMessage(message)
+      }
+    }
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
-<<<<<<< HEAD
-    socket.socket && socket.socket.on('connect', () => {
-      socket.join(ordersRoom)
-    })
-=======
-    if (socket?.socket?._callbacks?.$orders_register?.find(func => func?.name !== 'handleAddNewOrder')) {
+    if (!socket?.socket?._callbacks?.$orders_register || socket?.socket?._callbacks?.$orders_register?.find(func => func?.name !== 'handleAddNewOrder')) {
       socket.on('orders_register', handleAddNewOrder)
     }
     if (!socket?.socket?._callbacks?.$order_assigned || socket?.socket?._callbacks?.$order_assigned?.find(func => func?.name !== 'handleAddNewOrder')) {
       socket.on('order_assigned', handleAddNewOrder)
     }
-    if (socket?.socket?._callbacks?.$update_order?.find(func => func?.name !== 'handleUpdateOrder')) {
+    if (!socket?.socket?._callbacks?.$update_order || socket?.socket?._callbacks?.$update_order?.find(func => func?.name !== 'handleUpdateOrder')) {
       socket.on('update_order', handleUpdateOrder)
     }
-    if (socket?.socket?._callbacks?.$message?.find(func => func?.name !== 'handleReceiveMessage')) {
+    if (!socket?.socket?._callbacks?.$message || socket?.socket?._callbacks?.$message?.find(func => func?.name !== 'handleReceiveMessage')) {
       socket.on('message', handleReceiveMessage)
     }
->>>>>>> ee4c8ede ([FIX] toasts and alerts driver app (#1131))
     return () => {
       socket.off('orders_register', handleAddNewOrder)
       socket.off('order_assigned', handleAddNewOrder)
       socket.off('update_order', handleUpdateOrder)
-      socket.off('message', (e) => handleActionEvent('messages', e))
+      socket.off('message', handleReceiveMessage)
     }
-  }, [ordersGroup, socket?.socket, session])
+  }, [JSON.stringify(ordersGroup), socket?.socket, session])
 
   const handleAddAssignRequest = useCallback(
     (order) => {
-      handleActionEvent('request_register', order)
+      setOrderLogisticAdded(order)
+      const isSameEvent = orderLogisticAdded?.id === order?.id && orderLogisticAdded.status === order?.status
+      if (!order?.locked && !isSameEvent) {
+        handleActionEvent('request_register', order)
+      }
       setlogisticOrders((prevState) => ({
         ...prevState,
         orders: sortOrders([...prevState?.orders, order].filter((order, index, hash) => { // remove possibles duplicates
@@ -997,7 +1027,11 @@ export const OrderListGroups = (props) => {
 
   const handleUpdateAssignRequest = useCallback(
     (order) => {
-      handleActionEvent('request_update', order)
+      setOrderLogisticUpdated(order)
+      const isSameEvent = orderLogisticUpdated?.id === order?.id && orderLogisticUpdated.status === order?.status
+      if (!order?.locked && !isSameEvent) {
+        handleActionEvent('request_update', order)
+      }
       setlogisticOrders(prevState => ({
         ...prevState,
         orders: prevState?.orders?.some(_order => _order?.id === order?.id)
@@ -1082,6 +1116,10 @@ export const OrderListGroups = (props) => {
     }
   }, [ordersGroup])
 
+  useEffect(() => {
+    setCurrentTabSelected(combineTabs ? 'active' : 'pending')
+  }, [combineTabs])
+
   return (
     <>
       {UIComponent && (
@@ -1095,6 +1133,7 @@ export const OrderListGroups = (props) => {
           setOrdersGroup={setOrdersGroup}
           logisticOrders={logisticOrders}
           messages={messages}
+          setCombineTabsState={setCombineTabsState}
           ordersDeleted={ordersDeleted}
           setOrdersDeleted={setOrdersDeleted}
           setMessages={setMessages}
@@ -1120,6 +1159,7 @@ export const OrderListGroups = (props) => {
 OrderListGroups.defaultProps = {
   orderBy: '-id',
   orderDirection: 'desc',
+  isNetConnected: true,
   paginationSettings: { initialPage: 1, pageSize: 10, controlType: 'infinity' },
   beforeComponents: [],
   afterComponents: [],

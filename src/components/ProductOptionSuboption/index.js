@@ -11,7 +11,8 @@ export const ProductOptionSuboption = (props) => {
     option,
     suboption,
     onChange,
-    isOrigin
+    isOrigin,
+    pizzaState
   } = props
 
   /**
@@ -26,6 +27,7 @@ export const ProductOptionSuboption = (props) => {
   }
   const position = props.state.position || 'whole'
   const price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price
+  const usePizzaValidation = (pizzaState?.[`option:${option?.id}`]?.value === option?.max) && !(option?.max === 1 && option?.min === 1)
 
   /**
    * Set current state
@@ -45,13 +47,16 @@ export const ProductOptionSuboption = (props) => {
    */
   const toggleSelect = () => {
     const selectStatus = isOrigin ? !state.selected : state.selected
-    if (selectStatus && option.limit_suboptions_by_max && balance === option.max && !(option?.max === 1 && option?.min === 1)) {
+    const minMaxValidation = option.with_half_option ? usePizzaValidation : (balance === option.max && !(option?.max === 1 && option?.min === 1))
+    const canBeSelectedByHalf = (pizzaState?.[`option:${option?.id}`]?.value === (option.max - 0.5)) && option.with_half_option
+    if (selectStatus && option.limit_suboptions_by_max && minMaxValidation && !canBeSelectedByHalf) {
       return
     }
     changeState({
       ...state,
       quantity: state.selected ? 0 : 1,
-      selected: !state.selected
+      selected: !state.selected,
+      position: canBeSelectedByHalf ? 'left' : 'whole'
     })
   }
 
@@ -59,10 +64,13 @@ export const ProductOptionSuboption = (props) => {
    * Increment suboption quantity
    */
   const increment = () => {
-    if (option.limit_suboptions_by_max && (balance === option.max || state.quantity === suboption.max)) {
+    if (!option?.with_half_option && option.limit_suboptions_by_max && (balance === option.max || state.quantity === suboption.max)) {
       return
     }
-    if (!option.limit_suboptions_by_max && state.quantity === suboption.max) {
+    if (!option?.with_half_option && !option.limit_suboptions_by_max && state.quantity === suboption.max) {
+      return
+    }
+    if (option?.with_half_option && usePizzaValidation) {
       return
     }
     changeState({
@@ -109,6 +117,7 @@ export const ProductOptionSuboption = (props) => {
           <UIComponent
             {...props}
             state={state}
+            usePizzaValidation={usePizzaValidation}
             increment={increment}
             decrement={decrement}
             changePosition={changePosition}

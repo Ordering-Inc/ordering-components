@@ -10,14 +10,14 @@ export const Messages = (props) => {
     orderId,
     customHandleSend,
     messages,
-    setMessages
+    setMessages,
+    notificationApp
   } = props
 
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [{ token }] = useSession()
   const accessToken = props.accessToken || token
-
   const [canRead, setCanRead] = useState({ administrator: true, business: true, customer: true, driver: true })
   const [message, setMessage] = useState('')
   const [sendMessage, setSendMessages] = useState({ loading: false, error: null })
@@ -53,14 +53,18 @@ export const Messages = (props) => {
         body.type = 3
         body.file = image
       }
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        'X-App-X': ordering.appId,
+        'X-Socket-Id-X': socket?.getId()
+      }
+      if (notificationApp) {
+        headers.appType = notificationApp
+      }
       const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
-        },
+        headers,
         body: JSON.stringify(body)
       })
       const { error, result } = await response.json()
@@ -75,7 +79,7 @@ export const Messages = (props) => {
       }
       setSendMessages({ loading: false, error: error ? result : null })
     } catch (error) {
-      setSendMessages({ loading: false, error: [error.Messages] })
+      setSendMessages({ loading: false, error: [error.message] })
     }
   }
 

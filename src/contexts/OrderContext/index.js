@@ -174,7 +174,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     } catch (err) {
       const message = err?.message?.includes('Internal error')
         ? 'INTERNAL_ERROR'
-        : err.message
+        : !err.message
+          ? t('NETWORK_ERROR', 'Network error')
+          : err.message
       setAlert({ show: true, content: [message] })
       setState({ ...state, loading: false })
     }
@@ -224,25 +226,30 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       return
     }
 
+    const _params = { country_code: params?.country_code }
+
+    params?.type && (_params.type = params?.type)
+
     if (params && params?.address && !checkAddress(params?.address)) {
-      await updateOrderOptions({ address_id: params?.address?.id, country_code: params?.country_code })
+      _params.address_id = params?.address?.id
+      await updateOrderOptions(_params)
       if (isCountryCodeChanged) {
         events.emit('country_code_changed', params?.country_code)
       }
       return
     }
-
+    addressId && (_params.address_id = addressId)
     if (params && params?.isEdit) {
       if (addressId !== state.options.address_id) {
         return
       }
-      await updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+      await updateOrderOptions(_params)
       if (isCountryCodeChanged) {
         events.emit('country_code_changed', params?.country_code)
       }
       return
     }
-    await updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+    await updateOrderOptions(_params)
     if (isCountryCodeChanged) {
       events.emit('country_code_changed', params?.country_code)
     }
@@ -439,7 +446,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         }
         events.emit('cart_updated', result)
         events.emit('product_added', product, result)
-        isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name))
+        isQuickAddProduct && !isDisableToast && showToast(ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name))
       } else {
         setAlert({ show: true, content: result })
       }
@@ -561,7 +568,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_product_updated', product, result)
         events.emit('cart_updated', result)
-        isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_UPDATED_NOTIFICATION', 'Product _PRODUCT_ updated succesfully').replace('_PRODUCT_', product.name))
+        isQuickAddProduct && !isDisableToast && showToast(ToastType.Success, t('PRODUCT_UPDATED_NOTIFICATION', 'Product _PRODUCT_ updated succesfully').replace('_PRODUCT_', product.name))
       } else {
         setAlert({ show: true, content: result })
       }
@@ -1294,7 +1301,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       socket.leave(`carts_${customerState?.user?.id || session?.user?.id}`)
       socket.leave(`orderoptions_${customerState?.user?.id || session?.user?.id}`)
     }
-  }, [socket, session, customerState?.user?.id])
+  }, [socket, session.auth, session.loading, customerState?.user?.id, session?.user?.id])
 
   const functions = {
     refreshOrderOptions,

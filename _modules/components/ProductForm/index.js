@@ -1,6 +1,6 @@
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -8,6 +8,7 @@ exports.ProductForm = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _moment = _interopRequireDefault(require("moment"));
+var Sentry = _interopRequireWildcard(require("@sentry/react"));
 var _OrderContext = require("../../contexts/OrderContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
 var _ApiContext = require("../../contexts/ApiContext");
@@ -17,14 +18,15 @@ var _ToastContext = require("../../contexts/ToastContext");
 var _LanguageContext = require("../../contexts/LanguageContext");
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator.return && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, catch: function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
@@ -36,10 +38,10 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-var ProductForm = function ProductForm(props) {
-  var _props$productCart, _orderState$carts, _product$product, _product$product2, _product$product3, _product$product4;
+var ProductForm = exports.ProductForm = function ProductForm(props) {
+  var _props$product, _props$productCart, _orderState$carts, _product$product, _product$product2, _product$product3, _product$product4;
   var UIComponent = props.UIComponent,
     useOrderContext = props.useOrderContext,
     onSave = props.onSave,
@@ -51,7 +53,8 @@ var ProductForm = function ProductForm(props) {
     professionalList = props.professionalList,
     handleUpdateProducts = props.handleUpdateProducts,
     handleUpdateProfessionals = props.handleUpdateProfessionals,
-    handleChangeProfessional = props.handleChangeProfessional;
+    handleChangeProfessional = props.handleChangeProfessional,
+    setProductLoading = props.setProductLoading;
   var requestsState = {};
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 2),
@@ -78,8 +81,9 @@ var ProductForm = function ProductForm(props) {
   /**
    * Original product state
    */
+  var availableLazyLoad = ((_props$product = props.product) === null || _props$product === void 0 ? void 0 : _props$product.load_type) === 'lazy' && props.businessId && props.categoryId && props.productId;
   var _useState = (0, _react.useState)({
-      product: props.product,
+      product: availableLazyLoad ? null : props.product,
       loading: false,
       error: null
     }),
@@ -121,25 +125,49 @@ var ProductForm = function ProductForm(props) {
     _useState10 = _slicedToArray(_useState9, 2),
     customDefaultSubOptions = _useState10[0],
     setCustomDefaultSubOptions = _useState10[1];
-  var _useState11 = (0, _react.useState)({
+
+  /**
+   * preselected and selected suboptions
+   */
+  var _useState11 = (0, _react.useState)([]),
+    _useState12 = _slicedToArray(_useState11, 2),
+    selectedSuboptions = _useState12[0],
+    setSelectedSuboptions = _useState12[1];
+
+  /**
+   * dictionary of respect_to suboptions
+   */
+  var _useState13 = (0, _react.useState)([]),
+    _useState14 = _slicedToArray(_useState13, 2),
+    dependsSuboptions = _useState14[0],
+    setDependsSuboptions = _useState14[1];
+  var _useState15 = (0, _react.useState)({
       loading: false,
       professionals: [],
       error: null
     }),
-    _useState12 = _slicedToArray(_useState11, 2),
-    professionalListState = _useState12[0],
-    setProfessionalListState = _useState12[1];
+    _useState16 = _slicedToArray(_useState15, 2),
+    professionalListState = _useState16[0],
+    setProfessionalListState = _useState16[1];
 
   /**
    * Action status
    */
-  var _useState13 = (0, _react.useState)({
+  var _useState17 = (0, _react.useState)({
       loading: false,
       error: null
     }),
-    _useState14 = _slicedToArray(_useState13, 2),
-    actionStatus = _useState14[0],
-    setActionStatus = _useState14[1];
+    _useState18 = _slicedToArray(_useState17, 2),
+    actionStatus = _useState18[0],
+    setActionStatus = _useState18[1];
+
+  /**
+   * pizza type and position
+   */
+  var _useState19 = (0, _react.useState)({}),
+    _useState20 = _slicedToArray(_useState19, 2),
+    pizzaState = _useState20[0],
+    setPizzaState = _useState20[1];
 
   /**
    * Edit mode
@@ -257,16 +285,16 @@ var ProductForm = function ProductForm(props) {
   var getUnitTotal = function getUnitTotal(productCart) {
     var _product$product7;
     var subtotal = 0;
-    for (var i = 0; i < ((_product$product5 = product.product) === null || _product$product5 === void 0 ? void 0 : (_product$product5$ext = _product$product5.extras) === null || _product$product5$ext === void 0 ? void 0 : _product$product5$ext.length); i++) {
-      var _product$product5, _product$product5$ext, _product$product6;
+    for (var i = 0; i < ((_product$product5 = product.product) === null || _product$product5 === void 0 || (_product$product5 = _product$product5.extras) === null || _product$product5 === void 0 ? void 0 : _product$product5.length); i++) {
+      var _product$product5, _product$product6;
       var extra = (_product$product6 = product.product) === null || _product$product6 === void 0 ? void 0 : _product$product6.extras[i];
       for (var j = 0; j < ((_extra$options = extra.options) === null || _extra$options === void 0 ? void 0 : _extra$options.length); j++) {
         var _extra$options;
         var option = extra.options[j];
         for (var k = 0; k < ((_option$suboptions = option.suboptions) === null || _option$suboptions === void 0 ? void 0 : _option$suboptions.length); k++) {
-          var _option$suboptions, _productCart$options, _productCart$options$;
+          var _option$suboptions, _productCart$options;
           var suboption = option.suboptions[k];
-          if ((_productCart$options = productCart.options["id:".concat(option.id)]) !== null && _productCart$options !== void 0 && (_productCart$options$ = _productCart$options.suboptions["id:".concat(suboption.id)]) !== null && _productCart$options$ !== void 0 && _productCart$options$.selected) {
+          if ((_productCart$options = productCart.options["id:".concat(option.id)]) !== null && _productCart$options !== void 0 && (_productCart$options = _productCart$options.suboptions["id:".concat(suboption.id)]) !== null && _productCart$options !== void 0 && _productCart$options.selected) {
             var suboptionState = productCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)];
             var quantity = option.allow_suboption_quantity ? suboptionState.quantity : 1;
             var price = option.with_half_option && suboption.half_price && suboptionState.position !== 'whole' ? suboption.half_price : suboption.price;
@@ -359,7 +387,7 @@ var ProductForm = function ProductForm(props) {
         }
       }, _callee, null, [[4, 19]]);
     }));
-    return function handleFavoriteProduct(_x2) {
+    return function handleFavoriteProduct(_x) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -440,6 +468,7 @@ var ProductForm = function ProductForm(props) {
           }
           if (productCart.options["id:".concat(_option.id)]) {
             productCart.options["id:".concat(_option.id)].suboptions = {};
+            pizzaState["option:".concat(_option.id)] = {};
           }
         }
       });
@@ -466,6 +495,7 @@ var ProductForm = function ProductForm(props) {
    * @param {object} product Product object
    */
   var handleChangeSuboptionState = function handleChangeSuboptionState(state, suboption, option) {
+    var _newPizzaState;
     var newProductCart = JSON.parse(JSON.stringify(productCart));
     if (!newProductCart.options) {
       newProductCart.options = {};
@@ -477,9 +507,11 @@ var ProductForm = function ProductForm(props) {
         suboptions: {}
       };
     }
+    var newPizzaState = {};
     if (!state.selected) {
       delete newProductCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)];
       removeRelatedOptions(newProductCart, suboption.id);
+      newPizzaState = handleVerifyPizzaState(state, suboption, option);
     } else {
       if (option.min === option.max && option.min === 1) {
         var suboptions = newProductCart.options["id:".concat(option.id)].suboptions;
@@ -494,25 +526,173 @@ var ProductForm = function ProductForm(props) {
       }
       newProductCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)] = state;
     }
+    var suboptionsArray = [];
+    var _selectedSuboptions = selectedSuboptions;
+    if (state.selected) {
+      var _iterator = _createForOfIteratorHelper(product.product.extras),
+        _step;
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var _extra2 = _step.value;
+          var _iterator6 = _createForOfIteratorHelper(_extra2.options),
+            _step6;
+          try {
+            for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+              var _Object$keys, _newProductCart$optio3;
+              var _option3 = _step6.value;
+              if (((_Object$keys = Object.keys((newProductCart === null || newProductCart === void 0 || (_newProductCart$optio3 = newProductCart.options["id:".concat(_option3 === null || _option3 === void 0 ? void 0 : _option3.id)]) === null || _newProductCart$optio3 === void 0 ? void 0 : _newProductCart$optio3.suboptions) || {})) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length) === 0) {
+                newProductCart === null || newProductCart === void 0 || delete newProductCart.options["id:".concat(_option3 === null || _option3 === void 0 ? void 0 : _option3.id)];
+              }
+            }
+          } catch (err) {
+            _iterator6.e(err);
+          } finally {
+            _iterator6.f();
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+      if (newProductCart !== null && newProductCart !== void 0 && newProductCart.options) {
+        var _iterator2 = _createForOfIteratorHelper(product.product.extras),
+          _step2;
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var extra = _step2.value;
+            var _iterator3 = _createForOfIteratorHelper(extra.options),
+              _step3;
+            try {
+              for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+                var _option2 = _step3.value;
+                var _iterator4 = _createForOfIteratorHelper(_option2.suboptions),
+                  _step4;
+                try {
+                  for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+                    var _suboption = _step4.value;
+                    if (newProductCart !== null && newProductCart !== void 0 && newProductCart.options["id:".concat(_option2 === null || _option2 === void 0 ? void 0 : _option2.id)]) {
+                      var _newProductCart$optio;
+                      if (newProductCart !== null && newProductCart !== void 0 && (_newProductCart$optio = newProductCart.options["id:".concat(_option2 === null || _option2 === void 0 ? void 0 : _option2.id)]) !== null && _newProductCart$optio !== void 0 && _newProductCart$optio.suboptions["id:".concat(_suboption === null || _suboption === void 0 ? void 0 : _suboption.id)]) {
+                        _selectedSuboptions["suboption:".concat(_suboption.id)] = true;
+                      } else {
+                        _selectedSuboptions["suboption:".concat(_suboption.id)] = false;
+                      }
+                    } else {
+                      var _option2$suboptions;
+                      _selectedSuboptions["suboption:".concat(_suboption.id)] = (_suboption === null || _suboption === void 0 ? void 0 : _suboption.preselected) || (_option2 === null || _option2 === void 0 ? void 0 : _option2.max) === 1 && (_option2 === null || _option2 === void 0 ? void 0 : _option2.min) === 1 && (_option2 === null || _option2 === void 0 || (_option2$suboptions = _option2.suboptions) === null || _option2$suboptions === void 0 ? void 0 : _option2$suboptions.length) === 1;
+                    }
+                  }
+                } catch (err) {
+                  _iterator4.e(err);
+                } finally {
+                  _iterator4.f();
+                }
+              }
+            } catch (err) {
+              _iterator3.e(err);
+            } finally {
+              _iterator3.f();
+            }
+          }
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
+        }
+      }
+      var preselectedOptions = [];
+      var preselectedSuboptions = [];
+      var _iterator5 = _createForOfIteratorHelper(product.product.extras),
+        _step5;
+      try {
+        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+          var _extra3 = _step5.value;
+          var _iterator7 = _createForOfIteratorHelper(_extra3.options),
+            _step7;
+          try {
+            for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+              var _option4 = _step7.value;
+              var _iterator8 = _createForOfIteratorHelper(_option4.suboptions),
+                _step8;
+              try {
+                for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+                  var _suboption2 = _step8.value;
+                  if (checkSuboptionsSelected(_suboption2 === null || _suboption2 === void 0 ? void 0 : _suboption2.id, _selectedSuboptions, dependsSuboptions)) {
+                    preselectedOptions.push(_option4);
+                    preselectedSuboptions.push(_suboption2);
+                  }
+                }
+              } catch (err) {
+                _iterator8.e(err);
+              } finally {
+                _iterator8.f();
+              }
+            }
+          } catch (err) {
+            _iterator7.e(err);
+          } finally {
+            _iterator7.f();
+          }
+        }
+      } catch (err) {
+        _iterator5.e(err);
+      } finally {
+        _iterator5.f();
+      }
+      var states = preselectedSuboptions.map(function (suboption, i) {
+        var _newProductCart$optio2, _preselectedOptions$i, _preselectedOptions$i2;
+        var cartSuboption = (newProductCart === null || newProductCart === void 0 || (_newProductCart$optio2 = newProductCart.options["id:".concat((_preselectedOptions$i = preselectedOptions[i]) === null || _preselectedOptions$i === void 0 ? void 0 : _preselectedOptions$i.id)]) === null || _newProductCart$optio2 === void 0 ? void 0 : _newProductCart$optio2.suboptions["id:".concat(suboption === null || suboption === void 0 ? void 0 : suboption.id)]) || suboption;
+        var price = (_preselectedOptions$i2 = preselectedOptions[i]) !== null && _preselectedOptions$i2 !== void 0 && _preselectedOptions$i2.with_half_option && cartSuboption !== null && cartSuboption !== void 0 && cartSuboption.half_price && (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.position) !== 'whole' ? cartSuboption.half_price : cartSuboption.price;
+        return {
+          id: cartSuboption.id,
+          name: cartSuboption.name,
+          position: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state === null || state === void 0 ? void 0 : state.position : cartSuboption.position || 'whole',
+          price: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state.price : price,
+          quantity: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state.quantity : (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.quantity) || 1,
+          selected: true,
+          total: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state.total : price
+        };
+      });
+      preselectedOptions.map(function (option, i) {
+        var defaultSuboption = {
+          option: option,
+          suboption: preselectedSuboptions[i],
+          state: states[i]
+        };
+        suboptionsArray = [].concat(_toConsumableArray(suboptionsArray), [defaultSuboption]);
+      });
+      newPizzaState = handleVerifyPizzaState(state, suboption, option, preselectedOptions, preselectedSuboptions, states);
+    }
     var newBalance = Object.keys(newProductCart.options["id:".concat(option.id)].suboptions).length;
     if (option.limit_suboptions_by_max) {
       newBalance = Object.values(newProductCart.options["id:".concat(option.id)].suboptions).reduce(function (count, suboption) {
         return count + suboption.quantity;
       }, 0);
     }
-    if (newBalance <= option.max) {
+    var hasPreselectedFlow = suboptionsArray.filter(function (state) {
+      var _state$suboption;
+      return state === null || state === void 0 || (_state$suboption = state.suboption) === null || _state$suboption === void 0 ? void 0 : _state$suboption.preselected;
+    });
+    if (newBalance <= option.max || ((_newPizzaState = newPizzaState) === null || _newPizzaState === void 0 || (_newPizzaState = _newPizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _newPizzaState === void 0 ? void 0 : _newPizzaState.value) <= option.max && option !== null && option !== void 0 && option.with_half_option) {
       newProductCart.options["id:".concat(option.id)].balance = newBalance;
       newProductCart.unitTotal = getUnitTotal(newProductCart);
       newProductCart.total = newProductCart.unitTotal * newProductCart.quantity;
-      setProductCart(newProductCart);
+      if (state.selected && (hasPreselectedFlow === null || hasPreselectedFlow === void 0 ? void 0 : hasPreselectedFlow.length) > 0) {
+        handleChangeSuboptionDefault(suboptionsArray, newPizzaState);
+        setSelectedSuboptions(_selectedSuboptions);
+      } else {
+        setProductCart(newProductCart);
+      }
     }
   };
-  var handleChangeSuboptionDefault = function handleChangeSuboptionDefault(defaultOptions) {
+  var handleChangeSuboptionDefault = function handleChangeSuboptionDefault(defaultOptions, newPizzaState) {
     var newProductCart = JSON.parse(JSON.stringify(productCart));
     if (!newProductCart.options) {
       newProductCart.options = {};
     }
     defaultOptions.map(function (_ref3) {
+      var _newPizzaState2;
       var option = _ref3.option,
         state = _ref3.state,
         suboption = _ref3.suboption;
@@ -523,7 +703,7 @@ var ProductForm = function ProductForm(props) {
           suboptions: {}
         };
       }
-      if (!state.selected) {
+      if (!(state !== null && state !== void 0 && state.selected)) {
         delete newProductCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)];
         removeRelatedOptions(newProductCart, suboption.id);
       } else {
@@ -546,7 +726,7 @@ var ProductForm = function ProductForm(props) {
           return count + suboption.quantity;
         }, 0);
       }
-      if (newBalance <= option.max) {
+      if (newBalance <= option.max || (newPizzaState === null || newPizzaState === void 0 || (_newPizzaState2 = newPizzaState["option:".concat(option.id)]) === null || _newPizzaState2 === void 0 ? void 0 : _newPizzaState2.value) <= option.max && option !== null && option !== void 0 && option.with_half_option) {
         newProductCart.options["id:".concat(option.id)].balance = newBalance;
         newProductCart.unitTotal = getUnitTotal(newProductCart);
         newProductCart.total = newProductCart.unitTotal * newProductCart.quantity;
@@ -572,18 +752,18 @@ var ProductForm = function ProductForm(props) {
    * Check options to get errors
    */
   var checkErrors = function checkErrors() {
-    var _product$product8, _product$product8$ext;
+    var _product$product8;
     var errors = {};
     if (!(product !== null && product !== void 0 && product.product)) {
       return errors;
     }
-    (_product$product8 = product.product) === null || _product$product8 === void 0 ? void 0 : (_product$product8$ext = _product$product8.extras) === null || _product$product8$ext === void 0 ? void 0 : _product$product8$ext.forEach(function (extra) {
+    (_product$product8 = product.product) === null || _product$product8 === void 0 || (_product$product8 = _product$product8.extras) === null || _product$product8 === void 0 || _product$product8.forEach(function (extra) {
       extra.options.map(function (option) {
-        var _productCart$options3, _Object$keys, _option$suboptions3;
+        var _productCart$options3, _pizzaState, _Object$keys2, _option$suboptions3;
         var suboptions = (_productCart$options3 = productCart.options["id:".concat(option.id)]) === null || _productCart$options3 === void 0 ? void 0 : _productCart$options3.suboptions;
-        var quantity = suboptions ? option.limit_suboptions_by_max ? Object.values(suboptions).reduce(function (count, suboption) {
+        var quantity = suboptions ? option !== null && option !== void 0 && option.with_half_option ? pizzaState === null || pizzaState === void 0 || (_pizzaState = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState === void 0 ? void 0 : _pizzaState.value : option.limit_suboptions_by_max ? Object.values(suboptions).reduce(function (count, suboption) {
           return count + suboption.quantity;
-        }, 0) : (_Object$keys = Object.keys(suboptions)) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length : 0;
+        }, 0) : (_Object$keys2 = Object.keys(suboptions)) === null || _Object$keys2 === void 0 ? void 0 : _Object$keys2.length : 0;
         var evaluateRespectTo = false;
         if (option.respect_to && productCart.options) {
           var options = productCart === null || productCart === void 0 ? void 0 : productCart.options;
@@ -597,7 +777,7 @@ var ProductForm = function ProductForm(props) {
           }
         }
         var evaluate = option.respect_to ? evaluateRespectTo : true;
-        if ((option === null || option === void 0 ? void 0 : (_option$suboptions3 = option.suboptions) === null || _option$suboptions3 === void 0 ? void 0 : _option$suboptions3.length) > 0 && evaluate) {
+        if ((option === null || option === void 0 || (_option$suboptions3 = option.suboptions) === null || _option$suboptions3 === void 0 ? void 0 : _option$suboptions3.length) > 0 && evaluate) {
           if (option.min > quantity) {
             errors["id:".concat(option.id)] = true;
           } else if (option.max < quantity) {
@@ -615,21 +795,23 @@ var ProductForm = function ProductForm(props) {
    */
   var handleSave = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
-      var errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, changes, currentProduct, _props$productCart7, _product$product9, updatedProfessional, duration;
+      var _errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, _props$productCart7, changes, currentProduct, _product$product9, updatedProfessional, duration, _props$productCart8, _props$productCart9;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
+            _context3.prev = 0;
+            setProductLoading && setProductLoading(true);
             if (handleCustomSave) {
               handleCustomSave && handleCustomSave();
             }
-            errors = checkErrors();
-            if (!(Object.keys(errors).length === 0 || isService)) {
-              _context3.next = 19;
+            _errors = checkErrors();
+            if (!(Object.keys(_errors).length === 0 || isService)) {
+              _context3.next = 22;
               break;
             }
             successful = true;
             if (!useOrderContext) {
-              _context3.next = 18;
+              _context3.next = 21;
               break;
             }
             successful = false;
@@ -637,33 +819,33 @@ var ProductForm = function ProductForm(props) {
               business_id: props.businessId
             };
             currentProduct = !isService ? _objectSpread({}, productCart) : _objectSpread(_objectSpread({}, productCart), {}, {
-              professional_id: values === null || values === void 0 ? void 0 : (_values$professional = values.professional) === null || _values$professional === void 0 ? void 0 : _values$professional.id,
+              professional_id: values === null || values === void 0 || (_values$professional = values.professional) === null || _values$professional === void 0 ? void 0 : _values$professional.id,
               service_start: (_values$serviceTime = values === null || values === void 0 ? void 0 : values.serviceTime) !== null && _values$serviceTime !== void 0 ? _values$serviceTime : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.moment
             });
-            if ((_props$productCart6 = props.productCart) !== null && _props$productCart6 !== void 0 && _props$productCart6.code) {
-              _context3.next = 14;
+            onSave(productCart, !((_props$productCart6 = props.productCart) !== null && _props$productCart6 !== void 0 && _props$productCart6.code));
+            if ((_props$productCart7 = props.productCart) !== null && _props$productCart7 !== void 0 && _props$productCart7.code) {
+              _context3.next = 17;
               break;
             }
-            _context3.next = 11;
+            _context3.next = 14;
             return addProduct(currentProduct, changes, false);
-          case 11:
-            successful = _context3.sent;
-            _context3.next = 18;
-            break;
           case 14:
-            _context3.next = 16;
+            successful = _context3.sent;
+            _context3.next = 21;
+            break;
+          case 17:
+            _context3.next = 19;
             return updateProduct(currentProduct, changes, false);
-          case 16:
+          case 19:
             successful = _context3.sent;
             if (successful) {
               events.emit('product_edited', currentProduct);
             }
-          case 18:
+          case 21:
             if (successful) {
-              onSave(productCart, !((_props$productCart7 = props.productCart) !== null && _props$productCart7 !== void 0 && _props$productCart7.code));
               if (isService) {
                 updatedProfessional = JSON.parse(JSON.stringify(values === null || values === void 0 ? void 0 : values.professional));
-                duration = product === null || product === void 0 ? void 0 : (_product$product9 = product.product) === null || _product$product9 === void 0 ? void 0 : _product$product9.duration;
+                duration = product === null || product === void 0 || (_product$product9 = product.product) === null || _product$product9 === void 0 ? void 0 : _product$product9.duration;
                 updatedProfessional.busy_times.push({
                   start: values === null || values === void 0 ? void 0 : values.serviceTime,
                   end: (0, _moment.default)(values === null || values === void 0 ? void 0 : values.serviceTime).add(duration, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
@@ -672,14 +854,25 @@ var ProductForm = function ProductForm(props) {
                 handleUpdateProfessionals && handleUpdateProfessionals(updatedProfessional);
                 handleChangeProfessional && handleChangeProfessional(updatedProfessional);
               }
+            } else {
+              showToast(_ToastContext.ToastType.Error, !((_props$productCart8 = props.productCart) !== null && _props$productCart8 !== void 0 && _props$productCart8.code) ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'), 5000);
             }
-          case 19:
+          case 22:
+            setProductLoading && setProductLoading(false);
+            _context3.next = 29;
+            break;
+          case 25:
+            _context3.prev = 25;
+            _context3.t0 = _context3["catch"](0);
+            showToast(_ToastContext.ToastType.Error, !((_props$productCart9 = props.productCart) !== null && _props$productCart9 !== void 0 && _props$productCart9.code) ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'), 5000);
+            setProductLoading && setProductLoading(false);
+          case 29:
           case "end":
             return _context3.stop();
         }
-      }, _callee3);
+      }, _callee3, null, [[0, 25]]);
     }));
-    return function handleSave(_x3) {
+    return function handleSave(_x2) {
       return _ref4.apply(this, arguments);
     };
   }();
@@ -730,7 +923,7 @@ var ProductForm = function ProductForm(props) {
         }
       }, _callee4, null, [[0, 11]]);
     }));
-    return function handleCreateGuestUser(_x4) {
+    return function handleCreateGuestUser(_x3) {
       return _ref5.apply(this, arguments);
     };
   }();
@@ -782,7 +975,7 @@ var ProductForm = function ProductForm(props) {
         }
       }
     }
-    if ((option === null || option === void 0 ? void 0 : (_option$suboptions5 = option.suboptions) === null || _option$suboptions5 === void 0 ? void 0 : _option$suboptions5.length) === 0) showOption = false;
+    if ((option === null || option === void 0 || (_option$suboptions5 = option.suboptions) === null || _option$suboptions5 === void 0 ? void 0 : _option$suboptions5.length) === 0) showOption = false;
     return showOption;
   };
 
@@ -839,7 +1032,35 @@ var ProductForm = function ProductForm(props) {
       return _ref6.apply(this, arguments);
     };
   }();
-
+  /**
+   * function to verify position of pizza ingredients
+   * @param {object} newProductCart cart updated with suboptions
+   */
+  var handleVerifyPizzaState = function handleVerifyPizzaState(state, suboption, option, preselectedOptions, preselectedSuboptions, states) {
+    var newPizzaState = {};
+    if (state !== null && state !== void 0 && state.selected) {
+      preselectedOptions.map(function (option, i) {
+        if (option !== null && option !== void 0 && option.with_half_option) {
+          var _newPizzaState3, _preselectedSuboption, _states$i, _states$i2;
+          newPizzaState = _objectSpread(_objectSpread({}, newPizzaState), {}, _defineProperty({}, "option:".concat(option === null || option === void 0 ? void 0 : option.id), _objectSpread(_objectSpread({}, (_newPizzaState3 = newPizzaState) === null || _newPizzaState3 === void 0 ? void 0 : _newPizzaState3["option:".concat(option === null || option === void 0 ? void 0 : option.id)]), {}, _defineProperty({}, "suboption:".concat((_preselectedSuboption = preselectedSuboptions[i]) === null || _preselectedSuboption === void 0 ? void 0 : _preselectedSuboption.id), (((_states$i = states[i]) === null || _states$i === void 0 ? void 0 : _states$i.position) === 'whole' ? 1 : 0.5) * states[i].quantity))));
+          var value = (((_states$i2 = states[i]) === null || _states$i2 === void 0 ? void 0 : _states$i2.position) === 'whole' || (option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1 ? 1 : 0.5) * states[i].quantity + (newPizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)].value || 0);
+          newPizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)].value = value;
+        }
+      });
+    } else {
+      var _newPizzaState4, _Object$values, _newPizzaState5;
+      newPizzaState = _objectSpread(_objectSpread({}, pizzaState), {}, _defineProperty({}, "option:".concat(option === null || option === void 0 ? void 0 : option.id), _objectSpread(_objectSpread({}, pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]), {}, {
+        value: 0
+      })));
+      (_newPizzaState4 = newPizzaState) === null || _newPizzaState4 === void 0 || (_newPizzaState4 = _newPizzaState4["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _newPizzaState4 === void 0 || delete _newPizzaState4["suboption:".concat(suboption === null || suboption === void 0 ? void 0 : suboption.id)];
+      var value = Object === null || Object === void 0 || (_Object$values = Object.values(((_newPizzaState5 = newPizzaState) === null || _newPizzaState5 === void 0 ? void 0 : _newPizzaState5["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) || {})) === null || _Object$values === void 0 ? void 0 : _Object$values.reduce(function (acc, value) {
+        return acc + value;
+      }, 0);
+      newPizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)].value = value;
+    }
+    setPizzaState(newPizzaState);
+    return newPizzaState;
+  };
   /**
    * Init product cart when product changed
    */
@@ -860,85 +1081,187 @@ var ProductForm = function ProductForm(props) {
    * Listening product changes
    */
   (0, _react.useEffect)(function () {
+    var _props$product2;
+    if ((props === null || props === void 0 || (_props$product2 = props.product) === null || _props$product2 === void 0 ? void 0 : _props$product2.load_type) === 'lazy') return;
     setProduct(_objectSpread(_objectSpread({}, product), {}, {
       product: props.product
     }));
   }, [props.product]);
-  var checkHasPreselected = function checkHasPreselected(options, option) {
-    if (!(option !== null && option !== void 0 && option.respect_to)) return true;
-    var selectedOption = options.filter(function (option1) {
-      var _option1$suboptions;
-      return (option1 === null || option1 === void 0 ? void 0 : (_option1$suboptions = option1.suboptions) === null || _option1$suboptions === void 0 ? void 0 : _option1$suboptions.filter(function (suboption) {
-        return option.respect_to === (suboption === null || suboption === void 0 ? void 0 : suboption.id) && suboption.preselected;
-      }).length) > 0;
-    });
-    if (!selectedOption) return false;
-    checkHasPreselected(options, selectedOption);
-  };
 
   /**
    * Check if there is an option required with one suboption
-   */
+  */
+
+  var checkSuboptionsSelected = function checkSuboptionsSelected(suboptionId, _selectedSuboptions, _dependsSuboptions) {
+    var _dependsSuboptions2;
+    var count = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+    if (count > 100) {
+      Sentry.captureMessage('Suboptions selected bucle, more than 100 iterations');
+      return false;
+    }
+    if (!_selectedSuboptions["suboption:".concat(suboptionId)]) {
+      return false;
+    }
+    var respectTo = (_dependsSuboptions2 = _dependsSuboptions["suboption:".concat(suboptionId)]) !== null && _dependsSuboptions2 !== void 0 ? _dependsSuboptions2 : null;
+    if (respectTo === null) {
+      return _selectedSuboptions["suboption:".concat(suboptionId)];
+    }
+    return checkSuboptionsSelected(respectTo, _selectedSuboptions, _dependsSuboptions, count++);
+  };
   (0, _react.useEffect)(function () {
-    var _product$product10, _product$product10$ex;
-    if (product !== null && product !== void 0 && product.product && ((_product$product10 = product.product) === null || _product$product10 === void 0 ? void 0 : (_product$product10$ex = _product$product10.extras) === null || _product$product10$ex === void 0 ? void 0 : _product$product10$ex.length) > 0) {
-      var _ref7, _ref8;
-      var options = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(product.product.extras.map(function (extra) {
-        return extra.options.filter(function (option) {
-          var preselected = checkHasPreselected(extra.options, option);
-          return (option.min === 1 && option.max === 1 && option.suboptions.filter(function (suboption) {
-            return suboption.enabled;
-          }).length === 1 || option.suboptions.filter(function (suboption) {
-            return suboption.preselected;
-          }).length > 0) && (!(option !== null && option !== void 0 && option.conditioned) || (option === null || option === void 0 ? void 0 : option.conditioned) && preselected);
+    var _product$product10;
+    if (!(product !== null && product !== void 0 && product.loading) && product !== null && product !== void 0 && product.product && ((_product$product10 = product.product) === null || _product$product10 === void 0 || (_product$product10 = _product$product10.extras) === null || _product$product10 === void 0 ? void 0 : _product$product10.length) > 0) {
+      var _selectedSuboptions = {};
+      var _dependsSuboptions = {};
+      var preselectedOptions = [];
+      var preselectedSuboptions = [];
+      var _iterator9 = _createForOfIteratorHelper(product.product.extras),
+        _step9;
+      try {
+        for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
+          var extra = _step9.value;
+          var _iterator11 = _createForOfIteratorHelper(extra.options),
+            _step11;
+          try {
+            for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
+              var option = _step11.value;
+              var _iterator12 = _createForOfIteratorHelper(option.suboptions),
+                _step12;
+              try {
+                for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
+                  var _option$suboptions6, _props$productCart12;
+                  var suboption = _step12.value;
+                  _selectedSuboptions["suboption:".concat(suboption.id)] = (suboption.preselected || (option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1 && (option === null || option === void 0 || (_option$suboptions6 = option.suboptions) === null || _option$suboptions6 === void 0 ? void 0 : _option$suboptions6.length) === 1) && (!editMode || !!((_props$productCart12 = props.productCart) !== null && _props$productCart12 !== void 0 && (_props$productCart12 = _props$productCart12.options["id:".concat(option === null || option === void 0 ? void 0 : option.id)]) !== null && _props$productCart12 !== void 0 && _props$productCart12.suboptions["id:".concat(suboption === null || suboption === void 0 ? void 0 : suboption.id)]));
+                  _dependsSuboptions["suboption:".concat(suboption.id)] = option !== null && option !== void 0 && option.conditioned && (option === null || option === void 0 ? void 0 : option.respect_to) !== null ? option === null || option === void 0 ? void 0 : option.respect_to : null;
+                }
+              } catch (err) {
+                _iterator12.e(err);
+              } finally {
+                _iterator12.f();
+              }
+            }
+          } catch (err) {
+            _iterator11.e(err);
+          } finally {
+            _iterator11.f();
+          }
+        }
+      } catch (err) {
+        _iterator9.e(err);
+      } finally {
+        _iterator9.f();
+      }
+      if (editMode && props !== null && props !== void 0 && props.productCart) {
+        var _Object$values2, _props$productCart10;
+        (_Object$values2 = Object.values(props === null || props === void 0 || (_props$productCart10 = props.productCart) === null || _props$productCart10 === void 0 ? void 0 : _props$productCart10.options)) === null || _Object$values2 === void 0 || _Object$values2.map(function (option) {
+          var _Object$values3;
+          return (_Object$values3 = Object.values(option === null || option === void 0 ? void 0 : option.suboptions)) === null || _Object$values3 === void 0 ? void 0 : _Object$values3.map(function (suboption) {
+            _selectedSuboptions["suboption:".concat(suboption.id)] = true;
+          });
         });
-      })));
-      if (!(options !== null && options !== void 0 && options.length)) {
+      }
+      var _iterator10 = _createForOfIteratorHelper(product.product.extras),
+        _step10;
+      try {
+        for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
+          var _extra4 = _step10.value;
+          var _iterator13 = _createForOfIteratorHelper(_extra4.options),
+            _step13;
+          try {
+            for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
+              var _option5 = _step13.value;
+              var _iterator14 = _createForOfIteratorHelper(_option5.suboptions),
+                _step14;
+              try {
+                for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
+                  var _suboption3 = _step14.value;
+                  if (checkSuboptionsSelected(_suboption3 === null || _suboption3 === void 0 ? void 0 : _suboption3.id, _selectedSuboptions, _dependsSuboptions)) {
+                    preselectedOptions.push(_option5);
+                    preselectedSuboptions.push(_suboption3);
+                  }
+                }
+              } catch (err) {
+                _iterator14.e(err);
+              } finally {
+                _iterator14.f();
+              }
+            }
+          } catch (err) {
+            _iterator13.e(err);
+          } finally {
+            _iterator13.f();
+          }
+        }
+      } catch (err) {
+        _iterator10.e(err);
+      } finally {
+        _iterator10.f();
+      }
+      if (!(preselectedOptions !== null && preselectedOptions !== void 0 && preselectedOptions.length)) {
         return;
       }
-      var suboptions = (_ref8 = []).concat.apply(_ref8, _toConsumableArray(options.map(function (option) {
-        return option.suboptions;
-      }))).filter(function (suboption) {
-        return suboption.enabled;
-      });
-      var states = suboptions.map(function (suboption, i) {
-        var _options$i;
-        var price = (_options$i = options[i]) !== null && _options$i !== void 0 && _options$i.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
-        return {
-          id: suboption.id,
-          name: suboption.name,
-          position: suboption.position || 'whole',
-          price: price,
-          quantity: 1,
-          selected: true,
-          total: price
-        };
-      });
-      var suboptionsArray = [];
-      options.map(function (option) {
-        var defaultSuboptions = option.suboptions.filter(function (suboption) {
-          var _option$suboptions6;
-          return (suboption === null || suboption === void 0 ? void 0 : suboption.enabled) && ((suboption === null || suboption === void 0 ? void 0 : suboption.preselected) || (option === null || option === void 0 ? void 0 : (_option$suboptions6 = option.suboptions) === null || _option$suboptions6 === void 0 ? void 0 : _option$suboptions6.length) === 1);
-        }).map(function (suboption) {
+      var states = {};
+      if (editMode && props !== null && props !== void 0 && props.productCart) {
+        var _Object$values4, _props$productCart11;
+        var cartSuboptions = (_Object$values4 = Object.values(props === null || props === void 0 || (_props$productCart11 = props.productCart) === null || _props$productCart11 === void 0 ? void 0 : _props$productCart11.options)) === null || _Object$values4 === void 0 || (_Object$values4 = _Object$values4.map(function (option) {
+          return Object.values(option === null || option === void 0 ? void 0 : option.suboptions);
+        })) === null || _Object$values4 === void 0 ? void 0 : _Object$values4.flat();
+        states = cartSuboptions.map(function (suboption, i) {
+          var _preselectedOptions$i3;
+          var price = (_preselectedOptions$i3 = preselectedOptions[i]) !== null && _preselectedOptions$i3 !== void 0 && _preselectedOptions$i3.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
           return {
-            option: option,
-            suboption: suboption,
-            state: states.find(function (state) {
-              return (state === null || state === void 0 ? void 0 : state.id) === (suboption === null || suboption === void 0 ? void 0 : suboption.id);
-            })
+            id: suboption.id,
+            name: suboption.name,
+            position: suboption.position || 'whole',
+            price: price,
+            quantity: suboption.quantity,
+            selected: true,
+            total: price
           };
         });
-        suboptionsArray = [].concat(_toConsumableArray(suboptionsArray), _toConsumableArray(defaultSuboptions));
+      } else {
+        states = preselectedSuboptions.map(function (suboption, i) {
+          var _preselectedOptions$i4;
+          var price = (_preselectedOptions$i4 = preselectedOptions[i]) !== null && _preselectedOptions$i4 !== void 0 && _preselectedOptions$i4.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
+          return {
+            id: suboption.id,
+            name: suboption.name,
+            position: suboption.position || 'whole',
+            price: price,
+            quantity: 1,
+            selected: true,
+            total: price
+          };
+        });
+      }
+      var suboptionsArray = [];
+      var newPizzaState = {};
+      preselectedOptions.map(function (option, i) {
+        var defaultSuboption = {
+          option: option,
+          suboption: preselectedSuboptions[i],
+          state: states[i]
+        };
+        suboptionsArray = [].concat(_toConsumableArray(suboptionsArray), [defaultSuboption]);
+        if (option !== null && option !== void 0 && option.with_half_option) {
+          var _newPizzaState6, _preselectedSuboption2, _states$i3, _states$i4;
+          newPizzaState = _objectSpread(_objectSpread({}, newPizzaState), {}, _defineProperty({}, "option:".concat(option === null || option === void 0 ? void 0 : option.id), _objectSpread(_objectSpread({}, (_newPizzaState6 = newPizzaState) === null || _newPizzaState6 === void 0 ? void 0 : _newPizzaState6["option:".concat(option === null || option === void 0 ? void 0 : option.id)]), {}, _defineProperty({}, "suboption:".concat((_preselectedSuboption2 = preselectedSuboptions[i]) === null || _preselectedSuboption2 === void 0 ? void 0 : _preselectedSuboption2.id), (((_states$i3 = states[i]) === null || _states$i3 === void 0 ? void 0 : _states$i3.position) === 'whole' ? 1 : 0.5) * states[i].quantity))));
+          var value = (((_states$i4 = states[i]) === null || _states$i4 === void 0 ? void 0 : _states$i4.position) === 'whole' ? 1 : 0.5) * states[i].quantity + (newPizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)].value || 0);
+          newPizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)].value = value;
+        }
       });
+      setPizzaState(newPizzaState);
+      setSelectedSuboptions(_selectedSuboptions);
+      setDependsSuboptions(_dependsSuboptions);
       setDefaultSubOptions(suboptionsArray);
       setCustomDefaultSubOptions(suboptionsArray);
     }
-  }, [product.product]);
+  }, [JSON.stringify(product.product), product === null || product === void 0 ? void 0 : product.loading]);
   if (isStarbucks) {
     (0, _react.useEffect)(function () {
       if (product !== null && product !== void 0 && product.product && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
-        var _ref9, _ref10;
-        var options = (_ref9 = []).concat.apply(_ref9, _toConsumableArray(product.product.extras.map(function (extra) {
+        var _ref7, _ref8;
+        var options = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(product.product.extras.map(function (extra) {
           return extra.options.filter(function (option) {
             return option.name === 'Tamaño' && option.suboptions.filter(function (suboption) {
               return suboption.name === 'Grande (16oz - 437ml)';
@@ -948,7 +1271,7 @@ var ProductForm = function ProductForm(props) {
         if (!(options !== null && options !== void 0 && options.length)) {
           return;
         }
-        var suboptions = (_ref10 = []).concat.apply(_ref10, _toConsumableArray(options.map(function (option) {
+        var suboptions = (_ref8 = []).concat.apply(_ref8, _toConsumableArray(options.map(function (option) {
           return option.suboptions;
         }))).filter(function (suboption) {
           return suboption.name === 'Grande (16oz - 437ml)';
@@ -983,16 +1306,17 @@ var ProductForm = function ProductForm(props) {
     if (defaultSubOptions !== null && defaultSubOptions !== void 0 && defaultSubOptions.length) {
       handleChangeSuboptionDefault(defaultSubOptions);
     }
-  }, [defaultSubOptions]);
+  }, [JSON.stringify(defaultSubOptions)]);
 
   /**
    * Load product on component mounted
    */
   (0, _react.useEffect)(function () {
+    var _props$product3;
     if (!props.product && (!props.businessId || !props.categoryId || !props.productId)) {
       throw new Error('`businessId` && `categoryId` && `productId` are required if `product` was not provided.');
     }
-    if (!props.product && props.businessId && props.categoryId && props.productId) {
+    if (props.product && ((_props$product3 = props.product) === null || _props$product3 === void 0 ? void 0 : _props$product3.load_type) === 'lazy' && props.businessId && props.categoryId && props.productId || !props.product && props.businessId && props.categoryId && props.productId) {
       loadProductWithOptions();
     }
     return function () {
@@ -1019,6 +1343,8 @@ var ProductForm = function ProductForm(props) {
     isSoldOut: isSoldOut,
     actionStatus: actionStatus,
     maxProductQuantity: maxProductQuantity,
+    pizzaState: pizzaState,
+    setPizzaState: setPizzaState,
     increment: increment,
     decrement: decrement,
     handleChangeProductCartQuantity: handleChangeProductCartQuantity,
@@ -1032,7 +1358,6 @@ var ProductForm = function ProductForm(props) {
     professionalListState: professionalListState
   })));
 };
-exports.ProductForm = ProductForm;
 ProductForm.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

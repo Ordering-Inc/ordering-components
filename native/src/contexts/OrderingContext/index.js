@@ -34,20 +34,21 @@ export const OrderingProvider = ({ Alert, settings, children, isDisableToast, is
     appId: settings.app_id,
     use_root_point: settings.use_root_point,
     countryCode: settings.countryCode,
-    useOptimizeLoad: settings?.useOptimizeLoad
+    useOptimizeLoad: settings?.useOptimizeLoad,
+    force_update_lang: settings?.force_update_lang
   }
   return (
     <OrderingContext.Provider>
       <EventProvider>
         <ApiProvider settings={Object.assign(settings.api, restOfSettings)}>
-          <OptimizationLoadProvider settings={Object.assign(settings.api, restOfSettings)}>
-            <LanguageProvider strategy={nativeStrategy}>
+          <OptimizationLoadProvider strategy={nativeStrategy} settings={Object.assign(settings.api, restOfSettings)}>
+            <LanguageProvider strategy={nativeStrategy} settings={Object.assign(settings.api, restOfSettings)}>
               <ConfigProvider strategy={nativeStrategy}>
                 <OrderingThemeProvider settings={Object.assign(settings.api, restOfSettings)}>
                   <SiteProvider appId={settings.app_id}>
                     <UtilsProviders>
                       <ToastProvider>
-                        <ValidationFieldsProvider>
+                        <ValidationFieldsProvider appId={settings.app_id}>
                           <SessionProvider strategy={nativeStrategy}>
                             <WebsocketProvider strategy={nativeStrategy} settings={Object.assign(settings.socket, restOfSettings)}>
                               <CustomerProvider strategy={nativeStrategy}>

@@ -36,7 +36,7 @@ export const OrderDetails = (props) => {
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const socket = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
-  const [messagesReadList, setMessagesReadList] = useState(false)
+  const [messagesReadList, setMessagesReadList] = useState([])
   const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null })
   const [forceUpdate, setForceUpdate] = useState(null)
   const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
@@ -179,7 +179,14 @@ export const OrderDetails = (props) => {
   /**
    * Method to update differents orders status
   */
-  const handleChangeOrderStatus = async (status, isAcceptOrReject = {}) => {
+  const handleChangeOrderStatus = async (status, isAcceptOrReject = {}, options) => {
+    const dataToSave = options?.dataToSave
+    if (dataToSave) {
+      const order = Object.assign(orderState.order, { ...dataToSave, oldStatus: orderState.order?.status })
+      setOrderState({ ...orderState, order })
+      return order
+    }
+
     try {
       const bodyToSend = Object.keys(isAcceptOrReject || {}).length > 0 ? isAcceptOrReject : { status }
       setOrderState({ ...orderState, loading: true })
@@ -451,6 +458,22 @@ export const OrderDetails = (props) => {
     }
   }
 
+  /**
+   * Method to get room socket
+   * @param {String} roomType drivers, orders
+   * @returns socket room
+   */
+  const getRoom = (roomType) => !token
+    ? {
+      room: roomType,
+      project: ordering.project,
+      role: 'public',
+      user_id: hashKey
+    }
+    : roomType === 'orders'
+      ? user?.level === 0 ? 'orders' : `orders_${userCustomerId || user?.id}`
+      : `drivers_${orderState.order?.driver_id}`
+
   useEffect(() => {
     !orderState.loading && loadMessages()
   }, [orderState?.order?.id, orderState?.order?.status, orderState.loading])
@@ -487,7 +510,7 @@ export const OrderDetails = (props) => {
 
   useEffect(() => {
     if (orderState.loading || loading || !socket?.socket) return
-    const handleUpdateOrder = (order) => {
+    const handleUpdateOrderDetails = (order) => {
       if (order?.id !== orderState.order?.id) return
       showToast(ToastType.Info, t('UPDATING_ORDER', 'Updating order...'), 1000)
       delete order.total
@@ -498,7 +521,10 @@ export const OrderDetails = (props) => {
       })
       events.emit('order_updated', Object.assign(orderState.order, order))
     }
-    const handleTrackingDriver = ({ location }) => {
+    const handleTrackingDriver = (props) => {
+      const location = props.location
+      const driverId = props.driver_id
+      if (driverId !== orderState?.order?.driver_id) return
       const newLocation = location ?? { lat: -37.9722342, lng: 144.7729561 }
       setDriverLocation(newLocation)
       setOrderState({
@@ -512,35 +538,27 @@ export const OrderDetails = (props) => {
         }
       })
     }
-    const ordersRoom = !token
-      ? {
-        room: 'orders',
-        project: ordering.project,
-        role: 'public',
-        user_id: hashKey
-      } : user?.level === 0
-        ? 'orders'
-        : `orders_${userCustomerId || user?.id}`
 
-    if (!isDisabledOrdersRoom) socket.join(ordersRoom)
+    if (!isDisabledOrdersRoom) socket.join(getRoom('orders'))
     if (orderState.order?.driver_id) {
-      socket.join(`drivers_${orderState.order?.driver_id}`)
+      socket.join(getRoom('drivers'))
     }
     socket.socket.on('connect', () => {
-      if (!isDisabledOrdersRoom) socket.join(ordersRoom)
+      if (!isDisabledOrdersRoom) socket.join(getRoom('orders'))
       if (orderState.order?.driver_id) {
-        socket.join(`drivers_${orderState.order?.driver_id}`)
+        socket.join(getRoom('drivers'))
       }
     })
     socket.on('tracking_driver', handleTrackingDriver)
-    socket.on('update_order', handleUpdateOrder)
+    if (!socket?.socket?._callbacks?.$update_order || socket?.socket?._callbacks?.$update_order?.find(func => func?.name !== 'handleUpdateOrderDetails')) {
+      socket.on('update_order', handleUpdateOrderDetails)
+    }
     return () => {
-      if (!isDisabledOrdersRoom) socket.leave(ordersRoom)
-      // socket.leave(`drivers_${orderState.order?.driver_id}`)
-      socket.off('update_order', handleUpdateOrder)
+      if (!isDisabledOrdersRoom) socket.leave(getRoom('orders'))
+      socket.off('update_order', handleUpdateOrderDetails)
       socket.off('tracking_driver', handleTrackingDriver)
     }
-  }, [orderState.order, socket?.socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id, hashKey])
+  }, [orderState?.loading, socket?.socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id, hashKey])
 
   useEffect(() => {
     if (messages.loading) return
@@ -613,6 +631,7 @@ export const OrderDetails = (props) => {
           handleRemoveCart={handleRemoveCart}
           cartState={cartState}
           handleClickLogisticOrder={handleClickLogisticOrder}
+          loadMessages={loadMessages}
         />
       )}
     </>

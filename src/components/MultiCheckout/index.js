@@ -48,6 +48,7 @@ export const MultiCheckout = (props) => {
   const [paymethodSelected, setPaymethodSelected] = useState({})
   const [cartGroup, setCartGroup] = useState({ loading: true, error: null, result: null })
   const [walletState, setWalletState] = useState({ loading: false, error: null, result: null })
+  const [checkoutFieldsState, setCheckoutFieldsState] = useState({ fields: [], loading: false, error: null })
 
   const openCarts = (cartGroup?.result?.carts?.filter(cart => cart?.valid && cart?.status !== 1 && cart?.business_id) || null) || []
   const cartsInvalid = (cartGroup?.result?.carts?.filter(cart => cart?.status !== 1) || null) || []
@@ -295,6 +296,29 @@ export const MultiCheckout = (props) => {
     }
   }
 
+  const getValidationFieldOrderTypes = async () => {
+    try {
+      setCheckoutFieldsState({ ...checkoutFieldsState, loading: true })
+
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const response = await fetch(`${ordering.root}/validation_field_order_types`, requestOptions)
+      const content = await response.json()
+      if (!content?.error) {
+        setCheckoutFieldsState({ fields: content?.result, loading: false })
+      } else {
+        setCheckoutFieldsState({ ...checkoutFieldsState, loading: false, error: content?.result })
+      }
+    } catch (err) {
+      setCheckoutFieldsState({ ...checkoutFieldsState, loading: false, error: [err.message] })
+    }
+  }
+
   useEffect(() => {
     if (deliveryOptionSelected === undefined) {
       setDeliveryOptionSelected(null)
@@ -303,6 +327,7 @@ export const MultiCheckout = (props) => {
 
   useEffect(() => {
     Promise.any([getDeliveryOptions(), getLoyaltyPlans()])
+    getValidationFieldOrderTypes()
   }, [])
 
   useEffect(() => {
@@ -331,6 +356,7 @@ export const MultiCheckout = (props) => {
           walletState={walletState}
           totalCartsFee={totalCartsFee}
           cartsInvalid={cartsInvalid}
+          checkoutFieldsState={checkoutFieldsState}
         />
       )}
     </>
