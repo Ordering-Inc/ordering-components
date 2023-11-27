@@ -563,19 +563,21 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     if (!offerData.business_id) {
       throw new Error('`business_id` is required.')
     }
-    if (typeof offerData.coupon === 'undefined') {
+    if (typeof offerData.coupon === 'undefined' && typeof offerData.offer_id === 'undefined') {
       throw new Error('`coupon` is required.')
     }
     try {
       setState({ ...state, loading: true })
+      const _offerData = {
+        user_id: offerData?.userId,
+        business_id: offerData?.business_id,
+        force: offerData?.force ?? false
+      }
+      if (offerData?.coupon) _offerData.coupon = offerData.coupon
+      if (offerData?.offer_id) _offerData.offer_id = offerData.offer_id
       const response = await fetch(`${ordering.root}/carts/add_offer`, {
         method: 'POST',
-        body: JSON.stringify({
-          user_id: offerData.userId,
-          business_id: offerData.business_id,
-          coupon: offerData.coupon,
-          force: offerData.force ?? false
-        }),
+        body: JSON.stringify(_offerData),
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session.token}`,
