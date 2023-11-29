@@ -247,22 +247,44 @@ export const PaymentOptionOpenPay = (props) => {
     const VaultWidget = window.VaultWidget
     const localDeUnaToken = JSON.parse(localStorage.getItem('de_una_token'))
 
-    VaultWidget.configure({
+    VaultWidget.config({
       checkoutConfig: {
         publicApiKey: deUnaApiKey,
         env: 'staging',
         authToken: localDeUnaToken.token
       },
-      onExit: () => {
-        console.log('onExit')
+      callbacks: {
+        onSuccess: (payload) => {
+          console.log('onSuccess', payload)
+          const cardData = {
+            id: payload.metadata.createdCard.cardId,
+            last4: payload.metadata.createdCard.lastFour,
+            enabled: true,
+            brandCardName: payload.metadata.createdCard.company
+          }
+          setCardsList({
+            cards: [...cardsList?.cards, cardData],
+            loading: false,
+            error: null
+          })
+          VaultWidget.closeElements()
+        },
+        onFailure: (error) => {
+          console.log('onFailure', error)
+          // MyAlert.show('Hubo un problema al crear la tarjeta')
+        },
+        onClose: () => {
+          console.log('onClose', VaultWidget)
+        }
       }
     })
-    VaultWidget.show({
+    VaultWidget.initElements({
       mode: 'modal',
       modalParams: {
         desktop: { size: 'container', modalPosition: 'center' },
-        mobile: { size: 'container', modalPosition: 'center' },
-      }
+        mobile: { size: 'container', modalPosition: 'center' }
+      },
+      elementType: 'vault'
     })
   }
   const addCardPlugin = async (tokenId, deviceSessionId) => {
