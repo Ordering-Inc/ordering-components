@@ -463,17 +463,37 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
   var handleClick = function handleClick() {
     var VaultWidget = window.VaultWidget;
     var localDeUnaToken = JSON.parse(localStorage.getItem('de_una_token'));
-    VaultWidget.configure({
+    VaultWidget.config({
       checkoutConfig: {
         publicApiKey: deUnaApiKey,
         env: 'staging',
         authToken: localDeUnaToken.token
       },
-      onExit: function onExit() {
-        console.log('onExit');
+      callbacks: {
+        onSuccess: function onSuccess(payload) {
+          console.log('onSuccess', payload);
+          var cardData = {
+            id: payload.metadata.createdCard.cardId,
+            last4: payload.metadata.createdCard.lastFour,
+            enabled: true,
+            brandCardName: payload.metadata.createdCard.company
+          };
+          setCardsList({
+            cards: [].concat(_toConsumableArray(cardsList === null || cardsList === void 0 ? void 0 : cardsList.cards), [cardData]),
+            loading: false,
+            error: null
+          });
+          VaultWidget.closeElements();
+        },
+        onFailure: function onFailure(error) {
+          console.log('onFailure', error); // MyAlert.show('Hubo un problema al crear la tarjeta')
+        },
+        onClose: function onClose() {
+          console.log('onClose', VaultWidget);
+        }
       }
     });
-    VaultWidget.show({
+    VaultWidget.initElements({
       mode: 'modal',
       modalParams: {
         desktop: {
@@ -484,7 +504,8 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
           size: 'container',
           modalPosition: 'center'
         }
-      }
+      },
+      elementType: 'vault'
     });
   };
 
