@@ -48,7 +48,8 @@ var Checkout = exports.Checkout = function Checkout(props) {
     onPlaceOrderClick = props.onPlaceOrderClick,
     UIComponent = props.UIComponent,
     isApp = props.isApp,
-    isKiosk = props.isKiosk;
+    isKiosk = props.isKiosk,
+    isCustomerMode = props.isCustomerMode;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -88,7 +89,9 @@ var Checkout = exports.Checkout = function Checkout(props) {
    */
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
-    token = _useSession2[0].token;
+    _useSession2$ = _useSession2[0],
+    token = _useSession2$.token,
+    user = _useSession2$.user;
   /**
    * Toast state
    */
@@ -262,7 +265,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(paymentOptions, payloadProps, confirmPayment, dismissPlatformPay) {
       var _paymethodSelected$pa5, _cart$balance, _orderState$options2, _paymethodSelected$pa6, _cartResult$paymethod, _result$result, _cartResult$paymethod2, _cartResult$paymethod3, _cartResult$paymethod4;
-      var paymethodData, _paymethodSelected$da, payload, result, _paymethodSelected$pa7, cartResult, _result$result2, _yield$confirmPayment, confirmApplePayError;
+      var paymethodData, _paymethodSelected$da, payload, alseaProjects, customerFromLocalStorage, response, _result, result, _paymethodSelected$pa7, cartResult, _result$result2, _yield$confirmPayment, confirmApplePayError;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -310,53 +313,89 @@ var Checkout = exports.Checkout = function Checkout(props) {
             if (paymethodsWithoutSaveCard.includes(paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$pa6 = paymethodSelected.paymethod) === null || _paymethodSelected$pa6 === void 0 ? void 0 : _paymethodSelected$pa6.gateway)) {
               delete payload.paymethod_data;
             }
-            _context2.next = 18;
+            alseaProjects = ['alsea', 'alsea-staging'];
+            if (!(alseaProjects.includes(ordering.project) && isCustomerMode)) {
+              _context2.next = 31;
+              break;
+            }
+            _context2.next = 20;
+            return window.localStorage.getItem('user-customer', true);
+          case 20:
+            customerFromLocalStorage = _context2.sent;
+            _context2.next = 23;
+            return fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/api_checkprice.php', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-App-X': ordering.appId,
+                Authorization: "bearer ".concat(token)
+              },
+              body: JSON.stringify(_objectSpread(_objectSpread({}, payload), {}, {
+                user_id: (customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id) || user.id,
+                uuid: cart.uuid
+              }))
+            });
+          case 23:
+            response = _context2.sent;
+            _context2.next = 26;
+            return response.json();
+          case 26:
+            _result = _context2.sent;
+            if (!_result.error) {
+              _context2.next = 31;
+              break;
+            }
+            setPlacing(false);
+            setErrors(t(_result === null || _result === void 0 ? void 0 : _result.result));
+            return _context2.abrupt("return");
+          case 31:
+            _context2.next = 33;
             return placeCart(cart.uuid, payload);
-          case 18:
+          case 33:
             result = _context2.sent;
             if (!(result !== null && result !== void 0 && result.error || !result)) {
-              _context2.next = 27;
+              _context2.next = 42;
               break;
             }
             setErrors(result === null || result === void 0 ? void 0 : result.result);
             if (!(dismissPlatformPay && (paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$pa7 = paymethodSelected.paymethod) === null || _paymethodSelected$pa7 === void 0 ? void 0 : _paymethodSelected$pa7.gateway) === 'apple_pay')) {
-              _context2.next = 24;
+              _context2.next = 39;
               break;
             }
-            _context2.next = 24;
+            _context2.next = 39;
             return dismissPlatformPay();
-          case 24:
+          case 39:
             refreshOrderOptions();
             setPlacing(false);
             return _context2.abrupt("return");
-          case 27:
+          case 42:
             cartResult = result === null || result === void 0 ? void 0 : result.result;
             if (!((cartResult === null || cartResult === void 0 || (_cartResult$paymethod = cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
-              _context2.next = 31;
+              _context2.next = 46;
               break;
             }
-            _context2.next = 31;
+            _context2.next = 46;
             return actionsBeforePlace(paymethodSelected, result.result);
-          case 31:
+          case 46:
             if (!(confirmPayment && (result === null || result === void 0 || (_result$result = result.result) === null || _result$result === void 0 || (_result$result = _result$result.paymethod_data) === null || _result$result === void 0 ? void 0 : _result$result.gateway) === 'apple_pay')) {
-              _context2.next = 37;
+              _context2.next = 52;
               break;
             }
-            _context2.next = 34;
+            _context2.next = 49;
             return confirmPayment(result === null || result === void 0 || (_result$result2 = result.result) === null || _result$result2 === void 0 || (_result$result2 = _result$result2.paymethod_data) === null || _result$result2 === void 0 || (_result$result2 = _result$result2.result) === null || _result$result2 === void 0 ? void 0 : _result$result2.client_secret);
-          case 34:
+          case 49:
             _yield$confirmPayment = _context2.sent;
             confirmApplePayError = _yield$confirmPayment.error;
             if (confirmApplePayError) {
               setErrors(confirmApplePayError);
             }
-          case 37:
+          case 52:
             if (paymethodsWithoutSaveCard.includes(cartResult === null || cartResult === void 0 || (_cartResult$paymethod2 = cartResult.paymethod_data) === null || _cartResult$paymethod2 === void 0 ? void 0 : _cartResult$paymethod2.gateway) && cartResult !== null && cartResult !== void 0 && (_cartResult$paymethod3 = cartResult.paymethod_data) !== null && _cartResult$paymethod3 !== void 0 && (_cartResult$paymethod3 = _cartResult$paymethod3.result) !== null && _cartResult$paymethod3 !== void 0 && _cartResult$paymethod3.hash && (cartResult === null || cartResult === void 0 || (_cartResult$paymethod4 = cartResult.paymethod_data) === null || _cartResult$paymethod4 === void 0 ? void 0 : _cartResult$paymethod4.status) === 2 && !payloadProps.isNative) {
               handleConfirmCredomaticPage(cartResult, paymethodSelected);
             }
             setPlacing(false);
             onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult);
-          case 40:
+          case 55:
           case "end":
             return _context2.stop();
         }

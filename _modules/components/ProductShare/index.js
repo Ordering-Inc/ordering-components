@@ -92,7 +92,6 @@ ProductShare.propTypes = {
    * Array of HTML/Components elements, these components will not get the parent props
    */
 };
-
 ProductShare.defaultProps = {
   beforeComponents: [],
   afterComponents: [],

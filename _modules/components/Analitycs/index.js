@@ -103,7 +103,6 @@ var Analytics = exports.Analytics = function Analytics(props) {
       shipping: order.delivery_zone_price // Shipping (number).
     });
   };
-
   (0, _react.useEffect)(function () {
     console.log('Analytic Ready');
     if (analyticsReady && window.ga) {
