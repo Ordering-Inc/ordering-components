@@ -951,28 +951,38 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    */
   var clearCart = /*#__PURE__*/function () {
     var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(uuid) {
-      var countryCode, customerFromLocalStorage, userCustomerId, body, response, _yield$response$json2, error, result;
+      var configurations,
+        countryCode,
+        customerFromLocalStorage,
+        userCustomerId,
+        body,
+        response,
+        _yield$response$json2,
+        error,
+        result,
+        _args10 = arguments;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {
           case 0:
-            _context10.prev = 0;
+            configurations = _args10.length > 1 && _args10[1] !== undefined ? _args10[1] : {};
+            _context10.prev = 1;
             setState(_objectSpread(_objectSpread({}, state), {}, {
-              loading: true
+              loading: !(configurations !== null && configurations !== void 0 && configurations.disableLoading)
             }));
-            _context10.next = 4;
+            _context10.next = 5;
             return strategy.getItem('country-code');
-          case 4:
+          case 5:
             countryCode = _context10.sent;
-            _context10.next = 7;
+            _context10.next = 8;
             return strategy.getItem('user-customer', true);
-          case 7:
+          case 8:
             customerFromLocalStorage = _context10.sent;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = JSON.stringify({
               uuid: uuid,
               user_id: userCustomerId || session.user.id
             });
-            _context10.next = 12;
+            _context10.next = 13;
             return fetch("".concat(ordering.root, "/carts/clear"), {
               method: 'POST',
               headers: {
@@ -984,11 +994,11 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               },
               body: body
             });
-          case 12:
+          case 13:
             response = _context10.sent;
-            _context10.next = 15;
+            _context10.next = 16;
             return response.json();
-          case 15:
+          case 16:
             _yield$response$json2 = _context10.sent;
             error = _yield$response$json2.error;
             result = _yield$response$json2.result;
@@ -1007,18 +1017,18 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               error: error,
               result: result
             });
-          case 23:
-            _context10.prev = 23;
-            _context10.t0 = _context10["catch"](0);
+          case 24:
+            _context10.prev = 24;
+            _context10.t0 = _context10["catch"](1);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
             return _context10.abrupt("return", false);
-          case 27:
+          case 28:
           case "end":
             return _context10.stop();
         }
-      }, _callee10, null, [[0, 23]]);
+      }, _callee10, null, [[1, 24]]);
     }));
     return function clearCart(_x15) {
       return _ref12.apply(this, arguments);
@@ -1949,21 +1959,32 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    */
   var reorder = /*#__PURE__*/function () {
     var _ref23 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21(orderId, offAlert) {
-      var countryCode, customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc18, _yield$ordering$setAc19, error, result;
+      var configurations,
+        countryCode,
+        customerFromLocalStorage,
+        userCustomerId,
+        query,
+        options,
+        _yield$ordering$setAc18,
+        _yield$ordering$setAc19,
+        error,
+        result,
+        _args21 = arguments;
       return _regeneratorRuntime().wrap(function _callee21$(_context21) {
         while (1) switch (_context21.prev = _context21.next) {
           case 0:
-            _context21.prev = 0;
+            configurations = _args21.length > 2 && _args21[2] !== undefined ? _args21[2] : {};
+            _context21.prev = 1;
             setState(_objectSpread(_objectSpread({}, state), {}, {
-              loading: true
+              loading: !(configurations !== null && configurations !== void 0 && configurations.disableLoading)
             }));
-            _context21.next = 4;
+            _context21.next = 5;
             return strategy.getItem('country-code');
-          case 4:
+          case 5:
             countryCode = _context21.sent;
-            _context21.next = 7;
+            _context21.next = 8;
             return strategy.getItem('user-customer', true);
-          case 7:
+          case 8:
             customerFromLocalStorage = _context21.sent;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             query = userCustomerId ? {
@@ -1979,9 +2000,9 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             if (query) {
               options.query = query;
             }
-            _context21.next = 14;
+            _context21.next = 15;
             return ordering.setAccessToken(session.token).orders(orderId).reorder(options);
-          case 14:
+          case 15:
             _yield$ordering$setAc18 = _context21.sent;
             _yield$ordering$setAc19 = _yield$ordering$setAc18.content;
             error = _yield$ordering$setAc19.error;
@@ -2002,9 +2023,9 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               error: error,
               result: result
             });
-          case 23:
-            _context21.prev = 23;
-            _context21.t0 = _context21["catch"](0);
+          case 24:
+            _context21.prev = 24;
+            _context21.t0 = _context21["catch"](1);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
@@ -2012,11 +2033,11 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               error: true,
               result: [_context21.t0.message]
             });
-          case 27:
+          case 28:
           case "end":
             return _context21.stop();
         }
-      }, _callee21, null, [[0, 23]]);
+      }, _callee21, null, [[1, 24]]);
     }));
     return function reorder(_x34, _x35) {
       return _ref23.apply(this, arguments);

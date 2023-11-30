@@ -9,7 +9,6 @@ var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _OrderContext = require("../../contexts/OrderContext");
 var _ApiContext = require("../../contexts/ApiContext");
-var _UtilsContext = require("../../contexts/UtilsContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
@@ -33,13 +32,12 @@ var AddressDetails = exports.AddressDetails = function AddressDetails(props) {
     UIComponent = props.UIComponent,
     mapConfigs = props.mapConfigs,
     isMultiCheckout = props.isMultiCheckout,
-    openCarts = props.openCarts;
+    openCarts = props.openCarts,
+    cart = props.cart,
+    primaryColor = props.primaryColor;
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 1),
     orderState = _useOrder2[0];
-  var _useUtils = (0, _UtilsContext.useUtils)(),
-    _useUtils2 = _slicedToArray(_useUtils, 1),
-    optimizeImage = _useUtils2[0].optimizeImage;
   var _useConfig = (0, _ConfigContext.useConfig)(),
     _useConfig2 = _slicedToArray(_useConfig, 1),
     configs = _useConfig2[0].configs;
@@ -70,18 +68,25 @@ var AddressDetails = exports.AddressDetails = function AddressDetails(props) {
   /**
    * Method to format google url for business location
    */
-  var formatUrlMethod = function formatUrlMethod(location) {
-    var _orderState$options, _mapConfigs$mapSize, _mapConfigs$mapSize2, _mapConfigs$mapSize3, _mapConfigs$mapSize4, _mapConfigs$mapSize5, _mapConfigs$mapSize6;
+
+  var formatUrlMethod = function formatUrlMethod(businessLocation) {
+    var _orderState$options, _mapConfigs$mapSize, _mapConfigs$mapSize2, _mapConfigs$mapSize3, _mapConfigs$mapSize4;
     var orderLocation = props.orderLocation || (orderState === null || orderState === void 0 || (_orderState$options = orderState.options) === null || _orderState$options === void 0 || (_orderState$options = _orderState$options.address) === null || _orderState$options === void 0 ? void 0 : _orderState$options.location);
     var businessesMarkers = '';
+    var firstLetterBusinessName = '';
     if (isMultiCheckout) {
       openCarts.forEach(function (cart) {
-        var _cart$business, _cart$business2, _cart$business3;
-        businessesMarkers += "&markers=icon:".concat(optimizeImage((_cart$business = cart.business) === null || _cart$business === void 0 ? void 0 : _cart$business.logo, 'w_60,h_60,r_max'), "%7Ccolor:white%7C").concat((_cart$business2 = cart.business) === null || _cart$business2 === void 0 || (_cart$business2 = _cart$business2.location) === null || _cart$business2 === void 0 ? void 0 : _cart$business2.lat, ",").concat((_cart$business3 = cart.business) === null || _cart$business3 === void 0 || (_cart$business3 = _cart$business3.location) === null || _cart$business3 === void 0 ? void 0 : _cart$business3.lng);
+        var _cart$business$name$c, _cart$business, _cart$business$toUppe, _cart$business2, _cart$business3;
+        firstLetterBusinessName = (_cart$business$name$c = cart === null || cart === void 0 || (_cart$business = cart.business) === null || _cart$business === void 0 || (_cart$business = _cart$business.name) === null || _cart$business === void 0 || (_cart$business = _cart$business.charAt(0)) === null || _cart$business === void 0 || (_cart$business$toUppe = _cart$business.toUpperCase) === null || _cart$business$toUppe === void 0 ? void 0 : _cart$business$toUppe.call(_cart$business)) !== null && _cart$business$name$c !== void 0 ? _cart$business$name$c : 'S';
+        businessesMarkers += "&markers=label:".concat(firstLetterBusinessName, "%7Ccolor:").concat(primaryColor, "%7C").concat((_cart$business2 = cart.business) === null || _cart$business2 === void 0 || (_cart$business2 = _cart$business2.location) === null || _cart$business2 === void 0 ? void 0 : _cart$business2.lat, ",").concat((_cart$business3 = cart.business) === null || _cart$business3 === void 0 || (_cart$business3 = _cart$business3.location) === null || _cart$business3 === void 0 ? void 0 : _cart$business3.lng);
       });
+    } else {
+      var _cart$business$name$c2, _cart$business4, _cart$business4$toUpp, _cart$business$locati, _cart$business5, _businessLocation$loc, _cart$business$locati2, _cart$business6, _businessLocation$loc2;
+      firstLetterBusinessName = (_cart$business$name$c2 = cart === null || cart === void 0 || (_cart$business4 = cart.business) === null || _cart$business4 === void 0 || (_cart$business4 = _cart$business4.name) === null || _cart$business4 === void 0 || (_cart$business4 = _cart$business4.charAt(0)) === null || _cart$business4 === void 0 || (_cart$business4$toUpp = _cart$business4.toUpperCase) === null || _cart$business4$toUpp === void 0 ? void 0 : _cart$business4$toUpp.call(_cart$business4)) !== null && _cart$business$name$c2 !== void 0 ? _cart$business$name$c2 : 'S';
+      businessesMarkers = "&markers=label:".concat(firstLetterBusinessName, "%7Ccolor:").concat(primaryColor, "%7C").concat((_cart$business$locati = (_cart$business5 = cart.business) === null || _cart$business5 === void 0 || (_cart$business5 = _cart$business5.location) === null || _cart$business5 === void 0 ? void 0 : _cart$business5.lat) !== null && _cart$business$locati !== void 0 ? _cart$business$locati : businessLocation === null || businessLocation === void 0 || (_businessLocation$loc = businessLocation.location) === null || _businessLocation$loc === void 0 ? void 0 : _businessLocation$loc.lat, ",").concat((_cart$business$locati2 = (_cart$business6 = cart.business) === null || _cart$business6 === void 0 || (_cart$business6 = _cart$business6.location) === null || _cart$business6 === void 0 ? void 0 : _cart$business6.lng) !== null && _cart$business$locati2 !== void 0 ? _cart$business$locati2 : businessLocation === null || businessLocation === void 0 || (_businessLocation$loc2 = businessLocation.location) === null || _businessLocation$loc2 === void 0 ? void 0 : _businessLocation$loc2.lng);
     }
-    var staticmapUrl = isMultiCheckout ? "https://maps.googleapis.com/maps/api/staticmap?size=".concat((mapConfigs === null || mapConfigs === void 0 || (_mapConfigs$mapSize = mapConfigs.mapSize) === null || _mapConfigs$mapSize === void 0 ? void 0 : _mapConfigs$mapSize.width) || 500, "x").concat((mapConfigs === null || mapConfigs === void 0 || (_mapConfigs$mapSize2 = mapConfigs.mapSize) === null || _mapConfigs$mapSize2 === void 0 ? void 0 : _mapConfigs$mapSize2.height) || 190, "&scale=2&maptype=roadmap&zoom=10&markers=icon:%7Ccolor:red%7C").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng).concat(businessesMarkers, "&key=").concat(GM_API_KEY) : "https://maps.googleapis.com/maps/api/staticmap?size=".concat((mapConfigs === null || mapConfigs === void 0 || (_mapConfigs$mapSize3 = mapConfigs.mapSize) === null || _mapConfigs$mapSize3 === void 0 ? void 0 : _mapConfigs$mapSize3.width) || 500, "x").concat((mapConfigs === null || mapConfigs === void 0 || (_mapConfigs$mapSize4 = mapConfigs.mapSize) === null || _mapConfigs$mapSize4 === void 0 ? void 0 : _mapConfigs$mapSize4.height) || 190, "&scale=2&maptype=roadmap&center=").concat(location === null || location === void 0 ? void 0 : location.lat, ",").concat(location === null || location === void 0 ? void 0 : location.lng, "&markers=icon:%7Ccolor:red%7C").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng, "&markers=icon:%7Ccolor:red%7C").concat(location === null || location === void 0 ? void 0 : location.lat, ",").concat(location === null || location === void 0 ? void 0 : location.lng, "&key=").concat(GM_API_KEY);
-    return orderState.options.type === 1 ? "https://maps.googleapis.com/maps/api/staticmap?size=".concat((mapConfigs === null || mapConfigs === void 0 || (_mapConfigs$mapSize5 = mapConfigs.mapSize) === null || _mapConfigs$mapSize5 === void 0 ? void 0 : _mapConfigs$mapSize5.width) || 500, "x").concat((mapConfigs === null || mapConfigs === void 0 || (_mapConfigs$mapSize6 = mapConfigs.mapSize) === null || _mapConfigs$mapSize6 === void 0 ? void 0 : _mapConfigs$mapSize6.height) || 190, "&center=").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng, "&zoom=").concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : mapConfigs.mapZoom) || 15, "&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng, "&key=").concat(GM_API_KEY) : staticmapUrl;
+    var staticmapUrl = isMultiCheckout ? "https://maps.googleapis.com/maps/api/staticmap?size=".concat((mapConfigs === null || mapConfigs === void 0 || (_mapConfigs$mapSize = mapConfigs.mapSize) === null || _mapConfigs$mapSize === void 0 ? void 0 : _mapConfigs$mapSize.width) || 500, "x").concat((mapConfigs === null || mapConfigs === void 0 || (_mapConfigs$mapSize2 = mapConfigs.mapSize) === null || _mapConfigs$mapSize2 === void 0 ? void 0 : _mapConfigs$mapSize2.height) || 190, "&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng).concat(businessesMarkers, "&key=").concat(GM_API_KEY) : "https://maps.googleapis.com/maps/api/staticmap?size=".concat((mapConfigs === null || mapConfigs === void 0 || (_mapConfigs$mapSize3 = mapConfigs.mapSize) === null || _mapConfigs$mapSize3 === void 0 ? void 0 : _mapConfigs$mapSize3.width) || 500, "x").concat((mapConfigs === null || mapConfigs === void 0 || (_mapConfigs$mapSize4 = mapConfigs.mapSize) === null || _mapConfigs$mapSize4 === void 0 ? void 0 : _mapConfigs$mapSize4.height) || 190, "&scale=2&maptype=roadmap&markers=color:red%7C").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng).concat(businessesMarkers, "&key=").concat(GM_API_KEY);
+    return staticmapUrl;
   };
   /**
    * Method to get business location from API
@@ -179,5 +184,6 @@ AddressDetails.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  primaryColor: 'red'
 };

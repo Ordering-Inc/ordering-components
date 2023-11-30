@@ -36,7 +36,8 @@ var SingleOrderCard = exports.SingleOrderCard = function SingleOrderCard(props) 
   var UIComponent = props.UIComponent,
     order = props.order,
     handleReorder = props.handleReorder,
-    handleUpdateOrderList = props.handleUpdateOrderList;
+    handleUpdateOrderList = props.handleUpdateOrderList,
+    isCustomerMode = props.isCustomerMode;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -164,7 +165,7 @@ var SingleOrderCard = exports.SingleOrderCard = function SingleOrderCard(props) 
   var handleRemoveCart = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_order) {
       var _businessIds$map;
-      var _businessIds, orderIds, uuids, errors, _iterator, _step, item, _error, _yield$clearCart, error, result;
+      var _businessIds, orderIds, uuids, errors, _iterator, _step, item, _error, disableLoading, _yield$clearCart, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -193,58 +194,61 @@ var SingleOrderCard = exports.SingleOrderCard = function SingleOrderCard(props) 
             _iterator.s();
           case 11:
             if ((_step = _iterator.n()).done) {
-              _context2.next = 24;
+              _context2.next = 25;
               break;
             }
             item = _step.value;
             _error = null;
             if (!item.uuid) {
-              _context2.next = 21;
+              _context2.next = 22;
               break;
             }
-            _context2.next = 17;
-            return clearCart(item.uuid);
-          case 17:
+            disableLoading = isCustomerMode;
+            _context2.next = 18;
+            return clearCart(item.uuid, {
+              disableLoading: disableLoading
+            });
+          case 18:
             _yield$clearCart = _context2.sent;
             error = _yield$clearCart.error;
             result = _yield$clearCart.result;
             _error = error ? result[0] : false;
-          case 21:
-            _error && errors.push(_error);
           case 22:
+            _error && errors.push(_error);
+          case 23:
             _context2.next = 11;
             break;
-          case 24:
-            _context2.next = 29;
+          case 25:
+            _context2.next = 30;
             break;
-          case 26:
-            _context2.prev = 26;
+          case 27:
+            _context2.prev = 27;
             _context2.t0 = _context2["catch"](9);
             _iterator.e(_context2.t0);
-          case 29:
-            _context2.prev = 29;
+          case 30:
+            _context2.prev = 30;
             _iterator.f();
-            return _context2.finish(29);
-          case 32:
+            return _context2.finish(30);
+          case 33:
             handleReorder(orderIds);
             setCartState({
               loading: false,
               error: errors
             });
-            _context2.next = 39;
+            _context2.next = 40;
             break;
-          case 36:
-            _context2.prev = 36;
+          case 37:
+            _context2.prev = 37;
             _context2.t1 = _context2["catch"](5);
             setCartState({
               loading: false,
               error: [_context2.t1.message]
             });
-          case 39:
+          case 40:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[5, 36], [9, 26, 29, 32]]);
+      }, _callee2, null, [[5, 37], [9, 27, 30, 33]]);
     }));
     return function handleRemoveCart(_x) {
       return _ref2.apply(this, arguments);

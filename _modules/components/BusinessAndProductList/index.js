@@ -13,6 +13,7 @@ var _OrderContext = require("../../contexts/OrderContext");
 var _LanguageContext = require("../../contexts/LanguageContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
 var _ToastContext = require("../../contexts/ToastContext");
+var _CustomerContext = require("../../contexts/CustomerContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
@@ -52,7 +53,8 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
     location = props.location,
     avoidProductDuplicate = props.avoidProductDuplicate,
     isApp = props.isApp,
-    isFetchAllProducts = props.isFetchAllProducts;
+    isFetchAllProducts = props.isFetchAllProducts,
+    isCustomerMode = props.isCustomerMode;
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
     orderState = _useOrder2[0],
@@ -74,6 +76,9 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
     _useLanguage2 = _slicedToArray(_useLanguage, 2),
     languageState = _useLanguage2[0],
     t = _useLanguage2[1];
+  var _useCustomer = (0, _CustomerContext.useCustomer)(),
+    _useCustomer2 = _slicedToArray(_useCustomer, 1),
+    customerState = _useCustomer2[0];
   var _useState3 = (0, _react.useState)({
       id: null,
       name: t('ALL', 'All')
@@ -901,7 +906,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
   }, [JSON.stringify((_businessState$busine12 = businessState.business) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.id), isInitialRender]);
   var getBusiness = /*#__PURE__*/function () {
     var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-      var _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13, _orderState$options14, _orderState$options15, _result$categories, source, parameters, _orderState$options16, moment, _yield$ordering$busin2, result, data, _yield$ordering$busin3, menus;
+      var _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13, _orderState$options14, _orderState$options15, _customerState$user, _result$categories, source, parameters, _orderState$options16, moment, _customerState$user2, _yield$ordering$busin2, result, data, _yield$ordering$busin3, menus;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
@@ -925,11 +930,14 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
             if (professionalSelected) {
               parameters.professional_id = professionalSelected === null || professionalSelected === void 0 ? void 0 : professionalSelected.id;
             }
-            _context6.next = 10;
+            if (isCustomerMode && customerState !== null && customerState !== void 0 && (_customerState$user = customerState.user) !== null && _customerState$user !== void 0 && _customerState$user.id) {
+              parameters.user_id = customerState === null || customerState === void 0 || (_customerState$user2 = customerState.user) === null || _customerState$user2 === void 0 ? void 0 : _customerState$user2.id;
+            }
+            _context6.next = 11;
             return ordering.businesses(slug).select(businessProps).parameters(parameters).get({
               cancelToken: source
             });
-          case 10:
+          case 11:
             _yield$ordering$busin2 = _context6.sent;
             result = _yield$ordering$busin2.content.result;
             setErrorQuantityProducts(!(result !== null && result !== void 0 && result.categories) || (result === null || result === void 0 || (_result$categories = result.categories) === null || _result$categories === void 0 ? void 0 : _result$categories.length) === 0);
@@ -938,33 +946,33 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               loading: false
             });
             if (!(menusProps && isGetMenus)) {
-              _context6.next = 20;
+              _context6.next = 21;
               break;
             }
-            _context6.next = 17;
+            _context6.next = 18;
             return ordering.businesses(result.id).menus().select(menusProps).get();
-          case 17:
+          case 18:
             _yield$ordering$busin3 = _context6.sent;
             menus = _yield$ordering$busin3.content.result;
             data.menus = menus;
-          case 20:
+          case 21:
             setBusinessState(data);
             setLoadedFirstTime(true);
-            _context6.next = 28;
+            _context6.next = 29;
             break;
-          case 24:
-            _context6.prev = 24;
+          case 25:
+            _context6.prev = 25;
             _context6.t0 = _context6["catch"](0);
             setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
               loading: false,
               error: [_context6.t0.message]
             }));
             setLoadedFirstTime(true);
-          case 28:
+          case 29:
           case "end":
             return _context6.stop();
         }
-      }, _callee6, null, [[0, 24]]);
+      }, _callee6, null, [[0, 25]]);
     }));
     return function getBusiness() {
       return _ref13.apply(this, arguments);
