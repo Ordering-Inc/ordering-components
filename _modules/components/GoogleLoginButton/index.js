@@ -141,7 +141,6 @@ var GoogleLoginButton = exports.GoogleLoginButton = function GoogleLoginButton(p
     if (e) {
       e.preventDefault(); // to prevent submit if used within form
     }
-
     if (googleStatus.loaded) {
       var GoogleAuth = window.gapi.auth2.getAuthInstance();
       if (onRequest) {
@@ -184,7 +183,6 @@ var GoogleLoginButton = exports.GoogleLoginButton = function GoogleLoginButton(p
     if (e) {
       e.preventDefault(); // to prevent submit if used within form
     }
-
     if (googleStatus.loaded) {
       var GoogleAuth = window.gapi.auth2.getAuthInstance();
       GoogleAuth.signOut().then(GoogleAuth.disconnect().then(function () {

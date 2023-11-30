@@ -153,7 +153,6 @@ var MapView = exports.MapView = function MapView(props) {
       // customerMarkerGroups[order?.customer_id] = order?.driver_id !== session?.user?.id ? customerMakers.filter(_order => order?.id === _order?.id) : [...customerMakers, order]
       // setIsLoadingBusinessMakers(false)
     };
-
     events.on('order_updated', handleUpdateOrder);
     events.on('order_added', handleUpdateOrder);
     return function () {

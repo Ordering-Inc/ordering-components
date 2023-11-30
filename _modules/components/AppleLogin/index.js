@@ -61,7 +61,6 @@ var AppleLogin = exports.AppleLogin = function AppleLogin(props) {
     nonce: 'nonce',
     usePopup: true // or true defaults to false
   };
-
   (0, _react.useEffect)(function () {
     var AppleIDSignInOnFailure = document.addEventListener('AppleIDSignInOnFailure', function (error) {
       onFailure(error);

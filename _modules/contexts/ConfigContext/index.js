@@ -118,7 +118,6 @@ var ConfigProvider = exports.ConfigProvider = function ConfigProvider(_ref) {
       key: 'driver_tip_type',
       value: 2 // 1: fixed, 2: percetaje
     },
-
     driver_tip_options: {
       key: 'driver_tip_options',
       value: [0, 10, 15, 20, 25]
@@ -127,12 +126,10 @@ var ConfigProvider = exports.ConfigProvider = function ConfigProvider(_ref) {
       key: 'driver_tip_use_custom',
       value: 0 // 0: disabled, 1: enabled
     },
-
     validation_phone_number_lib: {
       key: 'validation_phone_number_lib',
       value: 1 // 0: disabled, 1: enabled
     },
-
     add_product_with_one_click: {
       key: 'add_product_with_one_click',
       value: false
