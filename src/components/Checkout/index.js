@@ -20,7 +20,8 @@ export const Checkout = (props) => {
     onPlaceOrderClick,
     UIComponent,
     isApp,
-    isKiosk
+    isKiosk,
+    isCustomerMode
   } = props
 
   const [ordering] = useApi()
@@ -42,7 +43,7 @@ export const Checkout = (props) => {
   /**
    * Session content
    */
-  const [{ token }] = useSession()
+  const [{ token, user }] = useSession()
   /**
    * Toast state
    */
@@ -192,6 +193,29 @@ export const Checkout = (props) => {
     await onChangeSpot()
     if (paymethodsWithoutSaveCard.includes(paymethodSelected?.paymethod?.gateway)) {
       delete payload.paymethod_data
+    }
+    const alseaProjects = ['alsea', 'alsea-staging']
+    if (alseaProjects.includes(ordering.project) && isCustomerMode) {
+      const customerFromLocalStorage = await window.localStorage.getItem('user-customer', true)
+      const response = await fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/api_checkprice.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          Authorization: `bearer ${token}`
+        },
+        body: JSON.stringify({
+          ...payload,
+          user_id: customerFromLocalStorage?.id || user.id,
+          uuid: cart.uuid
+        })
+      })
+      const result = await response.json()
+      if (result.error) {
+        setPlacing(false)
+        setErrors(t(result?.result))
+        return
+      }
     }
     const result = await placeCart(cart.uuid, payload)
     if (result?.error || !result) {
