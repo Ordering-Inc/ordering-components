@@ -31,7 +31,7 @@ export const Checkout = (props) => {
 
   const [placing, setPlacing] = useState(false)
   const [errors, setErrors] = useState(null)
-
+  const [alseaCheckPriceError, setAlseaCheckpriceError] = useState(null)
   /**
    * Language context
    */
@@ -193,29 +193,6 @@ export const Checkout = (props) => {
     await onChangeSpot()
     if (paymethodsWithoutSaveCard.includes(paymethodSelected?.paymethod?.gateway)) {
       delete payload.paymethod_data
-    }
-    const alseaProjects = ['alsea', 'alsea-staging']
-    if (alseaProjects.includes(ordering.project) && isCustomerMode) {
-      const customerFromLocalStorage = await window.localStorage.getItem('user-customer', true)
-      const response = await fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/api_checkprice.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-App-X': ordering.appId,
-          Authorization: `bearer ${token}`
-        },
-        body: JSON.stringify({
-          ...payload,
-          user_id: customerFromLocalStorage?.id || user.id,
-          uuid: cart.uuid
-        })
-      })
-      const result = await response.json()
-      if (result.error) {
-        setPlacing(false)
-        setErrors(t(result?.result))
-        return
-      }
     }
     const result = await placeCart(cart.uuid, payload)
     if (result?.error || !result) {
@@ -533,6 +510,39 @@ export const Checkout = (props) => {
     getValidationFieldOrderTypes()
   }, [])
 
+  useEffect(() => {
+    const alseaProjects = ['alsea', 'alsea-staging']
+    const amount = cart?.balance ?? cart?.total
+    if (!(alseaProjects.includes(ordering.project) && amount && isCustomerMode)) return
+    const handleAlseaCheckPrice = async () => {
+      try {
+        const customerFromLocalStorage = await window.localStorage.getItem('user-customer', true)
+        const response = await fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/api_checkprice.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-App-X': ordering.appId,
+            Authorization: `bearer ${token}`
+          },
+          body: JSON.stringify({
+            amount: amount,
+            user_id: customerFromLocalStorage?.id || user.id,
+            uuid: cart.uuid
+          })
+        })
+        const result = await response.json()
+        if (result.error) {
+          setAlseaCheckpriceError(t(result?.result))
+        } else {
+          setAlseaCheckpriceError(null)
+        }
+      } catch (err) {
+        setAlseaCheckpriceError(err?.message)
+      }
+    }
+    handleAlseaCheckPrice()
+  }, [isCustomerMode, cart?.balance, cart?.total])
+
   return (
     <>
       {UIComponent && (
@@ -558,6 +568,7 @@ export const Checkout = (props) => {
           handleChangeDeliveryOption={handleChangeDeliveryOption}
           handleConfirmCredomaticPage={handleConfirmCredomaticPage}
           checkoutFieldsState={checkoutFieldsState}
+          alseaCheckPriceError={alseaCheckPriceError}
         />
       )}
     </>
