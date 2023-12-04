@@ -70,7 +70,10 @@ var Checkout = exports.Checkout = function Checkout(props) {
     _useState4 = _slicedToArray(_useState3, 2),
     errors = _useState4[0],
     setErrors = _useState4[1];
-
+  var _useState5 = (0, _react.useState)(null),
+    _useState6 = _slicedToArray(_useState5, 2),
+    alseaCheckPriceError = _useState6[0],
+    setAlseaCheckpriceError = _useState6[1];
   /**
    * Language context
    */
@@ -101,7 +104,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
   /**
    * Delivery Instructions options
    */
-  var _useState5 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)({
       loading: false,
       result: [{
         id: null,
@@ -110,64 +113,64 @@ var Checkout = exports.Checkout = function Checkout(props) {
       }],
       error: null
     }),
-    _useState6 = _slicedToArray(_useState5, 2),
-    instructionsOptions = _useState6[0],
-    setInstructionsOptions = _useState6[1];
+    _useState8 = _slicedToArray(_useState7, 2),
+    instructionsOptions = _useState8[0],
+    setInstructionsOptions = _useState8[1];
   /**
    * Delivery instructions selected
    */
-  var _useState7 = (0, _react.useState)(undefined),
-    _useState8 = _slicedToArray(_useState7, 2),
-    deliveryOptionSelected = _useState8[0],
-    setDeliveryOptionSelected = _useState8[1];
+  var _useState9 = (0, _react.useState)(undefined),
+    _useState10 = _slicedToArray(_useState9, 2),
+    deliveryOptionSelected = _useState10[0],
+    setDeliveryOptionSelected = _useState10[1];
   /**
   * Comment state
   */
-  var _useState9 = (0, _react.useState)({
+  var _useState11 = (0, _react.useState)({
       loading: false,
       result: null,
       error: null
     }),
-    _useState10 = _slicedToArray(_useState9, 2),
-    commentState = _useState10[0],
-    setCommentState = _useState10[1];
+    _useState12 = _slicedToArray(_useState11, 2),
+    commentState = _useState12[0],
+    setCommentState = _useState12[1];
   /**
    * Object to save an object with business information
    */
-  var _useState11 = (0, _react.useState)({
+  var _useState13 = (0, _react.useState)({
       business: null,
       loading: true,
       error: null
     }),
-    _useState12 = _slicedToArray(_useState11, 2),
-    businessDetails = _useState12[0],
-    setBusinessDetails = _useState12[1];
+    _useState14 = _slicedToArray(_useState13, 2),
+    businessDetails = _useState14[0],
+    setBusinessDetails = _useState14[1];
   /**
    * This must be contains an object with info about paymente selected
    */
-  var _useState13 = (0, _react.useState)(null),
-    _useState14 = _slicedToArray(_useState13, 2),
-    paymethodSelected = _useState14[0],
-    setPaymethodSelected = _useState14[1];
+  var _useState15 = (0, _react.useState)(null),
+    _useState16 = _slicedToArray(_useState15, 2),
+    paymethodSelected = _useState16[0],
+    setPaymethodSelected = _useState16[1];
   /**
    * Loyalty plans state
    */
-  var _useState15 = (0, _react.useState)({
+  var _useState17 = (0, _react.useState)({
       loading: true,
       error: null,
       result: []
     }),
-    _useState16 = _slicedToArray(_useState15, 2),
-    loyaltyPlansState = _useState16[0],
-    setLoyaltyPlansState = _useState16[1];
-  var _useState17 = (0, _react.useState)({
+    _useState18 = _slicedToArray(_useState17, 2),
+    loyaltyPlansState = _useState18[0],
+    setLoyaltyPlansState = _useState18[1];
+  var _useState19 = (0, _react.useState)({
       fields: [],
       loading: false,
       error: null
     }),
-    _useState18 = _slicedToArray(_useState17, 2),
-    checkoutFieldsState = _useState18[0],
-    setCheckoutFieldsState = _useState18[1];
+    _useState20 = _slicedToArray(_useState19, 2),
+    checkoutFieldsState = _useState20[0],
+    setCheckoutFieldsState = _useState20[1];
   var businessId = props.uuid ? (_Object$values$find$b = (_Object$values$find = Object.values(orderState.carts).find(function (_cart) {
     return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === props.uuid;
   })) === null || _Object$values$find === void 0 ? void 0 : _Object$values$find.business_id) !== null && _Object$values$find$b !== void 0 ? _Object$values$find$b : {} : props.businessId;
@@ -178,10 +181,10 @@ var Checkout = exports.Checkout = function Checkout(props) {
   /**
    * Place spot state from chackout
    */
-  var _useState19 = (0, _react.useState)((_cartState$cart$spot_ = cartState === null || cartState === void 0 || (_cartState$cart = cartState.cart) === null || _cartState$cart === void 0 ? void 0 : _cartState$cart.spot_number) !== null && _cartState$cart$spot_ !== void 0 ? _cartState$cart$spot_ : cart === null || cart === void 0 ? void 0 : cart.spot_number),
-    _useState20 = _slicedToArray(_useState19, 2),
-    placeSpotNumber = _useState20[0],
-    setPlaceSpotNumber = _useState20[1];
+  var _useState21 = (0, _react.useState)((_cartState$cart$spot_ = cartState === null || cartState === void 0 || (_cartState$cart = cartState.cart) === null || _cartState$cart === void 0 ? void 0 : _cartState$cart.spot_number) !== null && _cartState$cart$spot_ !== void 0 ? _cartState$cart$spot_ : cart === null || cart === void 0 ? void 0 : cart.spot_number),
+    _useState22 = _slicedToArray(_useState21, 2),
+    placeSpotNumber = _useState22[0],
+    setPlaceSpotNumber = _useState22[1];
   /**
    * Timeout for update cart comment
    */
@@ -265,7 +268,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(paymentOptions, payloadProps, confirmPayment, dismissPlatformPay) {
       var _paymethodSelected$pa5, _cart$balance, _orderState$options2, _paymethodSelected$pa6, _cartResult$paymethod, _result$result, _cartResult$paymethod2, _cartResult$paymethod3, _cartResult$paymethod4;
-      var paymethodData, _paymethodSelected$da, payload, alseaProjects, customerFromLocalStorage, response, _result, result, _paymethodSelected$pa7, cartResult, _result$result2, _yield$confirmPayment, confirmApplePayError;
+      var paymethodData, _paymethodSelected$da, payload, result, _paymethodSelected$pa7, cartResult, _result$result2, _yield$confirmPayment, confirmApplePayError;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -313,89 +316,53 @@ var Checkout = exports.Checkout = function Checkout(props) {
             if (paymethodsWithoutSaveCard.includes(paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$pa6 = paymethodSelected.paymethod) === null || _paymethodSelected$pa6 === void 0 ? void 0 : _paymethodSelected$pa6.gateway)) {
               delete payload.paymethod_data;
             }
-            alseaProjects = ['alsea', 'alsea-staging'];
-            if (!(alseaProjects.includes(ordering.project) && isCustomerMode)) {
-              _context2.next = 31;
-              break;
-            }
-            _context2.next = 20;
-            return window.localStorage.getItem('user-customer', true);
-          case 20:
-            customerFromLocalStorage = _context2.sent;
-            _context2.next = 23;
-            return fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/api_checkprice.php', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'X-App-X': ordering.appId,
-                Authorization: "bearer ".concat(token)
-              },
-              body: JSON.stringify(_objectSpread(_objectSpread({}, payload), {}, {
-                user_id: (customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id) || user.id,
-                uuid: cart.uuid
-              }))
-            });
-          case 23:
-            response = _context2.sent;
-            _context2.next = 26;
-            return response.json();
-          case 26:
-            _result = _context2.sent;
-            if (!_result.error) {
-              _context2.next = 31;
-              break;
-            }
-            setPlacing(false);
-            setErrors(t(_result === null || _result === void 0 ? void 0 : _result.result));
-            return _context2.abrupt("return");
-          case 31:
-            _context2.next = 33;
+            _context2.next = 18;
             return placeCart(cart.uuid, payload);
-          case 33:
+          case 18:
             result = _context2.sent;
             if (!(result !== null && result !== void 0 && result.error || !result)) {
-              _context2.next = 42;
+              _context2.next = 27;
               break;
             }
             setErrors(result === null || result === void 0 ? void 0 : result.result);
             if (!(dismissPlatformPay && (paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$pa7 = paymethodSelected.paymethod) === null || _paymethodSelected$pa7 === void 0 ? void 0 : _paymethodSelected$pa7.gateway) === 'apple_pay')) {
-              _context2.next = 39;
+              _context2.next = 24;
               break;
             }
-            _context2.next = 39;
+            _context2.next = 24;
             return dismissPlatformPay();
-          case 39:
+          case 24:
             refreshOrderOptions();
             setPlacing(false);
             return _context2.abrupt("return");
-          case 42:
+          case 27:
             cartResult = result === null || result === void 0 ? void 0 : result.result;
             if (!((cartResult === null || cartResult === void 0 || (_cartResult$paymethod = cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
-              _context2.next = 46;
+              _context2.next = 31;
               break;
             }
-            _context2.next = 46;
+            _context2.next = 31;
             return actionsBeforePlace(paymethodSelected, result.result);
-          case 46:
+          case 31:
             if (!(confirmPayment && (result === null || result === void 0 || (_result$result = result.result) === null || _result$result === void 0 || (_result$result = _result$result.paymethod_data) === null || _result$result === void 0 ? void 0 : _result$result.gateway) === 'apple_pay')) {
-              _context2.next = 52;
+              _context2.next = 37;
               break;
             }
-            _context2.next = 49;
+            _context2.next = 34;
             return confirmPayment(result === null || result === void 0 || (_result$result2 = result.result) === null || _result$result2 === void 0 || (_result$result2 = _result$result2.paymethod_data) === null || _result$result2 === void 0 || (_result$result2 = _result$result2.result) === null || _result$result2 === void 0 ? void 0 : _result$result2.client_secret);
-          case 49:
+          case 34:
             _yield$confirmPayment = _context2.sent;
             confirmApplePayError = _yield$confirmPayment.error;
             if (confirmApplePayError) {
               setErrors(confirmApplePayError);
             }
-          case 52:
+          case 37:
             if (paymethodsWithoutSaveCard.includes(cartResult === null || cartResult === void 0 || (_cartResult$paymethod2 = cartResult.paymethod_data) === null || _cartResult$paymethod2 === void 0 ? void 0 : _cartResult$paymethod2.gateway) && cartResult !== null && cartResult !== void 0 && (_cartResult$paymethod3 = cartResult.paymethod_data) !== null && _cartResult$paymethod3 !== void 0 && (_cartResult$paymethod3 = _cartResult$paymethod3.result) !== null && _cartResult$paymethod3 !== void 0 && _cartResult$paymethod3.hash && (cartResult === null || cartResult === void 0 || (_cartResult$paymethod4 = cartResult.paymethod_data) === null || _cartResult$paymethod4 === void 0 ? void 0 : _cartResult$paymethod4.status) === 2 && !payloadProps.isNative) {
               handleConfirmCredomaticPage(cartResult, paymethodSelected);
             }
             setPlacing(false);
             onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult);
-          case 55:
+          case 40:
           case "end":
             return _context2.stop();
         }
@@ -862,6 +829,65 @@ var Checkout = exports.Checkout = function Checkout(props) {
     }
     getValidationFieldOrderTypes();
   }, []);
+  (0, _react.useEffect)(function () {
+    var _cart$balance3;
+    var alseaProjects = ['alsea', 'alsea-staging'];
+    var amount = (_cart$balance3 = cart === null || cart === void 0 ? void 0 : cart.balance) !== null && _cart$balance3 !== void 0 ? _cart$balance3 : cart === null || cart === void 0 ? void 0 : cart.total;
+    if (!(alseaProjects.includes(ordering.project) && amount && isCustomerMode)) return;
+    var handleAlseaCheckPrice = /*#__PURE__*/function () {
+      var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+        var customerFromLocalStorage, response, result;
+        return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+          while (1) switch (_context11.prev = _context11.next) {
+            case 0:
+              _context11.prev = 0;
+              _context11.next = 3;
+              return window.localStorage.getItem('user-customer', true);
+            case 3:
+              customerFromLocalStorage = _context11.sent;
+              _context11.next = 6;
+              return fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/api_checkprice.php', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId,
+                  Authorization: "bearer ".concat(token)
+                },
+                body: JSON.stringify({
+                  amount: amount,
+                  user_id: (customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id) || user.id,
+                  uuid: cart.uuid
+                })
+              });
+            case 6:
+              response = _context11.sent;
+              _context11.next = 9;
+              return response.json();
+            case 9:
+              result = _context11.sent;
+              if (result.error) {
+                setAlseaCheckpriceError(t(result === null || result === void 0 ? void 0 : result.result));
+              } else {
+                setAlseaCheckpriceError(null);
+              }
+              _context11.next = 16;
+              break;
+            case 13:
+              _context11.prev = 13;
+              _context11.t0 = _context11["catch"](0);
+              setAlseaCheckpriceError(_context11.t0 === null || _context11.t0 === void 0 ? void 0 : _context11.t0.message);
+            case 16:
+            case "end":
+              return _context11.stop();
+          }
+        }, _callee11, null, [[0, 13]]);
+      }));
+      return function handleAlseaCheckPrice() {
+        return _ref12.apply(this, arguments);
+      };
+    }();
+    handleAlseaCheckPrice();
+  }, [isCustomerMode, cart === null || cart === void 0 ? void 0 : cart.balance, cart === null || cart === void 0 ? void 0 : cart.total]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
     placing: placing,
@@ -882,7 +908,8 @@ var Checkout = exports.Checkout = function Checkout(props) {
     onChangeSpot: onChangeSpot,
     handleChangeDeliveryOption: handleChangeDeliveryOption,
     handleConfirmCredomaticPage: handleConfirmCredomaticPage,
-    checkoutFieldsState: checkoutFieldsState
+    checkoutFieldsState: checkoutFieldsState,
+    alseaCheckPriceError: alseaCheckPriceError
   })));
 };
 Checkout.propTypes = {
