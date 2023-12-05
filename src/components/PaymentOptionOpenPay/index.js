@@ -243,25 +243,42 @@ export const PaymentOptionOpenPay = (props) => {
     }
   }
 
+  const getBrandName = (company) => {
+    const cardsVisa = ['visa']
+    const cardsMaster = ['mastercard', 'master']
+    const cardsAmerica = ['american_express', 'amex']
+
+    if (cardsVisa.includes(company)) {
+      return 'visa'
+    } else if (cardsMaster.includes(company)) {
+      return 'mastercard'
+    } else if (cardsAmerica.includes(company)) {
+      return 'american'
+    } else {
+      return 'unknown'
+    }
+  }
+
   const handleClick = () => {
     const VaultWidget = window.VaultWidget
     const localDeUnaToken = JSON.parse(localStorage.getItem('de_una_token'))
 
     VaultWidget.config({
       checkoutConfig: {
-        publicApiKey: deUnaApiKey,
+        apiKey: deUnaApiKey,
         env: 'staging',
-        authToken: localDeUnaToken.token
+        userToken: localDeUnaToken.token
       },
       callbacks: {
         onSuccess: (payload) => {
           console.log('onSuccess', payload)
           const cardData = {
-            id: payload.metadata.createdCard.cardId,
-            last4: payload.metadata.createdCard.lastFour,
+            id: payload.data.cardId,
+            last4: payload.data.lastFour,
             enabled: true,
-            brandCardName: payload.metadata.createdCard.company
+            brandCardName: getBrandName(payload.data.company)
           }
+          events.emit('deuna_vault_completed', { event: 'deuna_vault_completed', data: payload?.data })
           setCardsList({
             cards: [...cardsList?.cards, cardData],
             loading: false,
@@ -271,20 +288,25 @@ export const PaymentOptionOpenPay = (props) => {
         },
         onFailure: (error) => {
           console.log('onFailure', error)
+          events.emit('deuna_vault_failed', { event: 'deuna_vault_failed', data: error })
+
           // MyAlert.show('Hubo un problema al crear la tarjeta')
         },
         onClose: () => {
           console.log('onClose', VaultWidget)
+          events.emit('deuna_vault_close', { event: 'deuna_vault_close', data: { onClose: true } })
+
         }
       }
-    })
-    VaultWidget.initElements({
-      mode: 'modal',
-      modalParams: {
-        desktop: { size: 'container', modalPosition: 'center' },
-        mobile: { size: 'container', modalPosition: 'center' }
-      },
-      elementType: 'vault'
+    }).then(() => {
+      VaultWidget.initElements({
+        mode: 'modal',
+        modalParams: {
+          desktop: { size: 'container', modalPosition: 'center' },
+          mobile: { size: 'container', modalPosition: 'center' }
+        },
+        elementType: 'vault'
+      })
     })
   }
   const addCardPlugin = async (tokenId, deviceSessionId) => {
