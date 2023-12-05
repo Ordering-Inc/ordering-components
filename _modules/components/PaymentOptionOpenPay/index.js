@@ -460,24 +460,44 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
     };
   }();
 
+  var getBrandName = function getBrandName(company) {
+    var cardsVisa = ['visa'];
+    var cardsMaster = ['mastercard', 'master'];
+    var cardsAmerica = ['american_express', 'amex'];
+
+    if (cardsVisa.includes(company)) {
+      return 'visa';
+    } else if (cardsMaster.includes(company)) {
+      return 'mastercard';
+    } else if (cardsAmerica.includes(company)) {
+      return 'american';
+    } else {
+      return 'unknown';
+    }
+  };
+
   var handleClick = function handleClick() {
     var VaultWidget = window.VaultWidget;
     var localDeUnaToken = JSON.parse(localStorage.getItem('de_una_token'));
     VaultWidget.config({
       checkoutConfig: {
-        publicApiKey: deUnaApiKey,
+        apiKey: deUnaApiKey,
         env: 'staging',
-        authToken: localDeUnaToken.token
+        userToken: localDeUnaToken.token
       },
       callbacks: {
         onSuccess: function onSuccess(payload) {
           console.log('onSuccess', payload);
           var cardData = {
-            id: payload.metadata.createdCard.cardId,
-            last4: payload.metadata.createdCard.lastFour,
+            id: payload.data.cardId,
+            last4: payload.data.lastFour,
             enabled: true,
-            brandCardName: payload.metadata.createdCard.company
+            brandCardName: getBrandName(payload.data.company)
           };
+          events.emit('deuna_vault_completed', {
+            event: 'deuna_vault_completed',
+            data: payload === null || payload === void 0 ? void 0 : payload.data
+          });
           setCardsList({
             cards: [].concat(_toConsumableArray(cardsList === null || cardsList === void 0 ? void 0 : cardsList.cards), [cardData]),
             loading: false,
@@ -486,26 +506,37 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
           VaultWidget.closeElements();
         },
         onFailure: function onFailure(error) {
-          console.log('onFailure', error); // MyAlert.show('Hubo un problema al crear la tarjeta')
+          console.log('onFailure', error);
+          events.emit('deuna_vault_failed', {
+            event: 'deuna_vault_failed',
+            data: error
+          }); // MyAlert.show('Hubo un problema al crear la tarjeta')
         },
         onClose: function onClose() {
           console.log('onClose', VaultWidget);
+          events.emit('deuna_vault_close', {
+            event: 'deuna_vault_close',
+            data: {
+              onClose: true
+            }
+          });
         }
       }
-    });
-    VaultWidget.initElements({
-      mode: 'modal',
-      modalParams: {
-        desktop: {
-          size: 'container',
-          modalPosition: 'center'
+    }).then(function () {
+      VaultWidget.initElements({
+        mode: 'modal',
+        modalParams: {
+          desktop: {
+            size: 'container',
+            modalPosition: 'center'
+          },
+          mobile: {
+            size: 'container',
+            modalPosition: 'center'
+          }
         },
-        mobile: {
-          size: 'container',
-          modalPosition: 'center'
-        }
-      },
-      elementType: 'vault'
+        elementType: 'vault'
+      });
     });
   };
 
