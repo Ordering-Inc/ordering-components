@@ -1049,7 +1049,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         if (state.carts[`businessId:${cart.business_id}`]) {
           delete state.carts[`businessId:${cart.business_id}`]
         }
-        events.emit('cart_placed', cart)
       } else {
         const cartFinded = Object.values(state.carts).find(_cart => _cart?.uuid === cart?.uuid)
         const oldBusinessId = cartFinded?.business_id
