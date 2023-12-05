@@ -2364,8 +2364,6 @@ var OrderProvider = function OrderProvider(_ref) {
         if (state.carts["businessId:".concat(cart.business_id)]) {
           delete state.carts["businessId:".concat(cart.business_id)];
         }
-
-        events.emit('cart_placed', cart);
       } else {
         var cartFinded = Object.values(state.carts).find(function (_cart) {
           return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === (cart === null || cart === void 0 ? void 0 : cart.uuid);
