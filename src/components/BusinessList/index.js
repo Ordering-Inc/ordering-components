@@ -9,6 +9,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useOrderingTheme } from '../../contexts/OrderingThemeContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 dayjs.extend(utc)
+console.log('testing');
 
 export const BusinessList = (props) => {
   const {
