@@ -68,11 +68,6 @@
     "@sentry/react": "^5.27.4",
     "@sentry/tracing": "^5.27.4"
   },
-  "husky": {
-    "hooks": {
-      "pre-push": "cypress run"
-    }
-  },
   "peerDependencies": {
     "react": ">=16.13.1",
     "react-dom": ">=16.13.1"
