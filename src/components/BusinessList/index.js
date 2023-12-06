@@ -41,6 +41,8 @@ export const BusinessList = (props) => {
     isCustomerMode
   } = props
 
+  console.log('aqui');
+
   const avoidFetchData = !token || isKiosk
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
   const [paginationProps, setPaginationProps] = useState({
