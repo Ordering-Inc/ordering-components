@@ -2,18 +2,20 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useSession } from '../../contexts/SessionContext'
 
 /**
  * Component to manage websocket status without UI component
  */
 export const WebsocketStatus = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    useReconnectByLogin
   } = props
 
   const [, t] = useLanguage()
   const socket = useWebsocket()
-
+  const [{ auth }] = useSession()
   const [socketStatus, setSocketStatus] = useState(socket?.socket?.connected ? 1 : 2)
   const [connectedDate, setConnectedDate] = useState(new Date())
   const [reconnectAttemptCount, setReconnectAttemptCount] = useState(0)
@@ -46,7 +48,12 @@ export const WebsocketStatus = (props) => {
         setSocketStatus(0)
       })
     }
-  }, [socket?.socket])
+    if (auth && socket?.socket?.connected && !socket?.socket?.disconnected && useReconnectByLogin) {
+      setReconnectAttemptCount(0)
+      setSocketStatus(1)
+      setConnectedDate(new Date())
+    }
+  }, [socket?.socket, auth])
 
   return (
     <>
