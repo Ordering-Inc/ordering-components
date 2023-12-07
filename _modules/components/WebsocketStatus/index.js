@@ -9,6 +9,7 @@ var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 var _LanguageContext = require("../../contexts/LanguageContext");
+var _SessionContext = require("../../contexts/SessionContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
@@ -24,11 +25,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  */
 var WebsocketStatus = exports.WebsocketStatus = function WebsocketStatus(props) {
   var _socket$socket;
-  var UIComponent = props.UIComponent;
+  var UIComponent = props.UIComponent,
+    useReconnectByLogin = props.useReconnectByLogin;
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
     _useLanguage2 = _slicedToArray(_useLanguage, 2),
     t = _useLanguage2[1];
   var socket = (0, _WebsocketContext.useWebsocket)();
+  var _useSession = (0, _SessionContext.useSession)(),
+    _useSession2 = _slicedToArray(_useSession, 1),
+    auth = _useSession2[0].auth;
   var _useState = (0, _react.useState)(socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && _socket$socket.connected ? 1 : 2),
     _useState2 = _slicedToArray(_useState, 2),
     socketStatus = _useState2[0],
@@ -52,6 +57,7 @@ var WebsocketStatus = exports.WebsocketStatus = function WebsocketStatus(props) 
     }
   };
   (0, _react.useEffect)(function () {
+    var _socket$socket2, _socket$socket3;
     if (socket !== null && socket !== void 0 && socket.socket) {
       socket.socket.on('connect', function () {
         setReconnectAttemptCount(0);
@@ -68,7 +74,12 @@ var WebsocketStatus = exports.WebsocketStatus = function WebsocketStatus(props) 
         setSocketStatus(0);
       });
     }
-  }, [socket === null || socket === void 0 ? void 0 : socket.socket]);
+    if (auth && socket !== null && socket !== void 0 && (_socket$socket2 = socket.socket) !== null && _socket$socket2 !== void 0 && _socket$socket2.connected && !(socket !== null && socket !== void 0 && (_socket$socket3 = socket.socket) !== null && _socket$socket3 !== void 0 && _socket$socket3.disconnected) && useReconnectByLogin) {
+      setReconnectAttemptCount(0);
+      setSocketStatus(1);
+      setConnectedDate(new Date());
+    }
+  }, [socket === null || socket === void 0 ? void 0 : socket.socket, auth]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     socketStatus: socketStatus,
     connectedDate: connectedDate,
