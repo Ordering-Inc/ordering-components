@@ -33,7 +33,7 @@ export const PhoneAutocomplete = (props) => {
    */
   const getUsers = async () => {
     const maxRetries = 3
-    const waitTime = 1000
+    const waitTime = 5000
 
     for (let retryAttempt = 1; retryAttempt <= maxRetries; retryAttempt++) {
       try {
