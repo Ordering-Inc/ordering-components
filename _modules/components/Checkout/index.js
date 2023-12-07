@@ -846,7 +846,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
             case 3:
               customerFromLocalStorage = _context11.sent;
               _context11.next = 6;
-              return fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/api_checkprice.php', {
+              return fetch('https://alsea-plugins.ordering.co/alseaplatform/api_checkprice.php', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
