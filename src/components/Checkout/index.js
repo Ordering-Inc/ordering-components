@@ -504,7 +504,7 @@ export const Checkout = (props) => {
     const handleAlseaCheckPrice = async () => {
       try {
         const customerFromLocalStorage = await window.localStorage.getItem('user-customer', true)
-        const response = await fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/api_checkprice.php', {
+        const response = await fetch('https://alsea-plugins.ordering.co/alseaplatform/api_checkprice.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
