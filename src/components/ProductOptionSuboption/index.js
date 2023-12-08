@@ -12,7 +12,8 @@ export const ProductOptionSuboption = (props) => {
     suboption,
     onChange,
     isOrigin,
-    pizzaState
+    pizzaState,
+    isAlsea
   } = props
 
   /**
@@ -23,11 +24,11 @@ export const ProductOptionSuboption = (props) => {
   if (selected && props.state.quantity && props.state.quantity > 0) {
     quantity = props.state.quantity
   } else if (selected) {
-    quantity = 1
+    quantity = option?.name?.toLowerCase() === 'queso y salsa' && isAlsea ? props.state.quantity : 1
   }
   const position = props.state.position || 'whole'
   const price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price
-  const usePizzaValidation = (pizzaState?.[`option:${option?.id}`]?.value === option?.max) && !(option?.max === 1 && option?.min === 1)
+  const usePizzaValidation = (pizzaState?.[`option:${option?.id}`]?.value >= option?.max) && !(option?.max === 1 && option?.min === 1)
 
   /**
    * Set current state
@@ -49,7 +50,7 @@ export const ProductOptionSuboption = (props) => {
     const selectStatus = isOrigin ? !state.selected : state.selected
     const minMaxValidation = option.with_half_option ? usePizzaValidation : (balance === option.max && !(option?.max === 1 && option?.min === 1))
     const canBeSelectedByHalf = (pizzaState?.[`option:${option?.id}`]?.value === (option.max - 0.5)) && option.with_half_option
-    if (selectStatus && option.limit_suboptions_by_max && minMaxValidation && !canBeSelectedByHalf) {
+    if (selectStatus && (option.limit_suboptions_by_max || isAlsea) && minMaxValidation && !canBeSelectedByHalf) {
       return
     }
     changeState({
@@ -110,6 +111,18 @@ export const ProductOptionSuboption = (props) => {
     })
   }
 
+  /**
+   * Change position of the suboption
+   * @param {string} position Position of the suboption
+   */
+  const changeQuantity = (quantity) => {
+    changeState({
+      ...state,
+      quantity: quantity,
+      total: state.price * quantity
+    })
+  }
+
   return (
     <>
       {
@@ -118,6 +131,7 @@ export const ProductOptionSuboption = (props) => {
             {...props}
             state={state}
             usePizzaValidation={usePizzaValidation}
+            changeQuantity={changeQuantity}
             increment={increment}
             decrement={decrement}
             changePosition={changePosition}
