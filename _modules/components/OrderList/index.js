@@ -403,7 +403,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
             }
             nextPage = !isNextPage ? pagination.currentPage + 1 : 1;
             _context5.next = 14;
-            return getOrders(getFirstOrder ? 0 : nextPage, searchByOtherStatus, pageSize);
+            return getOrders(getFirstOrder && !asDashboard ? 0 : nextPage, searchByOtherStatus, pageSize);
           case 14:
             response = _context5.sent;
             if (searchByOtherStatus) {
