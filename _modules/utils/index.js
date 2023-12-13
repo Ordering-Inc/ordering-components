@@ -4,8 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.randomString = exports.deepEqual = void 0;
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-var randomString = exports.randomString = function randomString() {
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+var randomString = function randomString() {
   var length = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
   var alphabet = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var result = '';
@@ -15,7 +15,8 @@ var randomString = exports.randomString = function randomString() {
   }
   return result;
 };
-var deepEqual = exports.deepEqual = function deepEqual(object1, object2) {
+exports.randomString = randomString;
+var deepEqual = function deepEqual(object1, object2) {
   var keys1 = Object.keys(object1);
   var keys2 = Object.keys(object2);
   if (keys1.length !== keys2.length) {
@@ -32,6 +33,7 @@ var deepEqual = exports.deepEqual = function deepEqual(object1, object2) {
   }
   return true;
 };
+exports.deepEqual = deepEqual;
 var isObject = function isObject(object) {
   return object != null && _typeof(object) === 'object';
 };
