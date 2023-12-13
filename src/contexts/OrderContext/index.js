@@ -1262,7 +1262,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     if (configTypes?.length > 0 && state.options.type && !configTypes.includes(state.options.type)) {
       const validDefaultValue = configTypes.includes(configState?.configs?.default_order_type?.type)
       updateOrderOptions(validDefaultValue ? { type: configState?.configs?.default_order_type?.type } : { type: configTypes[0] })
-      setAlert({ show: true, title: t('INFORMATION', 'Information'), content: t('ORDER_TYPE_CHANGED', 'the order type config has changed') })
     }
   }, [configTypes?.length, state.options.type])
 
