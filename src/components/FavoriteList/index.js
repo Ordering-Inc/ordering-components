@@ -30,6 +30,7 @@ export const FavoriteList = (props) => {
     pageSize: paginationSettings.pageSize ?? 10,
     total: null
   })
+  const [favProduct, setFavProduct] = useState(null)
 
   /**
    * Method to update favorite list
@@ -224,6 +225,8 @@ export const FavoriteList = (props) => {
           getFavoriteList={getFavoriteList}
           handleReorder={handleReorder}
           reorderState={reorderState}
+          favProduct={favProduct}
+          setFavProduct={setFavProduct}
         />
       )}
     </>
