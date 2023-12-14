@@ -2288,11 +2288,6 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
       } : {
         type: configTypes[0]
       });
-      setAlert({
-        show: true,
-        title: t('INFORMATION', 'Information'),
-        content: t('ORDER_TYPE_CHANGED', 'the order type config has changed')
-      });
     }
   }, [configTypes === null || configTypes === void 0 ? void 0 : configTypes.length, state.options.type]);
 
