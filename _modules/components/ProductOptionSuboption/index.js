@@ -25,7 +25,8 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
     suboption = props.suboption,
     onChange = props.onChange,
     isOrigin = props.isOrigin,
-    pizzaState = props.pizzaState;
+    pizzaState = props.pizzaState,
+    isAlsea = props.isAlsea;
 
   /**
    * Predefine default values for suboption state
@@ -35,11 +36,12 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
   if (selected && props.state.quantity && props.state.quantity > 0) {
     quantity = props.state.quantity;
   } else if (selected) {
-    quantity = 1;
+    var _option$name;
+    quantity = (option === null || option === void 0 || (_option$name = option.name) === null || _option$name === void 0 ? void 0 : _option$name.toLowerCase()) === 'queso y salsa' && isAlsea ? props.state.quantity : 1;
   }
   var position = props.state.position || 'whole';
   var price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price;
-  var usePizzaValidation = (pizzaState === null || pizzaState === void 0 || (_pizzaState = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState === void 0 ? void 0 : _pizzaState.value) === (option === null || option === void 0 ? void 0 : option.max) && !((option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1);
+  var usePizzaValidation = (pizzaState === null || pizzaState === void 0 || (_pizzaState = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState === void 0 ? void 0 : _pizzaState.value) >= (option === null || option === void 0 ? void 0 : option.max) && !((option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1);
 
   /**
    * Set current state
@@ -70,7 +72,7 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
     var selectStatus = isOrigin ? !state.selected : state.selected;
     var minMaxValidation = option.with_half_option ? usePizzaValidation : balance === option.max && !((option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1);
     var canBeSelectedByHalf = (pizzaState === null || pizzaState === void 0 || (_pizzaState2 = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState2 === void 0 ? void 0 : _pizzaState2.value) === option.max - 0.5 && option.with_half_option;
-    if (selectStatus && option.limit_suboptions_by_max && minMaxValidation && !canBeSelectedByHalf) {
+    if (selectStatus && (option.limit_suboptions_by_max || isAlsea) && minMaxValidation && !canBeSelectedByHalf) {
       return;
     }
     changeState(_objectSpread(_objectSpread({}, state), {}, {
@@ -126,9 +128,21 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
       total: price * state.quantity
     }));
   };
+
+  /**
+   * Change position of the suboption
+   * @param {string} position Position of the suboption
+   */
+  var changeQuantity = function changeQuantity(quantity) {
+    changeState(_objectSpread(_objectSpread({}, state), {}, {
+      quantity: quantity,
+      total: state.price * quantity
+    }));
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     state: state,
     usePizzaValidation: usePizzaValidation,
+    changeQuantity: changeQuantity,
     increment: increment,
     decrement: decrement,
     changePosition: changePosition,
