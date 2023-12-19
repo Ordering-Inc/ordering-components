@@ -59,7 +59,7 @@ var WebsocketProvider = exports.WebsocketProvider = function WebsocketProvider(_
     if (configs.project && (session.token || !configs.use_root_point)) {
       var _socket = new _socket2.Socket(_objectSpread(_objectSpread({}, configs), {}, {
         accessToken: session.token,
-        url: isAlsea ? configs.url : 'https://socket-v3.ordering.co'
+        url: isAlsea ? 'https://alsea-socket3-production.ordering.co' : 'https://socket-v3.ordering.co'
       }));
       setSocket(_socket);
     }

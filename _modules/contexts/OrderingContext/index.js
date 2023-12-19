@@ -36,12 +36,12 @@ var OrderingContext = exports.OrderingContext = /*#__PURE__*/(0, _react.createCo
  * @param {props} props
  */
 var OrderingProvider = exports.OrderingProvider = function OrderingProvider(_ref) {
-  var _settings$franchiseSl;
+  var _ref2, _settings$franchiseSl;
   var Alert = _ref.Alert,
     settings = _ref.settings,
-    isAlsea = _ref.isAlsea,
     children = _ref.children;
   var webStrategy = new _webStrategy.WebStrategy();
+  var isAlsea = (_ref2 = ['alsea', 'alsea-staging']) === null || _ref2 === void 0 ? void 0 : _ref2.includes(settings.project);
   var restOfSettings = {
     project: settings.project,
     appId: settings.app_id,
