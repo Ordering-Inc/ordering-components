@@ -11,7 +11,7 @@ function _extends() { _extends = Object.assign ? Object.assign.bind() : function
 /**
  * Component to render product ingredient
  */
-var ProductIngredient = function ProductIngredient(props) {
+var ProductIngredient = exports.ProductIngredient = function ProductIngredient(props) {
   var UIComponent = props.UIComponent,
     ingredient = props.ingredient,
     onChange = props.onChange;
@@ -46,7 +46,6 @@ var ProductIngredient = function ProductIngredient(props) {
     toggleSelect: toggleSelect
   })));
 };
-exports.ProductIngredient = ProductIngredient;
 ProductIngredient.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
