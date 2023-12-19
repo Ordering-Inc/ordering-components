@@ -851,7 +851,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
     var _cart$balance3;
     var alseaProjects = ['alsea', 'alsea-staging'];
     var amount = (_cart$balance3 = cart === null || cart === void 0 ? void 0 : cart.balance) !== null && _cart$balance3 !== void 0 ? _cart$balance3 : cart === null || cart === void 0 ? void 0 : cart.total;
-    if (!(alseaProjects.includes(ordering.project) && amount && isCustomerMode)) return;
+    if (!(alseaProjects.includes(ordering.project) && isCustomerMode)) return;
     var handleAlseaCheckPrice = /*#__PURE__*/function () {
       var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
         var customerFromLocalStorage, apiCheckprice, response, result;
@@ -873,7 +873,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
                   Authorization: "bearer ".concat(token)
                 },
                 body: JSON.stringify({
-                  amount: amount,
+                  amount: amount !== null && amount !== void 0 ? amount : 0,
                   user_id: (customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id) || user.id,
                   uuid: cart.uuid
                 })
