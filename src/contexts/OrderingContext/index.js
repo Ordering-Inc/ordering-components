@@ -27,8 +27,9 @@ export const OrderingContext = createContext()
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
+export const OrderingProvider = ({ Alert, settings, children }) => {
   const webStrategy = new WebStrategy()
+  const isAlsea = ['alsea', 'alsea-staging']?.includes(settings.project)
   const restOfSettings = {
     project: settings.project,
     appId: settings.app_id,
