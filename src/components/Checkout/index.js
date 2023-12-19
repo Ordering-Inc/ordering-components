@@ -500,7 +500,7 @@ export const Checkout = (props) => {
   useEffect(() => {
     const alseaProjects = ['alsea', 'alsea-staging']
     const amount = cart?.balance ?? cart?.total
-    if (!(alseaProjects.includes(ordering.project) && amount && isCustomerMode)) return
+    if (!(alseaProjects.includes(ordering.project) && isCustomerMode)) return
     const handleAlseaCheckPrice = async () => {
       try {
         const customerFromLocalStorage = await window.localStorage.getItem('user-customer', true)
@@ -513,7 +513,7 @@ export const Checkout = (props) => {
             Authorization: `bearer ${token}`
           },
           body: JSON.stringify({
-            amount: amount,
+            amount: amount ?? 0,
             user_id: customerFromLocalStorage?.id || user.id,
             uuid: cart.uuid
           })
