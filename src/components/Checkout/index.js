@@ -75,6 +75,8 @@ export const Checkout = (props) => {
 
   const [checkoutFieldsState, setCheckoutFieldsState] = useState({ fields: [], loading: false, error: null })
 
+  const [isLoadingCheckprice, setIsLoadingCheckprice] = useState(false)
+
   const businessId = props.uuid
     ? Object.values(orderState.carts).find(_cart => _cart?.uuid === props.uuid)?.business_id ?? {}
     : props.businessId
@@ -561,6 +563,7 @@ export const Checkout = (props) => {
           handleConfirmCredomaticPage={handleConfirmCredomaticPage}
           checkoutFieldsState={checkoutFieldsState}
           alseaCheckPriceError={alseaCheckPriceError}
+          isLoadingCheckprice={isLoadingCheckprice}
         />
       )}
     </>
