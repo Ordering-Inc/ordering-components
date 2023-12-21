@@ -52,7 +52,7 @@ export const UserFormDetails = (props) => {
       const source = {}
       requestsState.user = source
       ordering.setAccessToken(accessToken).users((useSessionUser && refreshSessionUser) ? session.user.id : userId).get({ cancelToken: source }).then((response) => {
-        setUserState({ loading: false, loadingDriver: false,result: response.content })
+        setUserState({ loading: false, loadingDriver: false, result: response.content })
         if (response.content.result) {
           if (!isCustomerMode) {
             changeUser({
@@ -141,7 +141,25 @@ export const UserFormDetails = (props) => {
           loading: false
         })
       } else {
-        response = await ordering.users(props?.userData?.id || userState.result.result.id).save(formState.changes, {
+        let _changes = formState.changes
+        if (props?.userData?.guest_id || userState.result.result?.guest_id) {
+          if (formState.changes.email) {
+            _changes = {
+              ..._changes,
+              guest_email: formState.changes.email
+            }
+          }
+          if (formState.changes.cellphone) {
+            _changes = {
+              ..._changes,
+              guest_cellphone: formState.changes.cellphone
+            }
+          }
+
+          delete _changes.email
+          delete _changes.cellphone
+        }
+        response = await ordering.users(props?.userData?.id || userState.result.result.id).save(_changes, {
           accessToken: accessToken
         })
         setFormState({
