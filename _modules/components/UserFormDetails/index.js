@@ -196,7 +196,7 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
    */
   var handleUpdateClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(changes, isImage, image) {
-      var response, _changes, parsedNumber, _props$userData, _formState$changes, photo, _changes2, _props$userData2, _changes$setCustomerI;
+      var response, _changes, parsedNumber, _props$userData, _formState$changes, photo, _changes2, _props$userData2, _userState$result$res, _props$userData3, _changes3, _changes$setCustomerI;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -240,21 +240,36 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               result: response.content,
               loading: false
             }));
-            _context.next = 20;
+            _context.next = 22;
             break;
           case 16:
-            _context.next = 18;
-            return ordering.users((props === null || props === void 0 || (_props$userData2 = props.userData) === null || _props$userData2 === void 0 ? void 0 : _props$userData2.id) || userState.result.result.id).save(formState.changes, {
+            _changes3 = formState.changes;
+            if (props !== null && props !== void 0 && (_props$userData2 = props.userData) !== null && _props$userData2 !== void 0 && _props$userData2.guest_id || (_userState$result$res = userState.result.result) !== null && _userState$result$res !== void 0 && _userState$result$res.guest_id) {
+              if (formState.changes.email) {
+                _changes3 = _objectSpread(_objectSpread({}, _changes3), {}, {
+                  guest_email: formState.changes.email
+                });
+              }
+              if (formState.changes.cellphone) {
+                _changes3 = _objectSpread(_objectSpread({}, _changes3), {}, {
+                  guest_cellphone: formState.changes.cellphone
+                });
+              }
+              delete _changes3.email;
+              delete _changes3.cellphone;
+            }
+            _context.next = 20;
+            return ordering.users((props === null || props === void 0 || (_props$userData3 = props.userData) === null || _props$userData3 === void 0 ? void 0 : _props$userData3.id) || userState.result.result.id).save(_changes3, {
               accessToken: accessToken
             });
-          case 18:
+          case 20:
             response = _context.sent;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               changes: response.content.error ? formState.changes : {},
               result: response.content,
               loading: false
             }));
-          case 20:
+          case 22:
             if (!response.content.error) {
               setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                 loadingDriver: false,
@@ -273,10 +288,10 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
                 setIsEdit(!isEdit);
               }
             }
-            _context.next = 26;
+            _context.next = 28;
             break;
-          case 23:
-            _context.prev = 23;
+          case 25:
+            _context.prev = 25;
             _context.t0 = _context["catch"](2);
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               result: {
@@ -285,11 +300,11 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               },
               loading: false
             }));
-          case 26:
+          case 28:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[2, 23]]);
+      }, _callee, null, [[2, 25]]);
     }));
     return function handleUpdateClick(_x, _x2, _x3) {
       return _ref.apply(this, arguments);
@@ -484,13 +499,13 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
   }();
   var updatePromotions = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(change, setState, state) {
-      var _props$userData3, response, _change$setCustomerIn;
+      var _props$userData4, response, _change$setCustomerIn;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
             _context4.prev = 0;
             _context4.next = 3;
-            return ordering.users((props === null || props === void 0 || (_props$userData3 = props.userData) === null || _props$userData3 === void 0 ? void 0 : _props$userData3.id) || userState.result.result.id).save(change, {
+            return ordering.users((props === null || props === void 0 || (_props$userData4 = props.userData) === null || _props$userData4 === void 0 ? void 0 : _props$userData4.id) || userState.result.result.id).save(change, {
               accessToken: accessToken
             });
           case 3:
