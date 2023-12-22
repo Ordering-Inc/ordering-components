@@ -858,17 +858,18 @@ var Checkout = exports.Checkout = function Checkout(props) {
     if (!(alseaProjects.includes(ordering.project) && isCustomerMode)) return;
     var handleAlseaCheckPrice = /*#__PURE__*/function () {
       var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
-        var customerFromLocalStorage, apiCheckprice, response, result, _result$result3;
+        var customerFromLocalStorage, apiCheckprice, response, result;
         return _regeneratorRuntime().wrap(function _callee11$(_context11) {
           while (1) switch (_context11.prev = _context11.next) {
             case 0:
               _context11.prev = 0;
-              _context11.next = 3;
+              setIsLoadingCheckprice(true);
+              _context11.next = 4;
               return window.localStorage.getItem('user-customer', true);
-            case 3:
+            case 4:
               customerFromLocalStorage = _context11.sent;
               apiCheckprice = ordering.project === 'alsea' ? 'https://alsea-plugins.ordering.co/alseaplatform/api_checkprice.php' : 'https://alsea-plugins-staging.ordering.co/alseaplatform/api_checkprice.php';
-              _context11.next = 7;
+              _context11.next = 8;
               return fetch(apiCheckprice, {
                 method: 'POST',
                 headers: {
@@ -882,42 +883,37 @@ var Checkout = exports.Checkout = function Checkout(props) {
                   uuid: cart.uuid
                 })
               });
-            case 7:
+            case 8:
               response = _context11.sent;
-              _context11.next = 10;
+              _context11.next = 11;
               return response.json();
-            case 10:
+            case 11:
               result = _context11.sent;
               if (!result.error) {
-                _context11.next = 15;
+                _context11.next = 16;
                 break;
               }
               setAlseaCheckpriceError(t(result === null || result === void 0 ? void 0 : result.result));
-              _context11.next = 21;
+              _context11.next = 19;
               break;
-            case 15:
-              if (!((result === null || result === void 0 || (_result$result3 = result.result) === null || _result$result3 === void 0 ? void 0 : _result$result3[0]) !== 'ALSEA_CHECKPRICE_NOT_NECESSARY')) {
-                _context11.next = 21;
-                break;
-              }
+            case 16:
               setAlseaCheckpriceError(null);
-              setIsLoadingCheckprice(true);
-              _context11.next = 20;
+              _context11.next = 19;
               return refreshOrderOptions();
-            case 20:
+            case 19:
               setIsLoadingCheckprice(false);
-            case 21:
               _context11.next = 26;
               break;
-            case 23:
-              _context11.prev = 23;
+            case 22:
+              _context11.prev = 22;
               _context11.t0 = _context11["catch"](0);
               setAlseaCheckpriceError(_context11.t0 === null || _context11.t0 === void 0 ? void 0 : _context11.t0.message);
+              setIsLoadingCheckprice(false);
             case 26:
             case "end":
               return _context11.stop();
           }
-        }, _callee11, null, [[0, 23]]);
+        }, _callee11, null, [[0, 22]]);
       }));
       return function handleAlseaCheckPrice() {
         return _ref12.apply(this, arguments);
