@@ -503,6 +503,7 @@ export const Checkout = (props) => {
     if (!(alseaProjects.includes(ordering.project) && isCustomerMode)) return
     const handleAlseaCheckPrice = async () => {
       try {
+        setIsLoadingCheckprice(true)
         const customerFromLocalStorage = await window.localStorage.getItem('user-customer', true)
         const apiCheckprice = ordering.project === 'alsea' ? 'https://alsea-plugins.ordering.co/alseaplatform/api_checkprice.php' : 'https://alsea-plugins-staging.ordering.co/alseaplatform/api_checkprice.php'
         const response = await fetch(apiCheckprice, {
@@ -523,9 +524,12 @@ export const Checkout = (props) => {
           setAlseaCheckpriceError(t(result?.result))
         } else {
           setAlseaCheckpriceError(null)
+          await refreshOrderOptions()
         }
+        setIsLoadingCheckprice(false)
       } catch (err) {
         setAlseaCheckpriceError(err?.message)
+        setIsLoadingCheckprice(false)
       }
     }
     handleAlseaCheckPrice()
