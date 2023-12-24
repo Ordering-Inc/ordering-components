@@ -171,6 +171,10 @@ var Checkout = function Checkout(props) {
     _useState20 = _slicedToArray(_useState19, 2),
     checkoutFieldsState = _useState20[0],
     setCheckoutFieldsState = _useState20[1];
+  var _useState21 = (0, _react.useState)(false),
+    _useState22 = _slicedToArray(_useState21, 2),
+    isLoadingCheckprice = _useState22[0],
+    setIsLoadingCheckprice = _useState22[1];
   var businessId = props.uuid ? (_Object$values$find$b = (_Object$values$find = Object.values(orderState.carts).find(function (_cart) {
     return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === props.uuid;
   })) === null || _Object$values$find === void 0 ? void 0 : _Object$values$find.business_id) !== null && _Object$values$find$b !== void 0 ? _Object$values$find$b : {} : props.businessId;
@@ -181,10 +185,10 @@ var Checkout = function Checkout(props) {
   /**
    * Place spot state from chackout
    */
-  var _useState21 = (0, _react.useState)((_cartState$cart$spot_ = cartState === null || cartState === void 0 ? void 0 : (_cartState$cart = cartState.cart) === null || _cartState$cart === void 0 ? void 0 : _cartState$cart.spot_number) !== null && _cartState$cart$spot_ !== void 0 ? _cartState$cart$spot_ : cart === null || cart === void 0 ? void 0 : cart.spot_number),
-    _useState22 = _slicedToArray(_useState21, 2),
-    placeSpotNumber = _useState22[0],
-    setPlaceSpotNumber = _useState22[1];
+  var _useState23 = (0, _react.useState)((_cartState$cart$spot_ = cartState === null || cartState === void 0 ? void 0 : (_cartState$cart = cartState.cart) === null || _cartState$cart === void 0 ? void 0 : _cartState$cart.spot_number) !== null && _cartState$cart$spot_ !== void 0 ? _cartState$cart$spot_ : cart === null || cart === void 0 ? void 0 : cart.spot_number),
+    _useState24 = _slicedToArray(_useState23, 2),
+    placeSpotNumber = _useState24[0],
+    setPlaceSpotNumber = _useState24[1];
   /**
    * Timeout for update cart comment
    */
@@ -841,12 +845,13 @@ var Checkout = function Checkout(props) {
           while (1) switch (_context11.prev = _context11.next) {
             case 0:
               _context11.prev = 0;
-              _context11.next = 3;
+              setIsLoadingCheckprice(true);
+              _context11.next = 4;
               return window.localStorage.getItem('user-customer', true);
-            case 3:
+            case 4:
               customerFromLocalStorage = _context11.sent;
               apiCheckprice = ordering.project === 'alsea' ? 'https://alsea-plugins.ordering.co/alseaplatform/api_checkprice.php' : 'https://alsea-plugins-staging.ordering.co/alseaplatform/api_checkprice.php';
-              _context11.next = 7;
+              _context11.next = 8;
               return fetch(apiCheckprice, {
                 method: 'POST',
                 headers: {
@@ -860,28 +865,37 @@ var Checkout = function Checkout(props) {
                   uuid: cart.uuid
                 })
               });
-            case 7:
+            case 8:
               response = _context11.sent;
-              _context11.next = 10;
+              _context11.next = 11;
               return response.json();
-            case 10:
+            case 11:
               result = _context11.sent;
-              if (result.error) {
-                setAlseaCheckpriceError(t(result === null || result === void 0 ? void 0 : result.result));
-              } else {
-                setAlseaCheckpriceError(null);
+              if (!result.error) {
+                _context11.next = 16;
+                break;
               }
-              _context11.next = 17;
+              setAlseaCheckpriceError(t(result === null || result === void 0 ? void 0 : result.result));
+              _context11.next = 19;
               break;
-            case 14:
-              _context11.prev = 14;
+            case 16:
+              setAlseaCheckpriceError(null);
+              _context11.next = 19;
+              return refreshOrderOptions();
+            case 19:
+              setIsLoadingCheckprice(false);
+              _context11.next = 26;
+              break;
+            case 22:
+              _context11.prev = 22;
               _context11.t0 = _context11["catch"](0);
               setAlseaCheckpriceError(_context11.t0 === null || _context11.t0 === void 0 ? void 0 : _context11.t0.message);
-            case 17:
+              setIsLoadingCheckprice(false);
+            case 26:
             case "end":
               return _context11.stop();
           }
-        }, _callee11, null, [[0, 14]]);
+        }, _callee11, null, [[0, 22]]);
       }));
       return function handleAlseaCheckPrice() {
         return _ref12.apply(this, arguments);
@@ -910,7 +924,8 @@ var Checkout = function Checkout(props) {
     handleChangeDeliveryOption: handleChangeDeliveryOption,
     handleConfirmCredomaticPage: handleConfirmCredomaticPage,
     checkoutFieldsState: checkoutFieldsState,
-    alseaCheckPriceError: alseaCheckPriceError
+    alseaCheckPriceError: alseaCheckPriceError,
+    isLoadingCheckprice: isLoadingCheckprice
   })));
 };
 exports.Checkout = Checkout;
