@@ -696,7 +696,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
           case 3:
             _context8.prev = 3;
             _context8.next = 6;
-            return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.id, "/messages/").concat(messageId, "/read"), {
+            return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.id, "/messages/").concat(messageId, "/read?order_id=").concat(orderId, "&order_message_id=").concat(messageId), {
               method: 'GET',
               headers: {
                 Authorization: "Bearer ".concat(token),
