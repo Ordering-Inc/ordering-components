@@ -34,6 +34,7 @@ export const PhoneAutocomplete = (props) => {
   const getUsers = async () => {
     const maxRetries = 3
     const waitTime = 60000
+    const cellphone = phone || urlPhone
 
     for (let retryAttempt = 1; retryAttempt <= maxRetries; retryAttempt++) {
       try {
@@ -50,14 +51,14 @@ export const PhoneAutocomplete = (props) => {
               attribute: 'cellphone',
               value: {
                 condition: 'ilike',
-                value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
+                value: isIos ? `%${cellphone}%` : encodeURI(`%${cellphone}%`)
               }
             },
             {
               attribute: 'phone',
               value: {
                 condition: 'ilike',
-                value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
+                value: isIos ? `%${cellphone}%` : encodeURI(`%${cellphone}%`)
               }
             }]
           }]
