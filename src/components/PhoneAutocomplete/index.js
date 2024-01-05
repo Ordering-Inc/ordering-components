@@ -50,14 +50,14 @@ export const PhoneAutocomplete = (props) => {
             conditions: [{
               attribute: 'cellphone',
               value: {
-                condition: 'ilike',
+                condition: 'like',
                 value: isIos ? `%${cellphone}%` : encodeURI(`%${cellphone}%`)
               }
             },
             {
               attribute: 'phone',
               value: {
-                condition: 'ilike',
+                condition: 'like',
                 value: isIos ? `%${cellphone}%` : encodeURI(`%${cellphone}%`)
               }
             }]
