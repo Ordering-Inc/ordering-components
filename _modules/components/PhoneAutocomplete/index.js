@@ -140,13 +140,13 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
                 conditions: [{
                   attribute: 'cellphone',
                   value: {
-                    condition: 'ilike',
+                    condition: 'like',
                     value: isIos ? "%".concat(cellphone, "%") : encodeURI("%".concat(cellphone, "%"))
                   }
                 }, {
                   attribute: 'phone',
                   value: {
-                    condition: 'ilike',
+                    condition: 'like',
                     value: isIos ? "%".concat(cellphone, "%") : encodeURI("%".concat(cellphone, "%"))
                   }
                 }]
