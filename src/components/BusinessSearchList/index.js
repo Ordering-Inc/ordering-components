@@ -154,7 +154,7 @@ export const BusinessSearchList = (props) => {
       filtParams = filtParams + (orderState?.options?.type === 1 && defaultLocation && filters.max_distance ? `&max_distance=${filters.max_distance}` : '')
       filtParams = !filterByCity ? (filtParams + `&page=${newFetch ? 1 : paginationProps.currentPage + 1}&page_size=${paginationProps.pageSize}`) : filtParams
       brandId && (filtParams = filtParams + `&franchise_ids=[${brandId}]`)
-      propsToFetch && (filtParams = filtParams + `params=${propsToFetch}`)
+      propsToFetch && (filtParams = filtParams + `&params=${propsToFetch}`)
       setBusinessesSearchList({
         ...businessesSearchList,
         loading: true,

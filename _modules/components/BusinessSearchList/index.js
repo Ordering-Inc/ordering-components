@@ -271,7 +271,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
               filtParams = filtParams + ((orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) === 1 && defaultLocation && filters.max_distance ? "&max_distance=".concat(filters.max_distance) : '');
               filtParams = !filterByCity ? filtParams + "&page=".concat(newFetch ? 1 : paginationProps.currentPage + 1, "&page_size=").concat(paginationProps.pageSize) : filtParams;
               brandId && (filtParams = filtParams + "&franchise_ids=[".concat(brandId, "]"));
-              propsToFetch && (filtParams = filtParams + "params=".concat(propsToFetch));
+              propsToFetch && (filtParams = filtParams + "&params=".concat(propsToFetch));
               setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
                 loading: true,
                 lengthError: false
