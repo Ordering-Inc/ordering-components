@@ -13,7 +13,8 @@ export const ProductOptionSuboption = (props) => {
     onChange,
     isOrigin,
     pizzaState,
-    isAlsea
+    isAlsea,
+    quesoYSalsaOptions
   } = props
 
   /**
@@ -24,7 +25,7 @@ export const ProductOptionSuboption = (props) => {
   if (selected && props.state.quantity && props.state.quantity > 0) {
     quantity = props.state.quantity
   } else if (selected) {
-    quantity = option?.name?.toLowerCase() === 'queso y salsa' && isAlsea ? props.state.quantity : 1
+    quantity = quesoYSalsaOptions.includes(option?.name?.toLowerCase()) && isAlsea ? props.state.quantity : 1
   }
   const position = props.state.position || 'whole'
   const price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price
