@@ -159,6 +159,11 @@ export const ProductForm = (props) => {
   const isAlsea = ['alsea', 'alsea-staging'].includes(ordering.project)
 
   /**
+   * alsea custom options
+   */
+  const quesoYSalsaOptions = ['queso y salsa', 'queso mozzarella y salsa']
+
+  /**
    * Init product cart status
    * @param {object} product Product to init product cart status
    */
@@ -422,7 +427,7 @@ export const ProductForm = (props) => {
           price: state?.id === cartSuboption?.id ? state.price : price,
           quantity: state?.id === cartSuboption?.id
             ? state.quantity
-            : preselectedOptions[i]?.name?.toLowerCase() === 'queso y salsa' && isAlsea
+            : quesoYSalsaOptions.includes(preselectedOptions[i]?.name?.toLowerCase()) && isAlsea
               ? cartSuboption?.quantity ?? 1
               : cartSuboption?.quantity || 1,
           selected: true,
@@ -552,7 +557,7 @@ export const ProductForm = (props) => {
         if (option?.suboptions?.length > 0 && evaluate) {
           if (option.min > quantity) {
             errors[`id:${option.id}`] = true
-          } else if (option.max < quantity) {
+          } else if (option.max < quantity && (option?.with_half_option && isAlsea && (option.max + 0.5 < quantity))) {
             errors[`id:${option.id}`] = true
           }
         }
@@ -1041,6 +1046,7 @@ export const ProductForm = (props) => {
             professionalListState={professionalListState}
             cart2={props.productCart}
             isAlsea={isAlsea}
+            quesoYSalsaOptions={quesoYSalsaOptions}
           />
         )
       }
