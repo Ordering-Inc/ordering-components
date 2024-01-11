@@ -26,7 +26,8 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
     onChange = props.onChange,
     isOrigin = props.isOrigin,
     pizzaState = props.pizzaState,
-    isAlsea = props.isAlsea;
+    isAlsea = props.isAlsea,
+    quesoYSalsaOptions = props.quesoYSalsaOptions;
 
   /**
    * Predefine default values for suboption state
@@ -37,7 +38,7 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
     quantity = props.state.quantity;
   } else if (selected) {
     var _option$name;
-    quantity = (option === null || option === void 0 || (_option$name = option.name) === null || _option$name === void 0 ? void 0 : _option$name.toLowerCase()) === 'queso y salsa' && isAlsea ? props.state.quantity : 1;
+    quantity = quesoYSalsaOptions.includes(option === null || option === void 0 || (_option$name = option.name) === null || _option$name === void 0 ? void 0 : _option$name.toLowerCase()) && isAlsea ? props.state.quantity : 1;
   }
   var position = props.state.position || 'whole';
   var price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price;
