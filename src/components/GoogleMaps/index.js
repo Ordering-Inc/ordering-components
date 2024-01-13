@@ -24,7 +24,8 @@ export const GoogleMaps = (props) => {
     useMapWithBusinessZones,
     deactiveAlerts,
     fallbackIcon,
-    manualZoom
+    manualZoom,
+    avoidFitBounds
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -115,7 +116,9 @@ export const GoogleMaps = (props) => {
     if (useMapWithBusinessZones) {
       bounds.extend(center)
     }
-    map.fitBounds(bounds)
+    if (!avoidFitBounds) {
+      map.fitBounds(bounds)
+    }
     setBoundMap(bounds)
   }
   /**
@@ -390,7 +393,9 @@ export const GoogleMaps = (props) => {
             const newLocation = new window.google.maps.LatLng(driverLocation?.lat, driverLocation?.lng)
             useMapWithBusinessZones ? boundMap.extend(newLocation) : markers?.[0] && markers[0].setPosition(newLocation)
             markers?.length > 0 && markers.forEach(marker => boundMap.extend(marker.position))
-            googleMap.fitBounds(boundMap)
+            if (!avoidFitBounds) {
+              googleMap.fitBounds(boundMap)
+            }
           }
         }
         setUserActivity(false)
