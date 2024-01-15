@@ -43,7 +43,8 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
     useMapWithBusinessZones = props.useMapWithBusinessZones,
     deactiveAlerts = props.deactiveAlerts,
     fallbackIcon = props.fallbackIcon,
-    manualZoom = props.manualZoom;
+    manualZoom = props.manualZoom,
+    avoidFitBounds = props.avoidFitBounds;
   var _useUtils = (0, _UtilsContext.useUtils)(),
     _useUtils2 = _slicedToArray(_useUtils, 1),
     optimizeImage = _useUtils2[0].optimizeImage;
@@ -172,7 +173,9 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
     if (useMapWithBusinessZones) {
       bounds.extend(center);
     }
-    map.fitBounds(bounds);
+    if (!avoidFitBounds) {
+      map.fitBounds(bounds);
+    }
     setBoundMap(bounds);
   };
   /**
@@ -481,7 +484,9 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
             (markers === null || markers === void 0 ? void 0 : markers.length) > 0 && markers.forEach(function (marker) {
               return boundMap.extend(marker.position);
             });
-            googleMap.fitBounds(boundMap);
+            if (!avoidFitBounds) {
+              googleMap.fitBounds(boundMap);
+            }
           }
         }
         setUserActivity(false);
