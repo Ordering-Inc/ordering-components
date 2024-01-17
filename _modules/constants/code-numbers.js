@@ -629,6 +629,10 @@ var CODES = exports.CODES = [{
   phoneCode: '1787',
   countryName: 'Puerto Rico'
 }, {
+  countryCode: 'PR',
+  phoneCode: '1939',
+  countryName: 'Puerto Rico'
+}, {
   countryCode: 'QA',
   phoneCode: '974',
   countryName: 'Qatar'

@@ -119,7 +119,8 @@ var FacebookLoginButton = exports.FacebookLoginButton = function FacebookLoginBu
             }));
             _context.next = 7;
             return ordering.users().authFacebook({
-              access_token: (_facebookResponse$aut = facebookResponse.authResponse) === null || _facebookResponse$aut === void 0 ? void 0 : _facebookResponse$aut.accessToken
+              access_token: (_facebookResponse$aut = facebookResponse.authResponse) === null || _facebookResponse$aut === void 0 ? void 0 : _facebookResponse$aut.accessToken,
+              use: 'http'
             });
           case 7:
             response = _context.sent;
