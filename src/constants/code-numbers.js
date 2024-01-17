@@ -155,6 +155,7 @@ export const CODES = [
   { countryCode: 'PL', phoneCode: '48', countryName: 'Poland' },
   { countryCode: 'PT', phoneCode: '351', countryName: 'Portugal' },
   { countryCode: 'PR', phoneCode: '1787', countryName: 'Puerto Rico' },
+  { countryCode: 'PR', phoneCode: '1939', countryName: 'Puerto Rico' },
   { countryCode: 'QA', phoneCode: '974', countryName: 'Qatar' },
   { countryCode: 'RE', phoneCode: '262', countryName: 'Reunion' },
   { countryCode: 'RO', phoneCode: '40', countryName: 'Romania' },
