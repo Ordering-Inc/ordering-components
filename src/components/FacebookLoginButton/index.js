@@ -70,7 +70,7 @@ export const FacebookLoginButton = (props) => {
 
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users().authFacebook({ access_token: facebookResponse.authResponse?.accessToken })
+      const response = await ordering.users().authFacebook({ access_token: facebookResponse.authResponse?.accessToken, use: 'http' })
       setFormState({
         result: response.content,
         loading: false
