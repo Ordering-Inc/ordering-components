@@ -117,16 +117,22 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
+            if (!customersPhones.loading) {
+              _context.next = 2;
+              break;
+            }
+            return _context.abrupt("return");
+          case 2:
             maxRetries = 3;
             waitTime = 60000;
             cellphone = phone || urlPhone;
             retryAttempt = 1;
-          case 4:
+          case 6:
             if (!(retryAttempt <= maxRetries)) {
-              _context.next = 34;
+              _context.next = 36;
               break;
             }
-            _context.prev = 5;
+            _context.prev = 7;
             setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
               loading: true
             }));
@@ -162,12 +168,12 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
                 return reject(new Error('Timeout exceeded'));
               }, waitTime);
             });
-            _context.next = 14;
+            _context.next = 16;
             return Promise.race([request, timer]);
-          case 14:
+          case 16:
             response = _context.sent;
             if (!(response.content && response.content.result)) {
-              _context.next = 21;
+              _context.next = 23;
               break;
             }
             result = response.content.result;
@@ -175,40 +181,40 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
               users: result,
               loading: false
             }));
-            return _context.abrupt("break", 34);
-          case 21:
+            return _context.abrupt("break", 36);
+          case 23:
             throw new Error('Error');
-          case 22:
-            _context.next = 31;
-            break;
           case 24:
-            _context.prev = 24;
-            _context.t0 = _context["catch"](5);
+            _context.next = 33;
+            break;
+          case 26:
+            _context.prev = 26;
+            _context.t0 = _context["catch"](7);
             ((_reqState$users = reqState.users) === null || _reqState$users === void 0 ? void 0 : _reqState$users.cancel) && reqState.users.cancel();
             if (!(retryAttempt < maxRetries)) {
-              _context.next = 30;
+              _context.next = 32;
               break;
             }
-            _context.next = 30;
+            _context.next = 32;
             return new Promise(function (resolve) {
               return setTimeout(resolve, waitTime);
             });
-          case 30:
+          case 32:
             if (retryAttempt === maxRetries) {
               setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
                 loading: false,
                 error: t('ERROR_MULTIPLE_FETCH', 'Exceeded the maximum number of retries. Reload the page.')
               }));
             }
-          case 31:
+          case 33:
             retryAttempt++;
-            _context.next = 4;
+            _context.next = 6;
             break;
-          case 34:
+          case 36:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[5, 24]]);
+      }, _callee, null, [[7, 26]]);
     }));
     return function getUsers() {
       return _ref.apply(this, arguments);
@@ -393,7 +399,7 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
   (0, _react.useEffect)(function () {
     var _customersPhones$user;
     if (urlPhone) return;
-    if (phone && phone.length >= 7 && ((customersPhones === null || customersPhones === void 0 || (_customersPhones$user = customersPhones.users) === null || _customersPhones$user === void 0 ? void 0 : _customersPhones$user.length) === 0 || phone.length === 7)) {
+    if (phone && phone.length >= 7 && ((customersPhones === null || customersPhones === void 0 || (_customersPhones$user = customersPhones.users) === null || _customersPhones$user === void 0 ? void 0 : _customersPhones$user.length) === 0 || phone.length === 7) && !customersPhones.loading) {
       getUsers();
     }
     if (phone && phone.length < 7 || !phone) {
