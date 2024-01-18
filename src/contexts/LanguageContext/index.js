@@ -105,9 +105,14 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
    * Refresh translation when change language from ordering
    */
   useEffect(() => {
-    if (state.language?.code && state.language?.code === ordering.language) {
-      settings?.use_root_point && settings?.force_update_lang ? updateLanguageContext() : refreshTranslations()
+    const checkLanguage = async () => {
+      if (state.language?.code && state.language?.code === ordering.language) {
+        const token = await strategy.getItem('token')
+        settings?.use_root_point && settings?.force_update_lang && !token ? updateLanguageContext() : refreshTranslations()
+      }
     }
+
+    checkLanguage()
   }, [state.language?.code, ordering])
 
   useEffect(() => {
