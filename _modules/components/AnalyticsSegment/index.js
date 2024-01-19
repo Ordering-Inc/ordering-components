@@ -190,6 +190,13 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
     }
   };
 
+  var handleDeUnaEvents = function handleDeUnaEvents(deUna) {
+    var _deUna$data;
+
+    if (debugMode) console.log(deUna);
+    analytics.track(deUna.event, (_deUna$data = deUna === null || deUna === void 0 ? void 0 : deUna.data) !== null && _deUna$data !== void 0 ? _deUna$data : 'NA');
+  };
+
   (0, _react.useEffect)(function () {
     if (analytics && !customData) {
       events.on('product_clicked', handleClickProduct);
@@ -203,6 +210,14 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
       events.on('product_promotion_clicked', handleClickPromotionProduct);
       events.on('in-checkout', handleInCheckout);
       events.on('go_to_business', handleGoToBusiness);
+      events.on('deuna_checkout', handleDeUnaEvents);
+      events.on('deuna_checkout_completed', handleDeUnaEvents);
+      events.on('deuna_checkout_failed_launch', handleDeUnaEvents);
+      events.on('deuna_checkout_callback_close', handleDeUnaEvents);
+      events.on('deuna_checkout_tokenize_error', handleDeUnaEvents);
+      events.on('deuna_vault_completed', handleDeUnaEvents);
+      events.on('deuna_vault_failed', handleDeUnaEvents);
+      events.on('deuna_vault_close', handleDeUnaEvents);
     }
 
     if (!customData || !analytics) return;
@@ -260,6 +275,14 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
         events.off('product_promotion_clicked', handleClickPromotionProduct);
         events.off('in-checkout', handleInCheckout);
         events.off('go_to_business', handleGoToBusiness);
+        events.off('deuna_checkout', handleDeUnaEvents);
+        events.off('deuna_checkout_completed', handleDeUnaEvents);
+        events.off('deuna_checkout_failed_launch', handleDeUnaEvents);
+        events.off('deuna_checkout_callback_close', handleDeUnaEvents);
+        events.off('deuna_checkout_tokenize_error', handleDeUnaEvents);
+        events.off('deuna_vault_completed', handleDeUnaEvents);
+        events.off('deuna_vault_failed', handleDeUnaEvents);
+        events.off('deuna_vault_close', handleDeUnaEvents);
       }
     };
   }, [analytics, customData]);

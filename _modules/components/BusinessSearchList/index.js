@@ -63,6 +63,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
   var _paginationSettings$p, _orderingTheme$theme, _orderingTheme$theme$, _orderingTheme$theme$2, _orderingTheme$theme$3;
 
   var UIComponent = props.UIComponent,
+      propsToFetch = props.propsToFetch,
       paginationSettings = props.paginationSettings,
       lazySearch = props.lazySearch,
       defaultTerm = props.defaultTerm,
@@ -270,6 +271,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
               filtParams = filtParams + ((orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) === 1 && defaultLocation && filters.max_distance ? "&max_distance=".concat(filters.max_distance) : '');
               filtParams = !filterByCity ? filtParams + "&page=".concat(newFetch ? 1 : paginationProps.currentPage + 1, "&page_size=").concat(paginationProps.pageSize) : filtParams;
               brandId && (filtParams = filtParams + "&franchise_ids=[".concat(brandId, "]"));
+              propsToFetch && (filtParams = filtParams + "&params=".concat(propsToFetch));
               setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
                 loading: true,
                 lengthError: false
@@ -293,22 +295,22 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 lat: ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : (_orderState$options3$ = _orderState$options3.address) === null || _orderState$options3$ === void 0 ? void 0 : (_orderState$options3$2 = _orderState$options3$.location) === null || _orderState$options3$2 === void 0 ? void 0 : _orderState$options3$2.lat) || (defaultLocation === null || defaultLocation === void 0 ? void 0 : defaultLocation.lat),
                 lng: ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : (_orderState$options4$ = _orderState$options4.address) === null || _orderState$options4$ === void 0 ? void 0 : (_orderState$options4$2 = _orderState$options4$.location) === null || _orderState$options4$2 === void 0 ? void 0 : _orderState$options4$2.lng) || (defaultLocation === null || defaultLocation === void 0 ? void 0 : defaultLocation.lng)
               };
-              _context.next = 13;
+              _context.next = 14;
               return fetch("".concat(ordering.root, "/search?order_type_id=").concat(orderState === null || orderState === void 0 ? void 0 : (_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.type, "&location=").concat(JSON.stringify((options === null || options === void 0 ? void 0 : options.location) || location)).concat(filtParams), requestOptions);
 
-            case 13:
+            case 14:
               response = _context.sent;
-              _context.next = 16;
+              _context.next = 17;
               return response.json();
 
-            case 16:
+            case 17:
               _yield$response$json = _context.sent;
               result = _yield$response$json.result;
               error = _yield$response$json.error;
               pagination = _yield$response$json.pagination;
 
               if (!error) {
-                _context.next = 23;
+                _context.next = 24;
                 break;
               }
 
@@ -320,7 +322,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
               });
               return _context.abrupt("return");
 
-            case 23:
+            case 24:
               nextPageItems = 0;
 
               if (pagination.current_page !== pagination.total_pages) {
@@ -348,11 +350,11 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 }));
               }
 
-              _context.next = 32;
+              _context.next = 33;
               break;
 
-            case 29:
-              _context.prev = 29;
+            case 30:
+              _context.prev = 30;
               _context.t0 = _context["catch"](0);
               setBusinessesSearchList({
                 businesses: [],
@@ -361,12 +363,12 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 lengthError: false
               });
 
-            case 32:
+            case 33:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 29]]);
+      }, _callee, null, [[0, 30]]);
     }));
 
     return function handleSearchbusinessAndProducts(_x, _x2, _x3) {
