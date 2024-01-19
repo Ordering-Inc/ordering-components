@@ -136,6 +136,11 @@ export const AnalyticsSegment = (props) => {
     }
   }
 
+  const handleDeUnaEvents = (deUna) => {
+    if (debugMode) console.log(deUna)
+    analytics.track(deUna.event, deUna?.data ?? 'NA')
+  }
+
   useEffect(() => {
     if (analytics && !customData) {
       events.on('product_clicked', handleClickProduct)
@@ -149,6 +154,14 @@ export const AnalyticsSegment = (props) => {
       events.on('product_promotion_clicked', handleClickPromotionProduct)
       events.on('in-checkout', handleInCheckout)
       events.on('go_to_business', handleGoToBusiness)
+      events.on('deuna_checkout', handleDeUnaEvents)
+      events.on('deuna_checkout_completed', handleDeUnaEvents)
+      events.on('deuna_checkout_failed_launch', handleDeUnaEvents)
+      events.on('deuna_checkout_callback_close', handleDeUnaEvents)
+      events.on('deuna_checkout_tokenize_error', handleDeUnaEvents)
+      events.on('deuna_vault_completed', handleDeUnaEvents)
+      events.on('deuna_vault_failed', handleDeUnaEvents)
+      events.on('deuna_vault_close', handleDeUnaEvents)
     }
     if (!customData || !analytics) return
     const { type, data } = customData
@@ -198,6 +211,14 @@ export const AnalyticsSegment = (props) => {
         events.off('product_promotion_clicked', handleClickPromotionProduct)
         events.off('in-checkout', handleInCheckout)
         events.off('go_to_business', handleGoToBusiness)
+        events.off('deuna_checkout', handleDeUnaEvents)
+        events.off('deuna_checkout_completed', handleDeUnaEvents)
+        events.off('deuna_checkout_failed_launch', handleDeUnaEvents)
+        events.off('deuna_checkout_callback_close', handleDeUnaEvents)
+        events.off('deuna_checkout_tokenize_error', handleDeUnaEvents)
+        events.off('deuna_vault_completed', handleDeUnaEvents)
+        events.off('deuna_vault_failed', handleDeUnaEvents)
+        events.off('deuna_vault_close', handleDeUnaEvents)
       }
     }
   }, [analytics, customData])
