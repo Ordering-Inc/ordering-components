@@ -283,10 +283,33 @@ var LanguageProvider = exports.LanguageProvider = function LanguageProvider(_ref
    * Refresh translation when change language from ordering
    */
   (0, _react.useEffect)(function () {
-    var _state$language2, _state$language3;
-    if ((_state$language2 = state.language) !== null && _state$language2 !== void 0 && _state$language2.code && ((_state$language3 = state.language) === null || _state$language3 === void 0 ? void 0 : _state$language3.code) === ordering.language) {
-      settings !== null && settings !== void 0 && settings.use_root_point && settings !== null && settings !== void 0 && settings.force_update_lang ? updateLanguageContext() : refreshTranslations();
-    }
+    var checkLanguage = /*#__PURE__*/function () {
+      var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+        var _state$language2, _state$language3;
+        var token;
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) switch (_context6.prev = _context6.next) {
+            case 0:
+              if (!((_state$language2 = state.language) !== null && _state$language2 !== void 0 && _state$language2.code && ((_state$language3 = state.language) === null || _state$language3 === void 0 ? void 0 : _state$language3.code) === ordering.language)) {
+                _context6.next = 5;
+                break;
+              }
+              _context6.next = 3;
+              return strategy.getItem('token');
+            case 3:
+              token = _context6.sent;
+              settings !== null && settings !== void 0 && settings.use_root_point && settings !== null && settings !== void 0 && settings.force_update_lang && !token ? updateLanguageContext() : refreshTranslations();
+            case 5:
+            case "end":
+              return _context6.stop();
+          }
+        }, _callee6);
+      }));
+      return function checkLanguage() {
+        return _ref7.apply(this, arguments);
+      };
+    }();
+    checkLanguage();
   }, [(_state$language4 = state.language) === null || _state$language4 === void 0 ? void 0 : _state$language4.code, ordering]);
   (0, _react.useEffect)(function () {
     setLanguageFromLocalStorage();
@@ -313,15 +336,7 @@ var useLanguage = exports.useLanguage = function useLanguage() {
   return languageManager || [{}, function (key) {
     var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
     return fallback || key;
-  }, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) switch (_context6.prev = _context6.next) {
-        case 0:
-        case "end":
-          return _context6.stop();
-      }
-    }, _callee6);
-  })), /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+  }, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
     return _regeneratorRuntime().wrap(function _callee7$(_context7) {
       while (1) switch (_context7.prev = _context7.next) {
         case 0:
@@ -329,5 +344,13 @@ var useLanguage = exports.useLanguage = function useLanguage() {
           return _context7.stop();
       }
     }, _callee7);
+  })), /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+    return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+      while (1) switch (_context8.prev = _context8.next) {
+        case 0:
+        case "end":
+          return _context8.stop();
+      }
+    }, _callee8);
   }))];
 };
