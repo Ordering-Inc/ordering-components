@@ -73,7 +73,7 @@ export const FacebookLoginButton = (props) => {
 
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users().authFacebook({ access_token: facebookResponse.authResponse?.accessToken })
+      const response = await ordering.users().authFacebook({ access_token: facebookResponse.authResponse?.accessToken, use: 'http' })
       setFormState({
         result: response.content,
         loading: false
@@ -82,7 +82,7 @@ export const FacebookLoginButton = (props) => {
         if (handleSuccessFacebookLogin) {
           handleSuccessFacebookLogin(response.content.result)
         }
-        events.emit('userLogin', { ...result, bySocial: 'Facebook' })
+        events.emit('userLogin', { ...response.content.result, bySocial: 'Facebook' })
       } else {
         events.emit('general_errors', response.content.result)
         handleFacebookLogout()
