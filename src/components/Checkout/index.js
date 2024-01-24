@@ -539,6 +539,7 @@ export const Checkout = (props) => {
           setAlseaCheckpriceError(t(result?.result))
         } else {
           setAlseaCheckpriceError(null)
+          await refreshOrderOptions()
         }
         setIsLoadingCheckprice(false)
       } catch (err) {
