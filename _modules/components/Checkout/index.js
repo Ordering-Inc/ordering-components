@@ -920,7 +920,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
       };
     }();
     handleAlseaCheckPrice();
-  }, [isCustomerMode, cart === null || cart === void 0 ? void 0 : cart.balance, cart === null || cart === void 0 ? void 0 : cart.total]);
+  }, [isCustomerMode, JSON.stringify(cart === null || cart === void 0 ? void 0 : cart.products)]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
     placing: placing,

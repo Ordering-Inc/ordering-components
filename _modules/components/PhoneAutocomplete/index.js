@@ -112,27 +112,21 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
    * Get users from API
    */
   var getUsers = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_phone) {
       var maxRetries, waitTime, cellphone, retryAttempt, conditions, source, request, timer, response, result, _reqState$users;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            if (!customersPhones.loading) {
-              _context.next = 2;
-              break;
-            }
-            return _context.abrupt("return");
-          case 2:
             maxRetries = 3;
             waitTime = 60000;
-            cellphone = phone || urlPhone;
+            cellphone = _phone || phone || urlPhone;
             retryAttempt = 1;
-          case 6:
+          case 4:
             if (!(retryAttempt <= maxRetries)) {
-              _context.next = 36;
+              _context.next = 34;
               break;
             }
-            _context.prev = 7;
+            _context.prev = 5;
             setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
               loading: true
             }));
@@ -168,12 +162,12 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
                 return reject(new Error('Timeout exceeded'));
               }, waitTime);
             });
-            _context.next = 16;
+            _context.next = 14;
             return Promise.race([request, timer]);
-          case 16:
+          case 14:
             response = _context.sent;
             if (!(response.content && response.content.result)) {
-              _context.next = 23;
+              _context.next = 21;
               break;
             }
             result = response.content.result;
@@ -181,42 +175,42 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
               users: result,
               loading: false
             }));
-            return _context.abrupt("break", 36);
-          case 23:
+            return _context.abrupt("break", 34);
+          case 21:
             throw new Error('Error');
-          case 24:
-            _context.next = 33;
+          case 22:
+            _context.next = 31;
             break;
-          case 26:
-            _context.prev = 26;
-            _context.t0 = _context["catch"](7);
+          case 24:
+            _context.prev = 24;
+            _context.t0 = _context["catch"](5);
             ((_reqState$users = reqState.users) === null || _reqState$users === void 0 ? void 0 : _reqState$users.cancel) && reqState.users.cancel();
             if (!(retryAttempt < maxRetries)) {
-              _context.next = 32;
+              _context.next = 30;
               break;
             }
-            _context.next = 32;
+            _context.next = 30;
             return new Promise(function (resolve) {
               return setTimeout(resolve, waitTime);
             });
-          case 32:
+          case 30:
             if (retryAttempt === maxRetries) {
               setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
                 loading: false,
                 error: t('ERROR_MULTIPLE_FETCH', 'Exceeded the maximum number of retries. Reload the page.')
               }));
             }
-          case 33:
+          case 31:
             retryAttempt++;
-            _context.next = 6;
+            _context.next = 4;
             break;
-          case 36:
+          case 34:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[7, 26]]);
+      }, _callee, null, [[5, 24]]);
     }));
-    return function getUsers() {
+    return function getUsers(_x) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -392,7 +386,7 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
         }
       }, _callee3, null, [[5, 41]]);
     }));
-    return function setGuestOptions(_x) {
+    return function setGuestOptions(_x2) {
       return _ref4.apply(this, arguments);
     };
   }();
@@ -458,7 +452,8 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
     alertState: alertState,
     optionsState: optionsState,
     checkAddress: checkAddress,
-    localPhoneCode: localPhoneCode
+    localPhoneCode: localPhoneCode,
+    getUsers: getUsers
   })));
 };
 PhoneAutocomplete.propTypes = {
