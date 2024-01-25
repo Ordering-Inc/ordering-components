@@ -308,7 +308,7 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
     if (googleReady) {
       var _location$zoom;
       var map = new window.google.maps.Map(divRef.current, {
-        zoom: (_location$zoom = location.zoom) !== null && _location$zoom !== void 0 ? _location$zoom : mapControls.defaultZoom,
+        zoom: (_location$zoom = location === null || location === void 0 ? void 0 : location.zoom) !== null && _location$zoom !== void 0 ? _location$zoom : mapControls.defaultZoom,
         center: center,
         zoomControl: mapControls === null || mapControls === void 0 ? void 0 : mapControls.zoomControl,
         streetViewControl: mapControls === null || mapControls === void 0 ? void 0 : mapControls.streetViewControl,
@@ -327,10 +327,15 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
           generateMarkers(map);
         }
         if (businessMap) {
-          marker = new window.google.maps.Marker({
+          marker = new window.google.maps.Marker(_objectSpread({
             position: new window.google.maps.LatLng(center.lat, center.lng),
             map: map
-          });
+          }, (location === null || location === void 0 ? void 0 : location.hideicon) && {
+            icon: {
+              url: 'https://picsum.photos/10',
+              size: new window.google.maps.Size(1, 1)
+            }
+          }));
           map.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
         } else {
           var _locations$3;

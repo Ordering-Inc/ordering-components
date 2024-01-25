@@ -33,11 +33,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(props) {
+  var _orderState$options5;
   var UIComponent = props.UIComponent,
     isIos = props.isIos,
     businessSlug = props.businessSlug,
     urlPhone = props.urlPhone,
-    propsToFetch = props.propsToFetch;
+    propsToFetch = props.propsToFetch,
+    isFromUrlPhone = props.isFromUrlPhone;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -146,14 +148,14 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
                 conditions: [{
                   attribute: 'cellphone',
                   value: {
-                    condition: 'like',
-                    value: isIos ? "%".concat(cellphone, "%") : encodeURI("%".concat(cellphone, "%"))
+                    condition: isFromUrlPhone ? '=' : 'like',
+                    value: isFromUrlPhone ? cellphone : isIos ? "%".concat(cellphone, "%") : encodeURI("%".concat(cellphone, "%"))
                   }
                 }, {
                   attribute: 'phone',
                   value: {
-                    condition: 'like',
-                    value: isIos ? "%".concat(cellphone, "%") : encodeURI("%".concat(cellphone, "%"))
+                    condition: isFromUrlPhone ? '=' : 'like',
+                    value: isFromUrlPhone ? cellphone : isIos ? "%".concat(cellphone, "%") : encodeURI("%".concat(cellphone, "%"))
                   }
                 }]
               }]
@@ -443,6 +445,19 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
       setLocalPhoneCode(window.localStorage.getItem('local_phone_code'));
     }
   }, []);
+  (0, _react.useEffect)(function () {
+    var _orderState$options2, _orderState$options3;
+    if (userCustomer !== null && userCustomer !== void 0 && userCustomer.id && orderState !== null && orderState !== void 0 && (_orderState$options2 = orderState.options) !== null && _orderState$options2 !== void 0 && _orderState$options2.user_id && (userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.id) !== (orderState === null || orderState === void 0 || (_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.user_id)) {
+      var _orderState$options4;
+      setUserCustomerOptions({
+        options: {
+          user_id: userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.id,
+          type: orderState === null || orderState === void 0 || (_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.type
+        },
+        customer: userCustomer
+      });
+    }
+  }, [userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.id, orderState === null || orderState === void 0 || (_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.user_id]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     phone: phone,
     customerState: customerState,
