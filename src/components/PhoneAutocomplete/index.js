@@ -228,6 +228,18 @@ export const PhoneAutocomplete = (props) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (userCustomer?.id && orderState?.options?.user_id && userCustomer?.id !== orderState?.options?.user_id) {
+      setUserCustomerOptions({
+        options: {
+          user_id: userCustomer?.id,
+          type: orderState?.options?.type
+        }, 
+        customer: userCustomer
+      })
+    }
+  }, [userCustomer?.id, orderState?.options?.user_id])
+
   return (
     <>
       {UIComponent && (
