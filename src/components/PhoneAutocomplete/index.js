@@ -31,12 +31,10 @@ export const PhoneAutocomplete = (props) => {
   /**
    * Get users from API
    */
-  const getUsers = async () => {
-    if (customersPhones.loading) return
+  const getUsers = async (_phone) => {
     const maxRetries = 3
     const waitTime = 60000
-    const cellphone = phone || urlPhone
-
+    const cellphone = _phone || phone || urlPhone
     for (let retryAttempt = 1; retryAttempt <= maxRetries; retryAttempt++) {
       try {
         setCustomersPhones({ ...customersPhones, loading: true })
@@ -248,6 +246,7 @@ export const PhoneAutocomplete = (props) => {
           optionsState={optionsState}
           checkAddress={checkAddress}
           localPhoneCode={localPhoneCode}
+          getUsers={getUsers}
         />
       )}
     </>

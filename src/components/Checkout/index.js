@@ -548,7 +548,7 @@ export const Checkout = (props) => {
       }
     }
     handleAlseaCheckPrice()
-  }, [isCustomerMode, cart?.balance, cart?.total])
+  }, [isCustomerMode, JSON.stringify(cart?.products)])
 
   return (
     <>
