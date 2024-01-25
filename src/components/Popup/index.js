@@ -109,7 +109,7 @@ export const Popup = (props) => {
     <>
       {
         open && root && ReactDOM.createPortal(
-          <div className='popup-component' style={popupStyles} onClick={handleClick} onKeyDown={handleKeyDown} tabIndex={-1} autoFocus ref={modalRef}>
+          <div className='popup-component' style={popupStyles} onMouseDown={handleClick} onKeyDown={handleKeyDown} tabIndex={-1} autoFocus ref={modalRef}>
             {
               UIComponent && <UIComponent {...props} />
             }
