@@ -200,6 +200,7 @@ export const AddressForm = (props) => {
         result,
         fetched: true
       })
+      return result
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
         setBusinessesList({
