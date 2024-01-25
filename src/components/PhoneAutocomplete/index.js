@@ -9,7 +9,7 @@ import { CODES } from '../../constants/code-numbers'
 import { TIMEZONES } from '../../constants/timezones'
 
 export const PhoneAutocomplete = (props) => {
-  const { UIComponent, isIos, businessSlug, urlPhone, propsToFetch } = props
+  const { UIComponent, isIos, businessSlug, urlPhone, propsToFetch, isFromUrlPhone } = props
 
   const [ordering] = useApi()
   const [{ user, token }] = useSession()
@@ -51,15 +51,23 @@ export const PhoneAutocomplete = (props) => {
             conditions: [{
               attribute: 'cellphone',
               value: {
-                condition: 'like',
-                value: isIos ? `%${cellphone}%` : encodeURI(`%${cellphone}%`)
+                condition: isFromUrlPhone ? '=' : 'like',
+                value: isFromUrlPhone
+                  ? cellphone
+                  : isIos
+                    ? `%${cellphone}%`
+                    : encodeURI(`%${cellphone}%`)
               }
             },
             {
               attribute: 'phone',
               value: {
-                condition: 'like',
-                value: isIos ? `%${cellphone}%` : encodeURI(`%${cellphone}%`)
+                condition: isFromUrlPhone ? '=' : 'like',
+                value: isFromUrlPhone
+                  ? cellphone
+                  : isIos
+                    ? `%${cellphone}%`
+                    : encodeURI(`%${cellphone}%`)
               }
             }]
           }]
