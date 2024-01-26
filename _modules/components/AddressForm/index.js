@@ -319,10 +319,9 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
               result: result,
               fetched: true
             }));
-            _context3.next = 24;
-            break;
-          case 21:
-            _context3.prev = 21;
+            return _context3.abrupt("return", result);
+          case 22:
+            _context3.prev = 22;
             _context3.t0 = _context3["catch"](2);
             if (_context3.t0.constructor.name !== 'Cancel') {
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
@@ -332,11 +331,11 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
                 result: [_context3.t0.message]
               }));
             }
-          case 24:
+          case 25:
           case "end":
             return _context3.stop();
         }
-      }, _callee3, null, [[2, 21]]);
+      }, _callee3, null, [[2, 22]]);
     }));
     return function getBusinessDeliveryZones(_x5) {
       return _ref3.apply(this, arguments);

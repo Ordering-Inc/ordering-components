@@ -128,7 +128,7 @@ var Popup = exports.Popup = function Popup(props) {
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, open && root && /*#__PURE__*/_reactDom.default.createPortal( /*#__PURE__*/_react.default.createElement("div", {
     className: "popup-component",
     style: popupStyles,
-    onClick: handleClick,
+    onMouseDown: handleClick,
     onKeyDown: handleKeyDown,
     tabIndex: -1,
     autoFocus: true,
