@@ -21,7 +21,7 @@ export const PhoneAutocomplete = (props) => {
   const [, t] = useLanguage()
   const [openModal, setOpenModal] = useState({ customer: false, signup: false, error: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
-  const [customersPhones, setCustomersPhones] = useState({ users: userCustomer ? [userCustomer] : [], loading: !!urlPhone, error: null })
+  const [customersPhones, setCustomersPhones] = useState({ users: userCustomer ? [userCustomer] : [], loading: !!urlPhone, error: null, fetched: false })
   const [businessAddress, setBusinessAddress] = useState(null)
   const [alertState, setAlertState] = useState({ open: true, content: [] })
   const [optionsState, setOptionsState] = useState({ loading: false })
@@ -35,6 +35,8 @@ export const PhoneAutocomplete = (props) => {
     const maxRetries = 3
     const waitTime = 60000
     const cellphone = _phone || phone || urlPhone
+    const cellphoneSplited = cellphone.match(/.{1,7}/) || []
+
     for (let retryAttempt = 1; retryAttempt <= maxRetries; retryAttempt++) {
       try {
         setCustomersPhones({ ...customersPhones, loading: true })
@@ -51,10 +53,10 @@ export const PhoneAutocomplete = (props) => {
               value: {
                 condition: isFromUrlPhone ? '=' : 'like',
                 value: isFromUrlPhone
-                  ? cellphone
+                  ? cellphoneSplited?.[0] || cellphone
                   : isIos
-                    ? `%${cellphone}%`
-                    : encodeURI(`%${cellphone}%`)
+                    ? `%${cellphoneSplited?.[0] || cellphone}%`
+                    : encodeURI(`%${cellphoneSplited?.[0] || cellphone}%`)
               }
             },
             {
@@ -62,10 +64,10 @@ export const PhoneAutocomplete = (props) => {
               value: {
                 condition: isFromUrlPhone ? '=' : 'like',
                 value: isFromUrlPhone
-                  ? cellphone
+                  ? cellphoneSplited?.[0] || cellphone
                   : isIos
-                    ? `%${cellphone}%`
-                    : encodeURI(`%${cellphone}%`)
+                    ? `%${cellphoneSplited?.[0] || cellphone}%`
+                    : encodeURI(`%${cellphoneSplited?.[0] || cellphone}%`)
               }
             }]
           }]
@@ -87,7 +89,8 @@ export const PhoneAutocomplete = (props) => {
 
         if (response.content && response.content.result) {
           const { result } = response.content
-          setCustomersPhones({ ...customersPhones, users: result, loading: false })
+          const users = result.filter(user => user.cellphone?.includes(cellphone))
+          setCustomersPhones({ ...customersPhones, users, loading: false, fetched: true })
           break
         } else {
           throw new Error('Error')
@@ -242,7 +245,7 @@ export const PhoneAutocomplete = (props) => {
         options: {
           user_id: userCustomer?.id,
           type: orderState?.options?.type
-        }, 
+        },
         customer: userCustomer
       })
     }
