@@ -221,7 +221,6 @@ var ConfigProvider = exports.ConfigProvider = function ConfigProvider(_ref) {
             return fetch('https://ipapi.co/json/');
           case 27:
             response = _context.sent;
-<<<<<<< HEAD
             _context.next = 30;
             return response.json();
           case 30:
@@ -233,24 +232,6 @@ var ConfigProvider = exports.ConfigProvider = function ConfigProvider(_ref) {
             _context.t1 = _context["catch"](24);
             data = null;
           case 36:
-=======
-            if (!(response.status === 200)) {
-              _context.next = 32;
-              break;
-            }
-            _context.next = 31;
-            return response.json();
-          case 31:
-            data = _context.sent;
-          case 32:
-            _context.next = 37;
-            break;
-          case 34:
-            _context.prev = 34;
-            _context.t1 = _context["catch"](24);
-            data = null;
-          case 37:
->>>>>>> 6d16c211 (Merge branch 'master' into development)
             conditionalConfigs = {
               dates_moment_format: {
                 key: 'dates_moment_format',
@@ -271,34 +252,19 @@ var ConfigProvider = exports.ConfigProvider = function ConfigProvider(_ref) {
               loading: false,
               configs: error ? {} : configsResult
             }));
-<<<<<<< HEAD
             _context.next = 44;
             break;
           case 41:
             _context.prev = 41;
-=======
-            _context.next = 45;
-            break;
-          case 42:
-            _context.prev = 42;
->>>>>>> 6d16c211 (Merge branch 'master' into development)
             _context.t2 = _context["catch"](1);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-<<<<<<< HEAD
           case 44:
           case "end":
             return _context.stop();
         }
       }, _callee, null, [[1, 41], [24, 33]]);
-=======
-          case 45:
-          case "end":
-            return _context.stop();
-        }
-      }, _callee, null, [[1, 42], [24, 34]]);
->>>>>>> 6d16c211 (Merge branch 'master' into development)
     }));
     return function refreshConfigs(_x) {
       return _ref2.apply(this, arguments);

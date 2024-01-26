@@ -83,7 +83,8 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
   var _useState7 = (0, _react.useState)({
       users: userCustomer ? [userCustomer] : [],
       loading: !!urlPhone,
-      error: null
+      error: null,
+      fetched: false
     }),
     _useState8 = _slicedToArray(_useState7, 2),
     customersPhones = _useState8[0],
@@ -115,20 +116,21 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
    */
   var getUsers = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_phone) {
-      var maxRetries, waitTime, cellphone, retryAttempt, conditions, source, request, timer, response, result, _reqState$users;
+      var maxRetries, waitTime, cellphone, cellphoneSplited, retryAttempt, conditions, source, request, timer, response, result, users, _reqState$users;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             maxRetries = 3;
             waitTime = 60000;
             cellphone = _phone || phone || urlPhone;
+            cellphoneSplited = cellphone.match(/.{1,7}/) || [];
             retryAttempt = 1;
-          case 4:
+          case 5:
             if (!(retryAttempt <= maxRetries)) {
-              _context.next = 34;
+              _context.next = 36;
               break;
             }
-            _context.prev = 5;
+            _context.prev = 6;
             setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
               loading: true
             }));
@@ -143,13 +145,13 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
                   attribute: 'cellphone',
                   value: {
                     condition: isFromUrlPhone ? '=' : 'like',
-                    value: isFromUrlPhone ? cellphone : isIos ? "%".concat(cellphone, "%") : encodeURI("%".concat(cellphone, "%"))
+                    value: isFromUrlPhone ? (cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone : isIos ? "%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%") : encodeURI("%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%"))
                   }
                 }, {
                   attribute: 'phone',
                   value: {
                     condition: isFromUrlPhone ? '=' : 'like',
-                    value: isFromUrlPhone ? cellphone : isIos ? "%".concat(cellphone, "%") : encodeURI("%".concat(cellphone, "%"))
+                    value: isFromUrlPhone ? (cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone : isIos ? "%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%") : encodeURI("%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%"))
                   }
                 }]
               }]
@@ -164,53 +166,58 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
                 return reject(new Error('Timeout exceeded'));
               }, waitTime);
             });
-            _context.next = 14;
+            _context.next = 15;
             return Promise.race([request, timer]);
-          case 14:
+          case 15:
             response = _context.sent;
             if (!(response.content && response.content.result)) {
-              _context.next = 21;
+              _context.next = 23;
               break;
             }
             result = response.content.result;
+            users = result.filter(function (user) {
+              var _user$cellphone;
+              return (_user$cellphone = user.cellphone) === null || _user$cellphone === void 0 ? void 0 : _user$cellphone.includes(cellphone);
+            });
             setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
-              users: result,
-              loading: false
+              users: users,
+              loading: false,
+              fetched: true
             }));
-            return _context.abrupt("break", 34);
-          case 21:
+            return _context.abrupt("break", 36);
+          case 23:
             throw new Error('Error');
-          case 22:
-            _context.next = 31;
-            break;
           case 24:
-            _context.prev = 24;
-            _context.t0 = _context["catch"](5);
+            _context.next = 33;
+            break;
+          case 26:
+            _context.prev = 26;
+            _context.t0 = _context["catch"](6);
             ((_reqState$users = reqState.users) === null || _reqState$users === void 0 ? void 0 : _reqState$users.cancel) && reqState.users.cancel();
             if (!(retryAttempt < maxRetries)) {
-              _context.next = 30;
+              _context.next = 32;
               break;
             }
-            _context.next = 30;
+            _context.next = 32;
             return new Promise(function (resolve) {
               return setTimeout(resolve, waitTime);
             });
-          case 30:
+          case 32:
             if (retryAttempt === maxRetries) {
               setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
                 loading: false,
                 error: t('ERROR_MULTIPLE_FETCH', 'Exceeded the maximum number of retries. Reload the page.')
               }));
             }
-          case 31:
+          case 33:
             retryAttempt++;
-            _context.next = 4;
+            _context.next = 5;
             break;
-          case 34:
+          case 36:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[5, 24]]);
+      }, _callee, null, [[6, 26]]);
     }));
     return function getUsers(_x) {
       return _ref.apply(this, arguments);

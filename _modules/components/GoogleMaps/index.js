@@ -137,13 +137,6 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
           marker.setMap(null);
         }
       } else {
-<<<<<<< HEAD
-=======
-        marker.addListener('click', function () {
-          var _locations$i9;
-          onBusinessClick && onBusinessClick((_locations$i9 = locations[i]) === null || _locations$i9 === void 0 ? void 0 : _locations$i9.slug);
-        });
->>>>>>> 6d16c211 (Merge branch 'master' into development)
         bounds.extend(marker.position);
         locationMarkers.push(marker);
       }
@@ -480,11 +473,7 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
       !useMapWithBusinessZones && (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newPos);
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
     }
-<<<<<<< HEAD
   }, [location, locations]);
-=======
-  }, [location, JSON.stringify(locations)]);
->>>>>>> 6d16c211 (Merge branch 'master' into development)
   (0, _react.useEffect)(function () {
     if (!businessMap && !manualZoom) {
       var interval = setInterval(function () {
@@ -507,11 +496,7 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
         return clearInterval(interval);
       };
     }
-<<<<<<< HEAD
   }, [locations, userActivity]);
-=======
-  }, [JSON.stringify(locations), userActivity]);
->>>>>>> 6d16c211 (Merge branch 'master' into development)
   (0, _react.useEffect)(function () {
     if (boundMap && businessMap) {
       boundMap.extend(center);

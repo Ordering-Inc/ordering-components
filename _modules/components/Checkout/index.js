@@ -689,18 +689,13 @@ var Checkout = exports.Checkout = function Checkout(props) {
   var handleConfirmCredomaticPage = /*#__PURE__*/function () {
     var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(cart, paymethodSelected) {
       var _configs$credomatic_i, _configs$credomatic_i2, _configs$credomatic_i3, _configs$credomatic_i4;
-<<<<<<< HEAD
       var isSandbox, keyId, processorId, _cart$paymethod_data, _cart$paymethod_data2, _paymethodSelected$da2, _paymethodSelected$da3, _paymethodSelected$da4, _Object$keys, cartUuid, data, form;
-=======
-      var isSandbox, keyId, processorId, _cart$paymethod_data, _cart$paymethod_data2, _paymethodSelected$da2, _paymethodSelected$da3, _paymethodSelected$da4, _Object$keys, cartUuid, data, form, requestOptions;
->>>>>>> 6d16c211 (Merge branch 'master' into development)
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) switch (_context9.prev = _context9.next) {
           case 0:
             isSandbox = (configs === null || configs === void 0 || (_configs$credomatic_i = configs.credomatic_integration_sandbox) === null || _configs$credomatic_i === void 0 ? void 0 : _configs$credomatic_i.value) === '1';
             keyId = isSandbox ? configs === null || configs === void 0 || (_configs$credomatic_i2 = configs.credomatic_integration_public_sandbox_key) === null || _configs$credomatic_i2 === void 0 ? void 0 : _configs$credomatic_i2.value : configs === null || configs === void 0 || (_configs$credomatic_i3 = configs.credomatic_integration_public_production_key) === null || _configs$credomatic_i3 === void 0 ? void 0 : _configs$credomatic_i3.value;
             processorId = configs === null || configs === void 0 || (_configs$credomatic_i4 = configs.credomatic_integration_processor_id) === null || _configs$credomatic_i4 === void 0 ? void 0 : _configs$credomatic_i4.value;
-<<<<<<< HEAD
             try {
               cartUuid = cart === null || cart === void 0 ? void 0 : cart.uuid;
               data = {
@@ -739,64 +734,6 @@ var Checkout = exports.Checkout = function Checkout(props) {
             return _context9.stop();
         }
       }, _callee9);
-=======
-            _context9.prev = 3;
-            cartUuid = cart === null || cart === void 0 ? void 0 : cart.uuid;
-            data = {
-              type: 'auth',
-              key_id: keyId,
-              hash: cart === null || cart === void 0 || (_cart$paymethod_data = cart.paymethod_data) === null || _cart$paymethod_data === void 0 || (_cart$paymethod_data = _cart$paymethod_data.result) === null || _cart$paymethod_data === void 0 ? void 0 : _cart$paymethod_data.hash,
-              time: cart === null || cart === void 0 || (_cart$paymethod_data2 = cart.paymethod_data) === null || _cart$paymethod_data2 === void 0 || (_cart$paymethod_data2 = _cart$paymethod_data2.result) === null || _cart$paymethod_data2 === void 0 ? void 0 : _cart$paymethod_data2.time,
-              amount: cart === null || cart === void 0 ? void 0 : cart.total,
-              orderid: cartUuid,
-              ccnumber: paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$da2 = paymethodSelected.data) === null || _paymethodSelected$da2 === void 0 ? void 0 : _paymethodSelected$da2.ccnumber,
-              cvv: paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$da3 = paymethodSelected.data) === null || _paymethodSelected$da3 === void 0 ? void 0 : _paymethodSelected$da3.cvv,
-              ccexp: paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$da4 = paymethodSelected.data) === null || _paymethodSelected$da4 === void 0 ? void 0 : _paymethodSelected$da4.ccexp,
-              redirect: window.location.href.replace(window.location.search, '')
-            };
-            if (processorId) {
-              data.processor_id = processorId;
-            }
-            form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'https://credomatic.compassmerchantsolutions.com/api/transact.php';
-            form.style.display = 'none';
-            // eslint-disable-next-line no-unused-expressions
-            (_Object$keys = Object.keys(data)) === null || _Object$keys === void 0 || _Object$keys.map(function (key) {
-              var formInputName = document.createElement('input');
-              formInputName.name = key;
-              formInputName.value = data[key];
-              form.appendChild(formInputName);
-            });
-            document.body.appendChild(form);
-            requestOptions = {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token)
-              },
-              body: JSON.stringify({
-                data: data,
-                project_code: ordering.project,
-                cart_uuid: cartUuid
-              })
-            };
-            _context9.next = 16;
-            return fetch('https://integrations.ordering.co/credomatic/log_generator.php', requestOptions);
-          case 16:
-            form.submit();
-            _context9.next = 22;
-            break;
-          case 19:
-            _context9.prev = 19;
-            _context9.t0 = _context9["catch"](3);
-            showToast(_ToastContext.ToastType.Error, _context9.t0.message);
-          case 22:
-          case "end":
-            return _context9.stop();
-        }
-      }, _callee9, null, [[3, 19]]);
->>>>>>> 6d16c211 (Merge branch 'master' into development)
     }));
     return function handleConfirmCredomaticPage(_x7, _x8) {
       return _ref10.apply(this, arguments);

@@ -252,14 +252,6 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
   var isAlsea = ['alsea', 'alsea-staging'].includes(ordering.project);
 
   /**
-<<<<<<< HEAD
-=======
-   * alsea custom options
-   */
-  var quesoYSalsaOptions = ['queso y salsa', 'queso mozzarella y salsa'];
-
-  /**
->>>>>>> 6d16c211 (Merge branch 'master' into development)
    * Init product cart status
    * @param {object} product Product to init product cart status
    */
@@ -663,11 +655,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
           name: cartSuboption.name,
           position: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state === null || state === void 0 ? void 0 : state.position : cartSuboption.position || 'whole',
           price: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state.price : price,
-<<<<<<< HEAD
           quantity: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state.quantity : ((_preselectedOptions$i3 = preselectedOptions[i]) === null || _preselectedOptions$i3 === void 0 || (_preselectedOptions$i3 = _preselectedOptions$i3.name) === null || _preselectedOptions$i3 === void 0 ? void 0 : _preselectedOptions$i3.toLowerCase()) === 'queso y salsa' && isAlsea ? (_cartSuboption$quanti = cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.quantity) !== null && _cartSuboption$quanti !== void 0 ? _cartSuboption$quanti : 1 : (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.quantity) || 1,
-=======
-          quantity: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state.quantity : quesoYSalsaOptions.includes((_preselectedOptions$i3 = preselectedOptions[i]) === null || _preselectedOptions$i3 === void 0 || (_preselectedOptions$i3 = _preselectedOptions$i3.name) === null || _preselectedOptions$i3 === void 0 ? void 0 : _preselectedOptions$i3.toLowerCase()) && isAlsea ? (_cartSuboption$quanti = cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.quantity) !== null && _cartSuboption$quanti !== void 0 ? _cartSuboption$quanti : 1 : (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.quantity) || 1,
->>>>>>> 6d16c211 (Merge branch 'master' into development)
           selected: true,
           total: (state === null || state === void 0 ? void 0 : state.id) === (cartSuboption === null || cartSuboption === void 0 ? void 0 : cartSuboption.id) ? state.total : price
         };
@@ -798,11 +786,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
         if ((option === null || option === void 0 || (_option$suboptions3 = option.suboptions) === null || _option$suboptions3 === void 0 ? void 0 : _option$suboptions3.length) > 0 && evaluate) {
           if (option.min > quantity) {
             errors["id:".concat(option.id)] = true;
-<<<<<<< HEAD
           } else if (option.max < quantity) {
-=======
-          } else if (option.max < quantity && option !== null && option !== void 0 && option.with_half_option && isAlsea && option.max + 0.5 < quantity) {
->>>>>>> 6d16c211 (Merge branch 'master' into development)
             errors["id:".concat(option.id)] = true;
           }
         }
@@ -1399,12 +1383,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
     handleChangeCommentState: handleChangeCommentState,
     professionalListState: professionalListState,
     cart2: props.productCart,
-<<<<<<< HEAD
     isAlsea: isAlsea
-=======
-    isAlsea: isAlsea,
-    quesoYSalsaOptions: quesoYSalsaOptions
->>>>>>> 6d16c211 (Merge branch 'master' into development)
   })));
 };
 ProductForm.propTypes = {
