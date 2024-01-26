@@ -36,7 +36,12 @@ var AnalyticsSegment = exports.AnalyticsSegment = function AnalyticsSegment(prop
       id: product.id,
       name: product.name,
       category: product.category_id,
+<<<<<<< HEAD
       price: product.price
+=======
+      price: product.price,
+      featured: product.featured
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
     });
   };
   var handleProductAdded = function handleProductAdded(product) {
@@ -102,6 +107,14 @@ var AnalyticsSegment = exports.AnalyticsSegment = function AnalyticsSegment(prop
       name: data.name
     });
   };
+<<<<<<< HEAD
+=======
+  var handleChangeView = function handleChangeView(pageName) {
+    analytics.track('Page View', {
+      page: pageName === null || pageName === void 0 ? void 0 : pageName.page
+    });
+  };
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
   (0, _react.useEffect)(function () {
     if (analytics) {
       events.on('product_clicked', handleClickProduct);
@@ -111,6 +124,10 @@ var AnalyticsSegment = exports.AnalyticsSegment = function AnalyticsSegment(prop
       events.on('order_updated', handleUpdateOrder);
       events.on('order_added', handleAddOrder);
       events.on('cart_product_removed', handleProductRemoved);
+<<<<<<< HEAD
+=======
+      events.on('change_view', handleChangeView);
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
     }
     return function () {
       if (analytics) {
@@ -121,6 +138,10 @@ var AnalyticsSegment = exports.AnalyticsSegment = function AnalyticsSegment(prop
         events.off('order_updated', handleUpdateOrder);
         events.off('order_added', handleAddOrder);
         events.off('cart_product_removed', handleProductRemoved);
+<<<<<<< HEAD
+=======
+        events.off('change_view', handleChangeView);
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
       }
     };
   }, [analytics]);

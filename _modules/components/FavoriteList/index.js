@@ -42,7 +42,12 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
     location = props.location,
     propsToFetch = props.propsToFetch,
     isProduct = props.isProduct,
+<<<<<<< HEAD
     isProfessional = props.isProfessional;
+=======
+    isProfessional = props.isProfessional,
+    franchiseId = props.franchiseId;
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -103,7 +108,12 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(page) {
       var pageSize,
         requestOptions,
+<<<<<<< HEAD
         fetchEndpoint,
+=======
+        params,
+        url,
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
         response,
         content,
         updatedProducts,
@@ -138,6 +148,7 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             };
+<<<<<<< HEAD
             fetchEndpoint = "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/").concat(favoriteURL, "?page=").concat(page, "&page_size=").concat(pageSize);
             _context.next = 9;
             return fetch(fetchEndpoint, requestOptions);
@@ -149,6 +160,23 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
             content = _context.sent;
             if (content.error) {
               _context.next = 34;
+=======
+            params = {};
+            if (franchiseId) {
+              params = params + "&franchise_id=".concat(franchiseId);
+            }
+            url = "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/").concat(favoriteURL, "?page=").concat(page, "&page_size=").concat(pageSize).concat(params);
+            _context.next = 11;
+            return fetch(url, requestOptions);
+          case 11:
+            response = _context.sent;
+            _context.next = 14;
+            return response.json();
+          case 14:
+            content = _context.sent;
+            if (content.error) {
+              _context.next = 36;
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
               break;
             }
             setPagination({
@@ -160,7 +188,11 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
               to: content.pagination.to
             });
             if (!isProduct) {
+<<<<<<< HEAD
               _context.next = 20;
+=======
+              _context.next = 22;
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
               break;
             }
             updatedProducts = content === null || content === void 0 ? void 0 : content.result.map(function (item) {
@@ -171,11 +203,19 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
               favorites: [].concat(_toConsumableArray(favoriteList === null || favoriteList === void 0 ? void 0 : favoriteList.favorites), _toConsumableArray(updatedProducts)),
               error: null
             });
+<<<<<<< HEAD
             _context.next = 32;
             break;
           case 20:
             if (!isProfessional) {
               _context.next = 25;
+=======
+            _context.next = 34;
+            break;
+          case 22:
+            if (!isProfessional) {
+              _context.next = 27;
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
               break;
             }
             updatedUsers = content === null || content === void 0 ? void 0 : content.result.map(function (item) {
@@ -186,6 +226,7 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
               favorites: [].concat(_toConsumableArray(favoriteList === null || favoriteList === void 0 ? void 0 : favoriteList.favorites), _toConsumableArray(updatedUsers)),
               error: null
             });
+<<<<<<< HEAD
             _context.next = 32;
             break;
           case 25:
@@ -195,6 +236,17 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
             _context.next = 28;
             return getOriginalList(idList);
           case 28:
+=======
+            _context.next = 34;
+            break;
+          case 27:
+            idList = content === null || content === void 0 || (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.reduce(function (ids, product) {
+              return [].concat(_toConsumableArray(ids), [product === null || product === void 0 ? void 0 : product.object_id]);
+            }, []);
+            _context.next = 30;
+            return getOriginalList(idList);
+          case 30:
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
             _yield$getOriginalLis = _context.sent;
             error = _yield$getOriginalLis.error;
             result = _yield$getOriginalLis.result;
@@ -210,29 +262,52 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
                 error: result
               }));
             }
+<<<<<<< HEAD
           case 32:
             _context.next = 35;
             break;
           case 34:
+=======
+          case 34:
+            _context.next = 37;
+            break;
+          case 36:
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
             setFavoriteList(_objectSpread(_objectSpread({}, favoriteList), {}, {
               loading: false,
               error: content.result
             }));
+<<<<<<< HEAD
           case 35:
             _context.next = 40;
             break;
           case 37:
             _context.prev = 37;
+=======
+          case 37:
+            _context.next = 42;
+            break;
+          case 39:
+            _context.prev = 39;
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
             _context.t0 = _context["catch"](3);
             setFavoriteList(_objectSpread(_objectSpread({}, favoriteList), {}, {
               loading: false,
               error: [_context.t0.message]
             }));
+<<<<<<< HEAD
           case 40:
           case "end":
             return _context.stop();
         }
       }, _callee, null, [[3, 37]]);
+=======
+          case 42:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee, null, [[3, 39]]);
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
     }));
     return function getFavoriteList(_x) {
       return _ref.apply(this, arguments);
@@ -255,6 +330,15 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
               attribute: 'id',
               value: ids
             });
+<<<<<<< HEAD
+=======
+            if (franchiseId) {
+              conditions.push({
+                attribute: 'franchise_id',
+                value: franchiseId
+              });
+            }
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
             if (conditions.length) {
               where = {
                 conditions: conditions,
@@ -274,6 +358,7 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
             if (location) fetchEndpoint = "".concat(fetchEndpoint, "&location=").concat(location);
             if (propsToFetch) fetchEndpoint = "".concat(fetchEndpoint, "&params=").concat(propsToFetch);
             fetchEndpoint = "".concat(fetchEndpoint, "&type=").concat(orderStatus === null || orderStatus === void 0 || (_orderStatus$options = orderStatus.options) === null || _orderStatus$options === void 0 ? void 0 : _orderStatus$options.type);
+<<<<<<< HEAD
             _context2.next = 11;
             return fetch(fetchEndpoint, requestOptions);
           case 11:
@@ -283,6 +368,17 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
           case 14:
             return _context2.abrupt("return", _context2.sent);
           case 15:
+=======
+            _context2.next = 12;
+            return fetch(fetchEndpoint, requestOptions);
+          case 12:
+            response = _context2.sent;
+            _context2.next = 15;
+            return response.json();
+          case 15:
+            return _context2.abrupt("return", _context2.sent);
+          case 16:
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
           case "end":
             return _context2.stop();
         }

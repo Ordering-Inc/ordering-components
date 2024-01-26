@@ -2087,7 +2087,11 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         while (1) switch (_context23.prev = _context23.next) {
           case 0:
             if (!(session !== null && session !== void 0 && session.token)) {
+<<<<<<< HEAD
               _context23.next = 40;
+=======
+              _context23.next = 38;
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
               break;
             }
             pastOrderTypes = [1, 2, 5, 6, 10, 11, 12, 15, 16, 17];
@@ -2131,6 +2135,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 }]
               });
             }
+<<<<<<< HEAD
             if (typeof businessSlug === 'number' && businessSlug) {
               where.push({
                 attribute: 'ref_business',
@@ -2155,6 +2160,8 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 }]
               });
             }
+=======
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
             options = {
               query: {
                 orderBy: '-delivery_datetime',
@@ -2163,22 +2170,36 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 where: where
               }
             };
+<<<<<<< HEAD
             _context23.next = 11;
             return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(options);
           case 11:
+=======
+            _context23.next = 9;
+            return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(options);
+          case 9:
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
             _yield$ordering$setAc20 = _context23.sent;
             _yield$ordering$setAc21 = _yield$ordering$setAc20.content;
             result = _yield$ordering$setAc21.result;
             error = _yield$ordering$setAc21.error;
             if (!(!error && (result === null || result === void 0 ? void 0 : result.length) > 0)) {
+<<<<<<< HEAD
               _context23.next = 37;
+=======
+              _context23.next = 35;
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
               break;
             }
             _noRviewOrder = result === null || result === void 0 ? void 0 : result.find(function (order) {
               return !(order !== null && order !== void 0 && order.review);
             });
             if (!(_noRviewOrder !== null && _noRviewOrder !== void 0 && _noRviewOrder.cart_group_id)) {
+<<<<<<< HEAD
               _context23.next = 34;
+=======
+              _context23.next = 32;
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
               break;
             }
             where.push({
@@ -2192,21 +2213,32 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 page_size: 10
               }
             };
+<<<<<<< HEAD
             _context23.next = 22;
             return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(_options5);
           case 22:
+=======
+            _context23.next = 20;
+            return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(_options5);
+          case 20:
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
             _yield$ordering$setAc22 = _context23.sent;
             _yield$ordering$setAc23 = _yield$ordering$setAc22.content;
             _result3 = _yield$ordering$setAc23.result;
             _error2 = _yield$ordering$setAc23.error;
             if (_error2) {
+<<<<<<< HEAD
               _context23.next = 31;
+=======
+              _context23.next = 29;
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
               break;
             }
             noReviewOrders = _result3.filter(function (order) {
               return !(order !== null && order !== void 0 && order.review);
             });
             return _context23.abrupt("return", noReviewOrders);
+<<<<<<< HEAD
           case 31:
             return _context23.abrupt("return", null);
           case 32:
@@ -2225,6 +2257,26 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
           case 40:
             return _context23.abrupt("return", null);
           case 41:
+=======
+          case 29:
+            return _context23.abrupt("return", null);
+          case 30:
+            _context23.next = 33;
+            break;
+          case 32:
+            return _context23.abrupt("return", _noRviewOrder);
+          case 33:
+            _context23.next = 36;
+            break;
+          case 35:
+            return _context23.abrupt("return", null);
+          case 36:
+            _context23.next = 39;
+            break;
+          case 38:
+            return _context23.abrupt("return", null);
+          case 39:
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
           case "end":
             return _context23.stop();
         }

@@ -11,6 +11,10 @@ var _SessionContext = require("../../../contexts/SessionContext");
 var _ApiContext = require("../../../contexts/ApiContext");
 var _OrderContext = require("../../../contexts/OrderContext");
 var _EventContext = require("../../../contexts/EventContext");
+<<<<<<< HEAD
+=======
+var _WebsocketContext = require("../../../contexts/WebsocketContext");
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
@@ -41,6 +45,10 @@ var PurchaseGiftCard = exports.PurchaseGiftCard = function PurchaseGiftCard(prop
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+<<<<<<< HEAD
+=======
+  var socket = (0, _WebsocketContext.useWebsocket)();
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
     orderState = _useOrder2[0],
@@ -95,7 +103,13 @@ var PurchaseGiftCard = exports.PurchaseGiftCard = function PurchaseGiftCard(prop
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
+<<<<<<< HEAD
                 Authorization: "Bearer ".concat(token)
+=======
+                Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+>>>>>>> 6d16c211 (Merge branch 'master' into development)
               }
             };
             _context.next = 9;
