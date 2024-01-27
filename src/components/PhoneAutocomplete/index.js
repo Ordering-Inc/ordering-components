@@ -35,8 +35,7 @@ export const PhoneAutocomplete = (props) => {
     const maxRetries = 3
     const waitTime = 60000
     const cellphone = _phone || phone || urlPhone
-    const cellphoneSplited = cellphone.match(/.{1,7}/) || []
-
+    const cellphoneSplited = cellphone?.match?.(/.{1,7}/) || []
     for (let retryAttempt = 1; retryAttempt <= maxRetries; retryAttempt++) {
       try {
         setCustomersPhones({ ...customersPhones, loading: true })
@@ -53,7 +52,7 @@ export const PhoneAutocomplete = (props) => {
               value: {
                 condition: isFromUrlPhone ? '=' : 'like',
                 value: isFromUrlPhone
-                  ? cellphoneSplited?.[0] || cellphone
+                  ? cellphone
                   : isIos
                     ? `%${cellphoneSplited?.[0] || cellphone}%`
                     : encodeURI(`%${cellphoneSplited?.[0] || cellphone}%`)
@@ -64,7 +63,7 @@ export const PhoneAutocomplete = (props) => {
               value: {
                 condition: isFromUrlPhone ? '=' : 'like',
                 value: isFromUrlPhone
-                  ? cellphoneSplited?.[0] || cellphone
+                  ? cellphone
                   : isIos
                     ? `%${cellphoneSplited?.[0] || cellphone}%`
                     : encodeURI(`%${cellphoneSplited?.[0] || cellphone}%`)
