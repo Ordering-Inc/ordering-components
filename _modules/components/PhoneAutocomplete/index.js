@@ -116,6 +116,7 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
    */
   var getUsers = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_phone) {
+      var _cellphone$match;
       var maxRetries, waitTime, cellphone, cellphoneSplited, retryAttempt, conditions, source, request, timer, response, result, users, _reqState$users;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -123,7 +124,7 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
             maxRetries = 3;
             waitTime = 60000;
             cellphone = _phone || phone || urlPhone;
-            cellphoneSplited = cellphone.match(/.{1,7}/) || [];
+            cellphoneSplited = (cellphone === null || cellphone === void 0 || (_cellphone$match = cellphone.match) === null || _cellphone$match === void 0 ? void 0 : _cellphone$match.call(cellphone, /.{1,7}/)) || [];
             retryAttempt = 1;
           case 5:
             if (!(retryAttempt <= maxRetries)) {
@@ -145,13 +146,13 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
                   attribute: 'cellphone',
                   value: {
                     condition: isFromUrlPhone ? '=' : 'like',
-                    value: isFromUrlPhone ? (cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone : isIos ? "%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%") : encodeURI("%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%"))
+                    value: isFromUrlPhone ? cellphone : isIos ? "%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%") : encodeURI("%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%"))
                   }
                 }, {
                   attribute: 'phone',
                   value: {
                     condition: isFromUrlPhone ? '=' : 'like',
-                    value: isFromUrlPhone ? (cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone : isIos ? "%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%") : encodeURI("%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%"))
+                    value: isFromUrlPhone ? cellphone : isIos ? "%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%") : encodeURI("%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%"))
                   }
                 }]
               }]
