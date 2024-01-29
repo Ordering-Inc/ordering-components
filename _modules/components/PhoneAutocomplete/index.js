@@ -116,22 +116,23 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
    */
   var getUsers = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_phone) {
-      var _cellphone$match;
-      var maxRetries, waitTime, cellphone, cellphoneSplited, retryAttempt, conditions, source, request, timer, response, result, users, _reqState$users;
+      var _cellphone$toString, _cellphoneString$matc;
+      var maxRetries, waitTime, cellphone, cellphoneString, cellphoneSplited, retryAttempt, conditions, source, request, timer, response, result, users, _reqState$users;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             maxRetries = 3;
             waitTime = 60000;
             cellphone = _phone || phone || urlPhone;
-            cellphoneSplited = (cellphone === null || cellphone === void 0 || (_cellphone$match = cellphone.match) === null || _cellphone$match === void 0 ? void 0 : _cellphone$match.call(cellphone, /.{1,7}/)) || [];
+            cellphoneString = cellphone === null || cellphone === void 0 || (_cellphone$toString = cellphone.toString) === null || _cellphone$toString === void 0 ? void 0 : _cellphone$toString.call(cellphone);
+            cellphoneSplited = (cellphoneString === null || cellphoneString === void 0 || (_cellphoneString$matc = cellphoneString.match) === null || _cellphoneString$matc === void 0 ? void 0 : _cellphoneString$matc.call(cellphoneString, /.{1,7}/)) || [];
             retryAttempt = 1;
-          case 5:
+          case 6:
             if (!(retryAttempt <= maxRetries)) {
-              _context.next = 36;
+              _context.next = 37;
               break;
             }
-            _context.prev = 6;
+            _context.prev = 7;
             setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
               loading: true
             }));
@@ -146,13 +147,13 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
                   attribute: 'cellphone',
                   value: {
                     condition: isFromUrlPhone ? '=' : 'like',
-                    value: isFromUrlPhone ? cellphone : isIos ? "%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%") : encodeURI("%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%"))
+                    value: isFromUrlPhone ? cellphoneString : isIos ? "%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphoneString, "%") : encodeURI("%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphoneString, "%"))
                   }
                 }, {
                   attribute: 'phone',
                   value: {
                     condition: isFromUrlPhone ? '=' : 'like',
-                    value: isFromUrlPhone ? cellphone : isIos ? "%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%") : encodeURI("%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphone, "%"))
+                    value: isFromUrlPhone ? cellphoneString : isIos ? "%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphoneString, "%") : encodeURI("%".concat((cellphoneSplited === null || cellphoneSplited === void 0 ? void 0 : cellphoneSplited[0]) || cellphoneString, "%"))
                   }
                 }]
               }]
@@ -167,58 +168,58 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
                 return reject(new Error('Timeout exceeded'));
               }, waitTime);
             });
-            _context.next = 15;
+            _context.next = 16;
             return Promise.race([request, timer]);
-          case 15:
+          case 16:
             response = _context.sent;
             if (!(response.content && response.content.result)) {
-              _context.next = 23;
+              _context.next = 24;
               break;
             }
             result = response.content.result;
             users = result.filter(function (user) {
               var _user$cellphone;
-              return (_user$cellphone = user.cellphone) === null || _user$cellphone === void 0 ? void 0 : _user$cellphone.includes(cellphone);
+              return (_user$cellphone = user.cellphone) === null || _user$cellphone === void 0 ? void 0 : _user$cellphone.includes(cellphoneString);
             });
             setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
               users: users,
               loading: false,
               fetched: true
             }));
-            return _context.abrupt("break", 36);
-          case 23:
-            throw new Error('Error');
+            return _context.abrupt("break", 37);
           case 24:
-            _context.next = 33;
+            throw new Error('Error');
+          case 25:
+            _context.next = 34;
             break;
-          case 26:
-            _context.prev = 26;
-            _context.t0 = _context["catch"](6);
+          case 27:
+            _context.prev = 27;
+            _context.t0 = _context["catch"](7);
             ((_reqState$users = reqState.users) === null || _reqState$users === void 0 ? void 0 : _reqState$users.cancel) && reqState.users.cancel();
             if (!(retryAttempt < maxRetries)) {
-              _context.next = 32;
+              _context.next = 33;
               break;
             }
-            _context.next = 32;
+            _context.next = 33;
             return new Promise(function (resolve) {
               return setTimeout(resolve, waitTime);
             });
-          case 32:
+          case 33:
             if (retryAttempt === maxRetries) {
               setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
                 loading: false,
                 error: t('ERROR_MULTIPLE_FETCH', 'Exceeded the maximum number of retries. Reload the page.')
               }));
             }
-          case 33:
+          case 34:
             retryAttempt++;
-            _context.next = 5;
+            _context.next = 6;
             break;
-          case 36:
+          case 37:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[6, 26]]);
+      }, _callee, null, [[7, 27]]);
     }));
     return function getUsers(_x) {
       return _ref.apply(this, arguments);
