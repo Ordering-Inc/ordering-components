@@ -62,14 +62,14 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Refresh order options and carts from API
    */
-  const refreshOrderOptions = async () => {
+  const refreshOrderOptions = async (customOptions) => {
     try {
       if (!state.loading) {
         setState({ ...state, loading: true })
       }
       const countryCodeFromLocalStorage = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerFromLocalStorage?.id
+      const userCustomerId = customOptions?.user_id ?? customerFromLocalStorage?.id
       const options = {}
       if (userCustomerId) {
         options.query = {
@@ -94,7 +94,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         }
       }
 
-      const res = await ordering.setAccessToken(session.token).orderOptions().get(options)
+      const res = await ordering.setAccessToken(customOptions?.token ?? session.token).orderOptions().get(options)
       const error = res?.content?.error
       const result = res?.content?.result
       console.log('refresh order optinos', result)

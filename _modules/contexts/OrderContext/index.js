@@ -132,8 +132,8 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Refresh order options and carts from API
    */
   var refreshOrderOptions = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _state$options, _state$options2, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, options, countryCode, res, error, result, _options2$address, carts, _options2, _options2$address2, localOptions, _options3, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(customOptions) {
+      var _customOptions$user_i, _state$options, _state$options2, _customOptions$token, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, options, countryCode, res, error, result, _options2$address, carts, _options2, _options2$address2, localOptions, _options3, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -151,7 +151,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             return strategy.getItem('user-customer', true);
           case 7:
             customerFromLocalStorage = _context.sent;
-            userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+            userCustomerId = (_customOptions$user_i = customOptions === null || customOptions === void 0 ? void 0 : customOptions.user_id) !== null && _customOptions$user_i !== void 0 ? _customOptions$user_i : customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             options = {};
             if (userCustomerId) {
               options.query = {
@@ -171,7 +171,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               };
             }
             _context.next = 16;
-            return ordering.setAccessToken(session.token).orderOptions().get(options);
+            return ordering.setAccessToken((_customOptions$token = customOptions === null || customOptions === void 0 ? void 0 : customOptions.token) !== null && _customOptions$token !== void 0 ? _customOptions$token : session.token).orderOptions().get(options);
           case 16:
             res = _context.sent;
             error = res === null || res === void 0 || (_res$content = res.content) === null || _res$content === void 0 ? void 0 : _res$content.error;
@@ -310,7 +310,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee, null, [[0, 67]]);
     }));
-    return function refreshOrderOptions() {
+    return function refreshOrderOptions(_x) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -417,7 +417,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee2);
     }));
-    return function changeAddress(_x, _x2) {
+    return function changeAddress(_x2, _x3) {
       return _ref3.apply(this, arguments);
     };
   }();
@@ -467,7 +467,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee3);
     }));
-    return function changeType(_x3) {
+    return function changeType(_x4) {
       return _ref4.apply(this, arguments);
     };
   }();
@@ -512,7 +512,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee4);
     }));
-    return function changeMoment(_x4) {
+    return function changeMoment(_x5) {
       return _ref5.apply(this, arguments);
     };
   }();
@@ -555,7 +555,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee5);
     }));
-    return function changeCityFilter(_x5) {
+    return function changeCityFilter(_x6) {
       return _ref6.apply(this, arguments);
     };
   }();
@@ -659,7 +659,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee6, null, [[9, 34]]);
     }));
-    return function updateOrderOptions(_x6) {
+    return function updateOrderOptions(_x7) {
       return _ref7.apply(this, arguments);
     };
   }();
@@ -777,7 +777,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee7, null, [[1, 27]]);
     }));
-    return function addProduct(_x7, _x8, _x9) {
+    return function addProduct(_x8, _x9, _x10) {
       return _ref9.apply(this, arguments);
     };
   }();
@@ -867,7 +867,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee8, null, [[0, 24]]);
     }));
-    return function addMultiProduct(_x10, _x11, _x12) {
+    return function addMultiProduct(_x11, _x12, _x13) {
       return _ref10.apply(this, arguments);
     };
   }();
@@ -943,7 +943,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee9, null, [[0, 21]]);
     }));
-    return function removeProduct(_x13, _x14) {
+    return function removeProduct(_x14, _x15) {
       return _ref11.apply(this, arguments);
     };
   }();
@@ -1032,7 +1032,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee10, null, [[1, 24]]);
     }));
-    return function clearCart(_x15) {
+    return function clearCart(_x16) {
       return _ref12.apply(this, arguments);
     };
   }();
@@ -1104,7 +1104,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee11, null, [[0, 21]]);
     }));
-    return function updateProduct(_x16, _x17, _x18) {
+    return function updateProduct(_x17, _x18, _x19) {
       return _ref13.apply(this, arguments);
     };
   }();
@@ -1233,7 +1233,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee12, null, [[6, 37]]);
     }));
-    return function applyCoupon(_x19, _x20) {
+    return function applyCoupon(_x20, _x21) {
       return _ref14.apply(this, arguments);
     };
   }();
@@ -1316,7 +1316,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee13, null, [[4, 20]]);
     }));
-    return function applyOffer(_x21) {
+    return function applyOffer(_x22) {
       return _ref15.apply(this, arguments);
     };
   }();
@@ -1396,7 +1396,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee14, null, [[4, 22]]);
     }));
-    return function removeOffer(_x22) {
+    return function removeOffer(_x23) {
       return _ref16.apply(this, arguments);
     };
   }();
@@ -1495,7 +1495,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee15, null, [[8, 29]]);
     }));
-    return function changeDriverTip(_x23) {
+    return function changeDriverTip(_x24) {
       return _ref17.apply(this, arguments);
     };
   }();
@@ -1583,7 +1583,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee16, null, [[8, 29]]);
     }));
-    return function changePaymethod(_x24, _x25, _x26) {
+    return function changePaymethod(_x25, _x26, _x27) {
       return _ref18.apply(this, arguments);
     };
   }();
@@ -1688,7 +1688,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee17, null, [[0, 29]]);
     }));
-    return function placeCart(_x27, _x28) {
+    return function placeCart(_x28, _x29) {
       return _ref19.apply(this, arguments);
     };
   }();
@@ -1783,7 +1783,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee18, null, [[0, 24]]);
     }));
-    return function placeMultiCarts(_x29, _x30) {
+    return function placeMultiCarts(_x30, _x31) {
       return _ref20.apply(this, arguments);
     };
   }();
@@ -1876,7 +1876,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee19, null, [[0, 25]]);
     }));
-    return function confirmCart(_x31, _x32) {
+    return function confirmCart(_x32, _x33) {
       return _ref21.apply(this, arguments);
     };
   }();
@@ -1951,7 +1951,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee20, null, [[0, 19]]);
     }));
-    return function confirmMultiCarts(_x33) {
+    return function confirmMultiCarts(_x34) {
       return _ref22.apply(this, arguments);
     };
   }();
@@ -2041,7 +2041,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee21, null, [[1, 24]]);
     }));
-    return function reorder(_x34, _x35) {
+    return function reorder(_x35, _x36) {
       return _ref23.apply(this, arguments);
     };
   }();
@@ -2241,7 +2241,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee24);
     }));
-    return function setUserCustomerOptions(_x36) {
+    return function setUserCustomerOptions(_x37) {
       return _ref26.apply(this, arguments);
     };
   }();
