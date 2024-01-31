@@ -97,6 +97,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       const res = await ordering.setAccessToken(session.token).orderOptions().get(options)
       const error = res?.content?.error
       const result = res?.content?.result
+      console.log('refresh order optinos', result)
 
       if (!error) {
         const { carts, ...options } = result
@@ -379,6 +380,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           .setAccessToken(session.token)
           .orderOptions()
           .save(body, options)
+        console.log('update order optinos', result)
         if (!error) {
           const { carts, ...options } = result
           state.carts = {}
