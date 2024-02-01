@@ -486,7 +486,8 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
             body = _objectSpread({}, values);
-            _context4.prev = 1;
+            if (isGuest && user !== null && user !== void 0 && user.guest_id) body.guest_token = user === null || user === void 0 ? void 0 : user.guest_id;
+            _context4.prev = 2;
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: true
             }));
@@ -494,7 +495,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
               body.notification_token = notificationState.notification_token;
               body.notification_app = notificationState.notification_app;
             }
-            _context4.next = 6;
+            _context4.next = 7;
             return fetch("".concat(ordering.root, "/auth/sms/twilio"), {
               method: 'POST',
               headers: {
@@ -504,11 +505,11 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
               },
               body: JSON.stringify(body)
             });
-          case 6:
+          case 7:
             response = _context4.sent;
-            _context4.next = 9;
+            _context4.next = 10;
             return response.json();
-          case 9:
+          case 10:
             res = _context4.sent;
             if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
               login({
@@ -523,22 +524,22 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
               loading: false,
               result: res
             }));
-            _context4.next = 17;
+            _context4.next = 18;
             break;
-          case 14:
-            _context4.prev = 14;
-            _context4.t0 = _context4["catch"](1);
+          case 15:
+            _context4.prev = 15;
+            _context4.t0 = _context4["catch"](2);
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: false,
               result: {
                 error: _context4.t0.message
               }
             }));
-          case 17:
+          case 18:
           case "end":
             return _context4.stop();
         }
-      }, _callee4, null, [[1, 14]]);
+      }, _callee4, null, [[2, 15]]);
     }));
     return function checkVerifyPhoneCode(_x4) {
       return _ref6.apply(this, arguments);
@@ -577,16 +578,17 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
           case 7:
             _credentials.verification_code = reCaptchaValue;
           case 8:
-            _context5.prev = 8;
+            if (isGuest && user !== null && user !== void 0 && user.guest_id) _credentials.guest_token = user === null || user === void 0 ? void 0 : user.guest_id;
+            _context5.prev = 9;
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: true,
               result: {
                 error: false
               }
             }));
-            _context5.next = 12;
+            _context5.next = 13;
             return ordering.users().auth(_credentials);
-          case 12:
+          case 13:
             _yield$ordering$users = _context5.sent;
             _yield$ordering$users2 = _yield$ordering$users.content;
             error = _yield$ordering$users2.error;
@@ -615,22 +617,22 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 }
               }));
             }
-            _context5.next = 22;
+            _context5.next = 23;
             break;
-          case 19:
-            _context5.prev = 19;
-            _context5.t0 = _context5["catch"](8);
+          case 20:
+            _context5.prev = 20;
+            _context5.t0 = _context5["catch"](9);
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: false,
               result: {
                 error: _context5.t0.message
               }
             }));
-          case 22:
+          case 23:
           case "end":
             return _context5.stop();
         }
-      }, _callee5, null, [[8, 19]]);
+      }, _callee5, null, [[9, 20]]);
     }));
     return function checkVerifyByOtpCode() {
       return _ref7.apply(this, arguments);
