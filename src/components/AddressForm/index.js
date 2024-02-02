@@ -121,9 +121,7 @@ export const AddressForm = (props) => {
       onSaveAddress && onSaveAddress(formState.changes)
       return
     }
-    if (userCustomerSetup) {
-      setUserCustomer(userCustomerSetup, true)
-    }
+
     setFormState({ ...formState, loading: true })
     try {
       const { content } = await ordering
@@ -151,6 +149,9 @@ export const AddressForm = (props) => {
           })
         }
       }
+      if (userCustomerSetup) {
+        await setUserCustomer(userCustomerSetup, true)
+      }
       refreshUserInfo()
     } catch (err) {
       setFormState({
@@ -163,7 +164,7 @@ export const AddressForm = (props) => {
   }
 
   const getBusinessDeliveryZones = async (location) => {
-    if(!location) return
+    if (!location) return
     try {
       setBusinessesList({
         ...businessesList,
