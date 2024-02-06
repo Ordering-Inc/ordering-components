@@ -207,18 +207,15 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
             onSaveAddress && onSaveAddress(formState.changes);
             return _context2.abrupt("return");
           case 7:
-            if (userCustomerSetup) {
-              setUserCustomer(userCustomerSetup, true);
-            }
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: true
             }));
-            _context2.prev = 9;
-            _context2.next = 12;
+            _context2.prev = 8;
+            _context2.next = 11;
             return ordering.users(userId).addresses((_addressState$address = addressState.address) === null || _addressState$address === void 0 ? void 0 : _addressState$address.id).save(_objectSpread(_objectSpread({}, values), formState.changes), {
               accessToken: accessToken
             });
-          case 12:
+          case 11:
             _yield$ordering$users2 = _context2.sent;
             content = _yield$ordering$users2.content;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
@@ -240,22 +237,29 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
                 });
               }
             }
+            if (!userCustomerSetup) {
+              _context2.next = 18;
+              break;
+            }
+            _context2.next = 18;
+            return setUserCustomer(userCustomerSetup, true);
+          case 18:
             refreshUserInfo();
-            _context2.next = 22;
+            _context2.next = 24;
             break;
-          case 19:
-            _context2.prev = 19;
-            _context2.t0 = _context2["catch"](9);
+          case 21:
+            _context2.prev = 21;
+            _context2.t0 = _context2["catch"](8);
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: false,
               error: [_context2.t0.message],
               address: {}
             }));
-          case 22:
+          case 24:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[9, 19]]);
+      }, _callee2, null, [[8, 21]]);
     }));
     return function saveAddress(_x3, _x4) {
       return _ref2.apply(this, arguments);
