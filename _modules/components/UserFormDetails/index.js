@@ -213,7 +213,7 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
             _changes = _objectSpread(_objectSpread({}, formState.changes), changes !== null && changes !== void 0 ? changes : {});
             if (!(_changes !== null && _changes !== void 0 && _changes.country_code) && _changes !== null && _changes !== void 0 && _changes.country_phone_code && _changes !== null && _changes !== void 0 && _changes.cellphone) {
               parsedNumber = (0, _libphonenumberJs.default)("+".concat(_changes === null || _changes === void 0 ? void 0 : _changes.country_phone_code).concat(_changes === null || _changes === void 0 ? void 0 : _changes.cellphone));
-              _changes.country_code = parsedNumber.country;
+              _changes.country_code = parsedNumber === null || parsedNumber === void 0 ? void 0 : parsedNumber.country;
             }
             if (CONDITIONAL_CODES.includes(_changes === null || _changes === void 0 ? void 0 : _changes.country_phone_code)) {
               if ((_changes === null || _changes === void 0 ? void 0 : _changes.country_code) === 'PR') {
