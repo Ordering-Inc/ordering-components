@@ -115,7 +115,7 @@ export const UserFormDetails = (props) => {
 
       if (!_changes?.country_code && _changes?.country_phone_code && _changes?.cellphone) {
         const parsedNumber = parsePhoneNumber(`+${_changes?.country_phone_code}${_changes?.cellphone}`)
-        _changes.country_code = parsedNumber.country
+        _changes.country_code = parsedNumber?.country
       }
 
       if (CONDITIONAL_CODES.includes(_changes?.country_phone_code)) {
