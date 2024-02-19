@@ -154,7 +154,8 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
               }));
               _context.next = 7;
               return ordering.users().authFacebook({
-                access_token: (_facebookResponse$aut = facebookResponse.authResponse) === null || _facebookResponse$aut === void 0 ? void 0 : _facebookResponse$aut.accessToken
+                access_token: (_facebookResponse$aut = facebookResponse.authResponse) === null || _facebookResponse$aut === void 0 ? void 0 : _facebookResponse$aut.accessToken,
+                use: 'http'
               });
 
             case 7:
@@ -169,7 +170,7 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
                   handleSuccessFacebookLogin(response.content.result);
                 }
 
-                events.emit('userLogin', _objectSpread(_objectSpread({}, result), {}, {
+                events.emit('userLogin', _objectSpread(_objectSpread({}, response.content.result), {}, {
                   bySocial: 'Facebook'
                 }));
               } else {
