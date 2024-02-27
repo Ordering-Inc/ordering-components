@@ -12,6 +12,7 @@ var _CustomerContext = require("../../contexts/CustomerContext");
 var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 var _libphonenumberJs = _interopRequireDefault(require("libphonenumber-js"));
+var _ToastContext = require("../../contexts/ToastContext");
 var _excluded = ["photo"];
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
@@ -54,7 +55,8 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
     onClose = props.onClose,
     dontToggleEditMode = props.dontToggleEditMode,
     isOrderTypeValidationField = props.isOrderTypeValidationField,
-    checkoutFields = props.checkoutFields;
+    checkoutFields = props.checkoutFields,
+    setUserConfirmPhone = props.setUserConfirmPhone;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -70,6 +72,9 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
   var _useValidationsFields = (0, _ValidationsFieldsContext.useValidationFields)(),
     _useValidationsFields2 = _slicedToArray(_useValidationsFields, 1),
     validationFields = _useValidationsFields2[0];
+  var _useToast = (0, _ToastContext.useToast)(),
+    _useToast2 = _slicedToArray(_useToast, 2),
+    showToast = _useToast2[1].showToast;
   var _useState = (0, _react.useState)(!!(props !== null && props !== void 0 && props.isEdit)),
     _useState2 = _slicedToArray(_useState, 2),
     isEdit = _useState2[0],
@@ -267,7 +272,7 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               changes: response.content.error ? formState.changes : {},
               result: response.content,
-              loading: false
+              loading: !!changes.confirmDataLayout || false
             }));
           case 22:
             if (!response.content.error) {
@@ -282,6 +287,9 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               }
               if (handleSuccessUpdate) {
                 handleSuccessUpdate(response.content.result);
+              }
+              if (changes.confirmDataLayout) {
+                handleRequestCustomerAddress();
               }
               onClose && onClose();
               if (!image && !dontToggleEditMode) {
@@ -651,6 +659,73 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
       return _ref6.apply(this, arguments);
     };
   }();
+  var handleRequestCustomerAddress = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+      var _props$userData5, response, _yield$response$json, result, error;
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.prev = 0;
+            setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              loading: true
+            }));
+            _context6.next = 4;
+            return fetch("".concat(ordering.root, "/actions/run/custom"), {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(accessToken),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+              },
+              body: JSON.stringify({
+                action: 'request_customer_address',
+                user_token_required: true,
+                user_id: (props === null || props === void 0 || (_props$userData5 = props.userData) === null || _props$userData5 === void 0 ? void 0 : _props$userData5.id) || userState.result.result.id,
+                user_token_expiration_time: 10
+              })
+            });
+          case 4:
+            response = _context6.sent;
+            _context6.next = 7;
+            return response.json();
+          case 7:
+            _yield$response$json = _context6.sent;
+            result = _yield$response$json.result;
+            error = _yield$response$json.error;
+            if (!error) {
+              _context6.next = 14;
+              break;
+            }
+            showToast(_ToastContext.ToastType.Error, result, 5000);
+            setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              loading: false
+            }));
+            return _context6.abrupt("return");
+          case 14:
+            setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              loading: false
+            }));
+            setUserConfirmPhone && setUserConfirmPhone({
+              result: 'OK',
+              open: false
+            });
+            _context6.next = 21;
+            break;
+          case 18:
+            _context6.prev = 18;
+            _context6.t0 = _context6["catch"](0);
+            showToast(_ToastContext.ToastType.Error, _context6.t0.message, 5000);
+          case 21:
+          case "end":
+            return _context6.stop();
+        }
+      }, _callee6, null, [[0, 18]]);
+    }));
+    return function handleRequestCustomerAddress() {
+      return _ref7.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     updatePromotions(singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? singleNotifications === null || singleNotifications === void 0 ? void 0 : singleNotifications.changes : notificationsGroup === null || notificationsGroup === void 0 ? void 0 : notificationsGroup.changes, singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? setSingleNotifications : setNotificationsGroup, singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? singleNotifications : notificationsGroup);
   }, [notificationsGroup === null || notificationsGroup === void 0 ? void 0 : notificationsGroup.loading, singleNotifications === null || singleNotifications === void 0 ? void 0 : singleNotifications.loading]);
@@ -695,7 +770,8 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
     verifyPhoneState: verifyPhoneState,
     handleChangePromotions: handleChangePromotions,
     handleRemoveAccount: handleRemoveAccount,
-    handleChangeNotifications: handleChangeNotifications
+    handleChangeNotifications: handleChangeNotifications,
+    handleRequestCustomerAddress: handleRequestCustomerAddress
   })));
 };
 UserFormDetails.propTypes = {
