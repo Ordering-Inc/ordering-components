@@ -4,6 +4,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useCustomer } from '../../contexts/CustomerContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
  * Component to control a address list
@@ -14,12 +15,14 @@ export const AddressList = (props) => {
     UIComponent,
     changeOrderAddressWithDefault,
     handleClickSetDefault,
-    handleClickDelete
+    handleClickDelete,
+    userCustomerSetup
   } = props
 
   const [ordering] = useApi()
   const [{ user, token }] = useSession()
   const [, { setUserCustomer }] = useCustomer()
+  const socket = useWebsocket()
   const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
 
@@ -133,6 +136,42 @@ export const AddressList = (props) => {
       setActionStatus({ ...actionStatus, loading: false, error: [err.message] })
     }
   }
+
+  const handleAddressRegister = async (address) => {
+    try {
+      setAddressList({
+        ...addressList,
+        loading: false,
+        addresses: [
+          ...addressList?.addresses,
+          address
+        ],
+        addedBySocket: true
+      })
+      await handleSetDefault(address, userCustomerSetup)
+    } catch (err) {
+      setAddressList({ ...addressList, loading: false, error: [err.message] })
+    }
+  }
+
+  useEffect(() => {
+    if (!userCustomerSetup?.id || !socket?.socket) return
+    const room = {
+      room: 'addresses',
+      project: ordering.project,
+      role: 'manager',
+      user_id: userCustomerSetup?.id
+    }
+    socket.socket.on('addresses_register', handleAddressRegister)
+    socket.socket.on('disconnect', () => {
+      socket.join(room)
+    })
+    socket.join(room)
+    return () => {
+      socket.leave(room)
+      socket.off('addresses_register', handleAddressRegister)
+    }
+  }, [socket?.socket, userCustomerSetup?.id])
 
   return (
     <>
