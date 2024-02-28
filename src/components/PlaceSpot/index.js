@@ -5,6 +5,7 @@ import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 
 export const PlaceSpot = (props) => {
   const {
@@ -12,13 +13,15 @@ export const PlaceSpot = (props) => {
     cart,
     spotNumberDefault,
     vehicleDefault,
-    onRemoveSpotNumber
+    onRemoveSpotNumber,
+    isCustomerMode
   } = props
 
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const socket = useWebsocket()
-  const [{ token }] = useSession()
+  const [{ user, token }] = useSession()
+  const [customerState] = useCustomer()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
 
@@ -103,10 +106,14 @@ export const PlaceSpot = (props) => {
   const handleChangeSpot = async ({ isCheckout = true, bodyToSend }) => {
     try {
       setSpotState({ ...spotState, loading: true })
+      const _bodyToSend = {
+        ...bodyToSend,
+        user_id: isCustomerMode ? customerState?.user?.id : user?.id
+      }
       const id = isCheckout ? cart?.uuid : cart?.id
       const endpointToFetch = isCheckout
-        ? ordering.setAccessToken(token).carts(id).set(bodyToSend)
-        : ordering.setAccessToken(token).orders(id).save(bodyToSend)
+        ? ordering.setAccessToken(token).carts(id).set(_bodyToSend)
+        : ordering.setAccessToken(token).orders(id).save(_bodyToSend)
 
       const { content: { error, result } } = await endpointToFetch
 
