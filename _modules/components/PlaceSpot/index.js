@@ -12,6 +12,7 @@ var _ToastContext = require("../../contexts/ToastContext");
 var _SessionContext = require("../../contexts/SessionContext");
 var _LanguageContext = require("../../contexts/LanguageContext");
 var _WebsocketContext = require("../../contexts/WebsocketContext");
+var _CustomerContext = require("../../contexts/CustomerContext");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -39,7 +40,8 @@ var PlaceSpot = exports.PlaceSpot = function PlaceSpot(props) {
     cart = props.cart,
     spotNumberDefault = props.spotNumberDefault,
     vehicleDefault = props.vehicleDefault,
-    onRemoveSpotNumber = props.onRemoveSpotNumber;
+    onRemoveSpotNumber = props.onRemoveSpotNumber,
+    isCustomerMode = props.isCustomerMode;
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 1),
     orderState = _useOrder2[0];
@@ -49,7 +51,12 @@ var PlaceSpot = exports.PlaceSpot = function PlaceSpot(props) {
   var socket = (0, _WebsocketContext.useWebsocket)();
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
-    token = _useSession2[0].token;
+    _useSession2$ = _useSession2[0],
+    user = _useSession2$.user,
+    token = _useSession2$.token;
+  var _useCustomer = (0, _CustomerContext.useCustomer)(),
+    _useCustomer2 = _slicedToArray(_useCustomer, 1),
+    customerState = _useCustomer2[0];
   var _useToast = (0, _ToastContext.useToast)(),
     _useToast2 = _slicedToArray(_useToast, 2),
     showToast = _useToast2[1].showToast;
@@ -190,7 +197,7 @@ var PlaceSpot = exports.PlaceSpot = function PlaceSpot(props) {
   }();
   var handleChangeSpot = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref2) {
-      var _ref2$isCheckout, isCheckout, bodyToSend, id, endpointToFetch, _yield$endpointToFetc, _yield$endpointToFetc2, error, result, _cart$business;
+      var _ref2$isCheckout, isCheckout, bodyToSend, _customerState$user, _bodyToSend, id, endpointToFetch, _yield$endpointToFetc, _yield$endpointToFetc2, error, result, _cart$business;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -199,11 +206,14 @@ var PlaceSpot = exports.PlaceSpot = function PlaceSpot(props) {
             setSpotState(_objectSpread(_objectSpread({}, spotState), {}, {
               loading: true
             }));
+            _bodyToSend = _objectSpread(_objectSpread({}, bodyToSend), {}, {
+              user_id: isCustomerMode ? customerState === null || customerState === void 0 || (_customerState$user = customerState.user) === null || _customerState$user === void 0 ? void 0 : _customerState$user.id : user === null || user === void 0 ? void 0 : user.id
+            });
             id = isCheckout ? cart === null || cart === void 0 ? void 0 : cart.uuid : cart === null || cart === void 0 ? void 0 : cart.id;
-            endpointToFetch = isCheckout ? ordering.setAccessToken(token).carts(id).set(bodyToSend) : ordering.setAccessToken(token).orders(id).save(bodyToSend);
-            _context2.next = 7;
+            endpointToFetch = isCheckout ? ordering.setAccessToken(token).carts(id).set(_bodyToSend) : ordering.setAccessToken(token).orders(id).save(_bodyToSend);
+            _context2.next = 8;
             return endpointToFetch;
-          case 7:
+          case 8:
             _yield$endpointToFetc = _context2.sent;
             _yield$endpointToFetc2 = _yield$endpointToFetc.content;
             error = _yield$endpointToFetc2.error;
@@ -218,20 +228,20 @@ var PlaceSpot = exports.PlaceSpot = function PlaceSpot(props) {
               loading: false,
               error: error ? result : null
             }));
-            _context2.next = 19;
+            _context2.next = 20;
             break;
-          case 16:
-            _context2.prev = 16;
+          case 17:
+            _context2.prev = 17;
             _context2.t0 = _context2["catch"](1);
             setSpotState(_objectSpread(_objectSpread({}, spotState), {}, {
               loading: false,
               error: [_context2.t0.message]
             }));
-          case 19:
+          case 20:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[1, 16]]);
+      }, _callee2, null, [[1, 17]]);
     }));
     return function handleChangeSpot(_x) {
       return _ref3.apply(this, arguments);
