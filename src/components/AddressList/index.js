@@ -16,7 +16,8 @@ export const AddressList = (props) => {
     changeOrderAddressWithDefault,
     handleClickSetDefault,
     handleClickDelete,
-    userCustomerSetup
+    userCustomerSetup,
+    setUserConfirmPhone
   } = props
 
   const [ordering] = useApi()
@@ -138,17 +139,18 @@ export const AddressList = (props) => {
   }
 
   const handleAddressRegister = async (address) => {
+    if (address?.user_id !== userCustomerSetup?.id) return
     try {
-      setAddressList({
-        ...addressList,
+      await setAddressList((prevProps) => ({
+        ...prevProps,
         loading: false,
         addresses: [
-          ...addressList?.addresses,
+          ...prevProps?.addresses,
           address
         ],
         addedBySocket: true
-      })
-      await handleSetDefault(address, userCustomerSetup)
+      }))
+      setUserConfirmPhone && setUserConfirmPhone({ open: false, result: null })
     } catch (err) {
       setAddressList({ ...addressList, loading: false, error: [err.message] })
     }
@@ -159,10 +161,10 @@ export const AddressList = (props) => {
     const room = {
       room: 'addresses',
       project: ordering.project,
-      role: 'manager',
-      user_id: userCustomerSetup?.id
+      role: 'agent',
+      user_id: user?.id
     }
-    socket.socket.on('addresses_register', handleAddressRegister)
+    socket.on('addresses_register', handleAddressRegister)
     socket.socket.on('disconnect', () => {
       socket.join(room)
     })
@@ -171,7 +173,7 @@ export const AddressList = (props) => {
       socket.leave(room)
       socket.off('addresses_register', handleAddressRegister)
     }
-  }, [socket?.socket, userCustomerSetup?.id])
+  }, [socket?.socket, user?.id])
 
   return (
     <>
