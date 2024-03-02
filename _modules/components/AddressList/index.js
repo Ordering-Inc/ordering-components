@@ -43,7 +43,8 @@ var AddressList = exports.AddressList = function AddressList(props) {
     changeOrderAddressWithDefault = props.changeOrderAddressWithDefault,
     handleClickSetDefault = props.handleClickSetDefault,
     handleClickDelete = props.handleClickDelete,
-    userCustomerSetup = props.userCustomerSetup;
+    userCustomerSetup = props.userCustomerSetup,
+    setUserConfirmPhone = props.setUserConfirmPhone;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -280,29 +281,40 @@ var AddressList = exports.AddressList = function AddressList(props) {
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
-            _context4.prev = 0;
-            setAddressList(_objectSpread(_objectSpread({}, addressList), {}, {
-              loading: false,
-              addresses: [].concat(_toConsumableArray(addressList === null || addressList === void 0 ? void 0 : addressList.addresses), [address]),
-              addedBySocket: true
-            }));
-            _context4.next = 4;
-            return handleSetDefault(address, userCustomerSetup);
-          case 4:
-            _context4.next = 9;
+            if (!((address === null || address === void 0 ? void 0 : address.user_id) !== (userCustomerSetup === null || userCustomerSetup === void 0 ? void 0 : userCustomerSetup.id))) {
+              _context4.next = 2;
+              break;
+            }
+            return _context4.abrupt("return");
+          case 2:
+            _context4.prev = 2;
+            _context4.next = 5;
+            return setAddressList(function (prevProps) {
+              return _objectSpread(_objectSpread({}, prevProps), {}, {
+                loading: false,
+                addresses: [].concat(_toConsumableArray(prevProps === null || prevProps === void 0 ? void 0 : prevProps.addresses), [address]),
+                addedBySocket: true
+              });
+            });
+          case 5:
+            setUserConfirmPhone && setUserConfirmPhone({
+              open: false,
+              result: null
+            });
+            _context4.next = 11;
             break;
-          case 6:
-            _context4.prev = 6;
-            _context4.t0 = _context4["catch"](0);
+          case 8:
+            _context4.prev = 8;
+            _context4.t0 = _context4["catch"](2);
             setAddressList(_objectSpread(_objectSpread({}, addressList), {}, {
               loading: false,
               error: [_context4.t0.message]
             }));
-          case 9:
+          case 11:
           case "end":
             return _context4.stop();
         }
-      }, _callee4, null, [[0, 6]]);
+      }, _callee4, null, [[2, 8]]);
     }));
     return function handleAddressRegister(_x6) {
       return _ref4.apply(this, arguments);
@@ -313,10 +325,10 @@ var AddressList = exports.AddressList = function AddressList(props) {
     var room = {
       room: 'addresses',
       project: ordering.project,
-      role: 'manager',
-      user_id: userCustomerSetup === null || userCustomerSetup === void 0 ? void 0 : userCustomerSetup.id
+      role: 'agent',
+      user_id: user === null || user === void 0 ? void 0 : user.id
     };
-    socket.socket.on('addresses_register', handleAddressRegister);
+    socket.on('addresses_register', handleAddressRegister);
     socket.socket.on('disconnect', function () {
       socket.join(room);
     });
@@ -325,7 +337,7 @@ var AddressList = exports.AddressList = function AddressList(props) {
       socket.leave(room);
       socket.off('addresses_register', handleAddressRegister);
     };
-  }, [socket === null || socket === void 0 ? void 0 : socket.socket, userCustomerSetup === null || userCustomerSetup === void 0 ? void 0 : userCustomerSetup.id]);
+  }, [socket === null || socket === void 0 ? void 0 : socket.socket, user === null || user === void 0 ? void 0 : user.id]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     addressList: addressList,
     setAddressList: setAddressList,

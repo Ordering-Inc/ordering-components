@@ -707,7 +707,7 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               loading: false
             }));
             setUserConfirmPhone && setUserConfirmPhone({
-              result: 'OK',
+              result: result,
               open: false
             });
             _context6.next = 21;
