@@ -531,7 +531,7 @@ export const UserFormDetails = (props) => {
         ...formState,
         loading: false
       })
-      setUserConfirmPhone && setUserConfirmPhone({ result: 'OK', open: false })
+      setUserConfirmPhone && setUserConfirmPhone({ result, open: false })
     } catch (err) {
       showToast(ToastType.Error, err.message, 5000)
     }
