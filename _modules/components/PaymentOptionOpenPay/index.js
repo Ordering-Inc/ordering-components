@@ -74,7 +74,8 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
       businessId = props.businessId,
       isApplyMasterCoupon = props.isApplyMasterCoupon,
       fromProfile = props.fromProfile,
-      deUnaApiKey = props.deUnaApiKey;
+      deUnaApiKey = props.deUnaApiKey,
+      forceOrderingCheckout = props.forceOrderingCheckout;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -120,7 +121,7 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
       _useEvent2 = _slicedToArray(_useEvent, 1),
       events = _useEvent2[0];
 
-  var isDeUna = (configs === null || configs === void 0 ? void 0 : (_configs$webview_chec = configs.webview_checkout_deuna) === null || _configs$webview_chec === void 0 ? void 0 : _configs$webview_chec.value) === '1' || (configs === null || configs === void 0 ? void 0 : (_configs$webview_chec2 = configs.webview_checkout_deuna) === null || _configs$webview_chec2 === void 0 ? void 0 : _configs$webview_chec2.value) === true;
+  var isDeUna = ((configs === null || configs === void 0 ? void 0 : (_configs$webview_chec = configs.webview_checkout_deuna) === null || _configs$webview_chec === void 0 ? void 0 : _configs$webview_chec.value) === '1' || (configs === null || configs === void 0 ? void 0 : (_configs$webview_chec2 = configs.webview_checkout_deuna) === null || _configs$webview_chec2 === void 0 ? void 0 : _configs$webview_chec2.value) === true) && !forceOrderingCheckout;
   var isAlsea = ordering.project === 'alsea';
   var DEUNA_URL = isAlsea ? 'https://api.deuna.com' : 'https://api.stg.deuna.io';
   (0, _react.useEffect)(function () {
