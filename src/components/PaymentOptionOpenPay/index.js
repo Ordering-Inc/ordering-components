@@ -17,7 +17,8 @@ export const PaymentOptionOpenPay = (props) => {
     businessId,
     isApplyMasterCoupon,
     fromProfile,
-    deUnaApiKey
+    deUnaApiKey,
+    forceOrderingCheckout
   } = props
 
   const [{ token, user }] = useSession()
@@ -29,7 +30,7 @@ export const PaymentOptionOpenPay = (props) => {
   const [{ configs }] = useConfig()
   const [events] = useEvent()
 
-  const isDeUna = configs?.webview_checkout_deuna?.value === '1' || configs?.webview_checkout_deuna?.value === true
+  const isDeUna = ((configs?.webview_checkout_deuna?.value === '1' || configs?.webview_checkout_deuna?.value === true) && !forceOrderingCheckout)
   const isAlsea = ordering.project === 'alsea'
 
   const DEUNA_URL = isAlsea ? 'https://api.deuna.com' : 'https://api.stg.deuna.io'
@@ -76,7 +77,7 @@ export const PaymentOptionOpenPay = (props) => {
       const localDeUnaToken = JSON.parse(localStorage.getItem('de_una_token'))
 
       const fetchURL = isDeUna
-        ? `${DEUNA_URL}/users/${localDeUnaToken?.user_data?.user?.id}/cards` 
+        ? `${DEUNA_URL}/users/${localDeUnaToken?.user_data?.user?.id}/cards`
         : `https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/api/openpay/cards/cards.php?language=${ordering.language}&user_id=${user?.id}`
 
       const params = {
