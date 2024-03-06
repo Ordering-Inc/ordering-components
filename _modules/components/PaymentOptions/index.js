@@ -253,7 +253,7 @@ var PaymentOptions = function PaymentOptions(props) {
       onPaymentChange && onPaymentChange({
         paymethodId: (_masterCardPaymethod$ = masterCardPaymethod === null || masterCardPaymethod === void 0 ? void 0 : masterCardPaymethod.id) !== null && _masterCardPaymethod$ !== void 0 ? _masterCardPaymethod$ : paymethod === null || paymethod === void 0 ? void 0 : paymethod.id,
         id: (_masterCardPaymethod$2 = masterCardPaymethod === null || masterCardPaymethod === void 0 ? void 0 : masterCardPaymethod.id) !== null && _masterCardPaymethod$2 !== void 0 ? _masterCardPaymethod$2 : paymethod === null || paymethod === void 0 ? void 0 : paymethod.id,
-        gateway: (_masterCardPaymethod$3 = masterCardPaymethod.gateway) !== null && _masterCardPaymethod$3 !== void 0 ? _masterCardPaymethod$3 : paymethod === null || paymethod === void 0 ? void 0 : paymethod.gateway,
+        gateway: (_masterCardPaymethod$3 = masterCardPaymethod === null || masterCardPaymethod === void 0 ? void 0 : masterCardPaymethod.gateway) !== null && _masterCardPaymethod$3 !== void 0 ? _masterCardPaymethod$3 : paymethod === null || paymethod === void 0 ? void 0 : paymethod.gateway,
         paymethod: masterCardPaymethod !== null && masterCardPaymethod !== void 0 ? masterCardPaymethod : paymethod,
         credentials: (_paymethod$credential = paymethod === null || paymethod === void 0 ? void 0 : paymethod.credentials) !== null && _paymethod$credential !== void 0 ? _paymethod$credential : null,
         data: data
