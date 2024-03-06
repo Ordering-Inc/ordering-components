@@ -40,17 +40,21 @@ export const WebsocketProvider = ({ settings, children, strategy, isAlsea }) => 
   useEffect(() => {
     if (session.auth) return
     const projectInputInterval = setInterval(async () => {
-      let project = null
-      if (configs.use_root_point) {
-        project = await strategy.getItem('project_name', true)
-      } else {
-        await strategy.removeItem('project_name')
-        clearInterval(projectInputInterval)
-      }
-      if (project) {
-        setConfigs({ ...configs, project })
-        configs.project = project
-        clearInterval(projectInputInterval)
+      try {
+        let project = null
+        if (configs.use_root_point) {
+          project = await strategy.getItem('project_name', true)
+        } else {
+          await strategy.removeItem('project_name')
+          clearInterval(projectInputInterval)
+        }
+        if (project) {
+          setConfigs({ ...configs, project })
+          configs.project = project
+          clearInterval(projectInputInterval)
+        }
+      } catch (err) {
+        console.log('err 2', err)
       }
     }, 1000)
     return () => clearInterval(projectInputInterval)
