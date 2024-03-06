@@ -86,7 +86,7 @@ var WebsocketProvider = exports.WebsocketProvider = function WebsocketProvider(_
               break;
             }
             _context.next = 5;
-            return strategy.getItem('project_name', true);
+            return strategy.getItem('project_name');
           case 5:
             project = _context.sent;
             _context.next = 11;

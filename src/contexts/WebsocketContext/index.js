@@ -43,7 +43,7 @@ export const WebsocketProvider = ({ settings, children, strategy, isAlsea }) => 
       try {
         let project = null
         if (configs.use_root_point) {
-          project = await strategy.getItem('project_name', true)
+          project = await strategy.getItem('project_name')
         } else {
           await strategy.removeItem('project_name')
           clearInterval(projectInputInterval)
