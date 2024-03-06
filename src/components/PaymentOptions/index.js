@@ -118,7 +118,7 @@ export const PaymentOptions = (props) => {
       onPaymentChange && onPaymentChange({
         paymethodId: masterCardPaymethod?.id ?? paymethod?.id,
         id: masterCardPaymethod?.id ?? paymethod?.id,
-        gateway: masterCardPaymethod.gateway ?? paymethod?.gateway,
+        gateway: masterCardPaymethod?.gateway ?? paymethod?.gateway,
         paymethod: masterCardPaymethod ?? paymethod,
         credentials: paymethod?.credentials ?? null,
         data
