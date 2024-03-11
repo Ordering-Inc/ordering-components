@@ -887,7 +887,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
             }
           case 31:
             if (hasAlreadyCoupon) {
-              showToast(_ToastContext.ToastType.Error, t('COUPON_ALREADY_ADDED', 'You have a coupon already added'), 5000);
+              showToast(_ToastContext.ToastType.Error, t('COUPON_ALREADY_ADDED', 'You have a coupon already added'));
             }
             setProductLoading && setProductLoading(false);
             _context3.next = 39;
@@ -895,7 +895,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
           case 35:
             _context3.prev = 35;
             _context3.t1 = _context3["catch"](0);
-            showToast(_ToastContext.ToastType.Error, !((_props$productCart9 = props.productCart) !== null && _props$productCart9 !== void 0 && _props$productCart9.code) ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'), 5000);
+            showToast(_ToastContext.ToastType.Error, !((_props$productCart9 = props.productCart) !== null && _props$productCart9 !== void 0 && _props$productCart9.code) ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'));
             setProductLoading && setProductLoading(false);
           case 39:
           case "end":

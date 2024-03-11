@@ -1574,8 +1574,12 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
           case 29:
             _context16.prev = 29;
             _context16.t0 = _context16["catch"](8);
+            refreshOrderOptions();
+            setState(_objectSpread(_objectSpread({}, state), {}, {
+              loading: false
+            }));
             return _context16.abrupt("return", false);
-          case 32:
+          case 34:
           case "end":
             return _context16.stop();
         }
