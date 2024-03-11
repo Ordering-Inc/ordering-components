@@ -885,6 +885,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       setState({ ...state, loading: false })
       return !error
     } catch (err) {
+      refreshOrderOptions()
+      setState({ ...state, loading: false })
       return false
     }
   }
