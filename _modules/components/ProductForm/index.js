@@ -806,7 +806,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    */
   var handleSave = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
-      var _errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, _JSON$parse, _product$product9, _props$productCart7, changes, currentProduct, isMultiProduct, _product$product10, updatedProfessional, duration, _props$productCart8, _props$productCart9;
+      var _JSON$parse, _product$product9, _cart$metafields, _cart$metafields$find, _errors, isMultiProduct, hasAlreadyCoupon, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, _props$productCart7, changes, currentProduct, _product$product10, updatedProfessional, duration, _props$productCart8, _props$productCart9;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -816,13 +816,17 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
               handleCustomSave && handleCustomSave();
             }
             _errors = checkErrors();
-            if (!(Object.keys(_errors).length === 0 || isService)) {
-              _context3.next = 30;
+            isMultiProduct = ((_JSON$parse = JSON.parse((product === null || product === void 0 || (_product$product9 = product.product) === null || _product$product9 === void 0 ? void 0 : _product$product9.meta) || '{}')) === null || _JSON$parse === void 0 ? void 0 : _JSON$parse.external_type) === 'coupon';
+            hasAlreadyCoupon = (cart === null || cart === void 0 || (_cart$metafields = cart.metafields) === null || _cart$metafields === void 0 || (_cart$metafields$find = _cart$metafields.find) === null || _cart$metafields$find === void 0 || (_cart$metafields$find = _cart$metafields$find.call(_cart$metafields, function (meta) {
+              return (meta === null || meta === void 0 ? void 0 : meta.key) === 'pulse_coupons';
+            })) === null || _cart$metafields$find === void 0 ? void 0 : _cart$metafields$find.value) && isMultiProduct;
+            if (!((Object.keys(_errors).length === 0 || isService) && !hasAlreadyCoupon)) {
+              _context3.next = 31;
               break;
             }
             successful = true;
             if (!useOrderContext) {
-              _context3.next = 29;
+              _context3.next = 30;
               break;
             }
             successful = false;
@@ -834,39 +838,38 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
               service_start: (_values$serviceTime = values === null || values === void 0 ? void 0 : values.serviceTime) !== null && _values$serviceTime !== void 0 ? _values$serviceTime : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.moment
             });
             onSave(productCart, !((_props$productCart6 = props.productCart) !== null && _props$productCart6 !== void 0 && _props$productCart6.code));
-            isMultiProduct = ((_JSON$parse = JSON.parse((product === null || product === void 0 || (_product$product9 = product.product) === null || _product$product9 === void 0 ? void 0 : _product$product9.meta) || '{}')) === null || _JSON$parse === void 0 ? void 0 : _JSON$parse.external_type) === 'coupon';
             if ((_props$productCart7 = props.productCart) !== null && _props$productCart7 !== void 0 && _props$productCart7.code) {
-              _context3.next = 25;
+              _context3.next = 26;
               break;
             }
             if (!isMultiProduct) {
-              _context3.next = 19;
+              _context3.next = 20;
               break;
             }
-            _context3.next = 16;
+            _context3.next = 17;
             return addMultiProduct(currentProduct, changes, false);
-          case 16:
+          case 17:
             _context3.t0 = _context3.sent;
+            _context3.next = 23;
+            break;
+          case 20:
             _context3.next = 22;
-            break;
-          case 19:
-            _context3.next = 21;
             return addProduct(currentProduct, changes, false);
-          case 21:
-            _context3.t0 = _context3.sent;
           case 22:
+            _context3.t0 = _context3.sent;
+          case 23:
             successful = _context3.t0;
-            _context3.next = 29;
+            _context3.next = 30;
             break;
-          case 25:
-            _context3.next = 27;
+          case 26:
+            _context3.next = 28;
             return updateProduct(currentProduct, changes, false);
-          case 27:
+          case 28:
             successful = _context3.sent;
             if (successful) {
               events.emit('product_edited', currentProduct);
             }
-          case 29:
+          case 30:
             if (successful) {
               if (isService) {
                 updatedProfessional = JSON.parse(JSON.stringify(values === null || values === void 0 ? void 0 : values.professional));
@@ -882,20 +885,23 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
             } else {
               showToast(_ToastContext.ToastType.Error, !((_props$productCart8 = props.productCart) !== null && _props$productCart8 !== void 0 && _props$productCart8.code) ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'), 5000);
             }
-          case 30:
+          case 31:
+            if (hasAlreadyCoupon) {
+              showToast(_ToastContext.ToastType.Error, t('COUPON_ALREADY_ADDED', 'You have a coupon already added'));
+            }
             setProductLoading && setProductLoading(false);
-            _context3.next = 37;
+            _context3.next = 39;
             break;
-          case 33:
-            _context3.prev = 33;
+          case 35:
+            _context3.prev = 35;
             _context3.t1 = _context3["catch"](0);
-            showToast(_ToastContext.ToastType.Error, !((_props$productCart9 = props.productCart) !== null && _props$productCart9 !== void 0 && _props$productCart9.code) ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'), 5000);
+            showToast(_ToastContext.ToastType.Error, !((_props$productCart9 = props.productCart) !== null && _props$productCart9 !== void 0 && _props$productCart9.code) ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'));
             setProductLoading && setProductLoading(false);
-          case 37:
+          case 39:
           case "end":
             return _context3.stop();
         }
-      }, _callee3, null, [[0, 33]]);
+      }, _callee3, null, [[0, 35]]);
     }));
     return function handleSave(_x2) {
       return _ref4.apply(this, arguments);
