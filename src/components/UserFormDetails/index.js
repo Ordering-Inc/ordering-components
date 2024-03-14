@@ -169,7 +169,7 @@ export const UserFormDetails = (props) => {
           ...formState,
           changes: response.content.error ? formState.changes : {},
           result: response.content,
-          loading: !!changes.confirmDataLayout || false
+          loading: !!changes?.confirmDataLayout || false
         })
       }
 
@@ -198,7 +198,7 @@ export const UserFormDetails = (props) => {
           handleSuccessUpdate(response.content.result)
         }
 
-        if (changes.confirmDataLayout) {
+        if (changes?.confirmDataLayout) {
           handleRequestCustomerAddress()
         }
 
