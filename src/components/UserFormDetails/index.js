@@ -45,6 +45,7 @@ export const UserFormDetails = (props) => {
   const [singleNotifications, setSingleNotifications] = useState({ loading: false, changes: {}, result: { error: false } })
   const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
   const [removeAccountState, setAccountState] = useState({ loading: false, error: null, result: null })
+  const [cellphoneStartZero, setCellphoneStartZero] = useState(null)
 
   const requestsState = {}
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
@@ -127,7 +128,9 @@ export const UserFormDetails = (props) => {
           _changes.country_phone_code = '1'
         }
       }
-
+      if (cellphoneStartZero) {
+        _changes.cellphone = cellphoneStartZero
+      }
       formState.changes = _changes
 
       if (isImage) {
@@ -169,7 +172,7 @@ export const UserFormDetails = (props) => {
           ...formState,
           changes: response.content.error ? formState.changes : {},
           result: response.content,
-          loading: !!changes.confirmDataLayout || false
+          loading: !!changes?.confirmDataLayout || false
         })
       }
 
@@ -198,7 +201,7 @@ export const UserFormDetails = (props) => {
           handleSuccessUpdate(response.content.result)
         }
 
-        if (changes.confirmDataLayout) {
+        if (changes?.confirmDataLayout) {
           handleRequestCustomerAddress()
         }
 
@@ -346,7 +349,7 @@ export const UserFormDetails = (props) => {
    */
   const sendVerifyPhoneCode = async (values) => {
     const body = {
-      cellphone: values.cellphone,
+      cellphone: cellphoneStartZero || values.cellphone,
       country_phone_code: parseInt(values.country_phone_code)
     }
     try {
@@ -598,6 +601,7 @@ export const UserFormDetails = (props) => {
           handleRemoveAccount={handleRemoveAccount}
           handleChangeNotifications={handleChangeNotifications}
           handleRequestCustomerAddress={handleRequestCustomerAddress}
+          setCellphoneStartZero={setCellphoneStartZero}
         />
       )}
     </>

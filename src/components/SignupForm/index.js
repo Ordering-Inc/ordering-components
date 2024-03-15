@@ -45,6 +45,7 @@ export const SignupForm = (props) => {
   const [reCaptchaValue, setReCaptchaValue] = useState({ code: '', version: '' })
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
   const [promotionsEnabled, setPromotionsEnabled] = useState(false)
+  const [cellphoneStartZero, setCellphoneStartZero] = useState(null)
 
   const useSignUpOtpEmail = configs?.email_otp_signup_enabled?.value === '1' && !isCustomerMode
   const useSignUpOtpCellphone = configs?.phone_otp_signup_enabled?.value === '1' && !isCustomerMode
@@ -104,6 +105,10 @@ export const SignupForm = (props) => {
         newData.cellphone = `787${newData.cellphone}`
         newData.country_phone_code = '1'
       }
+    }
+
+    if (cellphoneStartZero) {
+      newData.cellphone = cellphoneStartZero
     }
 
     try {
@@ -206,7 +211,7 @@ export const SignupForm = (props) => {
         },
         body: JSON.stringify({
           ...values,
-          cellphone: values.cellphone,
+          cellphone: cellphoneStartZero || values.cellphone,
           country_phone_code: `+${values.country_phone_code}`
         })
       })
@@ -245,7 +250,7 @@ export const SignupForm = (props) => {
       size: 6
     }
     const email = values?.email || signupData?.email
-    const cellphone = values?.cellphone || signupData?.cellphone
+    const cellphone = cellphoneStartZero || values?.cellphone || signupData?.cellphone
     const countryPhoneCode = values?.country_phone_code || signupData.country_phone_code
 
     setSignupData({
@@ -468,6 +473,7 @@ export const SignupForm = (props) => {
           setSignUpTab={setSignUpTab}
           signUpTab={signUpTab}
           setWillVerifyOtpState={setWillVerifyOtpState}
+          setCellphoneStartZero={setCellphoneStartZero}
           willVerifyOtpState={willVerifyOtpState}
           useSignUpFullDetails={useSignUpFullDetails}
           useSignUpOtpEmail={useSignUpOtpEmail}
