@@ -103,6 +103,10 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
     _useState12 = _slicedToArray(_useState11, 2),
     isReCaptchaEnable = _useState12[0],
     setIsReCaptchaEnable = _useState12[1];
+  var _useState13 = (0, _react.useState)(null),
+    _useState14 = _slicedToArray(_useState13, 2),
+    cellphoneStartZero = _useState14[0],
+    setCellphoneStartZero = _useState14[1];
   var useLoginByCellphone = (configs === null || configs === void 0 || (_configs$phone_passwo = configs.phone_password_login_enabled) === null || _configs$phone_passwo === void 0 ? void 0 : _configs$phone_passwo.value) === '1';
   var useLoginOtpEmail = (configs === null || configs === void 0 || (_configs$opt_email_en = configs.opt_email_enabled) === null || _configs$opt_email_en === void 0 ? void 0 : _configs$opt_email_en.value) === '1';
   var useLoginOtpCellphone = (configs === null || configs === void 0 || (_configs$otp_cellphon = configs.otp_cellphone_enabled) === null || _configs$otp_cellphon === void 0 ? void 0 : _configs$otp_cellphon.value) === '1';
@@ -111,18 +115,18 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
   var useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone;
   var isDeviceLoginEnabled = (configs === null || configs === void 0 || (_configs$device_code_ = configs.device_code_login_enabled) === null || _configs$device_code_ === void 0 ? void 0 : _configs$device_code_.value) === '1';
   defaultLoginTab = useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp';
-  var _useState13 = (0, _react.useState)(defaultLoginTab),
-    _useState14 = _slicedToArray(_useState13, 2),
-    loginTab = _useState14[0],
-    setLoginTab = _useState14[1];
-  var _useState15 = (0, _react.useState)(!useLoginOtpEmail && useLoginOtpCellphone ? 'cellphone' : 'email'),
+  var _useState15 = (0, _react.useState)(defaultLoginTab),
     _useState16 = _slicedToArray(_useState15, 2),
-    otpType = _useState16[0],
-    setOtpType = _useState16[1];
-  var _useState17 = (0, _react.useState)(''),
+    loginTab = _useState16[0],
+    setLoginTab = _useState16[1];
+  var _useState17 = (0, _react.useState)(!useLoginOtpEmail && useLoginOtpCellphone ? 'cellphone' : 'email'),
     _useState18 = _slicedToArray(_useState17, 2),
-    otpState = _useState18[0],
-    setOtpState = _useState18[1];
+    otpType = _useState18[0],
+    setOtpType = _useState18[1];
+  var _useState19 = (0, _react.useState)(''),
+    _useState20 = _slicedToArray(_useState19, 2),
+    otpState = _useState20[0],
+    setOtpState = _useState20[1];
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 2),
     user = _useSession2[0].user,
@@ -192,6 +196,9 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               parsedNumber = (0, _libphonenumberJs.default)(_credentials.cellphone);
               cellphone = parsedNumber === null || parsedNumber === void 0 ? void 0 : parsedNumber.nationalNumber;
               _credentials.cellphone = cellphone;
+              if (cellphoneStartZero) {
+                _credentials.cellphone = cellphoneStartZero;
+              }
             }
             if (notificationState !== null && notificationState !== void 0 && notificationState.notification_token) {
               _credentials.notification_app = notificationState.notification_app;
@@ -362,7 +369,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               },
               body: JSON.stringify({
-                cellphone: values.cellphone,
+                cellphone: cellphoneStartZero || values.cellphone,
                 country_phone_code: "+".concat(values.country_phone_code)
               })
             });
@@ -488,7 +495,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               size: 6
             };
             email = (values === null || values === void 0 ? void 0 : values.email) || (credentials === null || credentials === void 0 ? void 0 : credentials.email);
-            cellphone = (values === null || values === void 0 ? void 0 : values.cellphone) || (credentials === null || credentials === void 0 ? void 0 : credentials.cellphone);
+            cellphone = cellphoneStartZero || (values === null || values === void 0 ? void 0 : values.cellphone) || (credentials === null || credentials === void 0 ? void 0 : credentials.cellphone);
             countryPhoneCode = (values === null || values === void 0 ? void 0 : values.countryPhoneCode) || (values === null || values === void 0 ? void 0 : values.country_phone_code) || credentials.country_phone_code;
             _context4.prev = 4;
             if (otpType === 'cellphone') {
@@ -659,7 +666,8 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
     useLoginOtpEmail: useLoginOtpEmail,
     useLoginOtpCellphone: useLoginOtpCellphone,
     useLoginSpoonity: useLoginSpoonity,
-    handleLoginSpoonity: handleLoginSpoonity
+    handleLoginSpoonity: handleLoginSpoonity,
+    setCellphoneStartZero: setCellphoneStartZero
   })));
 };
 LoginForm.propTypes = {

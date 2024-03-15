@@ -128,14 +128,18 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
     _useState18 = _slicedToArray(_useState17, 2),
     promotionsEnabled = _useState18[0],
     setPromotionsEnabled = _useState18[1];
+  var _useState19 = (0, _react.useState)(null),
+    _useState20 = _slicedToArray(_useState19, 2),
+    cellphoneStartZero = _useState20[0],
+    setCellphoneStartZero = _useState20[1];
   var useSignUpOtpEmail = (configs === null || configs === void 0 || (_configs$email_otp_si = configs.email_otp_signup_enabled) === null || _configs$email_otp_si === void 0 ? void 0 : _configs$email_otp_si.value) === '1' && !isCustomerMode;
   var useSignUpOtpCellphone = (configs === null || configs === void 0 || (_configs$phone_otp_si = configs.phone_otp_signup_enabled) === null || _configs$phone_otp_si === void 0 ? void 0 : _configs$phone_otp_si.value) === '1' && !isCustomerMode;
   var useSignUpFullDetails = useSignUpOtpEmail || useSignUpOtpCellphone ? (configs === null || configs === void 0 || (_configs$full_details = configs.full_details_signup_enabled) === null || _configs$full_details === void 0 ? void 0 : _configs$full_details.value) === '1' : true;
   var defaultSignUpTab = useSignUpFullDetails ? 'default' : useSignUpOtpEmail ? 'otpEmail' : 'otpCellphone';
-  var _useState19 = (0, _react.useState)(defaultSignUpTab),
-    _useState20 = _slicedToArray(_useState19, 2),
-    signUpTab = _useState20[0],
-    setSignUpTab = _useState20[1];
+  var _useState21 = (0, _react.useState)(defaultSignUpTab),
+    _useState22 = _slicedToArray(_useState21, 2),
+    signUpTab = _useState22[0],
+    setSignUpTab = _useState22[1];
   /**
    * Default fuction for signup workflow
    */
@@ -209,17 +213,20 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 newData.country_phone_code = '1';
               }
             }
-            _context.prev = 19;
+            if (cellphoneStartZero) {
+              newData.cellphone = cellphoneStartZero;
+            }
+            _context.prev = 20;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: true
             }));
             source = {};
             requestsState.signup = source;
-            _context.next = 25;
+            _context.next = 26;
             return ordering.users().save(newData, {
               cancelToken: source
             });
-          case 25:
+          case 26:
             response = _context.sent;
             setFormState({
               result: response.content,
@@ -231,11 +238,11 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 handleSuccessSignup(response.content.result);
               }
             }
-            _context.next = 33;
+            _context.next = 34;
             break;
-          case 30:
-            _context.prev = 30;
-            _context.t0 = _context["catch"](19);
+          case 31:
+            _context.prev = 31;
+            _context.t0 = _context["catch"](20);
             if (_context.t0.constructor.name !== 'Cancel') {
               setFormState({
                 result: {
@@ -245,11 +252,11 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 loading: false
               });
             }
-          case 33:
+          case 34:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[19, 30]]);
+      }, _callee, null, [[20, 31]]);
     }));
     return function handleSignupClick(_x) {
       return _ref.apply(this, arguments);
@@ -321,7 +328,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               },
               body: JSON.stringify(_objectSpread(_objectSpread({}, values), {}, {
-                cellphone: values.cellphone,
+                cellphone: cellphoneStartZero || values.cellphone,
                 country_phone_code: "+".concat(values.country_phone_code)
               }))
             });
@@ -381,7 +388,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
               size: 6
             };
             email = (values === null || values === void 0 ? void 0 : values.email) || (signupData === null || signupData === void 0 ? void 0 : signupData.email);
-            cellphone = (values === null || values === void 0 ? void 0 : values.cellphone) || (signupData === null || signupData === void 0 ? void 0 : signupData.cellphone);
+            cellphone = cellphoneStartZero || (values === null || values === void 0 ? void 0 : values.cellphone) || (signupData === null || signupData === void 0 ? void 0 : signupData.cellphone);
             countryPhoneCode = (values === null || values === void 0 ? void 0 : values.country_phone_code) || signupData.country_phone_code;
             setSignupData(_objectSpread(_objectSpread({}, signupData), {}, {
               email: email,
@@ -682,6 +689,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
     setSignUpTab: setSignUpTab,
     signUpTab: signUpTab,
     setWillVerifyOtpState: setWillVerifyOtpState,
+    setCellphoneStartZero: setCellphoneStartZero,
     willVerifyOtpState: willVerifyOtpState,
     useSignUpFullDetails: useSignUpFullDetails,
     useSignUpOtpEmail: useSignUpOtpEmail,
