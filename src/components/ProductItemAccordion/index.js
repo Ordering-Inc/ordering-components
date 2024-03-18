@@ -17,7 +17,7 @@ export const ProductItemAccordion = (props) => {
   const productInfo = () => {
     let options = JSON.parse(JSON.stringify(Object.values(product.options ?? {})))
     const extraGroups = options.reduce((acc, option) => {
-      const extraRank = option.extra.rank
+      const extraRank = option?.extra?.rank ?? option?.rank
       acc[extraRank] = acc[extraRank] || []
       acc[extraRank].push(option)
       return acc
