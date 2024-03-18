@@ -771,6 +771,12 @@ Object.defineProperty(exports, "ProductIngredient", {
     return _ProductIngredient.ProductIngredient;
   }
 });
+Object.defineProperty(exports, "ProductItemAccordion", {
+  enumerable: true,
+  get: function get() {
+    return _ProductItemAccordion.ProductItemAccordion;
+  }
+});
 Object.defineProperty(exports, "ProductOption", {
   enumerable: true,
   get: function get() {
@@ -1247,6 +1253,7 @@ var _ProductForm = require("./components/ProductForm");
 var _ProductShare = require("./components/ProductShare");
 var _ProductImages = require("./components/ProductImages");
 var _ProductIngredient = require("./components/ProductIngredient");
+var _ProductItemAccordion = require("./components/ProductItemAccordion");
 var _ProductOption = require("./components/ProductOption");
 var _ProductOptionSuboption = require("./components/ProductOptionSuboption");
 var _ProductsList = require("./components/ProductsList");
