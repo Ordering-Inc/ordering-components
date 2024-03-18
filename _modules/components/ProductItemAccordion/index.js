@@ -35,7 +35,8 @@ var ProductItemAccordion = exports.ProductItemAccordion = function ProductItemAc
     var _product$options;
     var options = JSON.parse(JSON.stringify(Object.values((_product$options = product.options) !== null && _product$options !== void 0 ? _product$options : {})));
     var extraGroups = options.reduce(function (acc, option) {
-      var extraRank = option.extra.rank;
+      var _option$extra$rank, _option$extra;
+      var extraRank = (_option$extra$rank = option === null || option === void 0 || (_option$extra = option.extra) === null || _option$extra === void 0 ? void 0 : _option$extra.rank) !== null && _option$extra$rank !== void 0 ? _option$extra$rank : option === null || option === void 0 ? void 0 : option.rank;
       acc[extraRank] = acc[extraRank] || [];
       acc[extraRank].push(option);
       return acc;
