@@ -6,6 +6,8 @@ import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useBusiness } from '../../contexts/BusinessContext'
+
 /**
  * Component to manage Checkout page behavior without UI component
  */
@@ -22,6 +24,7 @@ export const Checkout = (props) => {
 
   const [ordering] = useApi()
   const [configs, { refreshConfigs }] = useConfig()
+  const [{ business }] = useBusiness()
 
   const [placing, setPlacing] = useState(false)
   const [errors, setErrors] = useState(null)
@@ -78,7 +81,7 @@ export const Checkout = (props) => {
 
   const [uberDirect, setUberDirect] = useState({ isUberDirect: false, amountToHide: null })
 
-  const [wowAcumulationPoints, setWowAcumulationPoints] = useState({result: null, loading: true, error: false})
+  const [wowAcumulationPoints, setWowAcumulationPoints] = useState({ result: null, loading: true, error: false })
 
   const [hasCateringProducts, setHasCateringProducts] = useState({ result: false, loading: true, error: false })
   /**
@@ -499,10 +502,31 @@ export const Checkout = (props) => {
     }
   }
   useEffect(() => {
-    if (businessId && typeof businessId === 'number') {
+    if (businessId && typeof businessId === 'number' && Object.keys(business)?.length === 0) {
       getBusiness()
+    } else if (Object.keys(business)?.length !== 0 && cart?.business_id === business?.id) {
+      const paymethodSelected = business?.paymethods?.find(paymethod => paymethod?.paymethod_id === cartState.cart?.paymethod_id)
+      if (paymethodSelected?.paymethod?.id) {
+        handlePaymethodChange({
+          paymethodId: paymethodSelected?.paymethod?.id,
+          gateway: paymethodSelected?.paymethod?.gateway,
+          paymethod: {
+            ...paymethodSelected?.paymethod,
+            credentials: {
+              ...paymethodSelected?.data
+            }
+          },
+          data: cart?.paymethod_data,
+          id: paymethodSelected?.paymethod?.id
+        })
+      }
+      setBusinessDetails({
+        ...businessDetails,
+        loading: false,
+        business: business
+      })
     }
-  }, [businessId])
+  }, [businessId, business])
 
   useEffect(() => {
     if (defaultOptionsVaXMiCuenta === null) return

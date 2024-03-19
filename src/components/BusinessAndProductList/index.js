@@ -5,6 +5,7 @@ import utc from 'dayjs/plugin/utc'
 import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useConfig } from '../../contexts/ConfigContext'
+import { useBusiness } from '../../contexts/BusinessContext'
 dayjs.extend(utc)
 
 export const BusinessAndProductList = (props) => {
@@ -27,7 +28,7 @@ export const BusinessAndProductList = (props) => {
   const [alertState, setAlertState] = useState({ open: false, content: [] })
   const [{ configs }] = useConfig()
   const [languageState, t] = useLanguage()
-
+  const [, { setBusiness }] = useBusiness()
   const [categorySelected, setCategorySelected] = useState({ id: null, name: t('ALL', 'All') })
   const [searchValue, setSearchValue] = useState(null)
   const [sortByValue, setSortByValue] = useState(null)
@@ -720,6 +721,7 @@ export const BusinessAndProductList = (props) => {
       }
 
       setBusinessState(data)
+      setBusiness(data?.business)
     } catch (err) {
       setBusinessState({
         ...businessState,
