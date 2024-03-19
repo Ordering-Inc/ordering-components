@@ -23,6 +23,8 @@ var _ToastContext = require("../../contexts/ToastContext");
 
 var _LanguageContext = require("../../contexts/LanguageContext");
 
+var _BusinessContext = require("../../contexts/BusinessContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -85,6 +87,10 @@ var Checkout = function Checkout(props) {
       _useConfig2 = _slicedToArray(_useConfig, 2),
       configs = _useConfig2[0],
       refreshConfigs = _useConfig2[1].refreshConfigs;
+
+  var _useBusiness = (0, _BusinessContext.useBusiness)(),
+      _useBusiness2 = _slicedToArray(_useBusiness, 1),
+      business = _useBusiness2[0].business;
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
@@ -1031,10 +1037,39 @@ var Checkout = function Checkout(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    if (businessId && typeof businessId === 'number') {
+    var _Object$keys, _Object$keys2;
+
+    if (businessId && typeof businessId === 'number' && ((_Object$keys = Object.keys(business)) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length) === 0) {
       getBusiness();
+    } else if (((_Object$keys2 = Object.keys(business)) === null || _Object$keys2 === void 0 ? void 0 : _Object$keys2.length) !== 0 && (cart === null || cart === void 0 ? void 0 : cart.business_id) === (business === null || business === void 0 ? void 0 : business.id)) {
+      var _business$paymethods, _paymethodSelected2$p;
+
+      var _paymethodSelected2 = business === null || business === void 0 ? void 0 : (_business$paymethods = business.paymethods) === null || _business$paymethods === void 0 ? void 0 : _business$paymethods.find(function (paymethod) {
+        var _cartState$cart3;
+
+        return (paymethod === null || paymethod === void 0 ? void 0 : paymethod.paymethod_id) === ((_cartState$cart3 = cartState.cart) === null || _cartState$cart3 === void 0 ? void 0 : _cartState$cart3.paymethod_id);
+      });
+
+      if (_paymethodSelected2 !== null && _paymethodSelected2 !== void 0 && (_paymethodSelected2$p = _paymethodSelected2.paymethod) !== null && _paymethodSelected2$p !== void 0 && _paymethodSelected2$p.id) {
+        var _paymethodSelected2$p2, _paymethodSelected2$p3, _paymethodSelected2$p4;
+
+        handlePaymethodChange({
+          paymethodId: _paymethodSelected2 === null || _paymethodSelected2 === void 0 ? void 0 : (_paymethodSelected2$p2 = _paymethodSelected2.paymethod) === null || _paymethodSelected2$p2 === void 0 ? void 0 : _paymethodSelected2$p2.id,
+          gateway: _paymethodSelected2 === null || _paymethodSelected2 === void 0 ? void 0 : (_paymethodSelected2$p3 = _paymethodSelected2.paymethod) === null || _paymethodSelected2$p3 === void 0 ? void 0 : _paymethodSelected2$p3.gateway,
+          paymethod: _objectSpread(_objectSpread({}, _paymethodSelected2 === null || _paymethodSelected2 === void 0 ? void 0 : _paymethodSelected2.paymethod), {}, {
+            credentials: _objectSpread({}, _paymethodSelected2 === null || _paymethodSelected2 === void 0 ? void 0 : _paymethodSelected2.data)
+          }),
+          data: cart === null || cart === void 0 ? void 0 : cart.paymethod_data,
+          id: _paymethodSelected2 === null || _paymethodSelected2 === void 0 ? void 0 : (_paymethodSelected2$p4 = _paymethodSelected2.paymethod) === null || _paymethodSelected2$p4 === void 0 ? void 0 : _paymethodSelected2$p4.id
+        });
+      }
+
+      setBusinessDetails(_objectSpread(_objectSpread({}, businessDetails), {}, {
+        loading: false,
+        business: business
+      }));
     }
-  }, [businessId]);
+  }, [businessId, business]);
   (0, _react.useEffect)(function () {
     if (defaultOptionsVaXMiCuenta === null) return;
     getVaXMiCuenta();

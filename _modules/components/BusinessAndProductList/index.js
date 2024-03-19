@@ -21,6 +21,8 @@ var _LanguageContext = require("../../contexts/LanguageContext");
 
 var _ConfigContext = require("../../contexts/ConfigContext");
 
+var _BusinessContext = require("../../contexts/BusinessContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -100,6 +102,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       _useLanguage2 = _slicedToArray(_useLanguage, 2),
       languageState = _useLanguage2[0],
       t = _useLanguage2[1];
+
+  var _useBusiness = (0, _BusinessContext.useBusiness)(),
+      _useBusiness2 = _slicedToArray(_useBusiness, 2),
+      setBusiness = _useBusiness2[1].setBusiness;
 
   var _useState3 = (0, _react.useState)({
     id: null,
@@ -1105,23 +1111,24 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
             case 20:
               setBusinessState(data);
-              _context6.next = 26;
+              setBusiness(data === null || data === void 0 ? void 0 : data.business);
+              _context6.next = 27;
               break;
 
-            case 23:
-              _context6.prev = 23;
+            case 24:
+              _context6.prev = 24;
               _context6.t0 = _context6["catch"](0);
               setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
                 loading: false,
                 error: [_context6.t0.message]
               }));
 
-            case 26:
+            case 27:
             case "end":
               return _context6.stop();
           }
         }
-      }, _callee6, null, [[0, 23]]);
+      }, _callee6, null, [[0, 24]]);
     }));
 
     return function getBusiness() {
