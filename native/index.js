@@ -62,6 +62,7 @@ import { PhoneAutocomplete } from '../src/components/PhoneAutocomplete'
 import { ProductForm } from '../src/components/ProductForm'
 import { ProductImages } from '../src/components/ProductImages'
 import { ProductIngredient } from '../src/components/ProductIngredient'
+import { ProductItemAccordion } from '../src/components/ProductItemAccordion'
 import { ProductOption } from '../src/components/ProductOption'
 import { ProductOptionSuboption } from '../src/components/ProductOptionSuboption'
 import { ProductsList } from '../src/components/ProductsList'
@@ -176,6 +177,7 @@ export {
   ProductForm,
   ProductImages,
   ProductIngredient,
+  ProductItemAccordion,
   ProductOption,
   ProductOptionSuboption,
   ProductsList,
