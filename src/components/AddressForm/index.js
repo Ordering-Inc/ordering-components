@@ -175,7 +175,9 @@ export const AddressForm = (props) => {
       const conditions = []
       const parameters = {
         location: `${location?.lat},${location?.lng}`,
-        type: options?.type
+        type: 2,
+        page: 1,
+        page_size: 5
       }
       if (franchiseId) {
         conditions.push({ attribute: 'franchise_id', value: franchiseId })
@@ -186,7 +188,11 @@ export const AddressForm = (props) => {
       }
       const source = {}
       requestsState.businesses = source
-      const fetchEndpoint = ordering.businesses().select(['delivery_zone', 'name', 'id', 'location', 'logo', 'slug', 'zones']).parameters(parameters).where(where)
+      const fetchEndpoint = ordering
+        .businesses()
+        .select(['delivery_zone', 'name', 'id', 'location', 'logo', 'slug', 'zones'])
+        .parameters(parameters)
+        .where(where)
       const { content: { error, result } } = await fetchEndpoint.get({ cancelToken: source })
       setBusinessesList({
         ...businessesList,
