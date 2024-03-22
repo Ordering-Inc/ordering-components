@@ -15,7 +15,7 @@ export const BillingContext = createContext()
  */
 export const BillingProvider = ({ settings, children }) => {
   return (
-    <BillingContext.Provider>
+    <BillingContext.Provider value={{}}>
       <EventProvider>
         <ApiProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
           <ToastProvider>
