@@ -502,7 +502,7 @@ export const Checkout = (props) => {
     }
   }
   useEffect(() => {
-    if (businessId && typeof businessId === 'number' && Object.keys(business)?.length === 0) {
+    if ((businessId && typeof businessId === 'number' && Object.keys(business)?.length === 0) || (Object.keys(business)?.length !== 0 && cart?.business_id !== business?.id)) {
       getBusiness()
     } else if (Object.keys(business)?.length !== 0 && cart?.business_id === business?.id) {
       const paymethodSelected = business?.paymethods?.find(paymethod => paymethod?.paymethod_id === cartState.cart?.paymethod_id)
