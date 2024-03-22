@@ -1037,11 +1037,11 @@ var Checkout = function Checkout(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    var _Object$keys, _Object$keys2;
+    var _Object$keys, _Object$keys2, _Object$keys3;
 
-    if (businessId && typeof businessId === 'number' && ((_Object$keys = Object.keys(business)) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length) === 0) {
+    if (businessId && typeof businessId === 'number' && ((_Object$keys = Object.keys(business)) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length) === 0 || ((_Object$keys2 = Object.keys(business)) === null || _Object$keys2 === void 0 ? void 0 : _Object$keys2.length) !== 0 && (cart === null || cart === void 0 ? void 0 : cart.business_id) !== (business === null || business === void 0 ? void 0 : business.id)) {
       getBusiness();
-    } else if (((_Object$keys2 = Object.keys(business)) === null || _Object$keys2 === void 0 ? void 0 : _Object$keys2.length) !== 0 && (cart === null || cart === void 0 ? void 0 : cart.business_id) === (business === null || business === void 0 ? void 0 : business.id)) {
+    } else if (((_Object$keys3 = Object.keys(business)) === null || _Object$keys3 === void 0 ? void 0 : _Object$keys3.length) !== 0 && (cart === null || cart === void 0 ? void 0 : cart.business_id) === (business === null || business === void 0 ? void 0 : business.id)) {
       var _business$paymethods, _paymethodSelected2$p;
 
       var _paymethodSelected2 = business === null || business === void 0 ? void 0 : (_business$paymethods = business.paymethods) === null || _business$paymethods === void 0 ? void 0 : _business$paymethods.find(function (paymethod) {
