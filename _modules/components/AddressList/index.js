@@ -52,7 +52,8 @@ var AddressList = exports.AddressList = function AddressList(props) {
     _useSession2 = _slicedToArray(_useSession, 1),
     _useSession2$ = _useSession2[0],
     user = _useSession2$.user,
-    token = _useSession2$.token;
+    token = _useSession2$.token,
+    auth = _useSession2$.auth;
   var _useCustomer = (0, _CustomerContext.useCustomer)(),
     _useCustomer2 = _slicedToArray(_useCustomer, 2),
     setUserCustomer = _useCustomer2[1].setUserCustomer;
@@ -321,7 +322,7 @@ var AddressList = exports.AddressList = function AddressList(props) {
     };
   }();
   (0, _react.useEffect)(function () {
-    if (!(userCustomerSetup !== null && userCustomerSetup !== void 0 && userCustomerSetup.id) || !(socket !== null && socket !== void 0 && socket.socket)) return;
+    if (!(userCustomerSetup !== null && userCustomerSetup !== void 0 && userCustomerSetup.id) || !(socket !== null && socket !== void 0 && socket.socket) || !auth) return;
     var room = {
       room: 'addresses',
       project: ordering.project,
@@ -329,7 +330,7 @@ var AddressList = exports.AddressList = function AddressList(props) {
       user_id: user === null || user === void 0 ? void 0 : user.id
     };
     socket.on('addresses_register', handleAddressRegister);
-    socket.socket.on('disconnect', function () {
+    socket.socket.on('connect', function () {
       socket.join(room);
     });
     socket.join(room);
@@ -337,7 +338,7 @@ var AddressList = exports.AddressList = function AddressList(props) {
       socket.leave(room);
       socket.off('addresses_register', handleAddressRegister);
     };
-  }, [socket === null || socket === void 0 ? void 0 : socket.socket, user === null || user === void 0 ? void 0 : user.id]);
+  }, [socket === null || socket === void 0 ? void 0 : socket.socket, user === null || user === void 0 ? void 0 : user.id, userCustomerSetup === null || userCustomerSetup === void 0 ? void 0 : userCustomerSetup.id]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     addressList: addressList,
     setAddressList: setAddressList,

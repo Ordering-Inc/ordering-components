@@ -205,17 +205,31 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
    */
   var handleUpdateClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(changes, isImage, image) {
-      var response, _changes, parsedNumber, _props$userData, _formState$changes, photo, _changes2, _props$userData2, _userState$result$res, _props$userData3, _changes3, _changes$setCustomerI;
+      var options,
+        response,
+        _changes,
+        parsedNumber,
+        _props$userData,
+        _formState$changes,
+        photo,
+        _changes2,
+        _props$userData2,
+        _userState$result$res,
+        _props$userData3,
+        _changes3,
+        _changes$setCustomerI,
+        _args = arguments;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
+            options = _args.length > 3 && _args[3] !== undefined ? _args[3] : {};
             if (!handleButtonUpdateClick) {
-              _context.next = 2;
+              _context.next = 3;
               break;
             }
             return _context.abrupt("return", handleButtonUpdateClick(userState.result.result, formState.changes));
-          case 2:
-            _context.prev = 2;
+          case 3:
+            _context.prev = 3;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: true
             }));
@@ -235,16 +249,16 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
             }
             formState.changes = _changes;
             if (!isImage) {
-              _context.next = 17;
+              _context.next = 18;
               break;
             }
-            _context.next = 12;
+            _context.next = 13;
             return ordering.users((props === null || props === void 0 || (_props$userData = props.userData) === null || _props$userData === void 0 ? void 0 : _props$userData.id) || userState.result.result.id).save({
               photo: image || formState.changes.photo
             }, {
               accessToken: accessToken
             });
-          case 12:
+          case 13:
             response = _context.sent;
             _formState$changes = formState.changes, photo = _formState$changes.photo, _changes2 = _objectWithoutProperties(_formState$changes, _excluded);
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
@@ -252,9 +266,9 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               result: response.content,
               loading: false
             }));
-            _context.next = 23;
+            _context.next = 24;
             break;
-          case 17:
+          case 18:
             _changes3 = formState.changes;
             if (props !== null && props !== void 0 && (_props$userData2 = props.userData) !== null && _props$userData2 !== void 0 && _props$userData2.guest_id || (_userState$result$res = userState.result.result) !== null && _userState$result$res !== void 0 && _userState$result$res.guest_id) {
               if (formState.changes.email) {
@@ -270,18 +284,18 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               delete _changes3.email;
               delete _changes3.cellphone;
             }
-            _context.next = 21;
+            _context.next = 22;
             return ordering.users((props === null || props === void 0 || (_props$userData3 = props.userData) === null || _props$userData3 === void 0 ? void 0 : _props$userData3.id) || userState.result.result.id).save(_changes3, {
               accessToken: accessToken
             });
-          case 21:
+          case 22:
             response = _context.sent;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               changes: response.content.error ? formState.changes : {},
               result: response.content,
               loading: !!(changes !== null && changes !== void 0 && changes.confirmDataLayout) || false
             }));
-          case 23:
+          case 24:
             if (!response.content.error) {
               setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                 loadingDriver: false,
@@ -298,16 +312,18 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               if (changes !== null && changes !== void 0 && changes.confirmDataLayout) {
                 handleRequestCustomerAddress();
               }
-              onClose && onClose();
-              if (!image && !dontToggleEditMode) {
+              if (!(changes !== null && changes !== void 0 && changes.confirmDataLayout)) {
+                onClose && onClose();
+              }
+              if (!image && !(options !== null && options !== void 0 && options.dontToggleEditMode)) {
                 setIsEdit(!isEdit);
               }
             }
-            _context.next = 29;
+            _context.next = 30;
             break;
-          case 26:
-            _context.prev = 26;
-            _context.t0 = _context["catch"](2);
+          case 27:
+            _context.prev = 27;
+            _context.t0 = _context["catch"](3);
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               result: {
                 error: true,
@@ -315,11 +331,11 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               },
               loading: false
             }));
-          case 29:
+          case 30:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[2, 26]]);
+      }, _callee, null, [[3, 27]]);
     }));
     return function handleUpdateClick(_x, _x2, _x3) {
       return _ref.apply(this, arguments);
