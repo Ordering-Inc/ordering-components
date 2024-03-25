@@ -21,7 +21,7 @@ export const AddressList = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [{ user, token }] = useSession()
+  const [{ user, token, auth }] = useSession()
   const [, { setUserCustomer }] = useCustomer()
   const socket = useWebsocket()
   const userId = props.userId || user?.id
@@ -157,7 +157,7 @@ export const AddressList = (props) => {
   }
 
   useEffect(() => {
-    if (!userCustomerSetup?.id || !socket?.socket) return
+    if (!userCustomerSetup?.id || !socket?.socket || !auth) return
     const room = {
       room: 'addresses',
       project: ordering.project,
@@ -165,7 +165,8 @@ export const AddressList = (props) => {
       user_id: user?.id
     }
     socket.on('addresses_register', handleAddressRegister)
-    socket.socket.on('disconnect', () => {
+
+    socket.socket.on('connect', () => {
       socket.join(room)
     })
     socket.join(room)
@@ -173,7 +174,7 @@ export const AddressList = (props) => {
       socket.leave(room)
       socket.off('addresses_register', handleAddressRegister)
     }
-  }, [socket?.socket, user?.id])
+  }, [socket?.socket, user?.id, userCustomerSetup?.id])
 
   return (
     <>
