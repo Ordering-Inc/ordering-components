@@ -108,7 +108,7 @@ export const UserFormDetails = (props) => {
   /**
    * Default fuction for user profile workflow
    */
-  const handleUpdateClick = async (changes, isImage, image) => {
+  const handleUpdateClick = async (changes, isImage, image, options = {}) => {
     if (handleButtonUpdateClick) {
       return handleButtonUpdateClick(userState.result.result, formState.changes)
     }
@@ -205,9 +205,11 @@ export const UserFormDetails = (props) => {
           handleRequestCustomerAddress()
         }
 
-        onClose && onClose()
+        if (!changes?.confirmDataLayout) {
+          onClose && onClose()
+        }
 
-        if (!image && !dontToggleEditMode) {
+        if (!image && !options?.dontToggleEditMode) {
           setIsEdit(!isEdit)
         }
       }
