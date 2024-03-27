@@ -56,6 +56,10 @@ export const MultiCheckout = (props) => {
   const totalCartsFee = openCarts?.length && openCarts?.filter(cart => cart?.status !== 1 && cart?.valid)?.reduce((total, cart) => { return total + (cart?.delivery_price_with_discount) }, 0)
 
   const handleGroupPlaceOrder = async (confirmPayment) => {
+    if (placing) {
+      showToast(ToastType.Info, t('CART_IN_PROGRESS', 'Cart in progress'))
+      return
+    }
     let paymethodData = paymethodSelected?.paymethod_data
     if (paymethodSelected?.paymethod_data && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected?.paymethod?.gateway)) {
       paymethodData = JSON.stringify({
