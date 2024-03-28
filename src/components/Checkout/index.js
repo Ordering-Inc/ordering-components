@@ -150,6 +150,10 @@ export const Checkout = (props) => {
    * Method to handle click on Place order
    */
   const handlerClickPlaceOrder = async (paymentOptions, payloadProps, confirmPayment, dismissPlatformPay) => {
+    if (placing) {
+      showToast(ToastType.Info, t('CART_IN_PROGRESS', 'Cart in progress'))
+      return
+    }
     let paymethodData = paymethodSelected?.data
     if (paymethodSelected?.paymethod && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected?.paymethod?.gateway)) {
       paymethodData = {
