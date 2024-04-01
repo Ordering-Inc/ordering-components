@@ -232,15 +232,14 @@ export const PhoneAutocomplete = (props) => {
   useEffect(() => {
     if (!window.localStorage.getItem('local_phone_code')) {
       const countriesElevenPhoneLength = ['GB']
-      const countriesElevenPhone = () => countriesElevenPhoneLength.find((val) => val === configs?.default_country_code?.value)
+      const countriesElevenPhone = countriesElevenPhoneLength.find((val) => val === configs?.default_country_code?.value)
       const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
       const localCountry = TIMEZONES[localTimezone]
       let localPhoneCode
-      if (countriesElevenPhone()) {
-        localPhoneCode = CODES.find(code => countriesElevenPhone() === code.countryCode)?.phoneCode
-      } else {
-        localPhoneCode = CODES.find(code => code.countryName === localCountry)?.phoneCode
-      }
+      countriesElevenPhone
+        ? localPhoneCode = CODES.find(code => countriesElevenPhone === code.countryCode)?.phoneCode4
+        : localPhoneCode = CODES.find(code => code.countryName === localCountry)?.phoneCode
+
       window.localStorage.setItem('local_phone_code', `+${localPhoneCode}`)
       setLocalPhoneCode(`+${localPhoneCode}`)
     } else {
