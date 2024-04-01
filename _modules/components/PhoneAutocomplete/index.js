@@ -14,6 +14,7 @@ var _BusinessContext = require("../../contexts/BusinessContext");
 var _LanguageContext = require("../../contexts/LanguageContext");
 var _codeNumbers = require("../../constants/code-numbers");
 var _timezones = require("../../constants/timezones");
+var _ConfigContext = require("../../contexts/ConfigContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
@@ -55,6 +56,9 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
   var _useBusiness = (0, _BusinessContext.useBusiness)(),
     _useBusiness2 = _slicedToArray(_useBusiness, 1),
     businessState = _useBusiness2[0];
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+    _useConfig2 = _slicedToArray(_useConfig, 1),
+    configs = _useConfig2[0].configs;
   var userCustomer = JSON.parse(window.localStorage.getItem('user-customer'));
   var _useState = (0, _react.useState)(''),
     _useState2 = _slicedToArray(_useState, 2),
@@ -436,12 +440,19 @@ var PhoneAutocomplete = exports.PhoneAutocomplete = function PhoneAutocomplete(p
   }, [businessSlug]);
   (0, _react.useEffect)(function () {
     if (!window.localStorage.getItem('local_phone_code')) {
-      var _CODES$find;
+      var _CODES$find, _CODES$find2;
+      var countriesElevenPhoneLength = ['GB'];
+      var countriesElevenPhone = countriesElevenPhoneLength.find(function (val) {
+        var _configs$default_coun, _configs$default_coun2;
+        return val === (configs === null || configs === void 0 || (_configs$default_coun = configs.default_country_code) === null || _configs$default_coun === void 0 || (_configs$default_coun = _configs$default_coun.value) === null || _configs$default_coun === void 0 || (_configs$default_coun2 = _configs$default_coun.toUpperCase) === null || _configs$default_coun2 === void 0 ? void 0 : _configs$default_coun2.call(_configs$default_coun));
+      });
       var localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       var localCountry = _timezones.TIMEZONES[localTimezone];
-      var _localPhoneCode = (_CODES$find = _codeNumbers.CODES.find(function (code) {
+      var _localPhoneCode = countriesElevenPhone ? (_CODES$find = _codeNumbers.CODES.find(function (code) {
+        return code.countryCode === countriesElevenPhone;
+      })) === null || _CODES$find === void 0 ? void 0 : _CODES$find.phoneCode : (_CODES$find2 = _codeNumbers.CODES.find(function (code) {
         return code.countryName === localCountry;
-      })) === null || _CODES$find === void 0 ? void 0 : _CODES$find.phoneCode;
+      })) === null || _CODES$find2 === void 0 ? void 0 : _CODES$find2.phoneCode;
       window.localStorage.setItem('local_phone_code', "+".concat(_localPhoneCode));
       setLocalPhoneCode("+".concat(_localPhoneCode));
     } else {
