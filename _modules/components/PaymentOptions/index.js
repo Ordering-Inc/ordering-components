@@ -10,6 +10,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _OrderContext = require("../../contexts/OrderContext");
 var _ApiContext = require("../../contexts/ApiContext");
 var _EventContext = require("../../contexts/EventContext");
+var _SessionContext = require("../../contexts/SessionContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
@@ -43,7 +44,9 @@ var PaymentOptions = exports.PaymentOptions = function PaymentOptions(props) {
     isCustomerMode = props.isCustomerMode,
     onPaymentChange = props.onPaymentChange,
     paymethodsCustom = props.paymethodsCustom,
-    UIComponent = props.UIComponent;
+    UIComponent = props.UIComponent,
+    isKiosk = props.isKiosk;
+  var fetchPaymethods = isKiosk;
   var _useEvent = (0, _EventContext.useEvent)(),
     _useEvent2 = _slicedToArray(_useEvent, 1),
     events = _useEvent2[0];
@@ -54,6 +57,9 @@ var PaymentOptions = exports.PaymentOptions = function PaymentOptions(props) {
     _useOrder2 = _slicedToArray(_useOrder, 2),
     orderState = _useOrder2[0],
     changePaymethod = _useOrder2[1].changePaymethod;
+  var _useSession = (0, _SessionContext.useSession)(),
+    _useSession2 = _slicedToArray(_useSession, 1),
+    sessionState = _useSession2[0];
   var orderTotal = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 || (_orderState$carts = _orderState$carts["businessId:".concat(businessId)]) === null || _orderState$carts === void 0 ? void 0 : _orderState$carts.total) || 0;
   var _useState = (0, _react.useState)({
       paymethods: [],
@@ -96,17 +102,23 @@ var PaymentOptions = exports.PaymentOptions = function PaymentOptions(props) {
    */
   var getPaymentOptions = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _yield$ordering$busin, _yield$ordering$busin2, error, result;
+      var deviceCode, headers, _yield$ordering$busin, _yield$ordering$busin2, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
               loading: true
             }));
-            _context.prev = 1;
-            _context.next = 4;
-            return ordering.businesses(businessId).get();
-          case 4:
+            deviceCode = sessionState === null || sessionState === void 0 ? void 0 : sessionState.device_code;
+            headers = {
+              'X-Physical-Device-Code-X': "".concat(deviceCode)
+            };
+            _context.prev = 3;
+            _context.next = 6;
+            return ordering.businesses(businessId).get(deviceCode ? {
+              headers: headers
+            } : {});
+          case 6:
             _yield$ordering$busin = _context.sent;
             _yield$ordering$busin2 = _yield$ordering$busin.content;
             error = _yield$ordering$busin2.error;
@@ -119,20 +131,20 @@ var PaymentOptions = exports.PaymentOptions = function PaymentOptions(props) {
               error: error ? result : null,
               paymethods: error ? [] : parsePaymethods(result.paymethods)
             }));
-            _context.next = 15;
+            _context.next = 17;
             break;
-          case 12:
-            _context.prev = 12;
-            _context.t0 = _context["catch"](1);
+          case 14:
+            _context.prev = 14;
+            _context.t0 = _context["catch"](3);
             setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
               loading: false,
               error: [_context.t0.message]
             }));
-          case 15:
+          case 17:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[1, 12]]);
+      }, _callee, null, [[3, 14]]);
     }));
     return function getPaymentOptions() {
       return _ref.apply(this, arguments);
@@ -216,6 +228,10 @@ var PaymentOptions = exports.PaymentOptions = function PaymentOptions(props) {
     }
   }, [paymethodSelected]);
   (0, _react.useEffect)(function () {
+    if (fetchPaymethods) {
+      getPaymentOptions();
+      return;
+    }
     if (paymethods) {
       setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
         loading: isLoading,

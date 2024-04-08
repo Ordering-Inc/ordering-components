@@ -160,14 +160,14 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
                 device_code: values === null || values === void 0 ? void 0 : values.device_code
               };
             } else if (loginTab === 'otp') {
-              _credentials = _defineProperty(_defineProperty({}, otpType, values && values[otpType] || credentials[otpType]), "one_time_password", values && (values === null || values === void 0 ? void 0 : values.code) || otpState);
+              _credentials = _defineProperty(_defineProperty({}, otpType, values && (values[otpType] || credentials[otpType])), "one_time_password", values && ((values === null || values === void 0 ? void 0 : values.code) || otpState));
               if (otpType === 'cellphone') {
                 _credentials = _objectSpread(_objectSpread({}, _credentials), {}, {
-                  country_phone_code: values && (values === null || values === void 0 ? void 0 : values.country_phone_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_phone_code)
+                  country_phone_code: values && ((values === null || values === void 0 ? void 0 : values.country_phone_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_phone_code))
                 });
               }
             } else {
-              _credentials = _defineProperty(_defineProperty({}, loginTab, values && values[loginTab] || credentials[loginTab]), "password", values && (values === null || values === void 0 ? void 0 : values.password) || credentials.password);
+              _credentials = _defineProperty(_defineProperty({}, loginTab, values && (values[loginTab] || credentials[loginTab])), "password", values && ((values === null || values === void 0 ? void 0 : values.password) || credentials.password));
             }
             if (!isReCaptchaEnable) {
               _context.next = 13;
@@ -268,10 +268,12 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
           case 42:
             return _context.abrupt("return");
           case 43:
-            login({
+            login(_objectSpread({
               user: result,
               token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
-            });
+            }, (values === null || values === void 0 ? void 0 : values.device_code) && {
+              device_code: values === null || values === void 0 ? void 0 : values.device_code
+            }));
           case 44:
             events.emit('userLogin', result);
             if (handleSuccessLogin) {
