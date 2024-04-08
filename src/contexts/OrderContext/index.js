@@ -1195,34 +1195,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           ]
         })
       }
-      if (typeof businessSlug === 'number' && businessSlug) {
-        where.push({
-          attribute: 'ref_business',
-          conditions: [
-            {
-              attribute: 'id',
-              value: {
-                condition: '=',
-                value: businessSlug
-              }
-            }
-          ]
-        })
-      }
-      if (typeof businessSlug === 'string' && businessSlug) {
-        where.push({
-          attribute: 'ref_business',
-          conditions: [
-            {
-              attribute: 'slug',
-              value: {
-                condition: '=',
-                value: businessSlug
-              }
-            }
-          ]
-        })
-      }
       const options = {
         query: {
           orderBy: '-delivery_datetime',

@@ -4,6 +4,7 @@ import { useSession } from '../../../contexts/SessionContext'
 import { useApi } from '../../../contexts/ApiContext'
 import { useToast, ToastType } from '../../../contexts/ToastContext'
 import { useLanguage } from '../../../contexts/LanguageContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 /**
  * Component to manage to send gift card behavior without UI component
@@ -17,8 +18,10 @@ export const SendGiftCard = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
+
   const [actionState, setActionState] = useState({ loading: false, error: null })
 
   const handleSendGiftCard = async (values) => {
@@ -28,7 +31,9 @@ export const SendGiftCard = (props) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify(values)
       }

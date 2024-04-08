@@ -14,7 +14,8 @@ export const FavoriteList = (props) => {
     location,
     propsToFetch,
     isProduct,
-    isProfessional
+    isProfessional,
+    franchiseId
   } = props
 
   const [ordering] = useApi()
@@ -62,9 +63,12 @@ export const FavoriteList = (props) => {
           'X-Socket-Id-X': socket?.getId()
         }
       }
-
-      const fetchEndpoint = `${ordering.root}/users/${user?.id}/${favoriteURL}?page=${page}&page_size=${pageSize}`
-      const response = await fetch(fetchEndpoint, requestOptions)
+      let params = {}
+      if (franchiseId) {
+        params = params + `&franchise_id=${franchiseId}`
+      }
+      const url = `${ordering.root}/users/${user?.id}/${favoriteURL}?page=${page}&page_size=${pageSize}${params}`
+      const response = await fetch(url, requestOptions)
       const content = await response.json()
 
       if (!content.error) {
@@ -137,11 +141,17 @@ export const FavoriteList = (props) => {
       attribute: 'id',
       value: ids
     })
+    if (franchiseId) {
+      conditions.push({
+        attribute: 'franchise_id',
+        value: franchiseId
+      })
+    }
     if (conditions.length) {
       where = {
         conditions,
         conector: 'AND'
-      } 
+      }
     }
     const requestOptions = {
       method: 'GET',

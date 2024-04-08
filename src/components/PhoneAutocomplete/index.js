@@ -7,6 +7,7 @@ import { useBusiness } from '../../contexts/BusinessContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { CODES } from '../../constants/code-numbers'
 import { TIMEZONES } from '../../constants/timezones'
+import { useConfig } from '../../contexts/ConfigContext'
 
 export const PhoneAutocomplete = (props) => {
   const { UIComponent, isIos, businessSlug, urlPhone, propsToFetch, isFromUrlPhone } = props
@@ -15,6 +16,7 @@ export const PhoneAutocomplete = (props) => {
   const [{ user, token }] = useSession()
   const [orderState, { setUserCustomerOptions }] = useOrder()
   const [businessState] = useBusiness()
+  const [{ configs }] = useConfig()
   const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
 
   const [phone, setPhone] = useState('')
@@ -229,9 +231,14 @@ export const PhoneAutocomplete = (props) => {
 
   useEffect(() => {
     if (!window.localStorage.getItem('local_phone_code')) {
+      const countriesElevenPhoneLength = ['GB']
+      const countriesElevenPhone = countriesElevenPhoneLength.find((val) => val === configs?.default_country_code?.value?.toUpperCase?.())
       const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
       const localCountry = TIMEZONES[localTimezone]
-      const localPhoneCode = CODES.find(code => code.countryName === localCountry)?.phoneCode
+      const localPhoneCode = countriesElevenPhone
+        ? CODES.find(code => code.countryCode === countriesElevenPhone)?.phoneCode
+        : CODES.find(code => code.countryName === localCountry)?.phoneCode
+
       window.localStorage.setItem('local_phone_code', `+${localPhoneCode}`)
       setLocalPhoneCode(`+${localPhoneCode}`)
     } else {
