@@ -175,6 +175,8 @@ export const SessionProvider = ({ children, strategy }) => {
       interval = setInterval(() => {
         verifyTokenActive()
       }, 5000)
+    } else {
+      clearInterval(interval)
     }
     return () => clearInterval(interval)
   }, [state?.auth, state?.token, state?.user?.mono_session])
