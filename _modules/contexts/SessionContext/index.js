@@ -37,6 +37,7 @@ var SessionContext = exports.SessionContext = /*#__PURE__*/(0, _react.createCont
  * @param {props} props
  */
 var SessionProvider = exports.SessionProvider = function SessionProvider(_ref) {
+  var _state$user4;
   var children = _ref.children,
     strategy = _ref.strategy;
   var _useState = (0, _react.useState)({
@@ -326,6 +327,55 @@ var SessionProvider = exports.SessionProvider = function SessionProvider(_ref) {
       return _ref8.apply(this, arguments);
     };
   }();
+  var verifyTokenActive = /*#__PURE__*/function () {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+      var _state$user2;
+      var requestOptions, response, _yield$response$json2, error;
+      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        while (1) switch (_context8.prev = _context8.next) {
+          case 0:
+            if (state !== null && state !== void 0 && state.auth && state !== null && state !== void 0 && state.token && state !== null && state !== void 0 && (_state$user2 = state.user) !== null && _state$user2 !== void 0 && _state$user2.mono_session) {
+              _context8.next = 2;
+              break;
+            }
+            return _context8.abrupt("return");
+          case 2:
+            _context8.prev = 2;
+            requestOptions = {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(state === null || state === void 0 ? void 0 : state.token)
+              }
+            };
+            _context8.next = 6;
+            return fetch("".concat(ordering.root, "/users/me?params=id"), requestOptions);
+          case 6:
+            response = _context8.sent;
+            _context8.next = 9;
+            return response.json();
+          case 9:
+            _yield$response$json2 = _context8.sent;
+            error = _yield$response$json2.error;
+            if (error) {
+              logout();
+              showToast(_ToastContext.ToastType.Error, t('ACCOUNT_LOGGED_IN_OTHER_DEVICE', 'Account logged in other device', 5000));
+            }
+            _context8.next = 16;
+            break;
+          case 14:
+            _context8.prev = 14;
+            _context8.t0 = _context8["catch"](2);
+          case 16:
+          case "end":
+            return _context8.stop();
+        }
+      }, _callee8, null, [[2, 14]]);
+    }));
+    return function verifyTokenActive() {
+      return _ref9.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     var interval = setInterval(function () {
       checkLocalStorage();
@@ -337,6 +387,20 @@ var SessionProvider = exports.SessionProvider = function SessionProvider(_ref) {
   (0, _react.useEffect)(function () {
     setValuesFromLocalStorage();
   }, []);
+  (0, _react.useEffect)(function () {
+    var _state$user3;
+    var interval = null;
+    if (state !== null && state !== void 0 && state.auth && state !== null && state !== void 0 && state.token && state !== null && state !== void 0 && (_state$user3 = state.user) !== null && _state$user3 !== void 0 && _state$user3.mono_session) {
+      interval = setInterval(function () {
+        verifyTokenActive();
+      }, 5000);
+    } else {
+      clearInterval(interval);
+    }
+    return function () {
+      return clearInterval(interval);
+    };
+  }, [state === null || state === void 0 ? void 0 : state.auth, state === null || state === void 0 ? void 0 : state.token, state === null || state === void 0 || (_state$user4 = state.user) === null || _state$user4 === void 0 ? void 0 : _state$user4.mono_session]);
   var functions = {
     login: login,
     logout: logout,
