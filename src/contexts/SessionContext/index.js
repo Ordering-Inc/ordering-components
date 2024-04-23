@@ -138,6 +138,26 @@ export const SessionProvider = ({ children, strategy }) => {
     }
   }
 
+  const verifyTokenActive = async () => {
+    if (!(state?.auth && state?.token && state?.user?.mono_session)) return
+    try {
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${state?.token}`
+        }
+      }
+      const response = await fetch(`${ordering.root}/users/me?params=id`, requestOptions)
+      const { error } = await response.json()
+      if (error) {
+        logout()
+        showToast(ToastType.Error, t('ACCOUNT_LOGGED_IN_OTHER_DEVICE', 'Account logged in other device', 5000))
+      }
+    } catch (err) {
+    }
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       checkLocalStorage()
@@ -148,6 +168,18 @@ export const SessionProvider = ({ children, strategy }) => {
   useEffect(() => {
     setValuesFromLocalStorage()
   }, [])
+
+  useEffect(() => {
+    let interval = null
+    if (state?.auth && state?.token && state?.user?.mono_session) {
+      interval = setInterval(() => {
+        verifyTokenActive()
+      }, 5000)
+    } else {
+      clearInterval(interval)
+    }
+    return () => clearInterval(interval)
+  }, [state?.auth, state?.token, state?.user?.mono_session])
 
   const functions = {
     login,
