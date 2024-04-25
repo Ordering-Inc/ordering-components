@@ -4,6 +4,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useCustomer } from '../../contexts/CustomerContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
  * Component to control a address list
@@ -14,12 +15,15 @@ export const AddressList = (props) => {
     UIComponent,
     changeOrderAddressWithDefault,
     handleClickSetDefault,
-    handleClickDelete
+    handleClickDelete,
+    userCustomerSetup,
+    setUserConfirmPhone
   } = props
 
   const [ordering] = useApi()
-  const [{ user, token }] = useSession()
+  const [{ user, token, auth }] = useSession()
   const [, { setUserCustomer }] = useCustomer()
+  const socket = useWebsocket()
   const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
 
@@ -133,6 +137,44 @@ export const AddressList = (props) => {
       setActionStatus({ ...actionStatus, loading: false, error: [err.message] })
     }
   }
+
+  const handleAddressRegister = async (address) => {
+    if (address?.user_id !== userCustomerSetup?.id) return
+    try {
+      await setAddressList((prevProps) => ({
+        ...prevProps,
+        loading: false,
+        addresses: [
+          ...prevProps?.addresses,
+          address
+        ],
+        addedBySocket: true
+      }))
+      setUserConfirmPhone && setUserConfirmPhone({ open: false, result: null })
+    } catch (err) {
+      setAddressList({ ...addressList, loading: false, error: [err.message] })
+    }
+  }
+
+  useEffect(() => {
+    if (!userCustomerSetup?.id || !socket?.socket || !auth) return
+    const room = {
+      room: 'addresses',
+      project: ordering.project,
+      role: 'agent',
+      user_id: user?.id
+    }
+    socket.on('addresses_register', handleAddressRegister)
+
+    socket.socket.on('connect', () => {
+      socket.join(room)
+    })
+    socket.join(room)
+    return () => {
+      socket.leave(room)
+      socket.off('addresses_register', handleAddressRegister)
+    }
+  }, [socket?.socket, user?.id, userCustomerSetup?.id])
 
   return (
     <>

@@ -4,6 +4,7 @@ import { useSession } from '../../../contexts/SessionContext'
 import { useApi } from '../../../contexts/ApiContext'
 import { useOrder } from '../../../contexts/OrderContext'
 import { useEvent } from '../../../contexts/EventContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 /**
  * Component to manage purchase gift card behavior without UI component
@@ -16,6 +17,7 @@ export const PurchaseGiftCard = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [orderState, { addProduct, removeProduct }] = useOrder()
   const [events] = useEvent()
 
@@ -49,7 +51,9 @@ export const PurchaseGiftCard = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
       const response = await fetch(`${ordering.root}/platform_products?where=${JSON.stringify(where)}`, requestOptions)

@@ -221,17 +221,22 @@ var ConfigProvider = exports.ConfigProvider = function ConfigProvider(_ref) {
             return fetch('https://ipapi.co/json/');
           case 27:
             response = _context.sent;
-            _context.next = 30;
+            if (!(response.status === 200)) {
+              _context.next = 32;
+              break;
+            }
+            _context.next = 31;
             return response.json();
-          case 30:
+          case 31:
             data = _context.sent;
-            _context.next = 36;
+          case 32:
+            _context.next = 37;
             break;
-          case 33:
-            _context.prev = 33;
+          case 34:
+            _context.prev = 34;
             _context.t1 = _context["catch"](24);
             data = null;
-          case 36:
+          case 37:
             conditionalConfigs = {
               dates_moment_format: {
                 key: 'dates_moment_format',
@@ -252,19 +257,19 @@ var ConfigProvider = exports.ConfigProvider = function ConfigProvider(_ref) {
               loading: false,
               configs: error ? {} : configsResult
             }));
-            _context.next = 44;
+            _context.next = 45;
             break;
-          case 41:
-            _context.prev = 41;
+          case 42:
+            _context.prev = 42;
             _context.t2 = _context["catch"](1);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-          case 44:
+          case 45:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[1, 41], [24, 33]]);
+      }, _callee, null, [[1, 42], [24, 34]]);
     }));
     return function refreshConfigs(_x) {
       return _ref2.apply(this, arguments);

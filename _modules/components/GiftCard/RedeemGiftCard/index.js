@@ -10,6 +10,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _SessionContext = require("../../../contexts/SessionContext");
 var _ApiContext = require("../../../contexts/ApiContext");
 var _EventContext = require("../../../contexts/EventContext");
+var _WebsocketContext = require("../../../contexts/WebsocketContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
@@ -39,6 +40,7 @@ var RedeemGiftCard = exports.RedeemGiftCard = function RedeemGiftCard(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useEvent = (0, _EventContext.useEvent)(),
     _useEvent2 = _slicedToArray(_useEvent, 1),
     events = _useEvent2[0];
@@ -67,7 +69,9 @@ var RedeemGiftCard = exports.RedeemGiftCard = function RedeemGiftCard(props) {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token)
+                Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               },
               body: JSON.stringify(values)
             };

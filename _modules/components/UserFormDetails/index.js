@@ -12,6 +12,7 @@ var _CustomerContext = require("../../contexts/CustomerContext");
 var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 var _libphonenumberJs = _interopRequireDefault(require("libphonenumber-js"));
+var _ToastContext = require("../../contexts/ToastContext");
 var _excluded = ["photo"];
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
@@ -52,9 +53,9 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
     isCustomerMode = props.isCustomerMode,
     isSuccess = props.isSuccess,
     onClose = props.onClose,
-    dontToggleEditMode = props.dontToggleEditMode,
     isOrderTypeValidationField = props.isOrderTypeValidationField,
-    checkoutFields = props.checkoutFields;
+    checkoutFields = props.checkoutFields,
+    setUserConfirmPhone = props.setUserConfirmPhone;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -70,6 +71,9 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
   var _useValidationsFields = (0, _ValidationsFieldsContext.useValidationFields)(),
     _useValidationsFields2 = _slicedToArray(_useValidationsFields, 1),
     validationFields = _useValidationsFields2[0];
+  var _useToast = (0, _ToastContext.useToast)(),
+    _useToast2 = _slicedToArray(_useToast, 2),
+    showToast = _useToast2[1].showToast;
   var _useState = (0, _react.useState)(!!(props !== null && props !== void 0 && props.isEdit)),
     _useState2 = _slicedToArray(_useState, 2),
     isEdit = _useState2[0],
@@ -131,6 +135,10 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
     _useState14 = _slicedToArray(_useState13, 2),
     removeAccountState = _useState14[0],
     setAccountState = _useState14[1];
+  var _useState15 = (0, _react.useState)(null),
+    _useState16 = _slicedToArray(_useState15, 2),
+    cellphoneStartZero = _useState16[0],
+    setCellphoneStartZero = _useState16[1];
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   (0, _react.useEffect)(function () {
@@ -196,17 +204,31 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
    */
   var handleUpdateClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(changes, isImage, image) {
-      var response, _changes, parsedNumber, _props$userData, _formState$changes, photo, _changes2, _props$userData2, _userState$result$res, _props$userData3, _changes3, _changes$setCustomerI;
+      var options,
+        response,
+        _changes,
+        parsedNumber,
+        _props$userData,
+        _formState$changes,
+        photo,
+        _changes2,
+        _props$userData2,
+        _userState$result$res,
+        _props$userData3,
+        _changes3,
+        _changes$setCustomerI,
+        _args = arguments;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
+            options = _args.length > 3 && _args[3] !== undefined ? _args[3] : {};
             if (!handleButtonUpdateClick) {
-              _context.next = 2;
+              _context.next = 3;
               break;
             }
             return _context.abrupt("return", handleButtonUpdateClick(userState.result.result, formState.changes));
-          case 2:
-            _context.prev = 2;
+          case 3:
+            _context.prev = 3;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: true
             }));
@@ -221,18 +243,21 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
                 _changes.country_phone_code = '1';
               }
             }
+            if (cellphoneStartZero) {
+              _changes.cellphone = cellphoneStartZero;
+            }
             formState.changes = _changes;
             if (!isImage) {
-              _context.next = 16;
+              _context.next = 18;
               break;
             }
-            _context.next = 11;
+            _context.next = 13;
             return ordering.users((props === null || props === void 0 || (_props$userData = props.userData) === null || _props$userData === void 0 ? void 0 : _props$userData.id) || userState.result.result.id).save({
               photo: image || formState.changes.photo
             }, {
               accessToken: accessToken
             });
-          case 11:
+          case 13:
             response = _context.sent;
             _formState$changes = formState.changes, photo = _formState$changes.photo, _changes2 = _objectWithoutProperties(_formState$changes, _excluded);
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
@@ -240,9 +265,9 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               result: response.content,
               loading: false
             }));
-            _context.next = 22;
+            _context.next = 24;
             break;
-          case 16:
+          case 18:
             _changes3 = formState.changes;
             if (props !== null && props !== void 0 && (_props$userData2 = props.userData) !== null && _props$userData2 !== void 0 && _props$userData2.guest_id || (_userState$result$res = userState.result.result) !== null && _userState$result$res !== void 0 && _userState$result$res.guest_id) {
               if (formState.changes.email) {
@@ -258,18 +283,18 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               delete _changes3.email;
               delete _changes3.cellphone;
             }
-            _context.next = 20;
+            _context.next = 22;
             return ordering.users((props === null || props === void 0 || (_props$userData3 = props.userData) === null || _props$userData3 === void 0 ? void 0 : _props$userData3.id) || userState.result.result.id).save(_changes3, {
               accessToken: accessToken
             });
-          case 20:
+          case 22:
             response = _context.sent;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               changes: response.content.error ? formState.changes : {},
               result: response.content,
-              loading: false
+              loading: !!(changes !== null && changes !== void 0 && changes.confirmDataLayout) || false
             }));
-          case 22:
+          case 24:
             if (!response.content.error) {
               setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                 loadingDriver: false,
@@ -283,16 +308,21 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               if (handleSuccessUpdate) {
                 handleSuccessUpdate(response.content.result);
               }
-              onClose && onClose();
-              if (!image && !dontToggleEditMode) {
+              if (changes !== null && changes !== void 0 && changes.confirmDataLayout) {
+                handleRequestCustomerAddress();
+              }
+              if (!(changes !== null && changes !== void 0 && changes.confirmDataLayout)) {
+                onClose && onClose();
+              }
+              if (!image && !(options !== null && options !== void 0 && options.dontToggleEditMode)) {
                 setIsEdit(!isEdit);
               }
             }
-            _context.next = 28;
+            _context.next = 30;
             break;
-          case 25:
-            _context.prev = 25;
-            _context.t0 = _context["catch"](2);
+          case 27:
+            _context.prev = 27;
+            _context.t0 = _context["catch"](3);
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               result: {
                 error: true,
@@ -300,11 +330,11 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               },
               loading: false
             }));
-          case 28:
+          case 30:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[2, 25]]);
+      }, _callee, null, [[3, 27]]);
     }));
     return function handleUpdateClick(_x, _x2, _x3) {
       return _ref.apply(this, arguments);
@@ -449,7 +479,7 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
             body = {
-              cellphone: values.cellphone,
+              cellphone: cellphoneStartZero || values.cellphone,
               country_phone_code: parseInt(values.country_phone_code)
             };
             _context3.prev = 1;
@@ -651,14 +681,80 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
       return _ref6.apply(this, arguments);
     };
   }();
+  var handleRequestCustomerAddress = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+      var _props$userData5, response, _yield$response$json, result, error;
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.prev = 0;
+            setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              loading: true
+            }));
+            _context6.next = 4;
+            return fetch("".concat(ordering.root, "/actions/run/custom"), {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(accessToken),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+              },
+              body: JSON.stringify({
+                action: 'request_customer_address',
+                user_token_required: true,
+                user_id: (props === null || props === void 0 || (_props$userData5 = props.userData) === null || _props$userData5 === void 0 ? void 0 : _props$userData5.id) || userState.result.result.id,
+                user_token_expiration_time: 10
+              })
+            });
+          case 4:
+            response = _context6.sent;
+            _context6.next = 7;
+            return response.json();
+          case 7:
+            _yield$response$json = _context6.sent;
+            result = _yield$response$json.result;
+            error = _yield$response$json.error;
+            if (!error) {
+              _context6.next = 14;
+              break;
+            }
+            showToast(_ToastContext.ToastType.Error, result, 5000);
+            setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              loading: false
+            }));
+            return _context6.abrupt("return");
+          case 14:
+            setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              loading: false
+            }));
+            setUserConfirmPhone && setUserConfirmPhone({
+              result: result,
+              open: false
+            });
+            _context6.next = 21;
+            break;
+          case 18:
+            _context6.prev = 18;
+            _context6.t0 = _context6["catch"](0);
+            showToast(_ToastContext.ToastType.Error, _context6.t0.message, 5000);
+          case 21:
+          case "end":
+            return _context6.stop();
+        }
+      }, _callee6, null, [[0, 18]]);
+    }));
+    return function handleRequestCustomerAddress() {
+      return _ref7.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     updatePromotions(singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? singleNotifications === null || singleNotifications === void 0 ? void 0 : singleNotifications.changes : notificationsGroup === null || notificationsGroup === void 0 ? void 0 : notificationsGroup.changes, singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? setSingleNotifications : setNotificationsGroup, singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? singleNotifications : notificationsGroup);
   }, [notificationsGroup === null || notificationsGroup === void 0 ? void 0 : notificationsGroup.loading, singleNotifications === null || singleNotifications === void 0 ? void 0 : singleNotifications.loading]);
   (0, _react.useEffect)(function () {
     var handleUpdateDriver = function handleUpdateDriver(data) {
-      var _data$changes;
       var changes = {};
-      (_data$changes = data.changes) === null || _data$changes === void 0 || _data$changes.map(function (change) {
+      data.changes && data.changes.map(function (change) {
         return changes[change.attribute] = change.new;
       });
       setUserState(_objectSpread(_objectSpread({}, userState), {}, {
@@ -695,7 +791,9 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
     verifyPhoneState: verifyPhoneState,
     handleChangePromotions: handleChangePromotions,
     handleRemoveAccount: handleRemoveAccount,
-    handleChangeNotifications: handleChangeNotifications
+    handleChangeNotifications: handleChangeNotifications,
+    handleRequestCustomerAddress: handleRequestCustomerAddress,
+    setCellphoneStartZero: setCellphoneStartZero
   })));
 };
 UserFormDetails.propTypes = {

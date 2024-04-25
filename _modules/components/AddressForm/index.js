@@ -38,7 +38,9 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
     onSaveAddress = props.onSaveAddress,
     isSelectedAfterAdd = props.isSelectedAfterAdd,
     onSaveCustomAddress = props.onSaveCustomAddress,
-    franchiseId = props.franchiseId;
+    franchiseId = props.franchiseId,
+    handleGoToLogin = props.handleGoToLogin,
+    avoidRefreshUserInfo = props.avoidRefreshUserInfo;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -61,6 +63,10 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
     _useState4 = _slicedToArray(_useState3, 2),
     formState = _useState4[0],
     setFormState = _useState4[1];
+  var _useState5 = (0, _react.useState)(null),
+    _useState6 = _slicedToArray(_useState5, 2),
+    userByToken = _useState6[0],
+    setUserByToken = _useState6[1];
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 2),
     _useSession2$ = _useSession2[0],
@@ -78,18 +84,18 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
   var _useCustomer = (0, _CustomerContext.useCustomer)(),
     _useCustomer2 = _slicedToArray(_useCustomer, 2),
     setUserCustomer = _useCustomer2[1].setUserCustomer;
-  var _useState5 = (0, _react.useState)(false),
-    _useState6 = _slicedToArray(_useState5, 2),
-    isEdit = _useState6[0],
-    _setIsEdit = _useState6[1];
-  var _useState7 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)(false),
+    _useState8 = _slicedToArray(_useState7, 2),
+    isEdit = _useState8[0],
+    _setIsEdit = _useState8[1];
+  var _useState9 = (0, _react.useState)({
       businesses: [],
       loading: true,
       error: null
     }),
-    _useState8 = _slicedToArray(_useState7, 2),
-    businessesList = _useState8[0],
-    setBusinessesList = _useState8[1];
+    _useState10 = _slicedToArray(_useState9, 2),
+    businessesList = _useState10[0],
+    setBusinessesList = _useState10[1];
 
   /**
    * Load an address by id
@@ -186,7 +192,8 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
    */
   var saveAddress = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values, userCustomerSetup) {
-      var _values$country_code, _formState$changes, _addressState$address, _yield$ordering$users2, content, _content$result;
+      var _userByToken$session;
+      var _values$country_code, _formState$changes, _addressState$address, _userByToken$session2, _yield$ordering$users2, content, _content$result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -197,7 +204,7 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
             onSaveCustomAddress(values);
             return _context2.abrupt("return");
           case 3:
-            if (auth) {
+            if (!(!auth && !(userByToken !== null && userByToken !== void 0 && (_userByToken$session = userByToken.session) !== null && _userByToken$session !== void 0 && _userByToken$session.token))) {
               _context2.next = 7;
               break;
             }
@@ -212,8 +219,8 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
             }));
             _context2.prev = 8;
             _context2.next = 11;
-            return ordering.users(userId).addresses((_addressState$address = addressState.address) === null || _addressState$address === void 0 ? void 0 : _addressState$address.id).save(_objectSpread(_objectSpread({}, values), formState.changes), {
-              accessToken: accessToken
+            return ordering.users((userByToken === null || userByToken === void 0 ? void 0 : userByToken.id) || userId).addresses((_addressState$address = addressState.address) === null || _addressState$address === void 0 ? void 0 : _addressState$address.id).save(_objectSpread(_objectSpread({}, values), formState.changes), {
+              accessToken: (userByToken === null || userByToken === void 0 || (_userByToken$session2 = userByToken.session) === null || _userByToken$session2 === void 0 ? void 0 : _userByToken$session2.token) || accessToken
             });
           case 11:
             _yield$ordering$users2 = _context2.sent;
@@ -244,7 +251,9 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
             _context2.next = 18;
             return setUserCustomer(userCustomerSetup, true);
           case 18:
-            refreshUserInfo();
+            if (!avoidRefreshUserInfo) {
+              refreshUserInfo();
+            }
             _context2.next = 24;
             break;
           case 21:
@@ -286,7 +295,9 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
             conditions = [];
             parameters = {
               location: "".concat(location === null || location === void 0 ? void 0 : location.lat, ",").concat(location === null || location === void 0 ? void 0 : location.lng),
-              type: options === null || options === void 0 ? void 0 : options.type
+              type: 2,
+              page: 1,
+              page_size: 5
             };
             if (franchiseId) {
               conditions.push({
@@ -345,6 +356,54 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
       return _ref3.apply(this, arguments);
     };
   }();
+  var getUserByToken = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+      var requestOptions, response, _yield$response$json, error, result;
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            requestOptions = {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(props.accessToken)
+              }
+            };
+            _context4.next = 4;
+            return fetch("".concat(ordering.root, "/users/me"), requestOptions);
+          case 4:
+            response = _context4.sent;
+            _context4.next = 7;
+            return response.json();
+          case 7:
+            _yield$response$json = _context4.sent;
+            error = _yield$response$json.error;
+            result = _yield$response$json.result;
+            if (error) {
+              _context4.next = 13;
+              break;
+            }
+            setUserByToken(result);
+            return _context4.abrupt("return");
+          case 13:
+            handleGoToLogin && handleGoToLogin();
+            _context4.next = 19;
+            break;
+          case 16:
+            _context4.prev = 16;
+            _context4.t0 = _context4["catch"](0);
+            handleGoToLogin && handleGoToLogin();
+          case 19:
+          case "end":
+            return _context4.stop();
+        }
+      }, _callee4, null, [[0, 16]]);
+    }));
+    return function getUserByToken() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     setAddressState(_objectSpread(_objectSpread({}, addressState), {}, {
       address: address || {}
@@ -372,6 +431,11 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
       request && request.cancel();
     };
   }, [requestsState.businesses]);
+  (0, _react.useEffect)(function () {
+    if (props.confirmAddress) {
+      getUserByToken();
+    }
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     formState: formState,
     showField: showField,

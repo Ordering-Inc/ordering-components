@@ -577,7 +577,10 @@ export const ProductForm = (props) => {
         handleCustomSave && handleCustomSave()
       }
       const errors = checkErrors()
-      if (Object.keys(errors).length === 0 || isService) {
+      const isMultiProduct = JSON.parse(product?.product?.meta || '{}')?.external_type === 'coupon'
+      const hasAlreadyCoupon = cart?.metafields?.find?.(meta => meta?.key === 'pulse_coupons')?.value && isMultiProduct
+
+      if ((Object.keys(errors).length === 0 || isService) && !hasAlreadyCoupon) {
         let successful = true
         if (useOrderContext) {
           successful = false
@@ -590,7 +593,6 @@ export const ProductForm = (props) => {
               service_start: values?.serviceTime ?? orderState.options?.moment
             }
           onSave(productCart, !props.productCart?.code)
-          const isMultiProduct = JSON.parse(product?.product?.meta || '{}')?.external_type === 'coupon'
           if (!props.productCart?.code) {
             successful =
               isMultiProduct
@@ -623,12 +625,17 @@ export const ProductForm = (props) => {
           )
         }
       }
+      if (hasAlreadyCoupon) {
+        showToast(
+          ToastType.Error,
+          t('COUPON_ALREADY_ADDED', 'You have a coupon already added')
+        )
+      }
       setProductLoading && setProductLoading(false)
     } catch (err) {
       showToast(
         ToastType.Error,
-        !props.productCart?.code ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product'),
-        5000
+        !props.productCart?.code ? t('FAILED_TO_ADD_PRODUCT', 'Failed to add product') : t('FAILED_TO_UPDATE_PRODUCT', 'Failed to update product')
       )
       setProductLoading && setProductLoading(false)
     }

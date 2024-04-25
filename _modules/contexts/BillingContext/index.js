@@ -25,7 +25,9 @@ var BillingContext = exports.BillingContext = /*#__PURE__*/(0, _react.createCont
 var BillingProvider = exports.BillingProvider = function BillingProvider(_ref) {
   var settings = _ref.settings,
     children = _ref.children;
-  return /*#__PURE__*/_react.default.createElement(BillingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
+  return /*#__PURE__*/_react.default.createElement(BillingContext.Provider, {
+    value: {}
+  }, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, {
       project: settings.project,
       appId: settings.app_id

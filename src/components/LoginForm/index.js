@@ -35,7 +35,7 @@ export const LoginForm = (props) => {
   const [{ configs }] = useConfig()
   const [reCaptchaValue, setReCaptchaValue] = useState({ code: '', version: '' })
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
-
+  const [cellphoneStartZero, setCellphoneStartZero] = useState(null)
   const useLoginByCellphone = configs?.phone_password_login_enabled?.value === '1'
   const useLoginOtpEmail = configs?.opt_email_enabled?.value === '1'
   const useLoginOtpCellphone = configs?.otp_cellphone_enabled?.value === '1'
@@ -70,19 +70,19 @@ export const LoginForm = (props) => {
         }
       } else if (loginTab === 'otp') {
         _credentials = {
-          [otpType]: values && values[otpType] || credentials[otpType],
-          one_time_password: values && values?.code || otpState
+          [otpType]: (values && values[otpType]) || credentials[otpType],
+          one_time_password: (values && values?.code) || otpState
         }
         if (otpType === 'cellphone') {
           _credentials = {
             ..._credentials,
-            country_phone_code: values && values?.country_phone_code || credentials?.country_phone_code,
+            country_phone_code: (values && values?.country_phone_code) || credentials?.country_phone_code
           }
         }
       } else {
         _credentials = {
-          [loginTab]: values && values[loginTab] || credentials[loginTab],
-          password: values && values?.password || credentials.password
+          [loginTab]: (values && values[loginTab]) || credentials[loginTab],
+          password: (values && values?.password) || credentials.password
         }
       }
 
@@ -106,8 +106,10 @@ export const LoginForm = (props) => {
       if (_credentials?.cellphone?.includes('+')) {
         const parsedNumber = parsePhoneNumber(_credentials.cellphone)
         const cellphone = parsedNumber?.nationalNumber
-
         _credentials.cellphone = cellphone
+        if (cellphoneStartZero) {
+          _credentials.cellphone = cellphoneStartZero
+        }
       }
 
       if (notificationState?.notification_token) {
@@ -156,7 +158,10 @@ export const LoginForm = (props) => {
           }
           login({
             user: result,
-            token: result.session?.access_token
+            token: result.session?.access_token,
+            ...(values?.device_code && {
+              device_code: values?.device_code
+            })
           })
         }
         events.emit('userLogin', result)
@@ -232,7 +237,7 @@ export const LoginForm = (props) => {
           'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({
-          cellphone: values.cellphone,
+          cellphone: cellphoneStartZero || values.cellphone,
           country_phone_code: `+${values.country_phone_code}`
         })
       })
@@ -314,7 +319,7 @@ export const LoginForm = (props) => {
       size: 6
     }
     const email = values?.email || credentials?.email
-    const cellphone = values?.cellphone || credentials?.cellphone
+    const cellphone = cellphoneStartZero || values?.cellphone || credentials?.cellphone
     const countryPhoneCode = values?.countryPhoneCode || values?.country_phone_code || credentials.country_phone_code
 
     try {
@@ -430,6 +435,7 @@ export const LoginForm = (props) => {
           useLoginOtpCellphone={useLoginOtpCellphone}
           useLoginSpoonity={useLoginSpoonity}
           handleLoginSpoonity={handleLoginSpoonity}
+          setCellphoneStartZero={setCellphoneStartZero}
         />
       )}
     </>

@@ -6,6 +6,7 @@ import { useCustomer } from '../../contexts/CustomerContext'
 import { useValidationFields as useValidationsFieldsController } from '../../contexts/ValidationsFieldsContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import parsePhoneNumber from 'libphonenumber-js'
+import { ToastType, useToast } from '../../contexts/ToastContext'
 const CONDITIONAL_CODES = ['1787']
 
 /**
@@ -25,9 +26,9 @@ export const UserFormDetails = (props) => {
     isCustomerMode,
     isSuccess,
     onClose,
-    dontToggleEditMode,
     isOrderTypeValidationField,
-    checkoutFields
+    checkoutFields,
+    setUserConfirmPhone
   } = props
 
   const [ordering] = useApi()
@@ -35,6 +36,7 @@ export const UserFormDetails = (props) => {
   const [session, { changeUser }] = useSession()
   const [customer, { setUserCustomer }] = useCustomer()
   const [validationFields] = useValidationsFieldsController()
+  const [, { showToast }] = useToast()
   const [isEdit, setIsEdit] = useState(!!props?.isEdit)
   const [userState, setUserState] = useState({ loading: false, loadingDriver: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
@@ -42,6 +44,7 @@ export const UserFormDetails = (props) => {
   const [singleNotifications, setSingleNotifications] = useState({ loading: false, changes: {}, result: { error: false } })
   const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
   const [removeAccountState, setAccountState] = useState({ loading: false, error: null, result: null })
+  const [cellphoneStartZero, setCellphoneStartZero] = useState(null)
 
   const requestsState = {}
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
@@ -104,7 +107,7 @@ export const UserFormDetails = (props) => {
   /**
    * Default fuction for user profile workflow
    */
-  const handleUpdateClick = async (changes, isImage, image) => {
+  const handleUpdateClick = async (changes, isImage, image, options = {}) => {
     if (handleButtonUpdateClick) {
       return handleButtonUpdateClick(userState.result.result, formState.changes)
     }
@@ -124,7 +127,9 @@ export const UserFormDetails = (props) => {
           _changes.country_phone_code = '1'
         }
       }
-
+      if (cellphoneStartZero) {
+        _changes.cellphone = cellphoneStartZero
+      }
       formState.changes = _changes
 
       if (isImage) {
@@ -166,7 +171,7 @@ export const UserFormDetails = (props) => {
           ...formState,
           changes: response.content.error ? formState.changes : {},
           result: response.content,
-          loading: false
+          loading: !!changes?.confirmDataLayout || false
         })
       }
 
@@ -195,9 +200,15 @@ export const UserFormDetails = (props) => {
           handleSuccessUpdate(response.content.result)
         }
 
-        onClose && onClose()
+        if (changes?.confirmDataLayout) {
+          handleRequestCustomerAddress()
+        }
 
-        if (!image && !dontToggleEditMode) {
+        if (!changes?.confirmDataLayout) {
+          onClose && onClose()
+        }
+
+        if (!image && !options?.dontToggleEditMode) {
           setIsEdit(!isEdit)
         }
       }
@@ -339,7 +350,7 @@ export const UserFormDetails = (props) => {
    */
   const sendVerifyPhoneCode = async (values) => {
     const body = {
-      cellphone: values.cellphone,
+      cellphone: cellphoneStartZero || values.cellphone,
       country_phone_code: parseInt(values.country_phone_code)
     }
     try {
@@ -490,6 +501,46 @@ export const UserFormDetails = (props) => {
     }
   }
 
+  const handleRequestCustomerAddress = async () => {
+    try {
+      setFormState({
+        ...formState,
+        loading: true
+      })
+      const response = await fetch(`${ordering.root}/actions/run/custom`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
+        },
+        body: JSON.stringify({
+          action: 'request_customer_address',
+          user_token_required: true,
+          user_id: props?.userData?.id || userState.result.result.id,
+          user_token_expiration_time: 10
+        })
+      })
+      const { result, error } = await response.json()
+      if (error) {
+        showToast(ToastType.Error, result, 5000)
+        setFormState({
+          ...formState,
+          loading: false
+        })
+        return
+      }
+      setFormState({
+        ...formState,
+        loading: false
+      })
+      setUserConfirmPhone && setUserConfirmPhone({ result, open: false })
+    } catch (err) {
+      showToast(ToastType.Error, err.message, 5000)
+    }
+  }
+
   useEffect(() => {
     updatePromotions(
       singleNotifications?.loading ? singleNotifications?.changes : notificationsGroup?.changes,
@@ -501,7 +552,7 @@ export const UserFormDetails = (props) => {
   useEffect(() => {
     const handleUpdateDriver = (data) => {
       const changes = {}
-      data.changes?.map(change => (
+      data.changes && data.changes.map(change => (
         changes[change.attribute] = change.new
       ))
       setUserState({
@@ -550,6 +601,8 @@ export const UserFormDetails = (props) => {
           handleChangePromotions={handleChangePromotions}
           handleRemoveAccount={handleRemoveAccount}
           handleChangeNotifications={handleChangeNotifications}
+          handleRequestCustomerAddress={handleRequestCustomerAddress}
+          setCellphoneStartZero={setCellphoneStartZero}
         />
       )}
     </>

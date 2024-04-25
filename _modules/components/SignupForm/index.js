@@ -128,14 +128,18 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
     _useState18 = _slicedToArray(_useState17, 2),
     promotionsEnabled = _useState18[0],
     setPromotionsEnabled = _useState18[1];
+  var _useState19 = (0, _react.useState)(null),
+    _useState20 = _slicedToArray(_useState19, 2),
+    cellphoneStartZero = _useState20[0],
+    setCellphoneStartZero = _useState20[1];
   var useSignUpOtpEmail = (configs === null || configs === void 0 || (_configs$email_otp_si = configs.email_otp_signup_enabled) === null || _configs$email_otp_si === void 0 ? void 0 : _configs$email_otp_si.value) === '1' && !isCustomerMode;
   var useSignUpOtpCellphone = (configs === null || configs === void 0 || (_configs$phone_otp_si = configs.phone_otp_signup_enabled) === null || _configs$phone_otp_si === void 0 ? void 0 : _configs$phone_otp_si.value) === '1' && !isCustomerMode;
   var useSignUpFullDetails = useSignUpOtpEmail || useSignUpOtpCellphone ? (configs === null || configs === void 0 || (_configs$full_details = configs.full_details_signup_enabled) === null || _configs$full_details === void 0 ? void 0 : _configs$full_details.value) === '1' : true;
   var defaultSignUpTab = useSignUpFullDetails ? 'default' : useSignUpOtpEmail ? 'otpEmail' : 'otpCellphone';
-  var _useState19 = (0, _react.useState)(defaultSignUpTab),
-    _useState20 = _slicedToArray(_useState19, 2),
-    signUpTab = _useState20[0],
-    setSignUpTab = _useState20[1];
+  var _useState21 = (0, _react.useState)(defaultSignUpTab),
+    _useState22 = _slicedToArray(_useState21, 2),
+    signUpTab = _useState22[0],
+    setSignUpTab = _useState22[1];
   /**
    * Default fuction for signup workflow
    */
@@ -209,17 +213,20 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 newData.country_phone_code = '1';
               }
             }
-            _context.prev = 19;
+            if (cellphoneStartZero) {
+              newData.cellphone = cellphoneStartZero;
+            }
+            _context.prev = 20;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: true
             }));
             source = {};
             requestsState.signup = source;
-            _context.next = 25;
+            _context.next = 26;
             return ordering.users().save(newData, {
               cancelToken: source
             });
-          case 25:
+          case 26:
             response = _context.sent;
             setFormState({
               result: response.content,
@@ -231,11 +238,11 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 handleSuccessSignup(response.content.result);
               }
             }
-            _context.next = 33;
+            _context.next = 34;
             break;
-          case 30:
-            _context.prev = 30;
-            _context.t0 = _context["catch"](19);
+          case 31:
+            _context.prev = 31;
+            _context.t0 = _context["catch"](20);
             if (_context.t0.constructor.name !== 'Cancel') {
               setFormState({
                 result: {
@@ -245,11 +252,11 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 loading: false
               });
             }
-          case 33:
+          case 34:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[19, 30]]);
+      }, _callee, null, [[20, 31]]);
     }));
     return function handleSignupClick(_x) {
       return _ref.apply(this, arguments);
@@ -321,7 +328,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               },
               body: JSON.stringify(_objectSpread(_objectSpread({}, values), {}, {
-                cellphone: values.cellphone,
+                cellphone: cellphoneStartZero || values.cellphone,
                 country_phone_code: "+".concat(values.country_phone_code)
               }))
             });
@@ -381,7 +388,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
               size: 6
             };
             email = (values === null || values === void 0 ? void 0 : values.email) || (signupData === null || signupData === void 0 ? void 0 : signupData.email);
-            cellphone = (values === null || values === void 0 ? void 0 : values.cellphone) || (signupData === null || signupData === void 0 ? void 0 : signupData.cellphone);
+            cellphone = cellphoneStartZero || (values === null || values === void 0 ? void 0 : values.cellphone) || (signupData === null || signupData === void 0 ? void 0 : signupData.cellphone);
             countryPhoneCode = (values === null || values === void 0 ? void 0 : values.country_phone_code) || signupData.country_phone_code;
             setSignupData(_objectSpread(_objectSpread({}, signupData), {}, {
               email: email,
@@ -486,7 +493,8 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
             body = _objectSpread({}, values);
-            _context4.prev = 1;
+            if (isGuest && user !== null && user !== void 0 && user.guest_id) body.guest_token = user === null || user === void 0 ? void 0 : user.guest_id;
+            _context4.prev = 2;
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: true
             }));
@@ -494,7 +502,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
               body.notification_token = notificationState.notification_token;
               body.notification_app = notificationState.notification_app;
             }
-            _context4.next = 6;
+            _context4.next = 7;
             return fetch("".concat(ordering.root, "/auth/sms/twilio"), {
               method: 'POST',
               headers: {
@@ -504,11 +512,11 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
               },
               body: JSON.stringify(body)
             });
-          case 6:
+          case 7:
             response = _context4.sent;
-            _context4.next = 9;
+            _context4.next = 10;
             return response.json();
-          case 9:
+          case 10:
             res = _context4.sent;
             if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
               login({
@@ -523,22 +531,22 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
               loading: false,
               result: res
             }));
-            _context4.next = 17;
+            _context4.next = 18;
             break;
-          case 14:
-            _context4.prev = 14;
-            _context4.t0 = _context4["catch"](1);
+          case 15:
+            _context4.prev = 15;
+            _context4.t0 = _context4["catch"](2);
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: false,
               result: {
                 error: _context4.t0.message
               }
             }));
-          case 17:
+          case 18:
           case "end":
             return _context4.stop();
         }
-      }, _callee4, null, [[1, 14]]);
+      }, _callee4, null, [[2, 15]]);
     }));
     return function checkVerifyPhoneCode(_x4) {
       return _ref6.apply(this, arguments);
@@ -577,16 +585,17 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
           case 7:
             _credentials.verification_code = reCaptchaValue;
           case 8:
-            _context5.prev = 8;
+            if (isGuest && user !== null && user !== void 0 && user.guest_id) _credentials.guest_token = user === null || user === void 0 ? void 0 : user.guest_id;
+            _context5.prev = 9;
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: true,
               result: {
                 error: false
               }
             }));
-            _context5.next = 12;
+            _context5.next = 13;
             return ordering.users().auth(_credentials);
-          case 12:
+          case 13:
             _yield$ordering$users = _context5.sent;
             _yield$ordering$users2 = _yield$ordering$users.content;
             error = _yield$ordering$users2.error;
@@ -615,22 +624,22 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
                 }
               }));
             }
-            _context5.next = 22;
+            _context5.next = 23;
             break;
-          case 19:
-            _context5.prev = 19;
-            _context5.t0 = _context5["catch"](8);
+          case 20:
+            _context5.prev = 20;
+            _context5.t0 = _context5["catch"](9);
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: false,
               result: {
                 error: _context5.t0.message
               }
             }));
-          case 22:
+          case 23:
           case "end":
             return _context5.stop();
         }
-      }, _callee5, null, [[8, 19]]);
+      }, _callee5, null, [[9, 20]]);
     }));
     return function checkVerifyByOtpCode() {
       return _ref7.apply(this, arguments);
@@ -680,6 +689,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
     setSignUpTab: setSignUpTab,
     signUpTab: signUpTab,
     setWillVerifyOtpState: setWillVerifyOtpState,
+    setCellphoneStartZero: setCellphoneStartZero,
     willVerifyOtpState: willVerifyOtpState,
     useSignUpFullDetails: useSignUpFullDetails,
     useSignUpOtpEmail: useSignUpOtpEmail,

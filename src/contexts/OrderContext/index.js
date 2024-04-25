@@ -885,6 +885,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       setState({ ...state, loading: false })
       return !error
     } catch (err) {
+      refreshOrderOptions()
+      setState({ ...state, loading: false })
       return false
     }
   }
@@ -1160,34 +1162,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
               value: {
                 condition: '=',
                 value: franchiseId
-              }
-            }
-          ]
-        })
-      }
-      if (typeof businessSlug === 'number' && businessSlug) {
-        where.push({
-          attribute: 'ref_business',
-          conditions: [
-            {
-              attribute: 'id',
-              value: {
-                condition: '=',
-                value: businessSlug
-              }
-            }
-          ]
-        })
-      }
-      if (typeof businessSlug === 'string' && businessSlug) {
-        where.push({
-          attribute: 'ref_business',
-          conditions: [
-            {
-              attribute: 'slug',
-              value: {
-                condition: '=',
-                value: businessSlug
               }
             }
           ]

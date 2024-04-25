@@ -150,6 +150,10 @@ export const Checkout = (props) => {
    * Method to handle click on Place order
    */
   const handlerClickPlaceOrder = async (paymentOptions, payloadProps, confirmPayment, dismissPlatformPay) => {
+    if (placing) {
+      showToast(ToastType.Info, t('CART_IN_PROGRESS', 'Cart in progress'))
+      return
+    }
     let paymethodData = paymethodSelected?.data
     if (paymethodSelected?.paymethod && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected?.paymethod?.gateway)) {
       paymethodData = {
@@ -428,6 +432,19 @@ export const Checkout = (props) => {
         form.appendChild(formInputName)
       })
       document.body.appendChild(form)
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          data: data,
+          project_code: ordering.project,
+          cart_uuid: cartUuid
+        })
+      }
+      await fetch('https://integrations.ordering.co/credomatic/log_generator.php', requestOptions)
       form.submit()
     } catch (err) {
       showToast(ToastType.Error, err.message)
@@ -474,6 +491,7 @@ export const Checkout = (props) => {
         delivery_zone_id: cart.delivery_zone_id,
         amount: cart?.balance ?? cart?.total
       }
+      let payload
       if (cart?.offer_id) payload.offer_id = cart?.offer_id
       onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cart)
     }
