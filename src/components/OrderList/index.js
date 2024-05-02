@@ -116,6 +116,8 @@ export const OrderList = props => {
   }
 
   const getOrders = async (page, otherStatus = [], pageSize = paginationSettings.pageSize) => {
+    const searchConditions = []
+
     const options = {
       query: {
         orderBy: `${sortBy.direction === 'desc' ? '-' : ''}${sortBy.param}`,
@@ -124,26 +126,38 @@ export const OrderList = props => {
       }
     }
     if (orderIds || orderStatus) {
-      options.query.where = []
       if (orderIds) {
-        options.query.where.push({ attribute: 'id', value: orderIds })
+        searchConditions.push({ attribute: 'id', value: orderIds })
       }
       if (orderStatus) {
         const searchByStatus = otherStatus?.length > 0 ? otherStatus : orderStatus
-        options.query.where.push({ attribute: 'status', value: searchByStatus })
+        searchConditions.push({ attribute: 'status', value: searchByStatus })
       }
     }
     if (userCustomerId) {
-      options.query.where.push({ attribute: 'customer_id', value: parseInt(userCustomerId, 10) })
+      searchConditions.push({ attribute: 'customer_id', value: parseInt(userCustomerId, 10) })
     }
     if (businessId) {
-      options.query.where.push({ attribute: 'business_id', value: parseInt(businessId, 10) })
+      if (typeof businessId === 'string') {
+        searchConditions.push({
+          attribute: 'ref_business',
+          conditions: [{
+            attribute: 'slug',
+            value: {
+              condition: 'ilike',
+              value: `%${businessId}%`
+            }
+          }]
+        })
+      } else {
+        searchConditions.push({ attribute: 'business_id', value: parseInt(businessId, 10) })
+      }
     }
     if (franchiseId) {
-      options.query.where.push({ attribute: 'ref_business', conditions: [{ attribute: 'franchise_id', value: parseInt(franchiseId, 10) }] })
+      searchConditions.push({ attribute: 'ref_business', conditions: [{ attribute: 'franchise_id', value: parseInt(franchiseId, 10) }] })
     }
     if (noGiftCardOrders) {
-      options.query.where.push({
+      searchConditions.push({
         attribute: 'products',
         conditions: [{
           attribute: 'type',
@@ -154,7 +168,12 @@ export const OrderList = props => {
         }]
       })
     }
-
+    if (searchConditions.length) {
+      options.query.where = {
+        conditions: searchConditions,
+        conector: 'AND'
+      }
+    }
     const source = {}
     requestsState.orders = source
     options.cancelToken = source
