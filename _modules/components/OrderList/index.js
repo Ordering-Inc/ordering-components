@@ -277,6 +277,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(page) {
       var otherStatus,
         pageSize,
+        searchConditions,
         options,
         searchByStatus,
         source,
@@ -287,6 +288,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
           case 0:
             otherStatus = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : [];
             pageSize = _args4.length > 2 && _args4[2] !== undefined ? _args4[2] : paginationSettings.pageSize;
+            searchConditions = [];
             options = {
               query: {
                 orderBy: "".concat(sortBy.direction === 'desc' ? '-' : '').concat(sortBy.param),
@@ -295,35 +297,47 @@ var OrderList = exports.OrderList = function OrderList(props) {
               }
             };
             if (orderIds || orderStatus) {
-              options.query.where = [];
               if (orderIds) {
-                options.query.where.push({
+                searchConditions.push({
                   attribute: 'id',
                   value: orderIds
                 });
               }
               if (orderStatus) {
                 searchByStatus = (otherStatus === null || otherStatus === void 0 ? void 0 : otherStatus.length) > 0 ? otherStatus : orderStatus;
-                options.query.where.push({
+                searchConditions.push({
                   attribute: 'status',
                   value: searchByStatus
                 });
               }
             }
             if (userCustomerId) {
-              options.query.where.push({
+              searchConditions.push({
                 attribute: 'customer_id',
                 value: parseInt(userCustomerId, 10)
               });
             }
             if (businessId) {
-              options.query.where.push({
-                attribute: 'business_id',
-                value: parseInt(businessId, 10)
-              });
+              if (typeof businessId === 'string') {
+                searchConditions.push({
+                  attribute: 'ref_business',
+                  conditions: [{
+                    attribute: 'slug',
+                    value: {
+                      condition: 'ilike',
+                      value: "%".concat(businessId, "%")
+                    }
+                  }]
+                });
+              } else {
+                searchConditions.push({
+                  attribute: 'business_id',
+                  value: parseInt(businessId, 10)
+                });
+              }
             }
             if (franchiseId) {
-              options.query.where.push({
+              searchConditions.push({
                 attribute: 'ref_business',
                 conditions: [{
                   attribute: 'franchise_id',
@@ -332,7 +346,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
               });
             }
             if (noGiftCardOrders) {
-              options.query.where.push({
+              searchConditions.push({
                 attribute: 'products',
                 conditions: [{
                   attribute: 'type',
@@ -343,15 +357,21 @@ var OrderList = exports.OrderList = function OrderList(props) {
                 }]
               });
             }
+            if (searchConditions.length) {
+              options.query.where = {
+                conditions: searchConditions,
+                conector: 'AND'
+              };
+            }
             source = {};
             requestsState.orders = source;
             options.cancelToken = source;
             functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard().select(propsToFetch) : ordering.setAccessToken(accessToken).orders().select(propsToFetch);
-            _context4.next = 14;
+            _context4.next = 16;
             return functionFetch.get(options);
-          case 14:
+          case 16:
             return _context4.abrupt("return", _context4.sent);
-          case 15:
+          case 17:
           case "end":
             return _context4.stop();
         }
