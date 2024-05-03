@@ -493,6 +493,7 @@ export const UserFormDetails = (props) => {
         result: res?.result,
         error: res?.error
       })
+      return res.result
     } catch (error) {
       setAccountState({
         ...removeAccountState,
