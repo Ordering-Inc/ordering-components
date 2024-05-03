@@ -663,20 +663,19 @@ var UserFormDetails = exports.UserFormDetails = function UserFormDetails(props) 
               result: res === null || res === void 0 ? void 0 : res.result,
               error: res === null || res === void 0 ? void 0 : res.error
             }));
-            _context5.next = 15;
-            break;
-          case 12:
-            _context5.prev = 12;
+            return _context5.abrupt("return", res.result);
+          case 13:
+            _context5.prev = 13;
             _context5.t0 = _context5["catch"](1);
             setAccountState(_objectSpread(_objectSpread({}, removeAccountState), {}, {
               loading: false,
               error: _context5.t0.message
             }));
-          case 15:
+          case 16:
           case "end":
             return _context5.stop();
         }
-      }, _callee5, null, [[1, 12]]);
+      }, _callee5, null, [[1, 13]]);
     }));
     return function handleRemoveAccount(_x9) {
       return _ref6.apply(this, arguments);
