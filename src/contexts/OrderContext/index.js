@@ -1263,7 +1263,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   }, [session.auth, session.loading, configState])
 
   useEffect(() => {
-    if (configTypes?.length > 0 && state.options.type && (!configTypes.includes(state.options.type) || configTypes.includes(configState?.configs?.default_order_type?.type))) {
+    if (configTypes?.length > 0 && state.options.type && !configTypes.includes(state.options.type)) {
       const validDefaultValue = configTypes.includes(configState?.configs?.default_order_type?.type)
       updateOrderOptions(validDefaultValue ? { type: configState?.configs?.default_order_type?.type } : { type: configTypes[0] })
       if (!session.auth) {
@@ -1271,7 +1271,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
     }
   }, [configTypes?.length, state.options.type])
-
   /**
    * Update carts from sockets
    */
