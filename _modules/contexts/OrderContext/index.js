@@ -2262,22 +2262,20 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
     }
   }, [session.auth, session.loading, configState]);
   (0, _react.useEffect)(function () {
-    var _configState$configs4;
-    if ((configTypes === null || configTypes === void 0 ? void 0 : configTypes.length) > 0 && state.options.type && (!configTypes.includes(state.options.type) || configTypes.includes(configState === null || configState === void 0 || (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 || (_configState$configs4 = _configState$configs4.default_order_type) === null || _configState$configs4 === void 0 ? void 0 : _configState$configs4.type))) {
-      var _configState$configs5, _configState$configs6;
-      var validDefaultValue = configTypes.includes(configState === null || configState === void 0 || (_configState$configs5 = configState.configs) === null || _configState$configs5 === void 0 || (_configState$configs5 = _configState$configs5.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.type);
+    if ((configTypes === null || configTypes === void 0 ? void 0 : configTypes.length) > 0 && state.options.type && !configTypes.includes(state.options.type)) {
+      var _configState$configs4, _configState$configs5;
+      var validDefaultValue = configTypes.includes(configState === null || configState === void 0 || (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 || (_configState$configs4 = _configState$configs4.default_order_type) === null || _configState$configs4 === void 0 ? void 0 : _configState$configs4.type);
       updateOrderOptions(validDefaultValue ? {
-        type: configState === null || configState === void 0 || (_configState$configs6 = configState.configs) === null || _configState$configs6 === void 0 || (_configState$configs6 = _configState$configs6.default_order_type) === null || _configState$configs6 === void 0 ? void 0 : _configState$configs6.type
+        type: configState === null || configState === void 0 || (_configState$configs5 = configState.configs) === null || _configState$configs5 === void 0 || (_configState$configs5 = _configState$configs5.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.type
       } : {
         type: configTypes[0]
       });
       if (!session.auth) {
-        var _configState$configs7;
-        changeType(validDefaultValue ? configState === null || configState === void 0 || (_configState$configs7 = configState.configs) === null || _configState$configs7 === void 0 || (_configState$configs7 = _configState$configs7.default_order_type) === null || _configState$configs7 === void 0 ? void 0 : _configState$configs7.type : configTypes[0]);
+        var _configState$configs6;
+        changeType(validDefaultValue ? configState === null || configState === void 0 || (_configState$configs6 = configState.configs) === null || _configState$configs6 === void 0 || (_configState$configs6 = _configState$configs6.default_order_type) === null || _configState$configs6 === void 0 ? void 0 : _configState$configs6.type : configTypes[0]);
       }
     }
   }, [configTypes === null || configTypes === void 0 ? void 0 : configTypes.length, state.options.type]);
-
   /**
    * Update carts from sockets
    */
