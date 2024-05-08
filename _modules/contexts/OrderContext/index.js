@@ -107,7 +107,9 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
     pickup: 2,
     eatin: 3,
     curbside: 4,
-    drivethru: 5
+    drivethru: 5,
+    catering_delivery: 7,
+    catering_pickup: 8
   };
   var _useState5 = (0, _react.useState)({
       loading: true,
@@ -2268,9 +2270,12 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
       } : {
         type: configTypes[0]
       });
+      if (!session.auth) {
+        var _configState$configs6;
+        changeType(validDefaultValue ? configState === null || configState === void 0 || (_configState$configs6 = configState.configs) === null || _configState$configs6 === void 0 || (_configState$configs6 = _configState$configs6.default_order_type) === null || _configState$configs6 === void 0 ? void 0 : _configState$configs6.type : configTypes[0]);
+      }
     }
   }, [configTypes === null || configTypes === void 0 ? void 0 : configTypes.length, state.options.type]);
-
   /**
    * Update carts from sockets
    */
