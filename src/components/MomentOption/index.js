@@ -90,7 +90,7 @@ export const MomentOption = (props) => {
   }
 
   const handleAsap = () => {
-    if (isAsap || (business && cateringPreorder)) return
+    if (isAsap) return
     setIsAsap(true)
     if (useOrderContext) {
       changeMoment(null)
