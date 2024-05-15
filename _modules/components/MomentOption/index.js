@@ -121,7 +121,7 @@ var MomentOption = exports.MomentOption = function MomentOption(props) {
     onChangeMoment && onChangeMoment(_moment);
   };
   var handleAsap = function handleAsap() {
-    if (isAsap || business && cateringPreorder) return;
+    if (isAsap) return;
     setIsAsap(true);
     if (useOrderContext) {
       changeMoment(null);

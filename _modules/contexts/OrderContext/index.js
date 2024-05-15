@@ -2270,7 +2270,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
       } : {
         type: configTypes[0]
       });
-      if (!session.auth) {
+      if (!session.auth && !(state !== null && state !== void 0 && state.loading)) {
         var _configState$configs6;
         changeType(validDefaultValue ? configState === null || configState === void 0 || (_configState$configs6 = configState.configs) === null || _configState$configs6 === void 0 || (_configState$configs6 = _configState$configs6.default_order_type) === null || _configState$configs6 === void 0 ? void 0 : _configState$configs6.type : configTypes[0]);
       }
