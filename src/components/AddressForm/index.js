@@ -182,7 +182,7 @@ export const AddressForm = (props) => {
         location: `${location?.lat},${location?.lng}`,
         type: 2,
         page: 1,
-        page_size: 5
+        page_size: 20
       }
       if (franchiseId) {
         conditions.push({ attribute: 'franchise_id', value: franchiseId })
