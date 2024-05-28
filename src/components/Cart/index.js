@@ -13,7 +13,8 @@ export const Cart = (props) => {
     UIComponent,
     handleEditProduct,
     businessConfigs,
-    commentDelayTime
+    commentDelayTime,
+    disablePreviousComment
   } = props
 
   /**
@@ -117,34 +118,37 @@ export const Cart = (props) => {
    */
   const handleChangeComment = (value, userId) => {
     try {
-      clearTimeout(timeout)
-      timeout = setTimeout(async function () {
-        setCommentState({ ...commentState, loading: true })
-        const uuid = cart?.uuid
-        const body = { comment: value }
-        if (userId) body.user_id = userId
-        const response = await fetch(`${ordering.root}/carts/${uuid}`, {
-          'Content-Type': 'application/json',
-          method: 'PUT',
-          body: JSON.stringify(body),
-          headers: {
+      if ((previousComment !== value || disablePreviousComment)) {
+        clearTimeout(timeout)
+        timeout = setTimeout(async function () {
+          setCommentState({ ...commentState, loading: true })
+          const uuid = cart?.uuid
+          const body = { comment: value }
+          if (userId) body.user_id = userId
+          const response = await fetch(`${ordering.root}/carts/${uuid}`, {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-            'X-App-X': ordering.appId,
-            'X-Socket-Id-X': socket?.getId()
+            method: 'PUT',
+            body: JSON.stringify(body),
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+              'X-App-X': ordering.appId,
+              'X-Socket-Id-X': socket?.getId()
+            }
+          })
+          const { result, error } = await response.json()
+          if (error) {
+            setCommentState({ ...commentState, loading: false, error: true, result })
+            showToast(ToastType.Error, result)
+            return
           }
-        })
-        const { result, error } = await response.json()
-        if (error) {
-          setCommentState({ ...commentState, loading: false, error: true, result })
-          showToast(ToastType.Error, result)
-          return
-        }
-        const carts = orderState.carts
-        carts[`businessId:${result.business_id}`] = result
-        setStateValues({ carts })
-        setCommentState({ ...commentState, loading: false, error: null, result })
-      }, commentDelayTime ?? 750)
+          const carts = orderState.carts
+          carts[`businessId:${result.business_id}`] = result
+          setStateValues({ carts })
+          setCommentState({ ...commentState, loading: false, error: null, result })
+        }, commentDelayTime ?? 750)
+      }
+      previousComment = value
     } catch (err) {
       setCommentState({ ...commentState, loading: false, error: true, result: err.message })
       showToast(ToastType.Error, err.message)
