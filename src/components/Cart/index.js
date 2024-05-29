@@ -13,7 +13,8 @@ export const Cart = (props) => {
     UIComponent,
     handleEditProduct,
     businessConfigs,
-    commentDelayTime
+    commentDelayTime,
+    disablePreviousComment
   } = props
 
   /**
@@ -44,7 +45,7 @@ export const Cart = (props) => {
   /**
    * Comment state
    */
-  const [commentState, setCommentState] = useState({ loading: false, result: null, error: null })
+  const [commentState, setCommentState] = useState({ loading: false, result: cart ?? null, error: null })
 
   /**
    * Total product in cart
@@ -117,7 +118,7 @@ export const Cart = (props) => {
    */
   const handleChangeComment = (value, userId) => {
     try {
-      if (previousComment !== value) {
+      if ((previousComment !== value || disablePreviousComment)) {
         clearTimeout(timeout)
         timeout = setTimeout(async function () {
           setCommentState({ ...commentState, loading: true })
