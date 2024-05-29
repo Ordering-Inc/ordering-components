@@ -698,6 +698,7 @@ export const BusinessAndProductList = (props) => {
       const source = {}
       requestsState.business = source
       const parameters = {
+        version: 'v2',
         type: orderState.options?.type || 1,
         location: location
           ? `${location?.lat},${location?.lng}`
