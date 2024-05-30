@@ -1248,6 +1248,13 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     setState({ ...state, loading: false })
   }
 
+  const handleOrderStateLoading = (loading) => {
+    setState({
+      ...state,
+      loading
+    })
+  }
+
   useEffect(() => {
     if (session.loading || languageState.loading) return
     if (session.auth) {
@@ -1368,7 +1375,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     getLastOrderHasNoReview,
     changeCityFilter,
     confirmMultiCarts,
-    addMultiProduct
+    addMultiProduct,
+    handleOrderStateLoading
   }
 
   const copyState = JSON.parse(JSON.stringify(state))
