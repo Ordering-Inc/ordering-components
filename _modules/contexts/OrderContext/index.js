@@ -2249,6 +2249,11 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
       return _ref26.apply(this, arguments);
     };
   }();
+  var handleOrderStateLoading = function handleOrderStateLoading(loading) {
+    setState(_objectSpread(_objectSpread({}, state), {}, {
+      loading: loading
+    }));
+  };
   (0, _react.useEffect)(function () {
     if (session.loading || languageState.loading) return;
     if (session.auth) {
@@ -2367,7 +2372,8 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
     getLastOrderHasNoReview: getLastOrderHasNoReview,
     changeCityFilter: changeCityFilter,
     confirmMultiCarts: confirmMultiCarts,
-    addMultiProduct: addMultiProduct
+    addMultiProduct: addMultiProduct,
+    handleOrderStateLoading: handleOrderStateLoading
   };
   var copyState = JSON.parse(JSON.stringify(state));
   return /*#__PURE__*/_react.default.createElement(OrderContext.Provider, {

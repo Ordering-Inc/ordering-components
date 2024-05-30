@@ -37,7 +37,8 @@ var Cart = exports.Cart = function Cart(props) {
     UIComponent = props.UIComponent,
     handleEditProduct = props.handleEditProduct,
     businessConfigs = props.businessConfigs,
-    commentDelayTime = props.commentDelayTime;
+    commentDelayTime = props.commentDelayTime,
+    disablePreviousComment = props.disablePreviousComment;
 
   /**
    * Order context manager
@@ -85,7 +86,7 @@ var Cart = exports.Cart = function Cart(props) {
    */
   var _useState = (0, _react.useState)({
       loading: false,
-      result: null,
+      result: cart !== null && cart !== void 0 ? cart : null,
       error: null
     }),
     _useState2 = _slicedToArray(_useState, 2),
@@ -166,7 +167,7 @@ var Cart = exports.Cart = function Cart(props) {
    */
   var handleChangeComment = function handleChangeComment(value, userId) {
     try {
-      if (previousComment !== value) {
+      if (previousComment !== value || disablePreviousComment) {
         clearTimeout(timeout);
         timeout = setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
           var uuid, body, response, _yield$response$json, result, error, carts;
