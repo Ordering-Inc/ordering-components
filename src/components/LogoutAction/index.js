@@ -85,9 +85,11 @@ export const LogoutAction = (props) => {
     try {
       setFormState({ ...formState, loading: true })
       if (isDriverApp) {
-        const { content: { result, error } } = await getActiveOrders()
-        if (error || result?.[0]?.id) {
-          showToast(ToastType.Error, error ? result : t('ERROR_USER_LOGOUT_YOU_HAVE_ASSIGNED_ORDERS', 'Can\'t logout, You have assigned orders'))
+        const response = await getActiveOrders()
+        if (response?.content?.error || response?.content?.result?.[0]?.id) {
+          showToast(ToastType.Error, response?.content?.error
+            ? response?.content?.result?.[0]?.id
+            : t('ERROR_USER_LOGOUT_YOU_HAVE_ASSIGNED_ORDERS', 'Can\'t logout, You have assigned orders'))
           setFormState({ ...formState, loading: false })
           return
         }
@@ -157,7 +159,6 @@ export const LogoutAction = (props) => {
         },
         loading: false
       })
-      return false
     }
   }
 
