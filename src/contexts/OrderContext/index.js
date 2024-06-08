@@ -1255,6 +1255,33 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     })
   }
 
+  const handleLogEvent = async (events) => {
+    try {
+      const countryCode = await strategy.getItem('country-code')
+      const headers = {
+        'X-Socket-Id-X': socket?.getId(),
+        'X-Country-Code-X': countryCode
+      }
+      const response = await fetch(`${ordering.root}/tracking_events`, {
+        body: JSON.stringify({
+          events
+        }),
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${session.token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      const { result, error } = await response.json()
+      if (error) {
+        console.log('Error logging event', result)
+        return
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   useEffect(() => {
     if (session.loading || languageState.loading) return
     if (session.auth) {
@@ -1376,7 +1403,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     changeCityFilter,
     confirmMultiCarts,
     addMultiProduct,
-    handleOrderStateLoading
+    handleOrderStateLoading,
+    handleLogEvent
   }
 
   const copyState = JSON.parse(JSON.stringify(state))
