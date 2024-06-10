@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useConfig } from '../../contexts/ConfigContext'
-import { useLanguage } from 'ordering-components/src/contexts/LanguageContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 /**
  * Component to manage logout behavior without UI component
