@@ -10,6 +10,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _SessionContext = require("../../contexts/SessionContext");
 var _ApiContext = require("../../contexts/ApiContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
+var _LanguageContext = require("../../contexts/LanguageContext");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
@@ -38,10 +39,14 @@ var LogoutAction = exports.LogoutAction = function LogoutAction(props) {
     token = props.token,
     isNative = props.isNative,
     useDefualtSessionManager = props.useDefualtSessionManager,
-    handleCustomLogoutClick = props.handleCustomLogoutClick;
+    handleCustomLogoutClick = props.handleCustomLogoutClick,
+    isDriverApp = props.isDriverApp;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+    _useLanguage2 = _slicedToArray(_useLanguage, 2),
+    t = _useLanguage2[1];
   var _useState = (0, _react.useState)({
       loading: false,
       result: {
@@ -109,7 +114,7 @@ var LogoutAction = exports.LogoutAction = function LogoutAction(props) {
    */
   var handleLogoutClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(bodyParams) {
-      var accessToken, body, funtionFetch, _yield$funtionFetch, _yield$funtionFetch$c, error, result;
+      var _response$content, _response$content2, response, _response$content3, _response$content4, accessToken, body, funtionFetch, _yield$funtionFetch, _yield$funtionFetch$c, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -120,6 +125,27 @@ var LogoutAction = exports.LogoutAction = function LogoutAction(props) {
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: true
             }));
+            if (!isDriverApp) {
+              _context.next = 10;
+              break;
+            }
+            _context.next = 6;
+            return getActiveOrders();
+          case 6:
+            response = _context.sent;
+            if (!(response !== null && response !== void 0 && (_response$content = response.content) !== null && _response$content !== void 0 && _response$content.error || response !== null && response !== void 0 && (_response$content2 = response.content) !== null && _response$content2 !== void 0 && (_response$content2 = _response$content2.result) !== null && _response$content2 !== void 0 && (_response$content2 = _response$content2[0]) !== null && _response$content2 !== void 0 && _response$content2.id)) {
+              _context.next = 10;
+              break;
+            }
+            setFormState({
+              result: {
+                error: true,
+                result: response !== null && response !== void 0 && (_response$content3 = response.content) !== null && _response$content3 !== void 0 && _response$content3.error ? response === null || response === void 0 || (_response$content4 = response.content) === null || _response$content4 === void 0 ? void 0 : _response$content4.result : t('ERROR_USER_LOGOUT_YOU_HAVE_ASSIGNED_ORDERS', 'Can\'t logout, You have assigned orders')
+              },
+              loading: false
+            });
+            return _context.abrupt("return");
+          case 10:
             accessToken = token || data.token;
             body = bodyParams && bodyParams !== null && bodyParams !== void 0 && bodyParams.notification_token ? {
               notification_app: bodyParams === null || bodyParams === void 0 ? void 0 : bodyParams.notification_app,
@@ -127,15 +153,15 @@ var LogoutAction = exports.LogoutAction = function LogoutAction(props) {
               token_notification: bodyParams === null || bodyParams === void 0 ? void 0 : bodyParams.notification_token
             } : null;
             funtionFetch = body ? ordering.setAccessToken(accessToken).users().logout(body) : ordering.setAccessToken(accessToken).users().logout();
-            _context.next = 8;
+            _context.next = 15;
             return funtionFetch;
-          case 8:
+          case 15:
             _yield$funtionFetch = _context.sent;
             _yield$funtionFetch$c = _yield$funtionFetch.content;
             error = _yield$funtionFetch$c.error;
             result = _yield$funtionFetch$c.result;
             if (error) {
-              _context.next = 17;
+              _context.next = 24;
               break;
             }
             setFormState({
@@ -152,7 +178,7 @@ var LogoutAction = exports.LogoutAction = function LogoutAction(props) {
               handleSuccessLogout();
             }
             return _context.abrupt("return", true);
-          case 17:
+          case 24:
             setFormState({
               result: {
                 error: error,
@@ -161,8 +187,8 @@ var LogoutAction = exports.LogoutAction = function LogoutAction(props) {
               loading: false
             });
             return _context.abrupt("return", false);
-          case 21:
-            _context.prev = 21;
+          case 28:
+            _context.prev = 28;
             _context.t0 = _context["catch"](1);
             setFormState({
               result: {
@@ -172,14 +198,62 @@ var LogoutAction = exports.LogoutAction = function LogoutAction(props) {
               loading: false
             });
             return _context.abrupt("return", false);
-          case 25:
+          case 32:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[1, 21]]);
+      }, _callee, null, [[1, 28]]);
     }));
     return function handleLogoutClick(_x) {
       return _ref.apply(this, arguments);
+    };
+  }();
+  var getActiveOrders = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      var options, accessToken, orderStatus, propsToFetch, functionFetch;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            options = {
+              query: {
+                page: 1,
+                page_size: 1
+              }
+            };
+            accessToken = token || data.token;
+            orderStatus = [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26];
+            options.query.where = [];
+            if (orderStatus) {
+              options.query.where.push({
+                attribute: 'status',
+                value: orderStatus
+              });
+            }
+            propsToFetch = ['id', 'status'];
+            functionFetch = ordering.setAccessToken(accessToken).orders().asDashboard().select(propsToFetch);
+            _context2.next = 10;
+            return functionFetch.get(options);
+          case 10:
+            return _context2.abrupt("return", _context2.sent);
+          case 13:
+            _context2.prev = 13;
+            _context2.t0 = _context2["catch"](0);
+            setFormState({
+              result: {
+                error: true,
+                result: _context2.t0.message
+              },
+              loading: false
+            });
+          case 16:
+          case "end":
+            return _context2.stop();
+        }
+      }, _callee2, null, [[0, 13]]);
+    }));
+    return function getActiveOrders() {
+      return _ref2.apply(this, arguments);
     };
   }();
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
