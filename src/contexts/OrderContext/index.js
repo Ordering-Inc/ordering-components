@@ -1263,6 +1263,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         'X-Country-Code-X': countryCode
       }
       await fetch(`${ordering.root}/tracking_events`, {
+        method: 'POST',
         body: JSON.stringify({
           events
         }),
