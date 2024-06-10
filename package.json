@@ -51,8 +51,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.10.4",
-    "@sentry/react": "^5.27.4",
-    "@sentry/tracing": "^5.27.4",
     "@react-native-async-storage/async-storage": "^1.13.1",
     "@segment/analytics-next": "^1.35.1",
     "@stripe/react-stripe-js": "^1.1.2",

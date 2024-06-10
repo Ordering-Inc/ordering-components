@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import * as Sentry from '@sentry/react'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useApi } from '../../contexts/ApiContext'
@@ -823,7 +822,6 @@ export const ProductForm = (props) => {
 
   const checkSuboptionsSelected = (suboptionId, _selectedSuboptions, _dependsSuboptions, count = 0) => {
     if (count > 100) {
-      Sentry.captureMessage('Suboptions selected bucle, more than 100 iterations')
       return false
     }
     if (!_selectedSuboptions[`suboption:${suboptionId}`]) {
