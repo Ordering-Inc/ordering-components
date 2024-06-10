@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useConfig } from '../../contexts/ConfigContext'
-import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from 'ordering-components/src/contexts/LanguageContext'
 
 /**
@@ -22,7 +21,6 @@ export const LogoutAction = (props) => {
 
   const [ordering] = useApi()
   const [, t] = useLanguage()
-  const [, { showToast }] = useToast()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
 
   const [data, { logout }] = useSession()
@@ -87,10 +85,15 @@ export const LogoutAction = (props) => {
       if (isDriverApp) {
         const response = await getActiveOrders()
         if (response?.content?.error || response?.content?.result?.[0]?.id) {
-          showToast(ToastType.Error, response?.content?.error
-            ? response?.content?.result?.[0]?.id
-            : t('ERROR_USER_LOGOUT_YOU_HAVE_ASSIGNED_ORDERS', 'Can\'t logout, You have assigned orders'))
-          setFormState({ ...formState, loading: false })
+          setFormState({
+            result: {
+              error: true,
+              result: response?.content?.error
+                ? response?.content?.result
+                : t('ERROR_USER_LOGOUT_YOU_HAVE_ASSIGNED_ORDERS', 'Can\'t logout, You have assigned orders')
+            },
+            loading: false
+          })
           return
         }
       }
