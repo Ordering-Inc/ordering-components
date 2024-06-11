@@ -917,6 +917,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
             source = {};
             requestsState.business = source;
             parameters = {
+              version: 'v2',
               type: ((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.type) || 1,
               location: location ? "".concat(location === null || location === void 0 ? void 0 : location.lat, ",").concat(location === null || location === void 0 ? void 0 : location.lng) : (_orderState$options11 = orderState.options) !== null && _orderState$options11 !== void 0 && (_orderState$options11 = _orderState$options11.address) !== null && _orderState$options11 !== void 0 && _orderState$options11.location ? "".concat((_orderState$options12 = orderState.options) === null || _orderState$options12 === void 0 || (_orderState$options12 = _orderState$options12.address) === null || _orderState$options12 === void 0 || (_orderState$options12 = _orderState$options12.location) === null || _orderState$options12 === void 0 ? void 0 : _orderState$options12.lat, ",").concat((_orderState$options13 = orderState.options) === null || _orderState$options13 === void 0 || (_orderState$options13 = _orderState$options13.address) === null || _orderState$options13 === void 0 || (_orderState$options13 = _orderState$options13.location) === null || _orderState$options13 === void 0 ? void 0 : _orderState$options13.lng) : null
             };
