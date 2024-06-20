@@ -8,7 +8,6 @@ exports.ProductForm = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _moment = _interopRequireDefault(require("moment"));
-var Sentry = _interopRequireWildcard(require("@sentry/react"));
 var _OrderContext = require("../../contexts/OrderContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
 var _ApiContext = require("../../contexts/ApiContext");
@@ -1128,7 +1127,6 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
     var _dependsSuboptions2;
     var count = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
     if (count > 100) {
-      Sentry.captureMessage('Suboptions selected bucle, more than 100 iterations');
       return false;
     }
     if (!_selectedSuboptions["suboption:".concat(suboptionId)]) {
