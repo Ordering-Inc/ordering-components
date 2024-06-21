@@ -2254,6 +2254,48 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
       loading: loading
     }));
   };
+  var handleLogEvent = /*#__PURE__*/function () {
+    var _ref27 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee25(events) {
+      var countryCode, headers;
+      return _regeneratorRuntime().wrap(function _callee25$(_context25) {
+        while (1) switch (_context25.prev = _context25.next) {
+          case 0:
+            _context25.prev = 0;
+            _context25.next = 3;
+            return strategy.getItem('country-code');
+          case 3:
+            countryCode = _context25.sent;
+            headers = {
+              'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
+              'X-Country-Code-X': countryCode
+            };
+            _context25.next = 7;
+            return fetch("".concat(ordering.root, "/tracking_events"), {
+              method: 'POST',
+              body: JSON.stringify({
+                events: events
+              }),
+              headers: _objectSpread(_objectSpread({}, headers), {}, {
+                Authorization: "Bearer ".concat(session.token),
+                'Content-Type': 'application/json'
+              })
+            });
+          case 7:
+            _context25.next = 11;
+            break;
+          case 9:
+            _context25.prev = 9;
+            _context25.t0 = _context25["catch"](0);
+          case 11:
+          case "end":
+            return _context25.stop();
+        }
+      }, _callee25, null, [[0, 9]]);
+    }));
+    return function handleLogEvent(_x37) {
+      return _ref27.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     if (session.loading || languageState.loading) return;
     if (session.auth) {
@@ -2307,9 +2349,9 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         }
       }
     };
-    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref27) {
-      var carts = _ref27.carts,
-        options = _objectWithoutProperties(_ref27, _excluded3);
+    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref28) {
+      var carts = _ref28.carts,
+        options = _objectWithoutProperties(_ref28, _excluded3);
       if (!isDisableToast) {
         showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'));
       }
@@ -2373,7 +2415,8 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
     changeCityFilter: changeCityFilter,
     confirmMultiCarts: confirmMultiCarts,
     addMultiProduct: addMultiProduct,
-    handleOrderStateLoading: handleOrderStateLoading
+    handleOrderStateLoading: handleOrderStateLoading,
+    handleLogEvent: handleLogEvent
   };
   var copyState = JSON.parse(JSON.stringify(state));
   return /*#__PURE__*/_react.default.createElement(OrderContext.Provider, {
