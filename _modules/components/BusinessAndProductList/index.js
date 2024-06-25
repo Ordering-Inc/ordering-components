@@ -680,7 +680,11 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
                   totalPages: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content12 = featuredRes.content) === null || _featuredRes$content12 === void 0 || (_featuredRes$content12 = _featuredRes$content12.pagination) === null || _featuredRes$content12 === void 0 ? void 0 : _featuredRes$content12.total_pages : pagination === null || pagination === void 0 ? void 0 : pagination.total_pages
                 }),
                 loading: false,
-                products: categorySelected.id === 'featured' ? productsListFeatured : searchValue ? [].concat(_toConsumableArray(productsListFeatured), _toConsumableArray(productsList)) : [].concat(_toConsumableArray(productsListFeatured), _toConsumableArray(curCategoryState.products.concat(productsList)))
+                products: categorySelected.id === 'featured' ? productsListFeatured : searchValue ? [].concat(_toConsumableArray(productsListFeatured), _toConsumableArray(productsList)).filter(function (product, i, _hash) {
+                  return _hash.findIndex(function (_product) {
+                    return (_product === null || _product === void 0 ? void 0 : _product.id) === (product === null || product === void 0 ? void 0 : product.id);
+                  }) === i;
+                }) : [].concat(_toConsumableArray(productsListFeatured), _toConsumableArray(curCategoryState.products.concat(productsList)))
               };
               categoriesState[categoryKey] = _newcategoryState;
               setCategoryState(_objectSpread({}, _newcategoryState));
