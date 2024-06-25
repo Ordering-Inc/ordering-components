@@ -516,7 +516,9 @@ export const BusinessAndProductList = (props) => {
           loading: false,
           products: categorySelected.id === 'featured'
             ? productsListFeatured
-            : searchValue ? [...productsListFeatured, ...productsList] : [...productsListFeatured, ...curCategoryState.products.concat(productsList)]
+            : searchValue
+              ? [...productsListFeatured, ...productsList].filter((product, i, _hash) => _hash.findIndex(_product => _product?.id === product?.id) === i)
+              : [...productsListFeatured, ...curCategoryState.products.concat(productsList)]
         }
 
         categoriesState[categoryKey] = newcategoryState
