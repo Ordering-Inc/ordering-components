@@ -347,13 +347,25 @@ var OrderList = exports.OrderList = function OrderList(props) {
             }
             if (noGiftCardOrders) {
               searchConditions.push({
-                attribute: 'products',
+                conector: 'OR',
                 conditions: [{
-                  attribute: 'type',
-                  value: {
-                    condition: '=',
-                    value: 'item'
-                  }
+                  attribute: 'products',
+                  conditions: [{
+                    attribute: 'type',
+                    value: {
+                      condition: '=',
+                      value: 'item'
+                    }
+                  }]
+                }, {
+                  attribute: 'products',
+                  conditions: [{
+                    attribute: 'type',
+                    value: {
+                      condition: '=',
+                      value: 'service'
+                    }
+                  }]
                 }]
               });
             }
