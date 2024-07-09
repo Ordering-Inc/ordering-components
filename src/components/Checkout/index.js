@@ -102,11 +102,12 @@ export const Checkout = (props) => {
    */
   const getVaXMiCuenta = async () => {
     if (!defaultOptionsVaXMiCuenta?.enable) {
-      setVaXMiCuenta({
+      applyDonation(0, 0)
+      /* setVaXMiCuenta({
         selectedOption: { amount: 0, option: 0 },
         loading: false,
         error: null
-      })
+      }) */
       return
     }
     try {
@@ -368,10 +369,7 @@ export const Checkout = (props) => {
   }
 
   const handleChangeVaXMiCuenta = (option, index) => {
-    setVaXMiCuenta({
-      ...vaXMiCuenta,
-      selectedOption: { amount: option, option: index, default: false }
-    })
+    applyDonation(option, index)
   }
 
   const checkUberDirect = async () => {
@@ -538,9 +536,14 @@ export const Checkout = (props) => {
     setDefaultOptionsVaXMiCuenta(JSON.parse(configs.configs?.va_por_mi_cuenta?.value).find((value) => value.brand_id === parseInt(businessDetails?.business?.brand_id)))
   }, [configs.loading, businessDetails.loading])
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (!vaXMiCuenta.selectedOption || vaXMiCuenta.selectedOption.default) return
     const applyDonation = async () => {
+      setVaXMiCuenta({
+        ...vaXMiCuenta,
+        loading: true,
+        error: null
+      })
       try {
         const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php`, {
           method: 'POST',
@@ -557,6 +560,11 @@ export const Checkout = (props) => {
         if (!result.error) {
           refreshOrderOptions()
         }
+        setVaXMiCuenta({
+          ...vaXMiCuenta,
+          loading: false,
+          error: result.error ?? null
+        })
       } catch (err) {
         setVaXMiCuenta({
           ...vaXMiCuenta,
@@ -566,7 +574,49 @@ export const Checkout = (props) => {
       }
     }
     applyDonation()
-  }, [vaXMiCuenta.selectedOption])
+  }, [vaXMiCuenta.selectedOption]) */
+
+  const applyDonation = async (option, index) => {
+    setVaXMiCuenta({
+      ...vaXMiCuenta,
+      loading: true,
+      error: null
+    })
+    try {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php`, {
+        method: 'POST',
+        body: JSON.stringify({
+          uuid: cart.uuid,
+          option: index
+        }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-APP-X': ordering.appId
+        }
+      })
+      const result = await response.json()
+      if (!result.error) {
+        setVaXMiCuenta({
+          ...vaXMiCuenta,
+          loading: false,
+          selectedOption: { amount: option, option: index, default: false }
+        })
+        /* refreshOrderOptions() */
+        return
+      }
+      setVaXMiCuenta({
+        ...vaXMiCuenta,
+        loading: false,
+        error: result.error ?? null
+      })
+    } catch (err) {
+      setVaXMiCuenta({
+        ...vaXMiCuenta,
+        loading: false,
+        error: [err.message]
+      })
+    }
+  }
 
   useEffect(() => {
     if (uberDirect.isUberDirect) {
