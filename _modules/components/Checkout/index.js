@@ -276,14 +276,13 @@ var Checkout = function Checkout(props) {
                 break;
               }
 
-              setVaXMiCuenta({
-                selectedOption: {
-                  amount: 0,
-                  option: 0
-                },
+              applyDonation(0, 0);
+              /* setVaXMiCuenta({
+                selectedOption: { amount: 0, option: 0 },
                 loading: false,
                 error: null
-              });
+              }) */
+
               return _context.abrupt("return");
 
             case 3:
@@ -772,13 +771,7 @@ var Checkout = function Checkout(props) {
   }();
 
   var handleChangeVaXMiCuenta = function handleChangeVaXMiCuenta(option, index) {
-    setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
-      selectedOption: {
-        amount: option,
-        option: index,
-        default: false
-      }
-    }));
+    applyDonation(option, index);
   };
 
   var checkUberDirect = /*#__PURE__*/function () {
@@ -1084,68 +1077,126 @@ var Checkout = function Checkout(props) {
       return value.brand_id === parseInt(businessDetails === null || businessDetails === void 0 ? void 0 : (_businessDetails$busi2 = businessDetails.business) === null || _businessDetails$busi2 === void 0 ? void 0 : _businessDetails$busi2.brand_id);
     }));
   }, [configs.loading, businessDetails.loading]);
-  (0, _react.useEffect)(function () {
-    if (!vaXMiCuenta.selectedOption || vaXMiCuenta.selectedOption.default) return;
-
-    var applyDonation = /*#__PURE__*/function () {
-      var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
-        var response, result;
-        return _regeneratorRuntime().wrap(function _callee11$(_context11) {
-          while (1) {
-            switch (_context11.prev = _context11.next) {
-              case 0:
-                _context11.prev = 0;
-                _context11.next = 3;
-                return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php"), {
-                  method: 'POST',
-                  body: JSON.stringify({
-                    uuid: cart.uuid,
-                    option: vaXMiCuenta.selectedOption.option
-                  }),
-                  headers: {
-                    Authorization: "Bearer ".concat(token),
-                    'X-APP-X': ordering.appId
-                  }
-                });
-
-              case 3:
-                response = _context11.sent;
-                _context11.next = 6;
-                return response.json();
-
-              case 6:
-                result = _context11.sent;
-
-                if (!result.error) {
-                  refreshOrderOptions();
-                }
-
-                _context11.next = 13;
-                break;
-
-              case 10:
-                _context11.prev = 10;
-                _context11.t0 = _context11["catch"](0);
-                setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
-                  loading: false,
-                  error: [_context11.t0.message]
-                }));
-
-              case 13:
-              case "end":
-                return _context11.stop();
-            }
+  /* useEffect(() => {
+    if (!vaXMiCuenta.selectedOption || vaXMiCuenta.selectedOption.default) return
+    const applyDonation = async () => {
+      setVaXMiCuenta({
+        ...vaXMiCuenta,
+        loading: true,
+        error: null
+      })
+      try {
+        const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php`, {
+          method: 'POST',
+          body: JSON.stringify({
+            uuid: cart.uuid,
+            option: vaXMiCuenta.selectedOption.option
+          }),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'X-APP-X': ordering.appId
           }
-        }, _callee11, null, [[0, 10]]);
-      }));
+        })
+        const result = await response.json()
+        if (!result.error) {
+          refreshOrderOptions()
+        }
+        setVaXMiCuenta({
+          ...vaXMiCuenta,
+          loading: false,
+          error: result.error ?? null
+        })
+      } catch (err) {
+        setVaXMiCuenta({
+          ...vaXMiCuenta,
+          loading: false,
+          error: [err.message]
+        })
+      }
+    }
+    applyDonation()
+  }, [vaXMiCuenta.selectedOption]) */
 
-      return function applyDonation() {
-        return _ref11.apply(this, arguments);
-      };
-    }();
+  var applyDonation = /*#__PURE__*/function () {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(option, index) {
+      var _result$error, response, result;
 
-    applyDonation();
-  }, [vaXMiCuenta.selectedOption]);
+      return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+        while (1) {
+          switch (_context11.prev = _context11.next) {
+            case 0:
+              setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
+                loading: true,
+                error: null
+              }));
+              _context11.prev = 1;
+              _context11.next = 4;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php"), {
+                method: 'POST',
+                body: JSON.stringify({
+                  uuid: cart.uuid,
+                  option: index
+                }),
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'X-APP-X': ordering.appId
+                }
+              });
+
+            case 4:
+              response = _context11.sent;
+              _context11.next = 7;
+              return response.json();
+
+            case 7:
+              result = _context11.sent;
+
+              if (result.error) {
+                _context11.next = 11;
+                break;
+              }
+
+              setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
+                loading: false,
+                selectedOption: {
+                  amount: option,
+                  option: index,
+                  default: false
+                }
+              }));
+              /* refreshOrderOptions() */
+
+              return _context11.abrupt("return");
+
+            case 11:
+              setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
+                loading: false,
+                error: (_result$error = result.error) !== null && _result$error !== void 0 ? _result$error : null
+              }));
+              _context11.next = 17;
+              break;
+
+            case 14:
+              _context11.prev = 14;
+              _context11.t0 = _context11["catch"](1);
+              setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
+                loading: false,
+                error: [_context11.t0.message]
+              }));
+
+            case 17:
+            case "end":
+              return _context11.stop();
+          }
+        }
+      }, _callee11, null, [[1, 14]]);
+    }));
+
+    return function applyDonation(_x6, _x7) {
+      return _ref11.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     if (uberDirect.isUberDirect) {
       checkAmountToHideCash();
