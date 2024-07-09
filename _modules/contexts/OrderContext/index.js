@@ -2237,7 +2237,7 @@ var OrderProvider = function OrderProvider(_ref) {
                   email: customerState === null || customerState === void 0 ? void 0 : (_customerState$user2 = customerState.user) === null || _customerState$user2 === void 0 ? void 0 : _customerState$user2.email,
                   telephone: customerState === null || customerState === void 0 ? void 0 : (_customerState$user3 = customerState.user) === null || _customerState$user3 === void 0 ? void 0 : _customerState$user3.cellphone,
                   uuid: cardId,
-                  error: error ? error : 'false',
+                  error: error || 'false',
                   x_app_x: ordering.appId,
                   version: ordering.appId,
                   ip: Object.keys(deviceInfo).length > 0 ? deviceInfo === null || deviceInfo === void 0 ? void 0 : deviceInfo.ip : '0000',
@@ -2356,6 +2356,10 @@ var OrderProvider = function OrderProvider(_ref) {
 
   (0, _react.useEffect)(function () {
     var handleCartUpdate = function handleCartUpdate(cart) {
+      setState(_objectSpread(_objectSpread({}, state), {}, {
+        loading: true
+      }));
+
       if (!isDisableToast) {
         showToast(_ToastContext.ToastType.Info, t('UPDATING_CART_INFO', 'Updating cart information...'));
       }
