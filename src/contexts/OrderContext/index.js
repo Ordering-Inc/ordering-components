@@ -953,11 +953,11 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   const sendLogData = async (cardId, error) => {
     if (!error) {
       try {
-        const apiKey = 'be0f755b93290b4c100445d77533d291763a417c75524e95e07819ad';
+        const apiKey = 'be0f755b93290b4c100445d77533d291763a417c75524e95e07819ad'
         const deviceInfoResponse = await fetch(`https://api.ipdata.co?api-key=${apiKey}`, {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           }
         })
         const deviceInfo = await deviceInfoResponse.json()
@@ -969,7 +969,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
               email: customerState?.user?.email,
               telephone: customerState?.user?.cellphone,
               uuid: cardId,
-              error: error ? error : 'false',
+              error: error || 'false',
               x_app_x: ordering.appId,
               version: ordering.appId,
               ip: Object.keys(deviceInfo).length > 0 ? deviceInfo?.ip : '0000',
@@ -978,7 +978,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
               mac_address: Object.keys(deviceInfo).length > 0 ? deviceInfo?.ip : '0000'
             }),
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             }
           })
         } catch (err) {
@@ -1005,7 +1005,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
             mac_address: '0000'
           }),
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           }
         })
       } catch (err) {
@@ -1041,6 +1041,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    */
   useEffect(() => {
     const handleCartUpdate = (cart) => {
+      setState({ ...state, loading: true })
       if (!isDisableToast) {
         showToast(ToastType.Info, t('UPDATING_CART_INFO', 'Updating cart information...'))
       }
