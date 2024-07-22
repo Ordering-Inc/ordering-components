@@ -544,7 +544,7 @@ var BusinessList = exports.BusinessList = function BusinessList(props) {
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true);
     }
-  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, priceLevelSelected, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
+  }, [JSON.stringify(orderState.options), orderState.loading, franchiseEnabled, businessTypeSelected, searchValue, priceLevelSelected, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
   (0, _react.useLayoutEffect)(function () {
     if (isDoordash) {
       getBusinesses(true);
