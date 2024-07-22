@@ -421,7 +421,7 @@ export const BusinessList = (props) => {
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true)
     }
-  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, priceLevelSelected, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
+  }, [JSON.stringify(orderState.options), orderState.loading, franchiseEnabled, businessTypeSelected, searchValue, priceLevelSelected, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
 
   useLayoutEffect(() => {
     if (isDoordash) {
