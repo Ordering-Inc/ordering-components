@@ -53,7 +53,7 @@ export const OrderListGroups = (props) => {
     pagination: {
       currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1)
         ? paginationSettings.initialPage - 1
-        : 0,
+        : 1,
       pageSize: paginationSettings.pageSize ?? 10,
       total: null
     }
@@ -965,7 +965,6 @@ export const OrderListGroups = (props) => {
         }
         delete order.total
         delete order.subtotal
-
         const currentFilter = ordersGroup[getStatusById(order?.status) ?? '']?.currentFilter
         !currentFilter.includes(order.status)
           ? actionOrderToTab(order, getStatusById(order?.status), 'remove')
@@ -1039,18 +1038,11 @@ export const OrderListGroups = (props) => {
     }
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
-    if (!socket?.socket?._callbacks?.$orders_register || socket?.socket?._callbacks?.$orders_register?.find(func => func?.name !== 'handleAddNewOrder')) {
-      socket.on('orders_register', handleAddNewOrder)
-    }
-    if (!socket?.socket?._callbacks?.$order_assigned || socket?.socket?._callbacks?.$order_assigned?.find(func => func?.name !== 'handleAddNewOrder')) {
-      socket.on('order_assigned', handleAddNewOrder)
-    }
-    if (!socket?.socket?._callbacks?.$update_order || socket?.socket?._callbacks?.$update_order?.find(func => func?.name !== 'handleUpdateOrder')) {
-      socket.on('update_order', handleUpdateOrder)
-    }
-    if (!socket?.socket?._callbacks?.$message || socket?.socket?._callbacks?.$message?.find(func => func?.name !== 'handleReceiveMessage')) {
-      socket.on('message', handleReceiveMessage)
-    }
+    socket.on('orders_register', handleAddNewOrder)
+    socket.on('order_assigned', handleAddNewOrder)
+    socket.on('update_order', handleUpdateOrder)
+    socket.on('message', handleReceiveMessage)
+
     return () => {
       socket.off('orders_register', handleAddNewOrder)
       socket.off('order_assigned', handleAddNewOrder)
