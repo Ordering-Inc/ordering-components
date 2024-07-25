@@ -80,7 +80,7 @@ var WebsocketProvider = exports.WebsocketProvider = function WebsocketProvider(_
         while (1) switch (_context.prev = _context.next) {
           case 0:
             project = null;
-            if (!configs.use_root_point) {
+            if (!settings.use_root_point) {
               _context.next = 7;
               break;
             }
@@ -97,10 +97,11 @@ var WebsocketProvider = exports.WebsocketProvider = function WebsocketProvider(_
             clearInterval(projectInputInterval);
           case 10:
             if (project) {
-              setConfigs(_objectSpread(_objectSpread({}, configs), {}, {
-                project: project
-              }));
-              configs.project = project;
+              setConfigs(function (prevConfigs) {
+                return _objectSpread(_objectSpread({}, prevConfigs), {}, {
+                  project: JSON.parse(project)
+                });
+              });
               clearInterval(projectInputInterval);
             }
           case 11:
