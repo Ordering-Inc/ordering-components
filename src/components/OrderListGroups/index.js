@@ -959,7 +959,7 @@ export const OrderListGroups = (props) => {
           typeof order?.status !== 'number' ||
           !order?.customer ||
           !order?.business ||
-          (!order?.paymethod && !order?.payment_events?.some(e => e.event === 'payment'))
+          ((!order?.paymethod && !order?.payment_events?.some(e => e.event === 'payment')) && order?.total !== 0)
         ) {
           return
         }
