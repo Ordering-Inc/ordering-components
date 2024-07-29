@@ -465,7 +465,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    * @param {object} cart Current cart
    * @param {number} suboptionId Suboption id
    */
-  var removeRelatedOptions = function removeRelatedOptions(productCart, suboptionId) {
+  var _removeRelatedOptions = function removeRelatedOptions(productCart, suboptionId) {
     product.product.extras.forEach(function (_extra) {
       _extra.options.forEach(function (_option) {
         if (_option.respect_to === suboptionId) {
@@ -473,7 +473,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
           var suboptions = (_productCart$options2 = productCart.options["id:".concat(_option.id)]) === null || _productCart$options2 === void 0 ? void 0 : _productCart$options2.suboptions;
           if (suboptions) {
             Object.keys(suboptions).map(function (suboptionKey) {
-              return removeRelatedOptions(productCart, parseInt(suboptionKey.split(':')[1]));
+              return _removeRelatedOptions(productCart, parseInt(suboptionKey.split(':')[1]));
             });
           }
           if (productCart.options["id:".concat(_option.id)]) {
@@ -520,14 +520,14 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
     var newPizzaState = {};
     if (!state.selected) {
       delete newProductCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)];
-      removeRelatedOptions(newProductCart, suboption.id);
+      _removeRelatedOptions(newProductCart, suboption.id);
       newPizzaState = handleVerifyPizzaState(state, suboption, option);
     } else {
       if (option.min === option.max && option.min === 1) {
         var suboptions = newProductCart.options["id:".concat(option.id)].suboptions;
         if (suboptions) {
           Object.keys(suboptions).map(function (suboptionKey) {
-            return removeRelatedOptions(newProductCart, parseInt(suboptionKey.split(':')[1]));
+            return _removeRelatedOptions(newProductCart, parseInt(suboptionKey.split(':')[1]));
           });
         }
         if (newProductCart.options["id:".concat(option.id)]) {
@@ -628,7 +628,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
               try {
                 for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
                   var _suboption2 = _step8.value;
-                  if (checkSuboptionsSelected(_suboption2 === null || _suboption2 === void 0 ? void 0 : _suboption2.id, _selectedSuboptions, dependsSuboptions)) {
+                  if (_checkSuboptionsSelected(_suboption2 === null || _suboption2 === void 0 ? void 0 : _suboption2.id, _selectedSuboptions, dependsSuboptions)) {
                     preselectedOptions.push(_option4);
                     preselectedSuboptions.push(_suboption2);
                   }
@@ -715,13 +715,13 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
       }
       if (!(state !== null && state !== void 0 && state.selected)) {
         delete newProductCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)];
-        removeRelatedOptions(newProductCart, suboption.id);
+        _removeRelatedOptions(newProductCart, suboption.id);
       } else {
         if (option.min === option.max && option.min === 1) {
           var suboptions = newProductCart.options["id:".concat(option.id)].suboptions;
           if (suboptions) {
             Object.keys(suboptions).map(function (suboptionKey) {
-              return removeRelatedOptions(newProductCart, parseInt(suboptionKey.split(':')[1]));
+              return _removeRelatedOptions(newProductCart, parseInt(suboptionKey.split(':')[1]));
             });
           }
           if (newProductCart.options["id:".concat(option.id)]) {
@@ -1123,7 +1123,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    * Check if there is an option required with one suboption
   */
 
-  var checkSuboptionsSelected = function checkSuboptionsSelected(suboptionId, _selectedSuboptions, _dependsSuboptions) {
+  var _checkSuboptionsSelected = function checkSuboptionsSelected(suboptionId, _selectedSuboptions, _dependsSuboptions) {
     var _dependsSuboptions2;
     var count = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
     if (count > 100) {
@@ -1136,7 +1136,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
     if (respectTo === null) {
       return _selectedSuboptions["suboption:".concat(suboptionId)];
     }
-    return checkSuboptionsSelected(respectTo, _selectedSuboptions, _dependsSuboptions, count++);
+    return _checkSuboptionsSelected(respectTo, _selectedSuboptions, _dependsSuboptions, count++);
   };
   (0, _react.useEffect)(function () {
     var _product$product11;
@@ -1205,7 +1205,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
               try {
                 for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
                   var _suboption3 = _step14.value;
-                  if (checkSuboptionsSelected(_suboption3 === null || _suboption3 === void 0 ? void 0 : _suboption3.id, _selectedSuboptions, _dependsSuboptions)) {
+                  if (_checkSuboptionsSelected(_suboption3 === null || _suboption3 === void 0 ? void 0 : _suboption3.id, _selectedSuboptions, _dependsSuboptions)) {
                     preselectedOptions.push(_option5);
                     preselectedSuboptions.push(_suboption3);
                   }

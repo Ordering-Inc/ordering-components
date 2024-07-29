@@ -1380,7 +1380,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
         var _order$payment_events, _ordersGroup, _getStatusById;
         if (!(order !== null && order !== void 0 && order.products) || !(order !== null && order !== void 0 && order.summary) || typeof (order === null || order === void 0 ? void 0 : order.status) !== 'number' || !(order !== null && order !== void 0 && order.customer) || !(order !== null && order !== void 0 && order.business) || !(order !== null && order !== void 0 && order.paymethod) && !(order !== null && order !== void 0 && (_order$payment_events = order.payment_events) !== null && _order$payment_events !== void 0 && _order$payment_events.some(function (e) {
           return e.event === 'payment';
-        }))) {
+        })) && (order === null || order === void 0 ? void 0 : order.total) !== 0) {
           return;
         }
         delete order.total;

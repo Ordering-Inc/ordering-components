@@ -15,7 +15,7 @@ var randomString = exports.randomString = function randomString() {
   }
   return result;
 };
-var deepEqual = exports.deepEqual = function deepEqual(object1, object2) {
+var _deepEqual = exports.deepEqual = function deepEqual(object1, object2) {
   var keys1 = Object.keys(object1);
   var keys2 = Object.keys(object2);
   if (keys1.length !== keys2.length) {
@@ -26,7 +26,7 @@ var deepEqual = exports.deepEqual = function deepEqual(object1, object2) {
     var val1 = object1[key];
     var val2 = object2[key];
     var areObjects = isObject(val1) && isObject(val2);
-    if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2) {
+    if (areObjects && !_deepEqual(val1, val2) || !areObjects && val1 !== val2) {
       return false;
     }
   }
