@@ -696,7 +696,7 @@ var BusinessProductsListing = exports.BusinessProductsListing = function Busines
       isRemove = _ref8.isRemove,
       id = _ref8.id;
     var _categories = _toConsumableArray(businessState === null || businessState === void 0 || (_businessState$busine9 = businessState.business) === null || _businessState$busine9 === void 0 ? void 0 : _businessState$busine9.categories);
-    var replaceSameTaxes = function replaceSameTaxes(categories, tax) {
+    var _replaceSameTaxes = function replaceSameTaxes(categories, tax) {
       for (var i = 0; i < (categories === null || categories === void 0 ? void 0 : categories.length); i++) {
         var _category$subcategori2;
         var category = categories[i];
@@ -712,14 +712,14 @@ var BusinessProductsListing = exports.BusinessProductsListing = function Busines
           }
         }
         if (((_category$subcategori2 = category.subcategories) === null || _category$subcategori2 === void 0 ? void 0 : _category$subcategori2.length) > 0) {
-          categories.subcategories = replaceSameTaxes(categories.subcategories, tax);
+          categories.subcategories = _replaceSameTaxes(categories.subcategories, tax);
         }
       }
       return categories;
     };
     setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
       business: _objectSpread(_objectSpread({}, businessState.business), {}, {
-        categories: replaceSameTaxes(_categories, tax)
+        categories: _replaceSameTaxes(_categories, tax)
       })
     }));
   };
@@ -728,7 +728,7 @@ var BusinessProductsListing = exports.BusinessProductsListing = function Busines
     var fee = _ref9.fee,
       isRemove = _ref9.isRemove;
     var _categories = _toConsumableArray(businessState === null || businessState === void 0 || (_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : _businessState$busine10.categories);
-    var replaceSameFees = function replaceSameFees(categories, fee) {
+    var _replaceSameFees = function replaceSameFees(categories, fee) {
       for (var i = 0; i < (categories === null || categories === void 0 ? void 0 : categories.length); i++) {
         var _category$subcategori3;
         var category = categories[i];
@@ -744,14 +744,14 @@ var BusinessProductsListing = exports.BusinessProductsListing = function Busines
           }
         }
         if (((_category$subcategori3 = category.subcategories) === null || _category$subcategori3 === void 0 ? void 0 : _category$subcategori3.length) > 0) {
-          categories.subcategories = replaceSameFees(categories.subcategories, fee);
+          categories.subcategories = _replaceSameFees(categories.subcategories, fee);
         }
       }
       return categories;
     };
     setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
       business: _objectSpread(_objectSpread({}, businessState.business), {}, {
-        categories: replaceSameFees(_categories, fee)
+        categories: _replaceSameFees(_categories, fee)
       })
     }));
   };

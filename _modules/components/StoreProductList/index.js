@@ -222,14 +222,14 @@ var StoreProductList = exports.StoreProductList = function StoreProductList(prop
       return _ref2.apply(this, arguments);
     };
   }();
-  var updateCategories = function updateCategories(categories, result) {
+  var _updateCategories = function updateCategories(categories, result) {
     return categories.map(function (category) {
       if (category.id === result.id) {
         return _objectSpread(_objectSpread({}, category), result);
       }
       if (Array.isArray(category === null || category === void 0 ? void 0 : category.subcategories) && category.subcategories.length > 0) {
         return _objectSpread(_objectSpread({}, category), {}, {
-          subcategories: updateCategories(category.subcategories, result)
+          subcategories: _updateCategories(category.subcategories, result)
         });
       }
       return category;
@@ -311,7 +311,7 @@ var StoreProductList = exports.StoreProductList = function StoreProductList(prop
             result = _yield$ordering$busin4.result;
             error = _yield$ordering$busin4.error;
             if (!error) {
-              updatedCategories = updateCategories(businessState === null || businessState === void 0 ? void 0 : businessState.business.categories, result);
+              updatedCategories = _updateCategories(businessState === null || businessState === void 0 ? void 0 : businessState.business.categories, result);
               updatedBusiness = _objectSpread(_objectSpread({}, businessState === null || businessState === void 0 ? void 0 : businessState.business), {}, {
                 categories: updatedCategories
               });
@@ -338,13 +338,13 @@ var StoreProductList = exports.StoreProductList = function StoreProductList(prop
       return _ref4.apply(this, arguments);
     };
   }();
-  var validCategory = function validCategory(cat, searchVal) {
+  var _validCategory = function validCategory(cat, searchVal) {
     var _cat$subcategories, _cat$name, _cat$subcategories2;
     if ((cat === null || cat === void 0 || (_cat$subcategories = cat.subcategories) === null || _cat$subcategories === void 0 ? void 0 : _cat$subcategories.length) === 0) return;
     if (cat !== null && cat !== void 0 && (_cat$name = cat.name) !== null && _cat$name !== void 0 && _cat$name.toLowerCase().includes(searchVal)) return true;
     var subcategories = cat === null || cat === void 0 || (_cat$subcategories2 = cat.subcategories) === null || _cat$subcategories2 === void 0 ? void 0 : _cat$subcategories2.filter(function (subCat) {
       var _subCat$name;
-      return (subCat === null || subCat === void 0 || (_subCat$name = subCat.name) === null || _subCat$name === void 0 || (_subCat$name = _subCat$name.toLowerCase()) === null || _subCat$name === void 0 ? void 0 : _subCat$name.includes(searchVal)) || validCategory(subCat, searchVal);
+      return (subCat === null || subCat === void 0 || (_subCat$name = subCat.name) === null || _subCat$name === void 0 || (_subCat$name = _subCat$name.toLowerCase()) === null || _subCat$name === void 0 ? void 0 : _subCat$name.includes(searchVal)) || _validCategory(subCat, searchVal);
     });
     return (subcategories === null || subcategories === void 0 ? void 0 : subcategories.length) > 0;
   };
@@ -359,12 +359,12 @@ var StoreProductList = exports.StoreProductList = function StoreProductList(prop
     if ((businessState === null || businessState === void 0 || (_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 || (_businessState$busine5 = _businessState$busine5.categories) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.length) > 0) {
       var _businessState$busine6;
       var lowerCaseSearchVal = categorySearch.toLowerCase();
-      var _updateCategories = businessState === null || businessState === void 0 || (_businessState$busine6 = businessState.business) === null || _businessState$busine6 === void 0 || (_businessState$busine6 = _businessState$busine6.categories) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.filter(function (cat) {
+      var updateCategories = businessState === null || businessState === void 0 || (_businessState$busine6 = businessState.business) === null || _businessState$busine6 === void 0 || (_businessState$busine6 = _businessState$busine6.categories) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.filter(function (cat) {
         var _cat$name2;
         if (cat !== null && cat !== void 0 && (_cat$name2 = cat.name) !== null && _cat$name2 !== void 0 && (_cat$name2 = _cat$name2.toLowerCase()) !== null && _cat$name2 !== void 0 && _cat$name2.includes(lowerCaseSearchVal)) return true;
-        return validCategory(cat, lowerCaseSearchVal);
+        return _validCategory(cat, lowerCaseSearchVal);
       });
-      setCategories(_updateCategories);
+      setCategories(updateCategories);
     }
   }, [categorySearch, businessState === null || businessState === void 0 ? void 0 : businessState.business]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

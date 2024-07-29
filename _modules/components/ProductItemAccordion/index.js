@@ -31,7 +31,7 @@ var ProductItemAccordion = exports.ProductItemAccordion = function ProductItemAc
   /**
    * Run productInfo to sort product options
    */
-  var productInfo = function productInfo() {
+  var _productInfo = function productInfo() {
     var _product$options;
     var options = JSON.parse(JSON.stringify(Object.values((_product$options = product.options) !== null && _product$options !== void 0 ? _product$options : {})));
     var extraGroups = options.reduce(function (acc, option) {
@@ -69,7 +69,7 @@ var ProductItemAccordion = exports.ProductItemAccordion = function ProductItemAc
         option.suboptions = Object.values((_option$suboptions = option.suboptions) !== null && _option$suboptions !== void 0 ? _option$suboptions : {});
         return option;
       });
-      return _objectSpread(_objectSpread({}, productInfo), {}, {
+      return _objectSpread(_objectSpread({}, _productInfo), {}, {
         ingredients: ingredients,
         options: options
       });
@@ -79,7 +79,7 @@ var ProductItemAccordion = exports.ProductItemAccordion = function ProductItemAc
     });
   };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    productInfo: productInfo()
+    productInfo: _productInfo()
   })));
 };
 ProductItemAccordion.propTypes = {

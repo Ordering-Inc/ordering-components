@@ -255,10 +255,10 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
     }));
   };
   var subCategoriesList = [];
-  var iterateCategories = function iterateCategories(categories) {
+  var _iterateCategories = function iterateCategories(categories) {
     return (categories === null || categories === void 0 ? void 0 : categories.length) > 0 && (categories === null || categories === void 0 ? void 0 : categories.forEach(function (category) {
       subCategoriesList.push(category);
-      iterateCategories(category.subcategories);
+      _iterateCategories(category.subcategories);
     }));
   };
 
@@ -343,7 +343,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               loading: false
             });
             if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
-              iterateCategories(businessState === null || businessState === void 0 || (_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.categories);
+              _iterateCategories(businessState === null || businessState === void 0 || (_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.categories);
               categoriesList = (_ref3 = []).concat.apply(_ref3, _toConsumableArray(businessState === null || businessState === void 0 || (_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.categories.map(function (category) {
                 return category.children;
               })));
@@ -1031,14 +1031,14 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
       })
     }));
   };
-  var updateCategories = function updateCategories(categories, result) {
+  var _updateCategories = function updateCategories(categories, result) {
     return categories.map(function (category) {
       if (category.id === result.id) {
         return _objectSpread(_objectSpread({}, category), result);
       }
       if (Array.isArray(category === null || category === void 0 ? void 0 : category.subcategories) && category.subcategories.length > 0) {
         return _objectSpread(_objectSpread({}, category), {}, {
-          subcategories: updateCategories(category.subcategories, result)
+          subcategories: _updateCategories(category.subcategories, result)
         });
       }
       return category;
@@ -1120,7 +1120,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
             result = _yield$ordering$busin7.result;
             error = _yield$ordering$busin7.error;
             if (!error) {
-              updatedCategories = updateCategories(businessState === null || businessState === void 0 ? void 0 : businessState.business.categories, result);
+              updatedCategories = _updateCategories(businessState === null || businessState === void 0 ? void 0 : businessState.business.categories, result);
               updatedBusiness = _objectSpread(_objectSpread({}, businessState === null || businessState === void 0 ? void 0 : businessState.business), {}, {
                 categories: updatedCategories
               });
