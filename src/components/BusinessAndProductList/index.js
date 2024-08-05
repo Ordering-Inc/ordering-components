@@ -295,6 +295,7 @@ export const BusinessAndProductList = (props) => {
 
   const getLazyProducts = async ({ page, pageSize = categoryStateDefault.pagination.pageSize }) => {
     const parameters = {
+      version: 'v2',
       type: orderState.options?.type ?? 1,
       ...(!isFetchAllProducts && { page }),
       ...(!isFetchAllProducts && { page_size: pageSize }),
