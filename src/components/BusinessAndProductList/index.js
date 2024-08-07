@@ -658,7 +658,8 @@ export const BusinessAndProductList = (props) => {
         requestsState.product = source
         const parameters = {
           type: orderState.options?.type || 1,
-          moment: orderState.options?.moment || null
+          moment: orderState.options?.moment || null,
+          version: 'v2'
         }
 
         if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
