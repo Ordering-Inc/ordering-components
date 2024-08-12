@@ -408,6 +408,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
           case 0:
             page = _ref5.page, _ref5$pageSize = _ref5.pageSize, pageSize = _ref5$pageSize === void 0 ? categoryStateDefault.pagination.pageSize : _ref5$pageSize;
             parameters = _objectSpread(_objectSpread(_objectSpread({
+              version: 'v2',
               type: (_orderState$options$t = (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) !== null && _orderState$options$t !== void 0 ? _orderState$options$t : 1
             }, !isFetchAllProducts && {
               page: page
