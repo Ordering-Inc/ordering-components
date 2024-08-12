@@ -1352,7 +1352,6 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     events.emit(evts[event], value);
   };
   (0, _react.useEffect)(function () {
-    var _session$user7, _session$user8;
     if (!(socket !== null && socket !== void 0 && socket.socket)) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
       var _order$products, _session$user5, _orderFound, _order$driver, _session$user6;
@@ -1437,8 +1436,6 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
         setRecentlyReceivedMessage(message);
       }
     };
-    var ordersRoom = (session === null || session === void 0 || (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user8 = session.user) === null || _session$user8 === void 0 ? void 0 : _session$user8.id);
-    socket.join(ordersRoom);
     socket.on('orders_register', handleAddNewOrder);
     socket.on('order_assigned', handleAddNewOrder);
     socket.on('update_order', handleUpdateOrder);
@@ -1520,31 +1517,35 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     };
   }, [socket, session, isLogisticActivated]);
   (0, _react.useEffect)(function () {
-    var _session$user15, _session$user16, _session$user17, _session$user18, _session$user19, _session$user20;
     if (!session.user) return;
-    socket.on('disconnect', function () {
-      var _session$user9, _session$user10, _session$user11, _session$user12, _session$user13, _session$user14;
-      var ordersRoom = (session === null || session === void 0 || (_session$user9 = session.user) === null || _session$user9 === void 0 ? void 0 : _session$user9.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user10 = session.user) === null || _session$user10 === void 0 ? void 0 : _session$user10.id);
+    var userId = session.user.id;
+    var userLevel = session.user.level;
+    var ordersRoom = !isDriverApp ? {
+      project: ordering.project,
+      room: 'orders',
+      user_id: userId,
+      role: 'manager'
+    } : userLevel === 0 ? 'orders' : "orders_".concat(userId);
+    var requestsRoom = "requests_".concat(userId);
+    var groupsRoom = "ordergroups_".concat(userId);
+    var messagesOrdersRoom = userLevel === 0 ? 'messages_orders' : "messages_orders_".concat(userId);
+    var joinRooms = function joinRooms() {
       socket.join(ordersRoom);
-      var requestsRoom = "requests_".concat(session === null || session === void 0 || (_session$user11 = session.user) === null || _session$user11 === void 0 ? void 0 : _session$user11.id);
       socket.join(requestsRoom);
-      var groupsRoom = "ordergroups_".concat(session === null || session === void 0 || (_session$user12 = session.user) === null || _session$user12 === void 0 ? void 0 : _session$user12.id);
       socket.join(groupsRoom);
-      socket.join((session === null || session === void 0 || (_session$user13 = session.user) === null || _session$user13 === void 0 ? void 0 : _session$user13.level) === 0 ? 'messages_orders' : "messages_orders_".concat(session === null || session === void 0 || (_session$user14 = session.user) === null || _session$user14 === void 0 ? void 0 : _session$user14.id));
-    });
-    var ordersRoom = (session === null || session === void 0 || (_session$user15 = session.user) === null || _session$user15 === void 0 ? void 0 : _session$user15.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user16 = session.user) === null || _session$user16 === void 0 ? void 0 : _session$user16.id);
-    var messagesOrdersRoom = (session === null || session === void 0 || (_session$user17 = session.user) === null || _session$user17 === void 0 ? void 0 : _session$user17.level) === 0 ? 'messages_orders' : "messages_orders_".concat(session === null || session === void 0 || (_session$user18 = session.user) === null || _session$user18 === void 0 ? void 0 : _session$user18.id);
-    var requestsRoom = "requests_".concat(session === null || session === void 0 || (_session$user19 = session.user) === null || _session$user19 === void 0 ? void 0 : _session$user19.id);
-    var groupsRoom = "ordergroups_".concat(session === null || session === void 0 || (_session$user20 = session.user) === null || _session$user20 === void 0 ? void 0 : _session$user20.id);
-    socket.join(ordersRoom);
-    socket.join(requestsRoom);
-    socket.join(groupsRoom);
-    socket.join(messagesOrdersRoom);
-    return function () {
+      socket.join(messagesOrdersRoom);
+    };
+    var leaveRooms = function leaveRooms() {
       socket.leave(ordersRoom);
       socket.leave(requestsRoom);
       socket.leave(groupsRoom);
       socket.leave(messagesOrdersRoom);
+    };
+    socket.on('disconnect', joinRooms);
+    joinRooms();
+    return function () {
+      leaveRooms();
+      socket.off('disconnect', joinRooms);
     };
   }, [socket, session]);
   (0, _react.useEffect)(function () {
