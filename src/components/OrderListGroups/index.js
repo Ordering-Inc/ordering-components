@@ -1036,8 +1036,6 @@ export const OrderListGroups = (props) => {
         setRecentlyReceivedMessage(message)
       }
     }
-    const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
-    socket.join(ordersRoom)
     socket.on('orders_register', handleAddNewOrder)
     socket.on('order_assigned', handleAddNewOrder)
     socket.on('update_order', handleUpdateOrder)
@@ -1125,30 +1123,45 @@ export const OrderListGroups = (props) => {
 
   useEffect(() => {
     if (!session.user) return
-    socket.on('disconnect', () => {
-      const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
+
+    const userId = session.user.id
+    const userLevel = session.user.level
+
+    const ordersRoom = !isDriverApp
+      ? {
+        project: ordering.project,
+        room: 'orders',
+        user_id: userId,
+        role: 'manager'
+      }
+      : userLevel === 0
+        ? 'orders'
+        : `orders_${userId}`
+
+    const requestsRoom = `requests_${userId}`
+    const groupsRoom = `ordergroups_${userId}`
+    const messagesOrdersRoom = userLevel === 0 ? 'messages_orders' : `messages_orders_${userId}`
+    const joinRooms = () => {
       socket.join(ordersRoom)
-      const requestsRoom = `requests_${session?.user?.id}`
       socket.join(requestsRoom)
-      const groupsRoom = `ordergroups_${session?.user?.id}`
       socket.join(groupsRoom)
-      socket.join(session?.user?.level === 0 ? 'messages_orders' : `messages_orders_${session?.user?.id}`)
-    })
-    const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
-    const messagesOrdersRoom = session?.user?.level === 0 ? 'messages_orders' : `messages_orders_${session?.user?.id}`
-    const requestsRoom = `requests_${session?.user?.id}`
-    const groupsRoom = `ordergroups_${session?.user?.id}`
+      socket.join(messagesOrdersRoom)
+    }
 
-    socket.join(ordersRoom)
-    socket.join(requestsRoom)
-    socket.join(groupsRoom)
-    socket.join(messagesOrdersRoom)
-
-    return () => {
+    const leaveRooms = () => {
       socket.leave(ordersRoom)
       socket.leave(requestsRoom)
       socket.leave(groupsRoom)
       socket.leave(messagesOrdersRoom)
+    }
+
+    socket.on('disconnect', joinRooms)
+
+    joinRooms()
+
+    return () => {
+      leaveRooms()
+      socket.off('disconnect', joinRooms)
     }
   }, [socket, session])
 
