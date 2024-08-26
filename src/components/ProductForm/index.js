@@ -273,10 +273,14 @@ export const ProductForm = (props) => {
       setProduct({ ...product, loading: true })
       const source = {}
       requestsState.product = source
+      const parameters = {
+        version: 'v2'
+      }
       const { content: { result, error } } = await ordering
         .businesses(props.businessId)
         .categories(props.categoryId)
         .products(props.productId)
+        .parameters(parameters)
         .get({ cancelToken: source })
 
       if (!error) {
