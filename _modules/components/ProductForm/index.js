@@ -407,7 +407,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    */
   var loadProductWithOptions = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var source, _yield$ordering$busin, _yield$ordering$busin2, result, error;
+      var source, parameters, _yield$ordering$busin, _yield$ordering$busin2, result, error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -417,17 +417,20 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
             }));
             source = {};
             requestsState.product = source;
-            _context2.next = 6;
-            return ordering.businesses(props.businessId).categories(props.categoryId).products(props.productId).get({
+            parameters = {
+              version: 'v2'
+            };
+            _context2.next = 7;
+            return ordering.businesses(props.businessId).categories(props.categoryId).products(props.productId).parameters(parameters).get({
               cancelToken: source
             });
-          case 6:
+          case 7:
             _yield$ordering$busin = _context2.sent;
             _yield$ordering$busin2 = _yield$ordering$busin.content;
             result = _yield$ordering$busin2.result;
             error = _yield$ordering$busin2.error;
             if (error) {
-              _context2.next = 13;
+              _context2.next = 14;
               break;
             }
             setProduct(_objectSpread(_objectSpread({}, product), {}, {
@@ -435,25 +438,25 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
               product: result
             }));
             return _context2.abrupt("return");
-          case 13:
+          case 14:
             setProduct(_objectSpread(_objectSpread({}, product), {}, {
               loading: false,
               error: [result]
             }));
-            _context2.next = 19;
+            _context2.next = 20;
             break;
-          case 16:
-            _context2.prev = 16;
+          case 17:
+            _context2.prev = 17;
             _context2.t0 = _context2["catch"](0);
             setProduct(_objectSpread(_objectSpread({}, product), {}, {
               loading: false,
               error: [_context2.t0.message]
             }));
-          case 19:
+          case 20:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[0, 16]]);
+      }, _callee2, null, [[0, 17]]);
     }));
     return function loadProductWithOptions() {
       return _ref2.apply(this, arguments);
