@@ -183,7 +183,7 @@ var Checkout = function Checkout(props) {
 
   var _useState11 = (0, _react.useState)({
     business: null,
-    loading: true,
+    loading: false,
     error: null
   }),
       _useState12 = _slicedToArray(_useState11, 2),
@@ -295,7 +295,7 @@ var Checkout = function Checkout(props) {
               return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/va_por_mi_cuenta.php"), {
                 method: 'POST',
                 body: JSON.stringify({
-                  uuid: cart.uuid
+                  uuid: cart === null || cart === void 0 ? void 0 : cart.uuid
                 }),
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -370,13 +370,16 @@ var Checkout = function Checkout(props) {
             case 0:
               refreshConfigs();
               _context2.prev = 1;
+              setBusinessDetails(_objectSpread(_objectSpread({}, businessDetails), {}, {
+                loading: true
+              }));
               parameters = {
                 type: (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type
               };
-              _context2.next = 5;
+              _context2.next = 6;
               return ordering.businesses(businessId).select(propsToFetch).parameters(parameters).get();
 
-            case 5:
+            case 6:
               _yield$ordering$busin = _context2.sent;
               _yield$ordering$busin2 = _yield$ordering$busin.content;
               result = _yield$ordering$busin2.result;
@@ -407,23 +410,23 @@ var Checkout = function Checkout(props) {
                 business: result,
                 error: error
               }));
-              _context2.next = 16;
+              _context2.next = 17;
               break;
 
-            case 13:
-              _context2.prev = 13;
+            case 14:
+              _context2.prev = 14;
               _context2.t0 = _context2["catch"](1);
               setBusinessDetails(_objectSpread(_objectSpread({}, businessDetails), {}, {
                 loading: false,
                 error: _context2.t0
               }));
 
-            case 16:
+            case 17:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 13]]);
+      }, _callee2, null, [[1, 14]]);
     }));
 
     return function getBusiness() {
@@ -454,7 +457,7 @@ var Checkout = function Checkout(props) {
               }
 
               payload = {
-                offer_id: cart.offer_id,
+                offer_id: cart === null || cart === void 0 ? void 0 : cart.offer_id,
                 amount: (_cart$balance = cart === null || cart === void 0 ? void 0 : cart.balance) !== null && _cart$balance !== void 0 ? _cart$balance : cart === null || cart === void 0 ? void 0 : cart.total
               };
 
@@ -467,7 +470,7 @@ var Checkout = function Checkout(props) {
 
               if (orderState.options.type === 1) {
                 payload = _objectSpread(_objectSpread({}, payload), {}, {
-                  delivery_zone_id: cart.delivery_zone_id
+                  delivery_zone_id: cart === null || cart === void 0 ? void 0 : cart.delivery_zone_id
                 });
               }
 
@@ -494,7 +497,7 @@ var Checkout = function Checkout(props) {
 
               setPlacing(true);
               _context3.next = 12;
-              return placeCart(cart.uuid, payload);
+              return placeCart(cart === null || cart === void 0 ? void 0 : cart.uuid, payload);
 
             case 12:
               result = _context3.sent;
@@ -786,7 +789,7 @@ var Checkout = function Checkout(props) {
               return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/is_cash_external_driver_group.php"), {
                 method: 'POST',
                 body: JSON.stringify({
-                  uuid: cart.uuid
+                  uuid: cart === null || cart === void 0 ? void 0 : cart.uuid
                 }),
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -841,7 +844,7 @@ var Checkout = function Checkout(props) {
               return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/max_cash_delivery.php"), {
                 method: 'POST',
                 body: JSON.stringify({
-                  uuid: cart.uuid
+                  uuid: cart === null || cart === void 0 ? void 0 : cart.uuid
                 }),
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -900,7 +903,7 @@ var Checkout = function Checkout(props) {
               return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/is_catering.php"), {
                 method: 'POST',
                 body: JSON.stringify({
-                  uuid: cart.uuid,
+                  uuid: cart === null || cart === void 0 ? void 0 : cart.uuid,
                   brand_id: businessDetails === null || businessDetails === void 0 ? void 0 : (_businessDetails$busi = businessDetails.business) === null || _businessDetails$busi === void 0 ? void 0 : _businessDetails$busi.brand_id
                 }),
                 headers: {
@@ -1036,6 +1039,10 @@ var Checkout = function Checkout(props) {
       getBusiness();
     } else if (((_Object$keys3 = Object.keys(business)) === null || _Object$keys3 === void 0 ? void 0 : _Object$keys3.length) !== 0 && (cart === null || cart === void 0 ? void 0 : cart.business_id) === (business === null || business === void 0 ? void 0 : business.id)) {
       var _business$paymethods, _paymethodSelected2$p;
+
+      setBusinessDetails(_objectSpread(_objectSpread({}, businessDetails), {}, {
+        loading: true
+      }));
 
       var _paymethodSelected2 = business === null || business === void 0 ? void 0 : (_business$paymethods = business.paymethods) === null || _business$paymethods === void 0 ? void 0 : _business$paymethods.find(function (paymethod) {
         var _cartState$cart3;
