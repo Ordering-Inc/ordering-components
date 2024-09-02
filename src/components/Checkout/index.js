@@ -62,7 +62,7 @@ export const Checkout = (props) => {
   /**
    * Object to save an object with business information
    */
-  const [businessDetails, setBusinessDetails] = useState({ business: null, loading: true, error: null })
+  const [businessDetails, setBusinessDetails] = useState({ business: null, loading: false, error: null })
   /**
    * This must be contains an object with info about paymente selected
    */
@@ -119,7 +119,7 @@ export const Checkout = (props) => {
       const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/va_por_mi_cuenta.php`, {
         method: 'POST',
         body: JSON.stringify({
-          uuid: cart.uuid
+          uuid: cart?.uuid
         }),
         headers: {
           Authorization: `Bearer ${token}`,
@@ -162,6 +162,10 @@ export const Checkout = (props) => {
   const getBusiness = async () => {
     refreshConfigs()
     try {
+      setBusinessDetails({
+        ...businessDetails,
+        loading: true
+      })
       const parameters = {
         type: orderState.options?.type
       }
@@ -210,7 +214,7 @@ export const Checkout = (props) => {
       }
     }
     let payload = {
-      offer_id: cart.offer_id,
+      offer_id: cart?.offer_id,
       amount: cart?.balance ?? cart?.total
     }
 
@@ -225,7 +229,7 @@ export const Checkout = (props) => {
     if (orderState.options.type === 1) {
       payload = {
         ...payload,
-        delivery_zone_id: cart.delivery_zone_id
+        delivery_zone_id: cart?.delivery_zone_id
       }
     }
 
@@ -258,7 +262,7 @@ export const Checkout = (props) => {
     }
 
     setPlacing(true)
-    const result = await placeCart(cart.uuid, payload)
+    const result = await placeCart(cart?.uuid, payload)
 
     if (result?.error) {
       setErrors(result?.result)
@@ -377,7 +381,7 @@ export const Checkout = (props) => {
       const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/is_cash_external_driver_group.php`, {
         method: 'POST',
         body: JSON.stringify({
-          uuid: cart.uuid
+          uuid: cart?.uuid
         }),
         headers: {
           Authorization: `Bearer ${token}`,
@@ -401,7 +405,7 @@ export const Checkout = (props) => {
       const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/max_cash_delivery.php`, {
         method: 'POST',
         body: JSON.stringify({
-          uuid: cart.uuid
+          uuid: cart?.uuid
         }),
         headers: {
           Authorization: `Bearer ${token}`,
@@ -429,7 +433,7 @@ export const Checkout = (props) => {
       const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/is_catering.php`, {
         method: 'POST',
         body: JSON.stringify({
-          uuid: cart.uuid,
+          uuid: cart?.uuid,
           brand_id: businessDetails?.business?.brand_id
         }),
         headers: {
@@ -503,6 +507,10 @@ export const Checkout = (props) => {
     if ((businessId && typeof businessId === 'number' && Object.keys(business)?.length === 0) || (Object.keys(business)?.length !== 0 && cart?.business_id !== business?.id)) {
       getBusiness()
     } else if (Object.keys(business)?.length !== 0 && cart?.business_id === business?.id) {
+      setBusinessDetails({
+        ...businessDetails,
+        loading: true
+      })
       const paymethodSelected = business?.paymethods?.find(paymethod => paymethod?.paymethod_id === cartState.cart?.paymethod_id)
       if (paymethodSelected?.paymethod?.id) {
         handlePaymethodChange({
