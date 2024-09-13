@@ -206,7 +206,7 @@ var BusinessProductsListing = exports.BusinessProductsListing = function Busines
     return name && name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || description && description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
   };
   var getProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, currentPage, currentPageSize) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, currentPage, currentPageSize) {
       var _businessState$busine;
       var _categoryState, _businessState$busine2, _categoryFinded, _categoryFinded2, _productsFinded, categoryFinded, _categories, productsFinded, productsFiltered, _categorySelected$pro, _businessState$busine3, _productsFiltered, categoryKey, categoryState, pagination, parameters, where, searchConditions, _businessState$busine4, _businessState$busine5, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -353,7 +353,7 @@ var BusinessProductsListing = exports.BusinessProductsListing = function Busines
     };
   }();
   var getProduct = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _businessState$busine6;
       var _businessState$busine7, source, _yield$ordering$busin, result, product;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -401,7 +401,7 @@ var BusinessProductsListing = exports.BusinessProductsListing = function Busines
     };
   }();
   var getTaxes = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var taxesObject, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -454,7 +454,7 @@ var BusinessProductsListing = exports.BusinessProductsListing = function Busines
     };
   }();
   var getFees = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var feesObject, response, _yield$response$json2, error, result;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -511,7 +511,7 @@ var BusinessProductsListing = exports.BusinessProductsListing = function Busines
    * Method to get the themes from API
    */
   var getSites = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var requestOptions, response, _yield$response$json3, error, result, site;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -571,7 +571,7 @@ var BusinessProductsListing = exports.BusinessProductsListing = function Busines
     };
   }();
   var getBusinessTypes = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
       var response, _yield$response$json4, error, result;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -620,7 +620,7 @@ var BusinessProductsListing = exports.BusinessProductsListing = function Busines
     setBusinessSlug(slug);
   }, [slug]);
   var getBusiness = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
       var _result$categories, source, _yield$ordering$busin2, result;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {

@@ -125,7 +125,7 @@ var Popup = exports.Popup = function Popup(props) {
     zIndex: 20001,
     outline: 'none'
   };
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, open && root && /*#__PURE__*/_reactDom.default.createPortal( /*#__PURE__*/_react.default.createElement("div", {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, open && root && /*#__PURE__*/_reactDom.default.createPortal(/*#__PURE__*/_react.default.createElement("div", {
     className: "popup-component",
     style: popupStyles,
     onMouseDown: handleClick,

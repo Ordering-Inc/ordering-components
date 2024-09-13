@@ -184,7 +184,7 @@ var BusinessSearchList = exports.BusinessSearchList = function BusinessSearchLis
     }));
   };
   var handleSearchbusinessAndProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, options, val) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, options, val) {
       var _orderState$options3, _orderState$options4, _orderState$options5, _orderState$options6, _ref2, filtParams, where, requestOptions, location, response, _yield$response$json, result, error, pagination, nextPageItems, remainingItems;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -294,7 +294,7 @@ var BusinessSearchList = exports.BusinessSearchList = function BusinessSearchLis
   * Function to get brand list from API
   */
   var getBrandList = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -352,7 +352,7 @@ var BusinessSearchList = exports.BusinessSearchList = function BusinessSearchLis
     };
   }();
   var getCities = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var requestOptions, response, _yield$response$json2, result, error, pagination;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -404,7 +404,7 @@ var BusinessSearchList = exports.BusinessSearchList = function BusinessSearchLis
   * Function to get tag list from API
   */
   var getTagList = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {

@@ -103,7 +103,7 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
    * @param {number} addressId Address id for address
    */
   var loadAddress = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(userId, addressId) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(userId, addressId) {
       var source, _yield$ordering$users, content;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -191,7 +191,7 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
    * Update if address id exist or create if not
    */
   var saveAddress = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values, userCustomerSetup) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values, userCustomerSetup) {
       var _userByToken$session;
       var _values$country_code, _formState$changes, _addressState$address, _userByToken$session2, _yield$ordering$users2, content, _content$result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -275,7 +275,7 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
     };
   }();
   var getBusinessDeliveryZones = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(location) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(location) {
       var where, conditions, parameters, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -357,7 +357,7 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
     };
   }();
   var getUserByToken = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var requestOptions, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {

@@ -43,7 +43,7 @@ var ValidationFieldsProvider = exports.ValidationFieldsProvider = function Valid
     state = _useState2[0],
     setState = _useState2[1];
   var loadOriginalValidationFields = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(options) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(options) {
       var fields,
         forceLoading,
         _fields$error,
@@ -135,7 +135,7 @@ var ValidationFieldsProvider = exports.ValidationFieldsProvider = function Valid
 };
 var useValidationFields = exports.useValidationFields = function useValidationFields() {
   var validationFieldsManager = (0, _react.useContext)(ValidationFieldsContext);
-  return validationFieldsManager || [{}, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  return validationFieldsManager || [{}, /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:

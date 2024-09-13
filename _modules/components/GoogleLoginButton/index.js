@@ -93,8 +93,8 @@ var GoogleLoginButton = exports.GoogleLoginButton = function GoogleLoginButton(p
       }));
       var GoogleAuth = window.gapi.auth2.getAuthInstance();
       if (!GoogleAuth) {
-        window.gapi.auth2.init(initParams).then( /*#__PURE__*/function () {
-          var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(res) {
+        window.gapi.auth2.init(initParams).then(/*#__PURE__*/function () {
+          var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(res) {
             var signedIn;
             return _regeneratorRuntime().wrap(function _callee$(_context) {
               while (1) switch (_context.prev = _context.next) {
@@ -206,7 +206,7 @@ var GoogleLoginButton = exports.GoogleLoginButton = function GoogleLoginButton(p
    * @param {object} res from Google
    */
   var handleSigninSuccess = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(res) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(res) {
       var authResponse, response;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

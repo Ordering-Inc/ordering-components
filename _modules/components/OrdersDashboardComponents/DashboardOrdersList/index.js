@@ -121,7 +121,7 @@ var DashboardOrdersList = exports.DashboardOrdersList = function DashboardOrders
    * @param {object} order orders id and new status
    */
   var handleUpdateOrderStatus = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(order) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(order) {
       var source, _yield$ordering$setAc, content, _orders2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -178,7 +178,7 @@ var DashboardOrdersList = exports.DashboardOrdersList = function DashboardOrders
    * @param {number} page page number
    */
   var getOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(pageSize, page) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(pageSize, page) {
       var where, conditions, options, getFilterStatusInOrderStatus, searchConditions, _filterValues$metafie, filterConditons, metafieldConditions, source, functionFetch;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -529,7 +529,7 @@ var DashboardOrdersList = exports.DashboardOrdersList = function DashboardOrders
     return filterCheck;
   };
   var loadOrders = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var response;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -585,7 +585,7 @@ var DashboardOrdersList = exports.DashboardOrdersList = function DashboardOrders
     };
   }();
   var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var response;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -635,7 +635,7 @@ var DashboardOrdersList = exports.DashboardOrdersList = function DashboardOrders
     };
   }();
   var getPageOrders = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(pageSize, page) {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(pageSize, page) {
       var response;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -717,7 +717,7 @@ var DashboardOrdersList = exports.DashboardOrdersList = function DashboardOrders
     setAllowColumns(_allowColumnsUpdated);
   };
   var saveUserSettings = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(allowColumnsUpdated) {
+    var _ref8 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(allowColumnsUpdated) {
       var _session$user, _session$user2, _session$user3, _settings, _allowColumnsUpdated;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {

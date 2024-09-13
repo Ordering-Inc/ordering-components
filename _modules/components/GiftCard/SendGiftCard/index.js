@@ -58,7 +58,7 @@ var SendGiftCard = exports.SendGiftCard = function SendGiftCard(props) {
     actionState = _useState2[0],
     setActionState = _useState2[1];
   var handleSendGiftCard = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
       var requestOptions, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

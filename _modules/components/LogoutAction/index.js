@@ -113,7 +113,7 @@ var LogoutAction = exports.LogoutAction = function LogoutAction(props) {
    * Default fuction for logout workflow
    */
   var handleLogoutClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(bodyParams) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(bodyParams) {
       var _response$content, _response$content2, response, _response$content3, _response$content4, accessToken, body, funtionFetch, _yield$funtionFetch, _yield$funtionFetch$c, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -209,7 +209,7 @@ var LogoutAction = exports.LogoutAction = function LogoutAction(props) {
     };
   }();
   var getActiveOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var options, accessToken, orderStatus, propsToFetch, functionFetch;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

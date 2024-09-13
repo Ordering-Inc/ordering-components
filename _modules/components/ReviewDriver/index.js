@@ -70,7 +70,7 @@ var ReviewDriver = exports.ReviewDriver = function ReviewDriver(props) {
    * Function that load and send the driver review to ordering
    */
   var handleSendDriverReview = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var orderId, _order$products$, _order$driver, _reviewsArray$, userId, fetchReviews, reviewsArray, error, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -88,13 +88,13 @@ var ReviewDriver = exports.ReviewDriver = function ReviewDriver(props) {
             _context3.prev = 4;
             userId = isProfessional ? order === null || order === void 0 || (_order$products$ = order.products[0]) === null || _order$products$ === void 0 || (_order$products$ = _order$products$.calendar_event) === null || _order$products$ === void 0 || (_order$products$ = _order$products$.professional) === null || _order$products$ === void 0 ? void 0 : _order$products$.id : order === null || order === void 0 || (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id;
             fetchReviews = /*#__PURE__*/function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
+              var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
                 var promises, data;
                 return _regeneratorRuntime().wrap(function _callee2$(_context2) {
                   while (1) switch (_context2.prev = _context2.next) {
                     case 0:
-                      promises = ids.map( /*#__PURE__*/function () {
-                        var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
+                      promises = ids.map(/*#__PURE__*/function () {
+                        var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
                           var headers, res, _yield$res$json, result, error;
                           return _regeneratorRuntime().wrap(function _callee$(_context) {
                             while (1) switch (_context.prev = _context.next) {

@@ -69,7 +69,7 @@ var UserVerification = exports.UserVerification = function UserVerification(prop
    * @param {Object} values object with type, channel, size, email values
    */
   var sendVerifyEmailCode = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
       var _values$type, _values$channel, _values$size, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -132,7 +132,7 @@ var UserVerification = exports.UserVerification = function UserVerification(prop
    * @param {Object} values object with channel and code values
    */
   var checkVerifyEmailCode = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
       var _values$channel2, response, _yield$response$json2, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -213,7 +213,7 @@ var UserVerification = exports.UserVerification = function UserVerification(prop
    * @param {Object} values object with cellphone and country code values
    */
   var sendVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
       var _values$type2, _values$channel3, _values$size2, response, _yield$response$json3, error, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -278,7 +278,7 @@ var UserVerification = exports.UserVerification = function UserVerification(prop
    * @param {Object} values object with cellphone and country code values
    */
   var checkVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
       var _values$channel4, response, _yield$response$json4, error, result;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {

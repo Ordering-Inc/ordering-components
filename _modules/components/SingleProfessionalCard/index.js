@@ -61,7 +61,7 @@ var SingleProfessionalCard = exports.SingleProfessionalCard = function SinglePro
    * Method to add, remove favorite info for user from API
    */
   var handleFavoriteProfessional = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var isAdd,
         changes,
         requestOptions,

@@ -150,7 +150,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
     return _dayjs.default.utc(date, format).format(format) === date;
   };
   var handleReorder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(value) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(value) {
       var orderId, _reordersArray$, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, disableLoading, fetchOrders, reordersArray, error, result, choosedOrder, _businessId, _businessData, _businessSlug, orderResult;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -168,13 +168,13 @@ var OrderList = exports.OrderList = function OrderList(props) {
             }));
             disableLoading = isCustomerMode;
             fetchOrders = /*#__PURE__*/function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
+              var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
                 var promises, data;
                 return _regeneratorRuntime().wrap(function _callee2$(_context2) {
                   while (1) switch (_context2.prev = _context2.next) {
                     case 0:
-                      promises = ids.map( /*#__PURE__*/function () {
-                        var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
+                      promises = ids.map(/*#__PURE__*/function () {
+                        var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
                           var res;
                           return _regeneratorRuntime().wrap(function _callee$(_context) {
                             while (1) switch (_context.prev = _context.next) {
@@ -274,7 +274,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
     };
   }();
   var getOrders = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(page) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(page) {
       var otherStatus,
         pageSize,
         searchConditions,
@@ -394,7 +394,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
     };
   }();
   var loadOrders = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(isNextPage, searchByOtherStatus) {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(isNextPage, searchByOtherStatus) {
       var keepOrders,
         getFirstOrder,
         pageSize,
@@ -531,7 +531,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
     }));
   };
   var loadMessages = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderId) {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderId) {
       var url, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -591,7 +591,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
     };
   }();
   var getBusinesses = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(businessIds) {
+    var _ref8 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(businessIds) {
       var _orderState$options, _orderState$options2, _orderState$options3, _orderState$options4, parameters, _orderState$options5, moment, where, conditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -761,7 +761,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
     };
   }, [socket, session, userCustomerId, isCustomerMode]);
   var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(searchByOtherStatus) {
+    var _ref9 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8(searchByOtherStatus) {
       var response;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
@@ -811,7 +811,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
     };
   }();
   var goToPage = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(page) {
+    var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9(page) {
       var response;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) switch (_context9.prev = _context9.next) {
@@ -892,7 +892,7 @@ var OrderList = exports.OrderList = function OrderList(props) {
     }));
   };
   var getPage = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(page, pageSize) {
+    var _ref11 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10(page, pageSize) {
       var response;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {

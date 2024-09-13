@@ -49,7 +49,7 @@ var OptimizationLoadProvider = exports.OptimizationLoadProvider = function Optim
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
   var getData = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _localOptions$address;
       var requestOptions, countryCodeFromLocalStorage, localOptions, countryCode, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {

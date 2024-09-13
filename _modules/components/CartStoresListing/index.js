@@ -76,7 +76,7 @@ var CartStoresListing = exports.CartStoresListing = function CartStoresListing(p
     setChangeStore = _useState8[1];
   var requestsState = {};
   var getCartStores = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var source, _yield$ordering$setAc, _yield$ordering$setAc2, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -122,7 +122,7 @@ var CartStoresListing = exports.CartStoresListing = function CartStoresListing(p
     };
   }();
   var handleCartStoreChange = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(businessId) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(businessId) {
       var _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, _orderState$carts, carts, cartFinded, route, _result$business, _result$business2;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

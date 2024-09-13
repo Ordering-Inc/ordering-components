@@ -53,7 +53,7 @@ var OrderingThemeProvider = exports.OrderingThemeProvider = function OrderingThe
     _useOptimizationLoad2 = _slicedToArray(_useOptimizationLoad, 1),
     optimizationLoad = _useOptimizationLoad2[0];
   var getThemes = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var themes,
         requestOptions,
         _themes$error,

@@ -74,7 +74,7 @@ var PaymentOptionWallet = exports.PaymentOptionWallet = function PaymentOptionWa
     return redemptionRate;
   };
   var getWallets = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _resLoyalty, _resLoyalty2, response, _yield$response$json, error, result, resLoyalty, reqLoyalty, wallets, loyaltyPlans;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -163,7 +163,7 @@ var PaymentOptionWallet = exports.PaymentOptionWallet = function PaymentOptionWa
     };
   }();
   var selectWallet = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(wallet) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(wallet) {
       var response, _yield$response$json2, error, result, carts;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -219,7 +219,7 @@ var PaymentOptionWallet = exports.PaymentOptionWallet = function PaymentOptionWa
     };
   }();
   var deletetWalletSelected = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(wallet) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(wallet) {
       var response, _yield$response$json3, error, result, carts;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {

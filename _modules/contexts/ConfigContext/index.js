@@ -148,7 +148,7 @@ var ConfigProvider = exports.ConfigProvider = function ConfigProvider(_ref) {
     }
   };
   var refreshConfigs = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newCountryCode) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(newCountryCode) {
       var configs,
         _configs$error,
         _configs$result,
@@ -311,7 +311,7 @@ var ConfigProvider = exports.ConfigProvider = function ConfigProvider(_ref) {
  */
 var useConfig = exports.useConfig = function useConfig() {
   var configManager = (0, _react.useContext)(ConfigContext);
-  return configManager || [{}, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  return configManager || [{}, /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:

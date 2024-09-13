@@ -61,7 +61,7 @@ var MapView = exports.MapView = function MapView(props) {
     alertState = _useState10[0],
     setAlertState = _useState10[1];
   var getBusinessLocations = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var markerGroupsObject, customerMarkerGroupsObject, options, _yield$ordering$setAc, _yield$ordering$setAc2, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -108,7 +108,7 @@ var MapView = exports.MapView = function MapView(props) {
     };
   }();
   var setDriverLocation = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(location) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(location) {
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:

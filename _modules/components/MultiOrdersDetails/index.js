@@ -78,7 +78,7 @@ var MultiOrdersDetails = exports.MultiOrdersDetails = function MultiOrdersDetail
    * Get orders from API
    */
   var getOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, _total, _subtotal, _tax;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

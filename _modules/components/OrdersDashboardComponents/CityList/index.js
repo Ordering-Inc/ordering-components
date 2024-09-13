@@ -54,7 +54,7 @@ var CityList = exports.CityList = function CityList(props) {
    * Method to get cities from API
    */
   var getCities = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _yield$ordering$count, _yield$ordering$count2, error, result, _cities, _iterator, _step, country;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

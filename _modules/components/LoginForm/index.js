@@ -142,7 +142,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
    * @param {object} credentials Login credentials email/cellphone and password
    */
   var handleLoginClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
       var _credentials4, _window, _credentials, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, level, session, accessToken, _yield$ordering$setAc, logoutResp, _result$session, _result$session2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -346,7 +346,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
    * @param {Object} values object with cellphone and country code values
    */
   var sendVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
       var response, res;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -419,7 +419,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
    * @param {Object} values object with cellphone and country code values
    */
   var checkVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
       var body, _res$result, response, res, _res$result2;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -484,7 +484,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
     };
   }();
   var generateOtpCode = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
       var body, email, cellphone, countryPhoneCode, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -567,7 +567,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
     };
   }();
   var handleLoginSpoonity = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var _result$session3, response, _yield$response$json2, result, error;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {

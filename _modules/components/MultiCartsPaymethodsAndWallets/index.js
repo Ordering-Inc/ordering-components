@@ -103,7 +103,7 @@ var MultiCartsPaymethodsAndWallets = exports.MultiCartsPaymethodsAndWallets = fu
    * Method to get available wallets and paymethods from API
    */
   var getPaymethodsAndWallets = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var requestOptions, response, content, _content$result, _content$result2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -166,7 +166,7 @@ var MultiCartsPaymethodsAndWallets = exports.MultiCartsPaymethodsAndWallets = fu
    * Method to get user wallets from API
    */
   var getUserWallets = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _resLoyalty, _resLoyalty2, response, _yield$response$json, error, result, resLoyalty, reqLoyalty, wallets, loyaltyPlans;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

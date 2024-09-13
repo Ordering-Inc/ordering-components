@@ -78,7 +78,7 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
    * getting products if array of product is not defined
    */
   var getProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _yield$ordering$busin, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

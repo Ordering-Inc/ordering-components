@@ -34,7 +34,7 @@ var CustomerProvider = exports.CustomerProvider = function CustomerProvider(_ref
     state = _useState2[0],
     setState = _useState2[1];
   var getUserCustomerFromLocalStorage = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var user;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -70,7 +70,7 @@ var CustomerProvider = exports.CustomerProvider = function CustomerProvider(_ref
     };
   }();
   var setUserCustomer = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(user, isFromLocalStorage) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(user, isFromLocalStorage) {
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -99,7 +99,7 @@ var CustomerProvider = exports.CustomerProvider = function CustomerProvider(_ref
     };
   }();
   var deleteUserCustomer = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(isFromLocalStorage) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(isFromLocalStorage) {
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:

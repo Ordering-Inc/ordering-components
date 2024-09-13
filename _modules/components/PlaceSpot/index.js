@@ -98,7 +98,7 @@ var PlaceSpot = exports.PlaceSpot = function PlaceSpot(props) {
     setVehicle = _useState8[1];
   var orderTypesAllowed = [3, 4, 5];
   var getPlaces = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var responsePlaceGroups, _yield$responsePlaceG, resultPlaceGroups, errorPlaceGroups, responsePlaces, _yield$responsePlaces, resultPlaces, errorPlaces, placeGroupDefault;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -196,7 +196,7 @@ var PlaceSpot = exports.PlaceSpot = function PlaceSpot(props) {
     };
   }();
   var handleChangeSpot = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref2) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref2) {
       var _ref2$isCheckout, isCheckout, bodyToSend, _customerState$user, _bodyToSend, id, endpointToFetch, _yield$endpointToFetc, _yield$endpointToFetc2, error, result, _cart$business;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

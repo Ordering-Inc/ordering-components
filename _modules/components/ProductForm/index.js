@@ -319,7 +319,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    * Method to add, remove favorite info for user from API
    */
   var handleFavoriteProduct = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(productFav) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(productFav) {
       var isAdd,
         productId,
         changes,
@@ -406,7 +406,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    * Load product from API
    */
   var loadProductWithOptions = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var source, parameters, _yield$ordering$busin, _yield$ordering$busin2, result, error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -807,7 +807,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    * Handle when click on save product
    */
   var handleSave = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
       var _JSON$parse, _product$product9, _cart$metafields, _cart$metafields$find, _errors, isMultiProduct, hasAlreadyCoupon, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, _props$productCart7, changes, currentProduct, _product$product10, updatedProfessional, duration, _props$productCart8, _props$productCart9;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -910,7 +910,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
     };
   }();
   var handleCreateGuestUser = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
       var _yield$ordering$users, _yield$ordering$users2, error, result, _result$session;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -1016,7 +1016,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    * Load professionals from API
    */
   var getProfessionalList = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var _yield$ordering$busin3, _yield$ordering$busin4, result, error, _result$professionals;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {

@@ -54,7 +54,7 @@ var PaymentOptionStripeDirect = exports.PaymentOptionStripeDirect = function Pay
    * Method to get stripe credentials from API
    */
   var getCredentials = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var response, _yield$response$json, publishable;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -90,7 +90,7 @@ var PaymentOptionStripeDirect = exports.PaymentOptionStripeDirect = function Pay
    * Method to get client id for create stripe payment method
    */
   var getRequirements = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var response, _yield$response$json2, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

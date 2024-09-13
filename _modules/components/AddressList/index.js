@@ -85,7 +85,7 @@ var AddressList = exports.AddressList = function AddressList(props) {
    * Function to load addresses from API
    */
   var loadAddresses = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var source, _yield$ordering$setAc, content;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -143,7 +143,7 @@ var AddressList = exports.AddressList = function AddressList(props) {
    * @param {object} address Address to make as default
    */
   var handleSetDefault = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(address, userCustomerSetup, sameAddress, dontSetUserCustomer) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(address, userCustomerSetup, sameAddress, dontSetUserCustomer) {
       var _yield$ordering$setAc2, content, _content$result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -224,7 +224,7 @@ var AddressList = exports.AddressList = function AddressList(props) {
    * @param {object} address Address to delete
    */
   var handleDelete = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(address) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(address) {
       var _yield$ordering$users, content, addresses;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -278,7 +278,7 @@ var AddressList = exports.AddressList = function AddressList(props) {
     };
   }();
   var handleAddressRegister = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(address) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(address) {
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:

@@ -71,7 +71,7 @@ var PageBanner = exports.PageBanner = function PageBanner(props) {
    * Method to get the page banner from API
    */
   var handleGetPageBanner = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _orderState$options5, _orderState$options6, requestOptions, fetchEndpoint, _configs$location_def, _configs$location_def2, _orderState$options2, _orderState$options3, _orderState$options4, defaultLatitude, defaultLongitude, isInvalidDefaultLocation, defaultLocation, location, type, _orderState$options7, moment, response, _yield$response$json, error, result, totalItems;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

@@ -81,7 +81,7 @@ var Contacts = exports.Contacts = function Contacts(props) {
     pagination = _useState8[0],
     setPagination = _useState8[1];
   var getOrders = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(nextPage) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(nextPage) {
       var parameters, pageFetch, _yield$ordering$order, _yield$ordering$order2, result, error, pageConfig, hash;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -155,7 +155,7 @@ var Contacts = exports.Contacts = function Contacts(props) {
    * Method to get businesses from SDK
    */
   var getBusinesses = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(nextPage) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(nextPage) {
       var where, pageFetch, _yield$ordering$busin, _yield$ordering$busin2, result, error, pageConfig;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -227,7 +227,7 @@ var Contacts = exports.Contacts = function Contacts(props) {
    * Method to get customers from SDK
    */
   var getCustomers = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(nextPage) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(nextPage) {
       var where, pageFetch, _yield$ordering$setAc, _yield$ordering$setAc2, result, error, pageConfig;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -299,7 +299,7 @@ var Contacts = exports.Contacts = function Contacts(props) {
    * Method to get drivers from SDK
    */
   var getDrivers = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(nextPage) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(nextPage) {
       var where, pageFetch, _yield$ordering$setAc3, _yield$ordering$setAc4, result, error, pageConfig;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -367,7 +367,7 @@ var Contacts = exports.Contacts = function Contacts(props) {
     };
   }();
   var loadMore = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(key) {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(key) {
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
           case 0:
@@ -430,8 +430,8 @@ var Contacts = exports.Contacts = function Contacts(props) {
       socket.leave(ordersRoom);
     };
   }, [socket === null || socket === void 0 ? void 0 : socket.socket, user]);
-  var handleMessage = (0, _react.useCallback)( /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(message) {
+  var handleMessage = (0, _react.useCallback)(/*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(message) {
       var orderId, _yield$ordering$setAc5, _yield$ordering$setAc6, result, error;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -480,8 +480,8 @@ var Contacts = exports.Contacts = function Contacts(props) {
       return _ref6.apply(this, arguments);
     };
   }(), []);
-  var handleOrder = (0, _react.useCallback)( /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(order) {
+  var handleOrder = (0, _react.useCallback)(/*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(order) {
       var id, status, driver;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {

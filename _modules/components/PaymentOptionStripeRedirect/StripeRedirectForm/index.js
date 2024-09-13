@@ -24,7 +24,7 @@ var StripeRedirectForm = exports.StripeRedirectForm = function StripeRedirectFor
    * @param {Object} param0 object with name, email and paydata from stripe form
    */
   var handleSubmitPaymentMethod = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
       var type, name, email;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

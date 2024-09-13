@@ -54,7 +54,7 @@ var OrderChange = exports.OrderChange = function OrderChange(props) {
    */
 
   var handleUpdateStateOrder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var body,
         comments,
         min,

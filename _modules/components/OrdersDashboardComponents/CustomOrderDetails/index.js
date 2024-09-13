@@ -97,7 +97,7 @@ var CustomOrderDetails = exports.CustomOrderDetails = function CustomOrderDetail
    * Get users from API
    */
   var getUsers = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var conditions, _yield$ordering$setAc, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -161,7 +161,7 @@ var CustomOrderDetails = exports.CustomOrderDetails = function CustomOrderDetail
    * Method to get business list from API
    */
   var getBusinessList = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(location) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(location) {
       var parameters, conditions, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -223,7 +223,7 @@ var CustomOrderDetails = exports.CustomOrderDetails = function CustomOrderDetail
    * Method to get products list from API
    */
   var getProducts = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(searchValue) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(searchValue) {
       var where, searchConditions, _yield$ordering$busin, _yield$ordering$busin2, error, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -289,7 +289,7 @@ var CustomOrderDetails = exports.CustomOrderDetails = function CustomOrderDetail
    * Method to update product cart
    */
   var handeUpdateProductCart = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(product, increament) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(product, increament) {
       var successful, cartProduct;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {

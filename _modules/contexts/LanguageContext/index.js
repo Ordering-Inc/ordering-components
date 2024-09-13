@@ -51,7 +51,7 @@ var LanguageProvider = exports.LanguageProvider = function LanguageProvider(_ref
    * Load language from localstorage and set state or load default language
    */
   var setLanguageFromLocalStorage = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var language;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -83,7 +83,7 @@ var LanguageProvider = exports.LanguageProvider = function LanguageProvider(_ref
     ordering = _useApi2[0],
     apiHelper = _useApi2[1];
   var updateLanguageContext = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _language, dictionary, _yield$ordering$trans, _yield$ordering$trans2, errDict, resDict, _yield$ordering$langu, _yield$ordering$langu2, error, result, language;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -146,7 +146,7 @@ var LanguageProvider = exports.LanguageProvider = function LanguageProvider(_ref
     };
   }();
   var refreshTranslations = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var _yield$ordering$trans3, _yield$ordering$trans4, error, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -185,7 +185,7 @@ var LanguageProvider = exports.LanguageProvider = function LanguageProvider(_ref
     };
   }();
   var loadDefaultLanguage = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var _language, _yield$ordering$langu3, _yield$ordering$langu4, error, result, language;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -243,7 +243,7 @@ var LanguageProvider = exports.LanguageProvider = function LanguageProvider(_ref
     };
   }();
   var setLanguage = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(language) {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(language) {
       var _state$language;
       var _language;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
@@ -284,7 +284,7 @@ var LanguageProvider = exports.LanguageProvider = function LanguageProvider(_ref
    */
   (0, _react.useEffect)(function () {
     var checkLanguage = /*#__PURE__*/function () {
-      var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+      var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
         var _state$language2, _state$language3;
         var token;
         return _regeneratorRuntime().wrap(function _callee6$(_context6) {
@@ -336,7 +336,7 @@ var useLanguage = exports.useLanguage = function useLanguage() {
   return languageManager || [{}, function (key) {
     var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
     return fallback || key;
-  }, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+  }, /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
     return _regeneratorRuntime().wrap(function _callee7$(_context7) {
       while (1) switch (_context7.prev = _context7.next) {
         case 0:
@@ -344,7 +344,7 @@ var useLanguage = exports.useLanguage = function useLanguage() {
           return _context7.stop();
       }
     }, _callee7);
-  })), /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+  })), /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
     return _regeneratorRuntime().wrap(function _callee8$(_context8) {
       while (1) switch (_context8.prev = _context8.next) {
         case 0:

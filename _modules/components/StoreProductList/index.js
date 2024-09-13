@@ -94,7 +94,7 @@ var StoreProductList = exports.StoreProductList = function StoreProductList(prop
    * Method to get products from API
    */
   var getCategoryProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch) {
       var _productsList$paginat, _productsList$paginat2, _businessState$busine, _businessState$busine2, parameters, where, conditions, searchConditions, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, error, pagination;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -181,7 +181,7 @@ var StoreProductList = exports.StoreProductList = function StoreProductList(prop
     };
   }();
   var getBusiness = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var fetchEndpoint, _yield$fetchEndpoint$3, _yield$fetchEndpoint$4, result, error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -236,7 +236,7 @@ var StoreProductList = exports.StoreProductList = function StoreProductList(prop
     });
   };
   var updateStoreProduct = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(categoryId, productId) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(categoryId, productId) {
       var updateParams,
         _businessState$busine3,
         _yield$ordering$busin,
@@ -288,7 +288,7 @@ var StoreProductList = exports.StoreProductList = function StoreProductList(prop
     };
   }();
   var updateStoreCategory = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(categoryId) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(categoryId) {
       var updateParams,
         _businessState$busine4,
         _yield$ordering$busin3,

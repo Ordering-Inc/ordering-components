@@ -50,7 +50,7 @@ var FirebaseGoogleLoginButton = exports.FirebaseGoogleLoginButton = function Fir
    * handling response of Google
    */
   var signInWithGoogle = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _configs$google_login, _configs$google_login2, auth, googleProvider, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -98,7 +98,7 @@ var FirebaseGoogleLoginButton = exports.FirebaseGoogleLoginButton = function Fir
    * @param {object} res from Google
    */
   var handleSigninSuccess = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(tokenResponse) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(tokenResponse) {
       var _yield$ordering$users, _yield$ordering$users2, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

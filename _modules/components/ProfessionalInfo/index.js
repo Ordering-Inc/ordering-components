@@ -59,7 +59,7 @@ var ProfessionalInfo = exports.ProfessionalInfo = function ProfessionalInfo(prop
    * Method to get user from API
    */
   var getUser = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var fetchEndpoint, _yield$fetchEndpoint$, result, user;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -103,7 +103,7 @@ var ProfessionalInfo = exports.ProfessionalInfo = function ProfessionalInfo(prop
    * Method to get the user reviews from API
    */
   var getUserReviews = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

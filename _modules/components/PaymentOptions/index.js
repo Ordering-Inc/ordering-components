@@ -101,7 +101,7 @@ var PaymentOptions = exports.PaymentOptions = function PaymentOptions(props) {
    * Method to get payment options from API
    */
   var getPaymentOptions = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var headers, _yield$ordering$busin, _yield$ordering$busin2, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

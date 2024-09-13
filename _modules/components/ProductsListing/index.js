@@ -96,7 +96,7 @@ var ProductsListing = exports.ProductsListing = function ProductsListing(props) 
    * Method to get products from API
    */
   var getProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _orderState$options, _yield$ordering$busin, result, productsFiltered;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -143,7 +143,7 @@ var ProductsListing = exports.ProductsListing = function ProductsListing(props) 
    * Method to get categories from api used business id
    */
   var getCategories = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _yield$ordering$busin2, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

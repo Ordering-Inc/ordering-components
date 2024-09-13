@@ -91,7 +91,7 @@ var PointsWalletLevels = exports.PointsWalletLevels = function PointsWalletLevel
    * Method to get level list from API
    */
   var getLevelList = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var requestOptions, fetchEndpoint, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

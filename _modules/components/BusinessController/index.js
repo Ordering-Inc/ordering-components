@@ -119,7 +119,7 @@ var BusinessController = exports.BusinessController = function BusinessControlle
    * Method to get business from SDK
    */
   var getBusiness = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _yield$ordering$busin, _yield$ordering$busin2, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -210,7 +210,7 @@ var BusinessController = exports.BusinessController = function BusinessControlle
    * Method to add, remove favorite info for user from API
    */
   var handleFavoriteBusiness = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var isAdd,
         _businessState$busine,
         _businessState$busine2,
@@ -375,7 +375,7 @@ var BusinessController = exports.BusinessController = function BusinessControlle
     }
   }, [business]);
   var updateBusiness = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(businessId) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(businessId) {
       var updateParams,
         _yield$ordering$busin3,
         _yield$ordering$busin4,

@@ -64,7 +64,7 @@ var GiftCardOrdersList = exports.GiftCardOrdersList = function GiftCardOrdersLis
    * Method to get the gift cards from API
    */
   var getGiftCards = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(page) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(page) {
       var pageSize,
         where,
         conditions,
@@ -115,7 +115,7 @@ var GiftCardOrdersList = exports.GiftCardOrdersList = function GiftCardOrdersLis
     };
   }();
   var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var response, _yield$response$json, error, result, pagination;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -170,7 +170,7 @@ var GiftCardOrdersList = exports.GiftCardOrdersList = function GiftCardOrdersLis
     };
   }();
   var goToPage = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(page) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(page) {
       var response, _yield$response$json2, error, result, pagination;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {

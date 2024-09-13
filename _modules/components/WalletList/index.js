@@ -73,7 +73,7 @@ var WalletList = exports.WalletList = function WalletList(props) {
     setUserLoyaltyLevel = _useState8[1];
   var userProps = ['loyalty_level'];
   var getTransactions = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(walletId) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(walletId) {
       var _transactions$list;
       var response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -134,7 +134,7 @@ var WalletList = exports.WalletList = function WalletList(props) {
     };
   }();
   var getWallets = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var response, _yield$response$json2, error, result, cashWallet, pointsWallet;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -198,7 +198,7 @@ var WalletList = exports.WalletList = function WalletList(props) {
     };
   }();
   var getUserLoyaltyLevel = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var _yield$ordering$users, _yield$ordering$users2, result, error;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {

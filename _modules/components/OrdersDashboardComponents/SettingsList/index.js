@@ -174,7 +174,7 @@ var SettingsList = exports.SettingsList = function SettingsList(props) {
    * @param {Object} params key and value to change
    */
   var saveConfig = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id, params) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(id, params) {
       var _yield$ordering$setAc, _yield$ordering$setAc2, error, result, changes, _configs, _categories;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

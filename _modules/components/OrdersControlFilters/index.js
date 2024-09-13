@@ -56,7 +56,7 @@ var OrdersControlFilters = exports.OrdersControlFilters = function OrdersControl
    * Method to get controls from API
    */
   var getControls = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _yield$ordering$setAc, _yield$ordering$setAc2, error, result, _controlsState$error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
