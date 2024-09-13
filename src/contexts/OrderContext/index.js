@@ -354,7 +354,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         const options = {}
         state.loading = true
         options.headers = {
-          'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId()
         }
         const countryCode = changes?.country_code && changes?.country_code !== state?.options?.address?.country_code
@@ -551,7 +550,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().removeProduct(body, {
         headers: {
-          'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId(),
           'X-Country-Code-X': countryCode
         }
@@ -699,7 +697,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         .carts()
         .applyCoupon(body, {
           headers: {
-            'X-App-X': ordering.appId,
             'X-Socket-Id-X': socket?.getId(),
             'X-Country-Code-X': countryCode
           }
@@ -1018,7 +1015,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (body.user_id === userCustomerId || data) {
         fetchurl = await ordering.setAccessToken(session.token).carts(cardId).confirmWithData(body, {
           headers: {
-            'X-App-X': ordering.appId,
             'X-Socket-Id-X': socket?.getId(),
             'X-Country-Code-X': countryCode
           }
@@ -1026,7 +1022,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       } else {
         fetchurl = await ordering.setAccessToken(session.token).carts(cardId).confirm(body, {
           headers: {
-            'X-App-X': ordering.appId,
             'X-Socket-Id-X': socket?.getId(),
             'X-Country-Code-X': countryCode
           }
@@ -1109,7 +1104,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         : null
       const options = {
         headers: {
-          'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId(),
           'X-Country-Code-X': countryCode
         }
