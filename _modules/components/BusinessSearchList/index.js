@@ -111,9 +111,11 @@ var BusinessSearchList = exports.BusinessSearchList = function BusinessSearchLis
     !lazySearch && (((_Object$keys = Object.keys((orderState === null || orderState === void 0 || (_orderState$options = orderState.options) === null || _orderState$options === void 0 || (_orderState$options = _orderState$options.address) === null || _orderState$options === void 0 ? void 0 : _orderState$options.location) || {})) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length) > 0 || defaultLocation) && handleSearchbusinessAndProducts(true);
   }, [filters, JSON.stringify(orderState === null || orderState === void 0 ? void 0 : orderState.options)]);
   var handleChangeTermValue = function handleChangeTermValue(val) {
+    var returnAllProductsValidation = (val === null || val === void 0 ? void 0 : val.length) < 2 && (termValue === null || termValue === void 0 ? void 0 : termValue.length) >= 2;
     setTermValue(val);
-    if ((termValue === null || termValue === void 0 ? void 0 : termValue.length) === 0 || (termValue === null || termValue === void 0 ? void 0 : termValue.length) >= 2) {
-      handleSearchbusinessAndProducts(true, {}, val);
+    if (returnAllProductsValidation || (val === null || val === void 0 ? void 0 : val.length) >= 2) {
+      var valueLoweredCase = val.toLowerCase();
+      handleSearchbusinessAndProducts(true, {}, valueLoweredCase);
     }
   };
   var cityId = orderState === null || orderState === void 0 || (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.city_id;
