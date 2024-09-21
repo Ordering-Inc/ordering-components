@@ -60,7 +60,7 @@ var PromotionsController = exports.PromotionsController = function PromotionsCon
     setOffersState = _useState6[1];
   var location = JSON.stringify(options === null || options === void 0 || (_options$address = options.address) === null || _options$address === void 0 ? void 0 : _options$address.location);
   var getOffers = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var params, url, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -97,7 +97,7 @@ var PromotionsController = exports.PromotionsController = function PromotionsCon
     };
   }();
   var loadOffers = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _yield$getOffers, error, result, _err$message;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

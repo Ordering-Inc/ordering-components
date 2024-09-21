@@ -101,7 +101,7 @@ var CheckPassword = exports.CheckPassword = function CheckPassword(props) {
    * Method to confirm password from API
    */
   var getCheckPassword = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -160,7 +160,7 @@ var CheckPassword = exports.CheckPassword = function CheckPassword(props) {
     };
   }();
   var generateOtpCode = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
       var body, email, cellphone, countryPhoneCode, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

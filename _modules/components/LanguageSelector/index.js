@@ -73,7 +73,7 @@ var LanguageSelector = exports.LanguageSelector = function LanguageSelector(prop
    * this method is used for load languages from API
    */
   var loadLanguages = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var source, _yield$ordering$langu, _yield$ordering$langu2, error, result, language;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

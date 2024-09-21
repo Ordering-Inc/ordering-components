@@ -60,7 +60,7 @@ var PaymethodList = exports.PaymethodList = function PaymethodList(props) {
    * Method to get paymethods from API
    */
   var getPaymethods = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var requestOptions, functionFetch, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

@@ -65,7 +65,7 @@ var PaymentOptionPaypal = exports.PaymentOptionPaypal = function PaymentOptionPa
     };
   }, [clientId]);
   var createOrder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data, actions) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(data, actions) {
       var params, _yield$placeCart, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -99,7 +99,7 @@ var PaymentOptionPaypal = exports.PaymentOptionPaypal = function PaymentOptionPa
     };
   }();
   var onApprove = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(data, actions) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(data, actions) {
       var _yield$confirmCart, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -129,7 +129,7 @@ var PaymentOptionPaypal = exports.PaymentOptionPaypal = function PaymentOptionPa
     };
   }();
   var onFail = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(data) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(data) {
       var _yield$confirmCart2, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {

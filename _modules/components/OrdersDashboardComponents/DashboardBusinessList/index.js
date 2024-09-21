@@ -129,7 +129,7 @@ var DashboardBusinessList = exports.DashboardBusinessList = function DashboardBu
    * @param {number, number} pageSize page
    */
   var getBusinesses = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(pageSize, page, isInactive) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(pageSize, page, isInactive) {
       var where, conditions, options, searchConditions, _filterValues$availab, _filterValues$menus, filterConditons, _filterValues$availab2, _filterValues$availab3, _filterValues$menus2, _filterValues$menus3, functionFetch;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -280,7 +280,7 @@ var DashboardBusinessList = exports.DashboardBusinessList = function DashboardBu
    * Method to get the countries from API
    */
   var getCountries = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _yield$ordering$count, _yield$ordering$count2, error, result, enabled, cities, _iterator, _step, country;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -353,7 +353,7 @@ var DashboardBusinessList = exports.DashboardBusinessList = function DashboardBu
    * Method to load businesses
    */
   var loadBusinesses = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var response, _err$constructor;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -413,7 +413,7 @@ var DashboardBusinessList = exports.DashboardBusinessList = function DashboardBu
    * Method to get businesses
    */
   var getInActiveBusinesses = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var response, _response$content;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -453,7 +453,7 @@ var DashboardBusinessList = exports.DashboardBusinessList = function DashboardBu
    * Method to get businesses more
    */
   var loadMoreBusinesses = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var response;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -507,7 +507,7 @@ var DashboardBusinessList = exports.DashboardBusinessList = function DashboardBu
    * Method to get businesses for page and pageSize
    */
   var getPageBusinesses = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(pageSize, page) {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(pageSize, page) {
       var response;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -563,7 +563,7 @@ var DashboardBusinessList = exports.DashboardBusinessList = function DashboardBu
    * @param {Boolean} isFeatured flag to check if featured or enabled
    */
   var handleEnableAllBusiness = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(enabled) {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(enabled) {
       var isFeatured,
         changes,
         requestOptions,
@@ -637,7 +637,7 @@ var DashboardBusinessList = exports.DashboardBusinessList = function DashboardBu
    * Method to delete business list
    */
   var handleDeleteMultiBusinesses = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+    var _ref8 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
       var requestOptions, response, content, updatedBusinessList;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {

@@ -74,7 +74,7 @@ var WebsocketProvider = exports.WebsocketProvider = function WebsocketProvider(_
   }, [socket, session === null || session === void 0 || (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id]);
   (0, _react.useEffect)(function () {
     if (session.auth) return;
-    var projectInputInterval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var projectInputInterval = setInterval(/*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var project;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {

@@ -147,7 +147,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
    */
 
   var handleClickLogisticOrder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(status, orderId, orders) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(status, orderId, orders) {
       var response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -226,7 +226,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
    * Method to Load message for first time
    */
   var loadMessages = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _orderState$order2, _orderState$order3, url, response, _yield$response$json2, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -291,7 +291,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
    * @param {string} spot
    */
   var sendMessage = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(spot) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(spot) {
       var _orderState$order4, _orderState$order5, _yield$fetch, status;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -353,7 +353,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
    * Method to update differents orders status
   */
   var handleChangeOrderStatus = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(status) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(status) {
       var isAcceptOrReject,
         options,
         dataToSave,
@@ -454,7 +454,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     };
   }();
   var updateDriverPosition = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var newLocation,
         _yield$ordering$setAc3,
         _yield$ordering$setAc4,
@@ -511,7 +511,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
      * Method to assign a driver for order
   */
   var handleAssignDriver = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(driverId) {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(driverId) {
       var _orderState$order$id2, _orderState$order8, bodyToSend, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, _drivers$error;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -568,7 +568,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
    * Method to get order from API
    */
   var getOrder = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+    var _ref8 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
       var source, options, _result, result, error, response, res, _yield$ordering$setAc7, content, order, err, businessData, _err, _yield$ordering$setAc8, _content, _e$message, _order$id, _e$message2;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -681,7 +681,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     };
   }();
   var readMessages = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+    var _ref9 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
       var _messages$messages, _messages$messages2;
       var messageId, _orderState$order9, _orderState$order10, response, _yield$response$json3, result;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
@@ -731,7 +731,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     };
   }();
   var getDrivers = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(orderId) {
+    var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9(orderId) {
       var _yield$ordering$setAc9, _yield$ordering$setAc10, error, result, _drivers$error2;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) switch (_context9.prev = _context9.next) {
@@ -772,7 +772,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
     };
   }();
   var handleReorder = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(orderId) {
+    var _ref11 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10(orderId) {
       var _yield$reorder, error, result;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {
@@ -830,7 +830,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
   * Method to remove products from cart
   */
   var handleRemoveCart = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+    var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
       var _carts;
       var uuid, content, _orderState$order11;
       return _regeneratorRuntime().wrap(function _callee11$(_context11) {

@@ -134,7 +134,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Refresh order options and carts from API
    */
   var refreshOrderOptions = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _state$options, _state$options2, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, options, countryCode, res, error, result, _options2$address, carts, _options2, _options2$address2, localOptions, _options3, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -341,7 +341,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Change order address
    */
   var changeAddress = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(addressId, params) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(addressId, params) {
       var _state$options8;
       var isCountryCodeChanged, optionsStorage, options, _state$options9, _params, _params$address;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -427,7 +427,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Change order type
    */
   var changeType = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(type) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(type) {
       var _state$options10;
       var options, cityId, params, _options;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
@@ -477,7 +477,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Change order moment
    */
   var changeMoment = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(moment) {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(moment) {
       var momentUnix, momentFormatted, options;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -522,7 +522,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Change order city
    */
   var changeCityFilter = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(id) {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(id) {
       var options;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -565,7 +565,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * @param {object} changes Changes to update order options
    */
   var updateOrderOptions = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(changes) {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(changes) {
       var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options11, _ref8, _state$options12, options, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, _options4, _err$message2, message;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -671,7 +671,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * @param {boolean} isQuickAddProduct option to add product when clicks
    */
   var addProduct = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product, cart, isQuickAddProduct) {
+    var _ref9 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product, cart, isQuickAddProduct) {
       var isPlatformProduct,
         countryCode,
         customerFromLocalStorage,
@@ -789,7 +789,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * @param {boolean} isQuickAddProduct option to add product when clicks
    */
   var addMultiProduct = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(product, cart, isQuickAddProduct) {
+    var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8(product, cart, isQuickAddProduct) {
       var countryCode, customerFromLocalStorage, userCustomerId, headers, body, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
@@ -876,7 +876,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Remove product to cart
    */
   var removeProduct = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(product, cart) {
+    var _ref11 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9(product, cart) {
       var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) switch (_context9.prev = _context9.next) {
@@ -952,7 +952,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Clear products of cart
    */
   var clearCart = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(uuid) {
+    var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10(uuid) {
       var configurations,
         countryCode,
         customerFromLocalStorage,
@@ -1041,7 +1041,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Update product to cart
    */
   var updateProduct = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(product, cart, isQuickAddProduct) {
+    var _ref13 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee11(product, cart, isQuickAddProduct) {
       var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
       return _regeneratorRuntime().wrap(function _callee11$(_context11) {
         while (1) switch (_context11.prev = _context11.next) {
@@ -1113,7 +1113,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Apply coupon to cart
    */
   var applyCoupon = /*#__PURE__*/function () {
-    var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(couponData, customParams) {
+    var _ref14 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee12(couponData, customParams) {
       var _state$carts;
       var countryCode, response, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc11, content, result;
       return _regeneratorRuntime().wrap(function _callee12$(_context12) {
@@ -1238,7 +1238,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
     };
   }();
   var applyOffer = /*#__PURE__*/function () {
-    var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(offerData) {
+    var _ref15 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee13(offerData) {
       var _offerData$force, countryCode, response, result;
       return _regeneratorRuntime().wrap(function _callee13$(_context13) {
         while (1) switch (_context13.prev = _context13.next) {
@@ -1321,7 +1321,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
     };
   }();
   var removeOffer = /*#__PURE__*/function () {
-    var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(offerData) {
+    var _ref16 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee14(offerData) {
       var countryCode, offerRemoveData, response, result;
       return _regeneratorRuntime().wrap(function _callee14$(_context14) {
         while (1) switch (_context14.prev = _context14.next) {
@@ -1405,7 +1405,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Apply coupon to cart
    */
   var changeDriverTip = /*#__PURE__*/function () {
-    var _ref17 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(businessId) {
+    var _ref17 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee15(businessId) {
       var _state$carts2;
       var driverTipRate,
         isFixedPrice,
@@ -1504,7 +1504,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Change payment method
    */
   var changePaymethod = /*#__PURE__*/function () {
-    var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(businessId, paymethodId, paymethodData) {
+    var _ref18 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee16(businessId, paymethodId, paymethodData) {
       var _state$carts3;
       var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc14, _yield$ordering$setAc15, error, result;
       return _regeneratorRuntime().wrap(function _callee16$(_context16) {
@@ -1596,7 +1596,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Place cart
    */
   var placeCart = /*#__PURE__*/function () {
-    var _ref19 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17(cardId, data) {
+    var _ref19 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee17(cardId, data) {
       var countryCode, customerFromLocalStorage, userCustomerId, body, headers, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result, orderObject;
       return _regeneratorRuntime().wrap(function _callee17$(_context17) {
         while (1) switch (_context17.prev = _context17.next) {
@@ -1701,7 +1701,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Place multi carts
    */
   var placeMultiCarts = /*#__PURE__*/function () {
-    var _ref20 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(data, cartUuid) {
+    var _ref20 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee18(data, cartUuid) {
       var countryCode, customerFromLocalStorage, userCustomerId, body, requestOptions, response, _yield$response$json3, error, result;
       return _regeneratorRuntime().wrap(function _callee18$(_context18) {
         while (1) switch (_context18.prev = _context18.next) {
@@ -1796,7 +1796,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Confirm cart
    */
   var confirmCart = /*#__PURE__*/function () {
-    var _ref21 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19(cardId, data) {
+    var _ref21 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee19(cardId, data) {
       var countryCode, customerFromLocalStorage, userCustomerId, body, fetchurl, _fetchurl, _fetchurl$content, error, result, cart;
       return _regeneratorRuntime().wrap(function _callee19$(_context19) {
         while (1) switch (_context19.prev = _context19.next) {
@@ -1889,7 +1889,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
   * Confirm multi carts
   */
   var confirmMultiCarts = /*#__PURE__*/function () {
-    var _ref22 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20(cartUuid) {
+    var _ref22 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee20(cartUuid) {
       var countryCode, requestOptions, response, _yield$response$json4, result, error;
       return _regeneratorRuntime().wrap(function _callee20$(_context20) {
         while (1) switch (_context20.prev = _context20.next) {
@@ -1964,7 +1964,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Reorder an order and get cart
    */
   var reorder = /*#__PURE__*/function () {
-    var _ref23 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21(orderId, offAlert) {
+    var _ref23 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee21(orderId, offAlert) {
       var configurations,
         countryCode,
         customerFromLocalStorage,
@@ -2050,7 +2050,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
     };
   }();
   var setOptionFromLocalStorage = /*#__PURE__*/function () {
-    var _ref24 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee22() {
+    var _ref24 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee22() {
       var _configState$configs3, _state$options13;
       var optionsLocalStorage;
       return _regeneratorRuntime().wrap(function _callee22$(_context22) {
@@ -2087,7 +2087,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
   * get Latest past Order that has no review
   */
   var getLastOrderHasNoReview = /*#__PURE__*/function () {
-    var _ref25 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee23() {
+    var _ref25 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee23() {
       var pastOrderTypes, where, options, _yield$ordering$setAc20, _yield$ordering$setAc21, result, error, _noRviewOrder, _options5, _yield$ordering$setAc22, _yield$ordering$setAc23, _result3, _error2, noReviewOrders;
       return _regeneratorRuntime().wrap(function _callee23$(_context23) {
         while (1) switch (_context23.prev = _context23.next) {
@@ -2220,7 +2220,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
     setState(_objectSpread(_objectSpread({}, state), values));
   };
   var setUserCustomerOptions = /*#__PURE__*/function () {
-    var _ref26 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee24(params) {
+    var _ref26 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee24(params) {
       var _params$options, _params$customer;
       var options;
       return _regeneratorRuntime().wrap(function _callee24$(_context24) {
@@ -2255,7 +2255,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
     }));
   };
   var handleLogEvent = /*#__PURE__*/function () {
-    var _ref27 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee25(events) {
+    var _ref27 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee25(events) {
       var countryCode, headers;
       return _regeneratorRuntime().wrap(function _callee25$(_context25) {
         while (1) switch (_context25.prev = _context25.next) {

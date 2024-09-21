@@ -22,7 +22,7 @@ var NativeStrategy = exports.NativeStrategy = /*#__PURE__*/function () {
   return _createClass(NativeStrategy, [{
     key: "getItem",
     value: function () {
-      var _getItem = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(storageKey, isJson) {
+      var _getItem = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(storageKey, isJson) {
         var value;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
@@ -52,7 +52,7 @@ var NativeStrategy = exports.NativeStrategy = /*#__PURE__*/function () {
   }, {
     key: "setItem",
     value: function () {
-      var _setItem = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(key, val) {
+      var _setItem = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(key, val) {
         var isJson,
           value,
           _args2 = arguments;
@@ -77,7 +77,7 @@ var NativeStrategy = exports.NativeStrategy = /*#__PURE__*/function () {
   }, {
     key: "removeItem",
     value: function () {
-      var _removeItem = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(key) {
+      var _removeItem = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(key) {
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
             case 0:

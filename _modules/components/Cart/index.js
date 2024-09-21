@@ -169,7 +169,7 @@ var Cart = exports.Cart = function Cart(props) {
     try {
       if (previousComment !== value || disablePreviousComment) {
         clearTimeout(timeout);
-        timeout = setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        timeout = setTimeout(/*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
           var uuid, body, response, _yield$response$json, result, error, carts;
           return _regeneratorRuntime().wrap(function _callee$(_context) {
             while (1) switch (_context.prev = _context.next) {

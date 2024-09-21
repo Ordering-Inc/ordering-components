@@ -123,7 +123,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
     };
   }, []);
   var initPaymentObject = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var payments;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -141,7 +141,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
     };
   }();
   var initCardPayments = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var card, eventHandler, cardButton;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -156,7 +156,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
           case 6:
             setIsLoadingMethod(false);
             eventHandler = /*#__PURE__*/function () {
-              var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+              var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
                 var result, response;
                 return _regeneratorRuntime().wrap(function _callee2$(_context2) {
                   while (1) switch (_context2.prev = _context2.next) {
@@ -237,7 +237,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
     };
   }();
   var initACHBankTransfer = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var ach, eventHandler, achButton;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -249,7 +249,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
             ach = _context5.sent;
             setIsLoadingMethod(false);
             eventHandler = /*#__PURE__*/function () {
-              var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(e) {
+              var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(e) {
                 var result, response, resultConfirm;
                 return _regeneratorRuntime().wrap(function _callee4$(_context4) {
                   while (1) switch (_context4.prev = _context4.next) {
@@ -338,7 +338,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
     };
   }();
   var initGiftCard = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
       var giftCard, eventHandler, giftCardButton;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -353,7 +353,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
           case 6:
             setIsLoadingMethod(false);
             eventHandler = /*#__PURE__*/function () {
-              var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(e) {
+              var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(e) {
                 var result, response;
                 return _regeneratorRuntime().wrap(function _callee6$(_context6) {
                   while (1) switch (_context6.prev = _context6.next) {
@@ -426,7 +426,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
     };
   }();
   var initDigitalWallets = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+    var _ref8 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
       var paymentRequest;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
@@ -453,7 +453,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
     };
   }();
   var applePay = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
+    var _ref9 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
       var applePay, eventHandler, applePayButtonTarget;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {
@@ -465,7 +465,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
             console.log(applePay);
             setIsLoadingMethod(false);
             eventHandler = /*#__PURE__*/function () {
-              var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(e) {
+              var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9(e) {
                 var result, _yield$placeCart, error, resultApi;
                 return _regeneratorRuntime().wrap(function _callee9$(_context9) {
                   while (1) switch (_context9.prev = _context9.next) {
@@ -526,7 +526,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
     };
   }();
   var googlePay = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12() {
+    var _ref11 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee12() {
       var googlePay, eventHandler, googlePayButtonTarget;
       return _regeneratorRuntime().wrap(function _callee12$(_context12) {
         while (1) switch (_context12.prev = _context12.next) {
@@ -541,7 +541,7 @@ var PaymentOptionSquare = exports.PaymentOptionSquare = function PaymentOptionSq
           case 6:
             setIsLoadingMethod(false);
             eventHandler = /*#__PURE__*/function () {
-              var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(e) {
+              var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee11(e) {
                 var result, _yield$placeCart2, error, resultApi;
                 return _regeneratorRuntime().wrap(function _callee11$(_context11) {
                   while (1) switch (_context11.prev = _context11.next) {

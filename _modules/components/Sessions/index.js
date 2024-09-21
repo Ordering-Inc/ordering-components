@@ -62,7 +62,7 @@ var Sessions = exports.Sessions = function Sessions(props) {
    * Method to get the sessions from API
    */
   var handleGetSessions = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -126,7 +126,7 @@ var Sessions = exports.Sessions = function Sessions(props) {
    * @param {number} sessionId session id
    */
   var handleDeleteSession = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(session) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(session) {
       var response, _yield$response$json2, result, error, sessions;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -197,7 +197,7 @@ var Sessions = exports.Sessions = function Sessions(props) {
    * Method to delete all sessions
    */
   var handleDeleteAllSessions = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var deleteCurrent,
         response,
         _yield$response$json3,

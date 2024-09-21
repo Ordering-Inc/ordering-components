@@ -103,7 +103,7 @@ var OrderVerticalList = exports.OrderVerticalList = function OrderVerticalList(p
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
   var getOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
       var page, _ref$pageSize, pageSize, orderStatus, options, _ordersGroup, source, functionFetch;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -157,7 +157,7 @@ var OrderVerticalList = exports.OrderVerticalList = function OrderVerticalList(p
     };
   }();
   var loadOrders = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _ordersGroup$paginati;
       var _ref4,
         newFetch,
@@ -253,7 +253,7 @@ var OrderVerticalList = exports.OrderVerticalList = function OrderVerticalList(p
     };
   }();
   var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var _yield$getOrders2, _yield$getOrders2$con, error, result, pagination, tabOptions, _err$message2;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -358,7 +358,7 @@ var OrderVerticalList = exports.OrderVerticalList = function OrderVerticalList(p
     }
   };
   var handleReorder = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(orderId) {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(orderId) {
       var _yield$reorder, error, result;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {

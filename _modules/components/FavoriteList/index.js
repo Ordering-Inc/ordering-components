@@ -101,7 +101,7 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
    * Function to get favorite list from API
    */
   var getFavoriteList = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(page) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(page) {
       var pageSize,
         requestOptions,
         params,
@@ -249,7 +249,7 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
    * Function to get business, product, order list from API
    */
   var getOriginalList = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
       var _orderStatus$options;
       var where, conditions, requestOptions, fetchEndpoint, response;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -305,7 +305,7 @@ var FavoriteList = exports.FavoriteList = function FavoriteList(props) {
     };
   }();
   var handleReorder = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(orderId) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(orderId) {
       var _yield$reorder, error, result, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, choosedOrder, _businessId, _businessData, _businessSlug;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {

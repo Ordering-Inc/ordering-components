@@ -76,7 +76,7 @@ var SingleOrderCard = exports.SingleOrderCard = function SingleOrderCard(props) 
    * Method to add, remove favorite info for user from API
    */
   var handleFavoriteOrder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var isAdd,
         changes,
         requestOptions,
@@ -163,7 +163,7 @@ var SingleOrderCard = exports.SingleOrderCard = function SingleOrderCard(props) 
    * Method to remove products from cart
    */
   var handleRemoveCart = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_order) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_order) {
       var _businessIds$map;
       var _businessIds, orderIds, uuids, errors, _iterator, _step, item, _error, disableLoading, _yield$clearCart, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {

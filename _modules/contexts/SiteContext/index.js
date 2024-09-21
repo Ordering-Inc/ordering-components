@@ -56,7 +56,7 @@ var SiteProvider = exports.SiteProvider = function SiteProvider(_ref) {
     _useOptimizationLoad2 = _slicedToArray(_useOptimizationLoad, 1),
     optimizationLoad = _useOptimizationLoad2[0];
   var refreshSite = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var sites,
         _sites$error,
         _sites$result,
@@ -142,7 +142,7 @@ var SiteProvider = exports.SiteProvider = function SiteProvider(_ref) {
  */
 var useSite = exports.useSite = function useSite() {
   var siteManager = (0, _react.useContext)(SiteContext);
-  return siteManager || [{}, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  return siteManager || [{}, /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:

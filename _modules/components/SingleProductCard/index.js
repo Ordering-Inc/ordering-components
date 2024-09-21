@@ -66,7 +66,7 @@ var SingleProductCard = exports.SingleProductCard = function SingleProductCard(p
    * Method to add, remove favorite info for user from API
    */
   var handleFavoriteProduct = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var isAdd,
         productId,
         changes,

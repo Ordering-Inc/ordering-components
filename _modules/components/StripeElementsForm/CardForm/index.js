@@ -95,7 +95,7 @@ var CardForm = exports.CardForm = function CardForm(props) {
    * @param {*string} businessId string to know your business
    */
   var stripeTokenHandler = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(tokenId, user, businessId) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(tokenId, user, businessId) {
       var isNewCard,
         result,
         response,
@@ -187,7 +187,7 @@ var CardForm = exports.CardForm = function CardForm(props) {
    * @param {event} event
    */
   var handleSubmit = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(event) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(event) {
       var _card, card, userName, userAddress, billingData, result, _result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {

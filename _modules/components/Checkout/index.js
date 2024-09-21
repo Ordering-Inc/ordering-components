@@ -207,7 +207,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
 
   var paymethodsWithoutSaveCard = ['credomatic'];
   var getBusiness = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _orderState$options, _cartState$cart2, parameters, _yield$ordering$busin, _yield$ordering$busin2, result, error, _result$paymethods, _paymethodSelected$pa, _paymethodSelected, _paymethodSelected$pa2, _paymethodSelected$pa3, _paymethodSelected$pa4;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -270,7 +270,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
    * Method to handle click on Place order
    */
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(paymentOptions, payloadProps, confirmPayment, dismissPlatformPay) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(paymentOptions, payloadProps, confirmPayment, dismissPlatformPay) {
       var _paymethodSelected$pa5, _cart$balance, _orderState$options2, _paymethodSelected$pa6, _cartResult$paymethod, _result$result, _cartResult$paymethod2, _cartResult$paymethod3, _cartResult$paymethod4;
       var paymethodData, _paymethodSelected$da, payload, result, _paymethodSelected$pa7, cartResult, _result$result2, _yield$confirmPayment, confirmApplePayError;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -400,7 +400,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
    * change place spot from checkout
    */
   var handleChangeSpot = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(_ref3) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(_ref3) {
       var _ref3$isCheckout, isCheckout, bodyToSend, id, endpointToFetch, _yield$endpointToFetc, _yield$endpointToFetc2, error, result, _cart$business;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -437,7 +437,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
     };
   }();
   var onChangeSpot = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var _cartState$cart4;
       var bodyToSend;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
@@ -470,7 +470,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
     try {
       if (previousComment !== value) {
         clearTimeout(timeout);
-        timeout = setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+        timeout = setTimeout(/*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
           var uuid, response, _yield$response$json, result, error;
           return _regeneratorRuntime().wrap(function _callee5$(_context5) {
             while (1) switch (_context5.prev = _context5.next) {
@@ -536,7 +536,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
     }
   };
   var getDeliveryOptions = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
       var response, _yield$response$json2, result, error;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -598,7 +598,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
     };
   }();
   var handleChangeDeliveryOption = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(value) {
+    var _ref8 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(value) {
       var response, _yield$response$json3, result, error;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -646,7 +646,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
     };
   }();
   var getLoyaltyPlans = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+    var _ref9 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
       var req, _yield$req$json, error, result;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
@@ -694,7 +694,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
     };
   }();
   var handleConfirmCredomaticPage = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(cart, paymethodSelected) {
+    var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9(cart, paymethodSelected) {
       var _configs$credomatic_i, _configs$credomatic_i2, _configs$credomatic_i3, _configs$credomatic_i4;
       var isSandbox, keyId, processorId, _cart$paymethod_data, _cart$paymethod_data2, _paymethodSelected$da2, _paymethodSelected$da3, _paymethodSelected$da4, _Object$keys, cartUuid, data, form, requestOptions;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
@@ -765,7 +765,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
     };
   }();
   var getValidationFieldOrderTypes = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
+    var _ref11 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {
@@ -865,7 +865,7 @@ var Checkout = exports.Checkout = function Checkout(props) {
     var amount = (_cart$balance3 = cart === null || cart === void 0 ? void 0 : cart.balance) !== null && _cart$balance3 !== void 0 ? _cart$balance3 : cart === null || cart === void 0 ? void 0 : cart.total;
     if (!(alseaProjects.includes(ordering.project) && isCustomerMode)) return;
     var handleAlseaCheckPrice = /*#__PURE__*/function () {
-      var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+      var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
         var customerFromLocalStorage, apiCheckprice, response, result;
         return _regeneratorRuntime().wrap(function _callee11$(_context11) {
           while (1) switch (_context11.prev = _context11.next) {

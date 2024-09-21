@@ -77,7 +77,7 @@ var ReviewProduct = exports.ReviewProduct = function ReviewProduct(props) {
     }));
   };
   var reviewProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId, changes) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId, changes) {
       var headers, response, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -129,7 +129,7 @@ var ReviewProduct = exports.ReviewProduct = function ReviewProduct(props) {
    * Function that load and send the product review to ordering
    */
   var handleSendProductReview = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var _order$business, error, result, _order$business2, _result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -143,8 +143,8 @@ var ReviewProduct = exports.ReviewProduct = function ReviewProduct(props) {
               break;
             }
             // eslint-disable-next-line no-unused-expressions
-            order === null || order === void 0 || (_order$business2 = order.business) === null || _order$business2 === void 0 || _order$business2.forEach( /*#__PURE__*/function () {
-              var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(business, i) {
+            order === null || order === void 0 || (_order$business2 = order.business) === null || _order$business2 === void 0 || _order$business2.forEach(/*#__PURE__*/function () {
+              var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(business, i) {
                 var productsOfOrder, _result;
                 return _regeneratorRuntime().wrap(function _callee2$(_context2) {
                   while (1) switch (_context2.prev = _context2.next) {

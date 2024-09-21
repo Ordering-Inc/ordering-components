@@ -72,7 +72,7 @@ var PurchaseGiftCard = exports.PurchaseGiftCard = function PurchaseGiftCard(prop
    * Method to get the gift products from API
    */
   var getPlatformProductsList = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var where, conditions, requestOptions, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -137,7 +137,7 @@ var PurchaseGiftCard = exports.PurchaseGiftCard = function PurchaseGiftCard(prop
     };
   }();
   var handleAccept = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _giftCart$products$;
       var giftCard, _yield$addProduct, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {

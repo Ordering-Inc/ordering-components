@@ -74,7 +74,7 @@ var GiftCardsList = exports.GiftCardsList = function GiftCardsList(props) {
    * Method to get the gift cards from API
    */
   var getGiftCards = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(page, pageSize) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(page, pageSize) {
       var where, conditions, searchConditions, requestOptions, fetchEndpoint, response, _yield$response$json, error, result, pagination;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
