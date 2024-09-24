@@ -192,20 +192,21 @@ var MultiCheckout = exports.MultiCheckout = function MultiCheckout(props) {
             error = _yield$placeMultiCart.error;
             result = _yield$placeMultiCart.result;
             if (!error) {
-              _context.next = 17;
+              _context.next = 18;
               break;
             }
+            setPlacing(false);
             return _context.abrupt("return");
-          case 17:
+          case 18:
             if (!((result === null || result === void 0 || (_result$paymethod_dat = result.paymethod_data) === null || _result$paymethod_dat === void 0 ? void 0 : _result$paymethod_dat.status) === 2 && actionsBeforePlace)) {
-              _context.next = 20;
+              _context.next = 21;
               break;
             }
-            _context.next = 20;
+            _context.next = 21;
             return actionsBeforePlace(paymethodSelected, result);
-          case 20:
+          case 21:
             if (!(confirmPayment && (paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.gateway) === 'global_apple_pay')) {
-              _context.next = 30;
+              _context.next = 31;
               break;
             }
             paymentEvent = result === null || result === void 0 || (_result$payment_event = result.payment_events) === null || _result$payment_event === void 0 ? void 0 : _result$payment_event.find(function (event) {
@@ -213,28 +214,28 @@ var MultiCheckout = exports.MultiCheckout = function MultiCheckout(props) {
               return event === null || event === void 0 || (_event$data = event.data) === null || _event$data === void 0 || (_event$data = _event$data.extra) === null || _event$data === void 0 ? void 0 : _event$data.client_secret;
             });
             if (!(paymentEvent !== null && paymentEvent !== void 0 && (_paymentEvent$data = paymentEvent.data) !== null && _paymentEvent$data !== void 0 && (_paymentEvent$data = _paymentEvent$data.extra) !== null && _paymentEvent$data !== void 0 && _paymentEvent$data.client_secret)) {
-              _context.next = 28;
+              _context.next = 29;
               break;
             }
-            _context.next = 25;
+            _context.next = 26;
             return confirmPayment(paymentEvent === null || paymentEvent === void 0 || (_paymentEvent$data2 = paymentEvent.data) === null || _paymentEvent$data2 === void 0 || (_paymentEvent$data2 = _paymentEvent$data2.extra) === null || _paymentEvent$data2 === void 0 ? void 0 : _paymentEvent$data2.client_secret);
-          case 25:
+          case 26:
             _yield$confirmPayment = _context.sent;
             confirmApplePayError = _yield$confirmPayment.error;
             if (confirmApplePayError !== null && confirmApplePayError !== void 0 && confirmApplePayError.message || confirmApplePayError !== null && confirmApplePayError !== void 0 && confirmApplePayError.localizedMessage) {
               showToast(_ToastContext.ToastType.Error, (confirmApplePayError === null || confirmApplePayError === void 0 ? void 0 : confirmApplePayError.message) || (confirmApplePayError === null || confirmApplePayError === void 0 ? void 0 : confirmApplePayError.localizedMessage));
             }
-          case 28:
+          case 29:
             setPlacing(false);
             if (!error) {
               onPlaceOrderClick && onPlaceOrderClick(result);
             }
-          case 30:
+          case 31:
             setPlacing(false);
             if (!error) {
               onPlaceOrderClick && onPlaceOrderClick(result);
             }
-          case 32:
+          case 33:
           case "end":
             return _context.stop();
         }
