@@ -91,7 +91,10 @@ export const MultiCheckout = (props) => {
     setPlacing(true)
     const { error, result } = await placeMultiCarts(payload, cartUuid)
 
-    if (error) return
+    if (error) {
+      setPlacing(false)
+      return
+    }
 
     if (result?.paymethod_data?.status === 2 && actionsBeforePlace) {
       await actionsBeforePlace(paymethodSelected, result)
