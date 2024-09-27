@@ -16,31 +16,37 @@ export const MapView = (props) => {
   const [alertState, setAlertState] = useState({ open: false, content: [], key: null })
 
   const getBusinessLocations = async () => {
-    const markerGroupsObject = {}
-    const customerMarkerGroupsObject = {}
-    setIsLoadingBusinessMakers(true)
-    const options = {
-      query: {
-        where: [
-          {
-            attribute: 'status',
-            value: [0, 13, 7, 4, 3, 8, 9, 14, 18, 19, 20, 21, 23, 26]
-          }
-        ]
+    try {
+      setIsLoadingBusinessMakers(true)
+      const options = {
+        query: {
+          where: [
+            {
+              attribute: 'status',
+              value: [0, 13, 7, 4, 3, 8, 9, 14, 18, 19, 20, 21, 23, 26]
+            }
+          ]
+        }
       }
-    }
-    const { content: { result, error } } = await ordering.setAccessToken(session.token).orders().asDashboard().get(options)
-    if (!error) {
-      result.map(order => {
-        markerGroupsObject[order?.business_id] = markerGroupsObject?.[order?.business_id] ? [...markerGroupsObject[order?.business_id], order] : [order]
-        customerMarkerGroupsObject[order?.customer_id] = customerMarkerGroupsObject?.[order?.customer_id] ? [...customerMarkerGroupsObject[order?.customer_id], order] : [order]
-      })
+      const { content: { result, error } } = await ordering.setAccessToken(session.token).orders().asDashboard().get(options)
+      if (error) {
+        setAlertState(result)
+      }
+      const markerGroupsObject = result.reduce((acc, order) => {
+        acc[order.business_id] = acc[order.business_id] ? [...acc[order.business_id], order] : [order]
+        return acc
+      }, {})
+      const customerMarkerGroupsObject = result.reduce((acc, order) => {
+        acc[order.customer_id] = acc[order.customer_id] ? [...acc[order.customer_id], order] : [order]
+        return acc
+      }, {})
+
       setMarkerGroups(markerGroupsObject)
       setCustomerMarkerGroups(customerMarkerGroupsObject)
-      setIsLoadingBusinessMakers(false)
       setBusinessMarkers(result)
-    } else {
-      setAlertState(result)
+    } catch (error) {
+      setAlertState({ open: true, content: [error.message] })
+    } finally {
       setIsLoadingBusinessMakers(false)
     }
   }
