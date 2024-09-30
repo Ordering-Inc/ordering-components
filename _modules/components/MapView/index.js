@@ -62,12 +62,11 @@ var MapView = exports.MapView = function MapView(props) {
     setAlertState = _useState10[1];
   var getBusinessLocations = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var markerGroupsObject, customerMarkerGroupsObject, options, _yield$ordering$setAc, _yield$ordering$setAc2, result, error;
+      var options, _yield$ordering$setAc, _yield$ordering$setAc2, result, error, markerGroupsObject, customerMarkerGroupsObject;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            markerGroupsObject = {};
-            customerMarkerGroupsObject = {};
+            _context.prev = 0;
             setIsLoadingBusinessMakers(true);
             options = {
               query: {
@@ -77,31 +76,45 @@ var MapView = exports.MapView = function MapView(props) {
                 }]
               }
             };
-            _context.next = 6;
+            _context.next = 5;
             return ordering.setAccessToken(session.token).orders().asDashboard().get(options);
-          case 6:
+          case 5:
             _yield$ordering$setAc = _context.sent;
             _yield$ordering$setAc2 = _yield$ordering$setAc.content;
             result = _yield$ordering$setAc2.result;
             error = _yield$ordering$setAc2.error;
-            if (!error) {
-              result.map(function (order) {
-                markerGroupsObject[order === null || order === void 0 ? void 0 : order.business_id] = markerGroupsObject !== null && markerGroupsObject !== void 0 && markerGroupsObject[order === null || order === void 0 ? void 0 : order.business_id] ? [].concat(_toConsumableArray(markerGroupsObject[order === null || order === void 0 ? void 0 : order.business_id]), [order]) : [order];
-                customerMarkerGroupsObject[order === null || order === void 0 ? void 0 : order.customer_id] = customerMarkerGroupsObject !== null && customerMarkerGroupsObject !== void 0 && customerMarkerGroupsObject[order === null || order === void 0 ? void 0 : order.customer_id] ? [].concat(_toConsumableArray(customerMarkerGroupsObject[order === null || order === void 0 ? void 0 : order.customer_id]), [order]) : [order];
-              });
-              setMarkerGroups(markerGroupsObject);
-              setCustomerMarkerGroups(customerMarkerGroupsObject);
-              setIsLoadingBusinessMakers(false);
-              setBusinessMarkers(result);
-            } else {
+            if (error) {
               setAlertState(result);
-              setIsLoadingBusinessMakers(false);
             }
-          case 11:
+            markerGroupsObject = result.reduce(function (acc, order) {
+              acc[order.business_id] = acc[order.business_id] ? [].concat(_toConsumableArray(acc[order.business_id]), [order]) : [order];
+              return acc;
+            }, {});
+            customerMarkerGroupsObject = result.reduce(function (acc, order) {
+              acc[order.customer_id] = acc[order.customer_id] ? [].concat(_toConsumableArray(acc[order.customer_id]), [order]) : [order];
+              return acc;
+            }, {});
+            setMarkerGroups(markerGroupsObject);
+            setCustomerMarkerGroups(customerMarkerGroupsObject);
+            setBusinessMarkers(result);
+            _context.next = 20;
+            break;
+          case 17:
+            _context.prev = 17;
+            _context.t0 = _context["catch"](0);
+            setAlertState({
+              open: true,
+              content: [_context.t0.message]
+            });
+          case 20:
+            _context.prev = 20;
+            setIsLoadingBusinessMakers(false);
+            return _context.finish(20);
+          case 23:
           case "end":
             return _context.stop();
         }
-      }, _callee);
+      }, _callee, null, [[0, 17, 20, 23]]);
     }));
     return function getBusinessLocations() {
       return _ref.apply(this, arguments);
