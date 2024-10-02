@@ -976,7 +976,7 @@ var Checkout = function Checkout(props) {
                 method: 'POST',
                 body: JSON.stringify({
                   type: 3,
-                  amount: total !== null && total !== void 0 ? total : cart === null || cart === void 0 ? void 0 : cart.subtotal
+                  amount: total !== null && total !== void 0 ? total : cart === null || cart === void 0 ? void 0 : cart.subtotal_to_calculate
                 }),
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -1234,11 +1234,11 @@ var Checkout = function Checkout(props) {
   }, [cart === null || cart === void 0 ? void 0 : cart.delivery_option_id]);
   (0, _react.useEffect)(function () {
     if (vaXMiCuenta.amount && vaXMiCuenta.amount > 0) {
-      getWowPointsAcumulation((cart === null || cart === void 0 ? void 0 : cart.subtotal) - vaXMiCuenta.amount);
+      getWowPointsAcumulation((cart === null || cart === void 0 ? void 0 : cart.subtotal_to_calculate) - vaXMiCuenta.amount);
     } else {
-      getWowPointsAcumulation(cart === null || cart === void 0 ? void 0 : cart.subtotal);
+      getWowPointsAcumulation(cart === null || cart === void 0 ? void 0 : cart.subtotal_to_calculate);
     }
-  }, [cart === null || cart === void 0 ? void 0 : cart.subtotal]);
+  }, [cart === null || cart === void 0 ? void 0 : cart.subtotal_to_calculate]);
   (0, _react.useEffect)(function () {
     getDeliveryOptions();
     checkUberDirect();
