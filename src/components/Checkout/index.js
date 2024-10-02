@@ -474,7 +474,7 @@ export const Checkout = (props) => {
         method: 'POST',
         body: JSON.stringify({
           type: 3,
-          amount: total ?? cart?.subtotal
+          amount: total ?? cart?.subtotal_to_calculate
         }),
         headers: {
           Authorization: `Bearer ${token}`,
@@ -656,11 +656,11 @@ export const Checkout = (props) => {
 
   useEffect(() => {
     if (vaXMiCuenta.amount && vaXMiCuenta.amount > 0) {
-      getWowPointsAcumulation(cart?.subtotal - vaXMiCuenta.amount)
+      getWowPointsAcumulation(cart?.subtotal_to_calculate - vaXMiCuenta.amount)
     } else {
-      getWowPointsAcumulation(cart?.subtotal)
+      getWowPointsAcumulation(cart?.subtotal_to_calculate)
     }
-  }, [cart?.subtotal])
+  }, [cart?.subtotal_to_calculate])
 
   useEffect(() => {
     getDeliveryOptions()
