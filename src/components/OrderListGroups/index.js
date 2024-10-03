@@ -1127,16 +1127,9 @@ export const OrderListGroups = (props) => {
     const userId = session.user.id
     const userLevel = session.user.level
 
-    const ordersRoom = !isDriverApp
-      ? {
-        project: ordering.project,
-        room: 'orders',
-        user_id: userId,
-        role: 'manager'
-      }
-      : userLevel === 0
-        ? 'orders'
-        : `orders_${userId}`
+    const ordersRoom = userLevel === 0 || !isDriverApp
+      ? 'orders'
+      : `orders_${userId}`
 
     const requestsRoom = `requests_${userId}`
     const groupsRoom = `ordergroups_${userId}`
