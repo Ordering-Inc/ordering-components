@@ -1520,12 +1520,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     if (!session.user) return;
     var userId = session.user.id;
     var userLevel = session.user.level;
-    var ordersRoom = !isDriverApp ? {
-      project: ordering.project,
-      room: 'orders',
-      user_id: userId,
-      role: 'manager'
-    } : userLevel === 0 ? 'orders' : "orders_".concat(userId);
+    var ordersRoom = userLevel === 0 || !isDriverApp ? 'orders' : "orders_".concat(userId);
     var requestsRoom = "requests_".concat(userId);
     var groupsRoom = "ordergroups_".concat(userId);
     var messagesOrdersRoom = userLevel === 0 ? 'messages_orders' : "messages_orders_".concat(userId);
