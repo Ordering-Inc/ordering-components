@@ -40,7 +40,6 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
   var UIComponent = props.UIComponent,
     orderBy = props.orderBy,
     isIos = props.isIos,
-    useDefualtSessionManager = props.useDefualtSessionManager,
     paginationSettings = props.paginationSettings,
     asDashboard = props.asDashboard,
     orderGroupStatusCustom = props.orderGroupStatusCustom,
@@ -199,7 +198,6 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     _useState28 = _slicedToArray(_useState27, 2),
     ordersFiltered = _useState28[0],
     setOrdersFiltered = _useState28[1];
-  var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
   var getOrders = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
@@ -375,7 +373,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
             source = {};
             requestsState.orders = source;
             options.cancelToken = source;
-            functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
+            functionFetch = asDashboard ? ordering.setAccessToken(session.token).orders().asDashboard() : ordering.setAccessToken(session.token).orders();
             _context.next = 29;
             return functionFetch.get(options);
           case 29:
@@ -401,7 +399,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
               loading: true
             }));
             _context2.next = 4;
-            return ordering.setAccessToken(accessToken).controls().get();
+            return ordering.setAccessToken(session.token).controls().get();
           case 4:
             _yield$ordering$setAc = _context2.sent;
             _yield$ordering$setAc2 = _yield$ordering$setAc.content;
@@ -680,7 +678,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(accessToken),
+                Authorization: "Bearer ".concat(session.token),
                 'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
@@ -740,7 +738,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
               break;
             }
             _context6.next = 6;
-            return ordering.setAccessToken(accessToken).orders(orderIds[0]).delete();
+            return ordering.setAccessToken(session.token).orders(orderIds[0]).delete();
           case 6:
             _yield$ordering$setAc3 = _context6.sent;
             error = _yield$ordering$setAc3.content.error;
@@ -765,7 +763,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
             }
             id = _step.value;
             _context6.next = 19;
-            return ordering.setAccessToken(accessToken).orders(id).delete();
+            return ordering.setAccessToken(session.token).orders(id).delete();
           case 19:
             _yield$ordering$setAc4 = _context6.sent;
             multiError = _yield$ordering$setAc4.content.error;
@@ -843,7 +841,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(accessToken),
+                Authorization: "Bearer ".concat(session.token),
                 'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
@@ -1047,7 +1045,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(accessToken)
+                Authorization: "Bearer ".concat(session.token)
               },
               body: JSON.stringify({
                 status: status,
@@ -1520,7 +1518,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     if (!session.user) return;
     var userId = session.user.id;
     var userLevel = session.user.level;
-    var ordersRoom = userLevel === 0 || !isDriverApp ? 'orders' : "orders_".concat(userId);
+    var ordersRoom = userLevel === 0 ? 'orders' : "orders_".concat(userId);
     var requestsRoom = "requests_".concat(userId);
     var groupsRoom = "ordergroups_".concat(userId);
     var messagesOrdersRoom = userLevel === 0 ? 'messages_orders' : "messages_orders_".concat(userId);
