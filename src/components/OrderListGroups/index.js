@@ -12,7 +12,6 @@ export const OrderListGroups = (props) => {
     UIComponent,
     orderBy,
     isIos,
-    useDefualtSessionManager,
     paginationSettings,
     asDashboard,
     orderGroupStatusCustom,
@@ -115,7 +114,6 @@ export const OrderListGroups = (props) => {
     }
   })
 
-  const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
 
   const getOrders = async ({
@@ -285,8 +283,8 @@ export const OrderListGroups = (props) => {
     options.cancelToken = source
 
     const functionFetch = asDashboard
-      ? ordering.setAccessToken(accessToken).orders().asDashboard()
-      : ordering.setAccessToken(accessToken).orders()
+      ? ordering.setAccessToken(session.token).orders().asDashboard()
+      : ordering.setAccessToken(session.token).orders()
     return await functionFetch.get(options)
   }
 
@@ -294,7 +292,7 @@ export const OrderListGroups = (props) => {
     try {
       setControlsState({ ...controlsState, loading: true })
       const { content: { error, result } } = await ordering
-        .setAccessToken(accessToken)
+        .setAccessToken(session.token)
         .controls()
         .get()
       const obj = {
@@ -527,7 +525,7 @@ export const OrderListGroups = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${session.token}`,
           'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId()
         }
@@ -557,11 +555,11 @@ export const OrderListGroups = (props) => {
       const errorState = []
 
       if (orderIds.length === 1) {
-        const { content: { error } } = await ordering.setAccessToken(accessToken).orders(orderIds[0]).delete()
+        const { content: { error } } = await ordering.setAccessToken(session.token).orders(orderIds[0]).delete()
         errorState.push({ error, id: orderIds[0] })
       } else if (orderIds.length > 1) {
         for (const id of orderIds) {
-          const { content: { error: multiError } } = await ordering.setAccessToken(accessToken).orders(id).delete()
+          const { content: { error: multiError } } = await ordering.setAccessToken(session.token).orders(id).delete()
           errorState.push({ error: multiError, id })
         }
       }
@@ -602,7 +600,7 @@ export const OrderListGroups = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${session.token}`,
           'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId()
         }
@@ -773,7 +771,7 @@ export const OrderListGroups = (props) => {
     try {
       const response = await fetch(`${ordering.root}/drivers/${session.user?.id}/assign_requests/${orderId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` },
         body: JSON.stringify({
           status,
           user_id: session.user?.id
@@ -1127,7 +1125,7 @@ export const OrderListGroups = (props) => {
     const userId = session.user.id
     const userLevel = session.user.level
 
-    const ordersRoom = userLevel === 0 || !isDriverApp
+    const ordersRoom = userLevel === 0
       ? 'orders'
       : `orders_${userId}`
 
