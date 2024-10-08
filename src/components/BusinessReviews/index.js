@@ -11,7 +11,7 @@ export const BusinessReviews = (props) => {
 
   const [ordering] = useApi()
   const requestsState = {}
-  const [searchValue, setSearchValue] = useState(null);
+  const [searchValue, setSearchValue] = useState(null)
 
   /**
    * businessReviewsList, this must be contain a reviews, loading and error to send UIComponent
@@ -40,7 +40,7 @@ export const BusinessReviews = (props) => {
 
   const onChangeReview = (text) => {
     const reviews = text !== ''
-      ? reviewsList.filter(review => review.comment.toLowerCase().includes(text?.toLowerCase()))
+      ? reviewsList.filter(review => review.comment && review.comment.toLowerCase().includes(text?.toLowerCase()))
       : reviewsList
     setBusinessReviewsList({
       ...businessReviewsList,
@@ -111,7 +111,7 @@ export const BusinessReviews = (props) => {
 
   useEffect(() => {
     if (!reviews?.length) return
-    const reviewsListing = sortReviews(reviews.filter(r => r.comment))
+    const reviewsListing = sortReviews(reviews)
     if (!searchValue) {
       setBusinessReviewsList({
         ...businessReviewsList,
@@ -121,11 +121,11 @@ export const BusinessReviews = (props) => {
     } else {
       setBusinessReviewsList({
         ...businessReviewsList,
-        reviews: reviewsListing.filter(item => item.comment.toLowerCase().includes(searchValue.toLowerCase())),
+        reviews: reviewsListing.filter(item => item.comment && item.comment.toLowerCase().includes(searchValue.toLowerCase())),
         loading: false
       })
     }
-  }, [searchValue]);
+  }, [searchValue])
 
   return (
     <>
