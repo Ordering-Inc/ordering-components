@@ -41,7 +41,8 @@ var BusinessSearchList = exports.BusinessSearchList = function BusinessSearchLis
     lazySearch = props.lazySearch,
     defaultTerm = props.defaultTerm,
     defaultLocation = props.defaultLocation,
-    brandId = props.brandId;
+    brandId = props.brandId,
+    isIos = props.isIos;
   var _useState = (0, _react.useState)({
       businesses: [],
       loading: true,
@@ -192,7 +193,7 @@ var BusinessSearchList = exports.BusinessSearchList = function BusinessSearchLis
         while (1) switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            filtParams = (val === null || val === void 0 ? void 0 : val.length) >= 3 ? "&term=".concat(encodeURI("%".concat(val, "%"))) : '';
+            filtParams = (val === null || val === void 0 ? void 0 : val.length) >= 3 ? "&term=".concat(isIos ? "%".concat(val, "%") : encodeURI("%".concat(val, "%"))) : '';
             Object.keys(filters).map(function (key) {
               var _filters$key;
               if (!filters[key] && filters[key] !== 0 || filters[key] === 'default' || ((_filters$key = filters[key]) === null || _filters$key === void 0 ? void 0 : _filters$key.length) === 0) return;
