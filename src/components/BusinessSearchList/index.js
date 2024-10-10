@@ -13,7 +13,8 @@ export const BusinessSearchList = (props) => {
     lazySearch,
     defaultTerm,
     defaultLocation,
-    brandId
+    brandId,
+    isIos
   } = props
 
   const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: true, error: null, lengthError: true })
@@ -135,7 +136,7 @@ export const BusinessSearchList = (props) => {
 
   const handleSearchbusinessAndProducts = async (newFetch, options, val) => {
     try {
-      let filtParams = val?.length >= 3 ? `&term=${encodeURI(`%${val}%`)}` : ''
+      let filtParams = val?.length >= 3 ? `&term=${isIos ? `%${val}%` : encodeURI(`%${val}%`)}` : ''
       Object.keys(filters).map(key => {
         if ((!filters[key] && filters[key] !== 0) || filters[key] === 'default' || filters[key]?.length === 0) return
         Array.isArray(filters[key]) ? filtParams = filtParams + `&${key}=[${filters[key]}]` : filtParams = filtParams + `&${key}=${filters[key]}`
