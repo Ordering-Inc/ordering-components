@@ -75,7 +75,7 @@ var BusinessReviews = exports.BusinessReviews = function BusinessReviews(props) 
   };
   var onChangeReview = function onChangeReview(text) {
     var reviews = text !== '' ? reviewsList.filter(function (review) {
-      return review.comment.toLowerCase().includes(text === null || text === void 0 ? void 0 : text.toLowerCase());
+      return review.comment && review.comment.toLowerCase().includes(text === null || text === void 0 ? void 0 : text.toLowerCase());
     }) : reviewsList;
     setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
       loading: false,
@@ -159,9 +159,7 @@ var BusinessReviews = exports.BusinessReviews = function BusinessReviews(props) 
   }, []);
   (0, _react.useEffect)(function () {
     if (!(reviews !== null && reviews !== void 0 && reviews.length)) return;
-    var reviewsListing = sortReviews(reviews.filter(function (r) {
-      return r.comment;
-    }));
+    var reviewsListing = sortReviews(reviews);
     if (!searchValue) {
       setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
         reviews: reviewsListing,
@@ -170,7 +168,7 @@ var BusinessReviews = exports.BusinessReviews = function BusinessReviews(props) 
     } else {
       setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
         reviews: reviewsListing.filter(function (item) {
-          return item.comment.toLowerCase().includes(searchValue.toLowerCase());
+          return item.comment && item.comment.toLowerCase().includes(searchValue.toLowerCase());
         }),
         loading: false
       }));
