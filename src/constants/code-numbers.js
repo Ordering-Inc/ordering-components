@@ -187,6 +187,7 @@ export const CODES = [
   { countryCode: 'SI', phoneCode: '963', countryName: 'Syria' },
   { countryCode: 'TW', phoneCode: '886', countryName: 'Taiwan' },
   { countryCode: 'TJ', phoneCode: '7', countryName: 'Tajikst' },
+  { countryCode: 'TZ', phoneCode: '255', countryName: 'Tanzania' },
   { countryCode: 'TH', phoneCode: '66', countryName: 'Thailand' },
   { countryCode: 'TG', phoneCode: '228', countryName: 'Togo' },
   { countryCode: 'TO', phoneCode: '676', countryName: 'Tonga' },
