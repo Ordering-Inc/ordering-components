@@ -757,6 +757,10 @@ var CODES = exports.CODES = [{
   phoneCode: '7',
   countryName: 'Tajikst'
 }, {
+  countryCode: 'TZ',
+  phoneCode: '255',
+  countryName: 'Tanzania'
+}, {
   countryCode: 'TH',
   phoneCode: '66',
   countryName: 'Thailand'
