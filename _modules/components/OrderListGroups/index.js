@@ -199,6 +199,19 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     ordersFiltered = _useState28[0],
     setOrdersFiltered = _useState28[1];
   var requestsState = {};
+  var handleSelectCurrentTab = function handleSelectCurrentTab(value) {
+    if (!isDriverApp) {
+      setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, value, _objectSpread(_objectSpread({}, ordersGroup[value]), {}, {
+        loading: true
+      }))));
+    }
+    if (value === 'logisticOrders') {
+      setlogisticOrders(_objectSpread(_objectSpread({}, logisticOrders), {}, {
+        loading: true
+      }));
+    }
+    setCurrentTabSelected(value);
+  };
   var getOrders = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
       var _filtered$customer, _filtered$customer2, _filtered$date, _filtered$date3;
@@ -964,39 +977,38 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
   };
   var actionOrderToTab = function actionOrderToTab(orderAux, status, type) {
     var _ordersGroup$status;
-    var orderList = (_ordersGroup$status = ordersGroup[status]) === null || _ordersGroup$status === void 0 ? void 0 : _ordersGroup$status.orders;
-    var orders;
+    var orderList = ((_ordersGroup$status = ordersGroup[status]) === null || _ordersGroup$status === void 0 ? void 0 : _ordersGroup$status.orders) || [];
     var order = _objectSpread(_objectSpread({}, orderAux), {}, {
-      showNotification: true
+      showNotification: false
     });
-    if (type === 'update') {
-      var indexToUpdate = orderList.findIndex(function (o) {
-        return o.id === order.id;
-      });
-      orderList[indexToUpdate] = _objectSpread(_objectSpread({}, order), {}, {
-        action: type + (order === null || order === void 0 ? void 0 : order.status)
-      });
-      orders = orderList;
-    } else {
-      orders = type === 'add' ? [_objectSpread(_objectSpread({}, order), {}, {
-        action: type + (order === null || order === void 0 ? void 0 : order.status)
-      })].concat(_toConsumableArray(orderList)) : orderList.filter(function (_order) {
-        return _order.id !== order.id;
-      });
+    var updatedOrders;
+    switch (type) {
+      case 'update':
+        updatedOrders = orderList.map(function (o) {
+          return o.id === order.id ? _objectSpread(_objectSpread({}, order), {}, {
+            action: "".concat(type).concat(order === null || order === void 0 ? void 0 : order.status)
+          }) : o;
+        });
+        break;
+      case 'add':
+        updatedOrders = [_objectSpread(_objectSpread({}, order), {}, {
+          action: "".concat(type).concat(order === null || order === void 0 ? void 0 : order.status)
+        })].concat(_toConsumableArray(orderList));
+        break;
+      case 'remove':
+        updatedOrders = orderList.filter(function (o) {
+          return o.id !== order.id;
+        });
+        break;
     }
-    var _pagination = ordersGroup[status].pagination;
-    if (type !== 'update') {
-      _pagination = _objectSpread(_objectSpread({}, ordersGroup[status].pagination), {}, {
-        total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
-      });
-    }
+    var updatedPagination = _objectSpread(_objectSpread({}, ordersGroup[status].pagination), {}, {
+      total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : type === 'remove' ? -1 : 0)
+    });
     setOrdersGroup(function (prevState) {
-      return _objectSpread(_objectSpread({}, prevState), {}, _defineProperty(_defineProperty({
-        orders: filterByIdUnique(sortOrders(orders))
-      }, status, _objectSpread(_objectSpread({}, prevState[status]), {}, {
-        orders: sortOrders(orders),
-        pagination: _pagination
-      })), "pagination", _pagination));
+      return _objectSpread(_objectSpread({}, prevState), {}, _defineProperty({}, status, _objectSpread(_objectSpread({}, prevState[status]), {}, {
+        orders: sortOrders(updatedOrders),
+        pagination: updatedPagination
+      })));
     });
   };
   var handleClickOrder = function handleClickOrder(orderAux) {
@@ -1577,7 +1589,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     currentFilters: currentFilters,
     setCurrentFilters: setCurrentFilters,
     currentTabSelected: currentTabSelected,
-    setCurrentTabSelected: setCurrentTabSelected,
+    setCurrentTabSelected: handleSelectCurrentTab,
     ordersGroup: ordersGroup,
     setOrdersGroup: setOrdersGroup,
     logisticOrders: logisticOrders,
