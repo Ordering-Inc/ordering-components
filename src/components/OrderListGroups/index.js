@@ -101,6 +101,7 @@ export const OrderListGroups = (props) => {
   const [orderLogisticAdded, setOrderLogisticAdded] = useState(null)
   const [orderLogisticUpdated, setOrderLogisticUpdated] = useState(null)
   const [recentlyReceivedMessage, setRecentlyReceivedMessage] = useState(null)
+
   const [ordersFiltered, setOrdersFiltered] = useState({
     orders: [],
     loading: false,
@@ -115,6 +116,25 @@ export const OrderListGroups = (props) => {
   })
 
   const requestsState = {}
+
+  const handleSelectCurrentTab = (value) => {
+    if (!isDriverApp) {
+      setOrdersGroup({
+        ...ordersGroup,
+        [value]: {
+          ...ordersGroup[value],
+          loading: true
+        }
+      })
+    }
+    if (value === 'logisticOrders') {
+      setlogisticOrders({
+        ...logisticOrders,
+        loading: true
+      })
+    }
+    setCurrentTabSelected(value)
+  }
 
   const getOrders = async ({
     page,
@@ -697,37 +717,34 @@ export const OrderListGroups = (props) => {
   }
 
   const actionOrderToTab = (orderAux, status, type) => {
-    const orderList = ordersGroup[status]?.orders
-    let orders
-    const order = {
-      ...orderAux,
-      showNotification: true
+    const orderList = ordersGroup[status]?.orders || []
+    const order = { ...orderAux, showNotification: false }
+    let updatedOrders
+
+    switch (type) {
+      case 'update':
+        updatedOrders = orderList.map(o => o.id === order.id ? { ...order, action: `${type}${order?.status}` } : o)
+        break
+      case 'add':
+        updatedOrders = [{ ...order, action: `${type}${order?.status}` }, ...orderList]
+        break
+      case 'remove':
+        updatedOrders = orderList.filter(o => o.id !== order.id)
+        break
     }
-    if (type === 'update') {
-      const indexToUpdate = orderList.findIndex((o) => o.id === order.id)
-      orderList[indexToUpdate] = { ...order, action: type + order?.status }
-      orders = orderList
-    } else {
-      orders = type === 'add'
-        ? [{ ...order, action: type + order?.status }, ...orderList]
-        : orderList.filter((_order) => _order.id !== order.id)
+
+    const updatedPagination = {
+      ...ordersGroup[status].pagination,
+      total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : type === 'remove' ? -1 : 0)
     }
-    let _pagination = ordersGroup[status].pagination
-    if (type !== 'update') {
-      _pagination = {
-        ...ordersGroup[status].pagination,
-        total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
-      }
-    }
-    setOrdersGroup((prevState) => ({
+
+    setOrdersGroup(prevState => ({
       ...prevState,
-      orders: filterByIdUnique(sortOrders(orders)),
       [status]: {
         ...prevState[status],
-        orders: sortOrders(orders),
-        pagination: _pagination
-      },
-      pagination: _pagination
+        orders: sortOrders(updatedOrders),
+        pagination: updatedPagination
+      }
     }))
   }
 
@@ -1195,7 +1212,7 @@ export const OrderListGroups = (props) => {
           currentFilters={currentFilters}
           setCurrentFilters={setCurrentFilters}
           currentTabSelected={currentTabSelected}
-          setCurrentTabSelected={setCurrentTabSelected}
+          setCurrentTabSelected={handleSelectCurrentTab}
           ordersGroup={ordersGroup}
           setOrdersGroup={setOrdersGroup}
           logisticOrders={logisticOrders}
