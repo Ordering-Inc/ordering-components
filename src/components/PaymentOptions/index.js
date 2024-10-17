@@ -5,9 +5,10 @@ import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useSession } from '../../contexts/SessionContext'
 
+const stripeLink = 'stripe_link'
 const paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal', 'square']
 const paymethodsNotAllowed = ['paypal_express', 'authorize']
-const paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon']
+const paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon', stripeLink]
 
 /**
  * Component to manage payment options behavior without UI component
@@ -28,7 +29,7 @@ export const PaymentOptions = (props) => {
   const [events] = useEvent()
   const [ordering] = useApi()
   const [orderState, { changePaymethod }] = useOrder()
-  const [{device_code}] = useSession()
+  const [{ device_code }] = useSession()
   const orderTotal = orderState.carts?.[`businessId:${businessId}`]?.total || 0
 
   const [paymethodsList, setPaymethodsList] = useState({ paymethods: [], loading: true, error: null })
@@ -42,7 +43,7 @@ export const PaymentOptions = (props) => {
       .filter(credentials => isCustomerMode
         ? !paymethodsNotAllowed.includes(credentials?.paymethod?.gateway) &&
           (isAlsea || paymethodsCallcenterMode.includes(credentials?.paymethod?.gateway))
-        : !paymethodsNotAllowed.includes(credentials?.paymethod?.gateway))
+        : ![...paymethodsNotAllowed, stripeLink].includes(credentials?.paymethod?.gateway))
       .map(credentials => {
         return {
           ...credentials?.paymethod,
