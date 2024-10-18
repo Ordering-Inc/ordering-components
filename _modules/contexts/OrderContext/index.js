@@ -593,7 +593,6 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             options = {};
             state.loading = true;
             options.headers = {
-              'X-App-X': ordering.appId,
               'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
             };
             countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 || (_state$options11 = state.options) === null || _state$options11 === void 0 || (_state$options11 = _state$options11.address) === null || _state$options11 === void 0 ? void 0 : _state$options11.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : (_ref8 = countryCodeFromLocalStorage !== null && countryCodeFromLocalStorage !== void 0 ? countryCodeFromLocalStorage : changes === null || changes === void 0 ? void 0 : changes.country_code) !== null && _ref8 !== void 0 ? _ref8 : state === null || state === void 0 || (_state$options12 = state.options) === null || _state$options12 === void 0 || (_state$options12 = _state$options12.address) === null || _state$options12 === void 0 ? void 0 : _state$options12.country_code;
@@ -906,7 +905,6 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             _context9.next = 12;
             return ordering.setAccessToken(session.token).carts().removeProduct(body, {
               headers: {
-                'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
@@ -1198,7 +1196,6 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             _context12.next = 29;
             return ordering.setAccessToken(session.token).carts().applyCoupon(body, {
               headers: {
-                'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
@@ -1824,7 +1821,6 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             _context19.next = 13;
             return ordering.setAccessToken(session.token).carts(cardId).confirmWithData(body, {
               headers: {
-                'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
@@ -1837,7 +1833,6 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             _context19.next = 18;
             return ordering.setAccessToken(session.token).carts(cardId).confirm(body, {
               headers: {
-                'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
@@ -1998,7 +1993,6 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             } : null;
             options = {
               headers: {
-                'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
