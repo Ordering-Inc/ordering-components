@@ -3,14 +3,16 @@ import PropTypes from 'prop-types'
 
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useSession } from '../../contexts/SessionContext'
 
 export const UpsellingPage = (props) => {
-  const { UIComponent, products, cartProducts, onSave } = props
-
+  const { UIComponent, useSuggestiveUpselling, products, cartProducts, onSave } = props
   const [upsellingProducts, setUpsellingProducts] = useState({ products: [], loading: true, error: false })
   const [businessProducts, setBusinessProducts] = useState([])
   const [ordering] = useApi()
   const [orderState] = useOrder()
+  const [{ token }] = useSession()
+  const currentCart = orderState.carts[`businessId:${props.businessId}`]
 
   const businessId = props.uuid
     ? Object.values(orderState.carts).find(_cart => _cart?.uuid === props.uuid)?.business_id ?? {}
@@ -38,6 +40,11 @@ export const UpsellingPage = (props) => {
     }
   }, [orderState.loading])
 
+  useEffect(() => {
+    if (!cartProducts?.length || !useSuggestiveUpselling) return
+    getSuggestiveProducts()
+  }, [cartProducts?.length, useSuggestiveUpselling])
+
   /**
    * getting products if array of product is not defined
    */
@@ -58,6 +65,41 @@ export const UpsellingPage = (props) => {
       })
     }
   }
+
+  /**
+   * getting suggestive products if useSuggestiveUpselling is true
+   */
+  const getSuggestiveProducts = async () => {
+    if (!currentCart?.uuid) return
+    try {
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const response = await fetch(`${ordering.root}/carts/${currentCart?.uuid}/upselling`, requestOptions)
+      const { error, result } = await response.json()
+      if (!error) {
+        setBusinessProducts(result)
+        getUpsellingProducts(result)
+      } else {
+        setUpsellingProducts({
+          ...upsellingProducts,
+          loading: false,
+          error
+        })
+      }
+    } catch (error) {
+      setUpsellingProducts({
+        ...upsellingProducts,
+        loading: false,
+        error
+      })
+    }
+  }
+
   /**
    *
    * filt products if they are already in the cart
@@ -66,21 +108,15 @@ export const UpsellingPage = (props) => {
   const getUpsellingProducts = (result) => {
     const upsellingProductsfiltered = result.filter(product => product.upselling)
 
-    const repeatProducts = cartProducts && cartProducts?.filter(cartProduct => upsellingProductsfiltered.find(product => product.id === cartProduct.id))
+    const repeatProducts = cartProducts?.length ? cartProducts?.filter(cartProduct => upsellingProductsfiltered.find(product => product.id === cartProduct.id)) : []
 
-    if (repeatProducts.length) {
-      setUpsellingProducts({
-        ...upsellingProducts,
-        loading: false,
-        products: upsellingProductsfiltered.filter(product => !product.inventoried && !repeatProducts.find(repeatProduct => repeatProduct.id === product.id))
-      })
-    } else {
-      setUpsellingProducts({
-        ...upsellingProducts,
-        loading: false,
-        products: upsellingProductsfiltered
-      })
-    }
+    setUpsellingProducts({
+      ...upsellingProducts,
+      loading: false,
+      products: repeatProducts?.length
+        ? upsellingProductsfiltered?.filter(product => !product.inventoried && !repeatProducts.find(repeatProduct => repeatProduct.id === product.id))
+        : upsellingProductsfiltered
+    })
   }
 
   /**
