@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.SingleBusinessCard = void 0;
 var _react = _interopRequireDefault(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 var SingleBusinessCard = exports.SingleBusinessCard = function SingleBusinessCard(props) {
   var UIComponent = props.UIComponent;
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props));
