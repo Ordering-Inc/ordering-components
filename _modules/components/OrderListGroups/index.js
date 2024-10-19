@@ -976,37 +976,37 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     return combineTabs ? combinedStatus : status;
   };
   var actionOrderToTab = function actionOrderToTab(orderAux, status, type) {
-    var _ordersGroup$status;
-    var orderList = ((_ordersGroup$status = ordersGroup[status]) === null || _ordersGroup$status === void 0 ? void 0 : _ordersGroup$status.orders) || [];
-    var order = _objectSpread(_objectSpread({}, orderAux), {}, {
-      showNotification: false
-    });
-    var updatedOrders;
-    switch (type) {
-      case 'update':
-        updatedOrders = orderList.map(function (o) {
-          return o.id === order.id ? _objectSpread(_objectSpread({}, order), {}, {
-            action: "".concat(type).concat(order === null || order === void 0 ? void 0 : order.status)
-          }) : o;
-        });
-        break;
-      case 'add':
-        updatedOrders = [_objectSpread(_objectSpread({}, order), {}, {
-          action: "".concat(type).concat(order === null || order === void 0 ? void 0 : order.status)
-        })].concat(_toConsumableArray(orderList));
-        break;
-      case 'remove':
-        updatedOrders = orderList.filter(function (o) {
-          return o.id !== order.id;
-        });
-        break;
-    }
-    var updatedPagination = _objectSpread(_objectSpread({}, ordersGroup[status].pagination), {}, {
-      total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : type === 'remove' ? -1 : 0)
-    });
     setOrdersGroup(function (prevState) {
+      var _prevState$status;
+      var orderList = ((_prevState$status = prevState[status]) === null || _prevState$status === void 0 ? void 0 : _prevState$status.orders) || [];
+      var order = _objectSpread(_objectSpread({}, orderAux), {}, {
+        showNotification: false
+      });
+      var updatedOrders;
+      switch (type) {
+        case 'update':
+          updatedOrders = orderList.map(function (o) {
+            return o.id === order.id ? _objectSpread(_objectSpread({}, order), {}, {
+              action: "".concat(type).concat(order === null || order === void 0 ? void 0 : order.status)
+            }) : o;
+          });
+          break;
+        case 'add':
+          updatedOrders = [_objectSpread(_objectSpread({}, order), {}, {
+            action: "".concat(type).concat(order === null || order === void 0 ? void 0 : order.status)
+          })].concat(_toConsumableArray(orderList));
+          break;
+        case 'remove':
+          updatedOrders = orderList.filter(function (o) {
+            return o.id !== order.id;
+          });
+          break;
+      }
+      var updatedPagination = _objectSpread(_objectSpread({}, prevState[status].pagination), {}, {
+        total: prevState[status].pagination.total + (type === 'add' ? 1 : type === 'remove' ? -1 : 0)
+      });
       return _objectSpread(_objectSpread({}, prevState), {}, _defineProperty({}, status, _objectSpread(_objectSpread({}, prevState[status]), {}, {
-        orders: sortOrders(updatedOrders),
+        orders: filterByIdUnique(sortOrders(updatedOrders)),
         pagination: updatedPagination
       })));
     });
@@ -1018,9 +1018,9 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     });
     var ordersGroups = order === null || order === void 0 || (_order$order_group2 = order.order_group) === null || _order$order_group2 === void 0 ? void 0 : _order$order_group2.orders;
     if (!ordersGroups) {
-      var _ordersGroup$status2;
+      var _ordersGroup$status;
       var status = getStatusById(order === null || order === void 0 ? void 0 : order.status);
-      var orderList = (_ordersGroup$status2 = ordersGroup[status]) === null || _ordersGroup$status2 === void 0 ? void 0 : _ordersGroup$status2.orders;
+      var orderList = (_ordersGroup$status = ordersGroup[status]) === null || _ordersGroup$status === void 0 ? void 0 : _ordersGroup$status.orders;
       var indexToUpdate = orderList === null || orderList === void 0 ? void 0 : orderList.findIndex(function (o) {
         return (o === null || o === void 0 ? void 0 : o.id) === (order === null || order === void 0 ? void 0 : order.id);
       });
@@ -1375,8 +1375,8 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
       for (var i = 0; i < ordersStatusArray.length; i++) {
         var status = ordersStatusArray[i];
         if (order !== null && order !== void 0 && order.products) {
-          var _ordersGroup$status3;
-          orderFound = (_ordersGroup$status3 = ordersGroup[status]) === null || _ordersGroup$status3 === void 0 || (_ordersGroup$status3 = _ordersGroup$status3.orders) === null || _ordersGroup$status3 === void 0 ? void 0 : _ordersGroup$status3.find(function (_order) {
+          var _ordersGroup$status2;
+          orderFound = (_ordersGroup$status2 = ordersGroup[status]) === null || _ordersGroup$status2 === void 0 || (_ordersGroup$status2 = _ordersGroup$status2.orders) === null || _ordersGroup$status2 === void 0 ? void 0 : _ordersGroup$status2.find(function (_order) {
             return _order.id === order.id;
           });
         }
@@ -1563,9 +1563,9 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     var handleCustomerReviewed = function handleCustomerReviewed(review) {
       var orderFound = null;
       for (var i = 0; i < ordersStatusArray.length; i++) {
-        var _ordersGroup$status4;
+        var _ordersGroup$status3;
         var status = ordersStatusArray[i];
-        orderFound = (_ordersGroup$status4 = ordersGroup[status]) === null || _ordersGroup$status4 === void 0 || (_ordersGroup$status4 = _ordersGroup$status4.orders) === null || _ordersGroup$status4 === void 0 ? void 0 : _ordersGroup$status4.find(function (_order) {
+        orderFound = (_ordersGroup$status3 = ordersGroup[status]) === null || _ordersGroup$status3 === void 0 || (_ordersGroup$status3 = _ordersGroup$status3.orders) === null || _ordersGroup$status3 === void 0 ? void 0 : _ordersGroup$status3.find(function (_order) {
           return _order.id === review.order_id;
         });
         if (orderFound) break;
