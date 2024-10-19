@@ -717,35 +717,37 @@ export const OrderListGroups = (props) => {
   }
 
   const actionOrderToTab = (orderAux, status, type) => {
-    const orderList = ordersGroup[status]?.orders || []
-    const order = { ...orderAux, showNotification: false }
-    let updatedOrders
+    setOrdersGroup(prevState => {
+      const orderList = prevState[status]?.orders || []
+      const order = { ...orderAux, showNotification: false }
+      let updatedOrders
 
-    switch (type) {
-      case 'update':
-        updatedOrders = orderList.map(o => o.id === order.id ? { ...order, action: `${type}${order?.status}` } : o)
-        break
-      case 'add':
-        updatedOrders = [{ ...order, action: `${type}${order?.status}` }, ...orderList]
-        break
-      case 'remove':
-        updatedOrders = orderList.filter(o => o.id !== order.id)
-        break
-    }
-
-    const updatedPagination = {
-      ...ordersGroup[status].pagination,
-      total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : type === 'remove' ? -1 : 0)
-    }
-
-    setOrdersGroup(prevState => ({
-      ...prevState,
-      [status]: {
-        ...prevState[status],
-        orders: sortOrders(updatedOrders),
-        pagination: updatedPagination
+      switch (type) {
+        case 'update':
+          updatedOrders = orderList.map(o => o.id === order.id ? { ...order, action: `${type}${order?.status}` } : o)
+          break
+        case 'add':
+          updatedOrders = [{ ...order, action: `${type}${order?.status}` }, ...orderList]
+          break
+        case 'remove':
+          updatedOrders = orderList.filter(o => o.id !== order.id)
+          break
       }
-    }))
+
+      const updatedPagination = {
+        ...prevState[status].pagination,
+        total: prevState[status].pagination.total + (type === 'add' ? 1 : type === 'remove' ? -1 : 0)
+      }
+
+      return {
+        ...prevState,
+        [status]: {
+          ...prevState[status],
+          orders: filterByIdUnique(sortOrders(updatedOrders)),
+          pagination: updatedPagination
+        }
+      }
+    })
   }
 
   const handleClickOrder = (orderAux) => {
