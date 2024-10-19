@@ -9,6 +9,7 @@ var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _ApiContext = require("../../contexts/ApiContext");
 var _OrderContext = require("../../contexts/OrderContext");
+var _SessionContext = require("../../contexts/SessionContext");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
@@ -30,6 +31,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
   var _Object$values$find$b, _Object$values$find;
   var UIComponent = props.UIComponent,
+    useSuggestiveUpselling = props.useSuggestiveUpselling,
     products = props.products,
     cartProducts = props.cartProducts,
     onSave = props.onSave;
@@ -51,6 +53,10 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 1),
     orderState = _useOrder2[0];
+  var _useSession = (0, _SessionContext.useSession)(),
+    _useSession2 = _slicedToArray(_useSession, 1),
+    token = _useSession2[0].token;
+  var currentCart = orderState.carts["businessId:".concat(props.businessId)];
   var businessId = props.uuid ? (_Object$values$find$b = (_Object$values$find = Object.values(orderState.carts).find(function (_cart) {
     return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === props.uuid;
   })) === null || _Object$values$find === void 0 ? void 0 : _Object$values$find.business_id) !== null && _Object$values$find$b !== void 0 ? _Object$values$find$b : {} : props.businessId;
@@ -73,6 +79,10 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
       getUpsellingProducts(businessProducts);
     }
   }, [orderState.loading]);
+  (0, _react.useEffect)(function () {
+    if (!(cartProducts !== null && cartProducts !== void 0 && cartProducts.length) || !useSuggestiveUpselling) return;
+    getSuggestiveProducts();
+  }, [cartProducts === null || cartProducts === void 0 ? void 0 : cartProducts.length, useSuggestiveUpselling]);
 
   /**
    * getting products if array of product is not defined
@@ -113,6 +123,69 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
       return _ref.apply(this, arguments);
     };
   }();
+
+  /**
+   * getting suggestive products if useSuggestiveUpselling is true
+   */
+  var getSuggestiveProducts = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      var requestOptions, response, _yield$response$json, error, result;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            if (currentCart !== null && currentCart !== void 0 && currentCart.uuid) {
+              _context2.next = 2;
+              break;
+            }
+            return _context2.abrupt("return");
+          case 2:
+            _context2.prev = 2;
+            requestOptions = {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(token)
+              }
+            };
+            _context2.next = 6;
+            return fetch("".concat(ordering.root, "/carts/").concat(currentCart === null || currentCart === void 0 ? void 0 : currentCart.uuid, "/upselling"), requestOptions);
+          case 6:
+            response = _context2.sent;
+            _context2.next = 9;
+            return response.json();
+          case 9:
+            _yield$response$json = _context2.sent;
+            error = _yield$response$json.error;
+            result = _yield$response$json.result;
+            if (!error) {
+              setBusinessProducts(result);
+              getUpsellingProducts(result);
+            } else {
+              setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
+                loading: false,
+                error: error
+              }));
+            }
+            _context2.next = 18;
+            break;
+          case 15:
+            _context2.prev = 15;
+            _context2.t0 = _context2["catch"](2);
+            setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
+              loading: false,
+              error: _context2.t0
+            }));
+          case 18:
+          case "end":
+            return _context2.stop();
+        }
+      }, _callee2, null, [[2, 15]]);
+    }));
+    return function getSuggestiveProducts() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
   /**
    *
    * filt products if they are already in the cart
@@ -122,26 +195,19 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
     var upsellingProductsfiltered = result.filter(function (product) {
       return product.upselling;
     });
-    var repeatProducts = cartProducts && (cartProducts === null || cartProducts === void 0 ? void 0 : cartProducts.filter(function (cartProduct) {
+    var repeatProducts = cartProducts !== null && cartProducts !== void 0 && cartProducts.length ? cartProducts === null || cartProducts === void 0 ? void 0 : cartProducts.filter(function (cartProduct) {
       return upsellingProductsfiltered.find(function (product) {
         return product.id === cartProduct.id;
       });
+    }) : [];
+    setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
+      loading: false,
+      products: repeatProducts !== null && repeatProducts !== void 0 && repeatProducts.length ? upsellingProductsfiltered === null || upsellingProductsfiltered === void 0 ? void 0 : upsellingProductsfiltered.filter(function (product) {
+        return !product.inventoried && !repeatProducts.find(function (repeatProduct) {
+          return repeatProduct.id === product.id;
+        });
+      }) : upsellingProductsfiltered
     }));
-    if (repeatProducts.length) {
-      setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
-        loading: false,
-        products: upsellingProductsfiltered.filter(function (product) {
-          return !product.inventoried && !repeatProducts.find(function (repeatProduct) {
-            return repeatProduct.id === product.id;
-          });
-        })
-      }));
-    } else {
-      setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
-        loading: false,
-        products: upsellingProductsfiltered
-      }));
-    }
   };
 
   /**
