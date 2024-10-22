@@ -718,7 +718,8 @@ export const OrderListGroups = (props) => {
 
   const actionOrderToTab = (orderAux, status, type) => {
     setOrdersGroup(prevState => {
-      const orderList = prevState[status]?.orders || []
+      if (!prevState[status]?.orders) return
+      const orderList = prevState[status]?.orders
       const order = { ...orderAux, showNotification: false }
       let updatedOrders
 
