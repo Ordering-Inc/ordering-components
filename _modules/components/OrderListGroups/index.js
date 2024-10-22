@@ -977,8 +977,9 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
   };
   var actionOrderToTab = function actionOrderToTab(orderAux, status, type) {
     setOrdersGroup(function (prevState) {
-      var _prevState$status;
-      var orderList = ((_prevState$status = prevState[status]) === null || _prevState$status === void 0 ? void 0 : _prevState$status.orders) || [];
+      var _prevState$status, _prevState$status2;
+      if (!((_prevState$status = prevState[status]) !== null && _prevState$status !== void 0 && _prevState$status.orders)) return;
+      var orderList = (_prevState$status2 = prevState[status]) === null || _prevState$status2 === void 0 ? void 0 : _prevState$status2.orders;
       var order = _objectSpread(_objectSpread({}, orderAux), {}, {
         showNotification: false
       });
