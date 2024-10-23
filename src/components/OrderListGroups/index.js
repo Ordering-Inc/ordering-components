@@ -647,7 +647,7 @@ export const OrderListGroups = (props) => {
     return ordersSorted
   }
 
-  const filterByIdUnique = (array) => {
+  const filterByIdUnique = (array, currentTabSelected) => {
     if (!array) return []
 
     const tempObj = {}
@@ -688,7 +688,7 @@ export const OrderListGroups = (props) => {
         if (_item) ordersGroupids.push(item?.cart_group_id)
         return _item
       }).filter(item => item)
-    return options?.allStatusses ? totalOrders : filterByIdUnique(totalOrders)
+    return options?.allStatusses ? totalOrders : filterByIdUnique(totalOrders, currentTabSelected)
   }
 
   const getStatusById = (id) => {
@@ -744,7 +744,7 @@ export const OrderListGroups = (props) => {
         ...prevState,
         [status]: {
           ...prevState[status],
-          orders: filterByIdUnique(sortOrders(updatedOrders)),
+          orders: filterByIdUnique(sortOrders(updatedOrders), status),
           pagination: updatedPagination
         }
       }
