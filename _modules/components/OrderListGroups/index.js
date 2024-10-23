@@ -915,7 +915,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     });
     return ordersSorted;
   };
-  var filterByIdUnique = function filterByIdUnique(array) {
+  var filterByIdUnique = function filterByIdUnique(array, currentTabSelected) {
     var _ordersGroupStatus$cu;
     if (!array) return [];
     var tempObj = {};
@@ -960,7 +960,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
     }).filter(function (item) {
       return item;
     });
-    return options !== null && options !== void 0 && options.allStatusses ? totalOrders : filterByIdUnique(totalOrders);
+    return options !== null && options !== void 0 && options.allStatusses ? totalOrders : filterByIdUnique(totalOrders, currentTabSelected);
   };
   var getStatusById = function getStatusById(id) {
     var _orderGroupStatusCust6, _orderGroupStatusCust7, _orderGroupStatusCust8, _orderGroupStatusCust9;
@@ -1007,7 +1007,7 @@ var OrderListGroups = exports.OrderListGroups = function OrderListGroups(props) 
         total: prevState[status].pagination.total + (type === 'add' ? 1 : type === 'remove' ? -1 : 0)
       });
       return _objectSpread(_objectSpread({}, prevState), {}, _defineProperty({}, status, _objectSpread(_objectSpread({}, prevState[status]), {}, {
-        orders: filterByIdUnique(sortOrders(updatedOrders)),
+        orders: filterByIdUnique(sortOrders(updatedOrders), status),
         pagination: updatedPagination
       })));
     });
