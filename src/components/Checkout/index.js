@@ -21,7 +21,8 @@ export const Checkout = (props) => {
     UIComponent,
     isApp,
     isKiosk,
-    isCustomerMode
+    isCustomerMode,
+    handleOrderRedirect
   } = props
 
   const [ordering] = useApi()
@@ -501,6 +502,21 @@ export const Checkout = (props) => {
       setDeliveryOptionSelected(cart?.delivery_option_id)
     }
   }, [cart?.delivery_option_id])
+
+  useEffect(() => {
+    const handleCartUpdate = (cart) => {
+      if (cart?.status !== 1 || !cart?.order?.uuid) return
+      handleOrderRedirect && handleOrderRedirect(cart?.order?.uuid)
+    }
+    if (isCustomerMode && socket?.socket?._callbacks?.$carts_update) {
+      socket.on('carts_update', handleCartUpdate)
+    }
+    return () => {
+      if (isCustomerMode && socket?.socket?._callbacks?.$carts_update) {
+        socket.off('carts_update', handleCartUpdate)
+      }
+    }
+  }, [socket, isCustomerMode])
 
   useEffect(() => {
     if (!isKiosk) {
