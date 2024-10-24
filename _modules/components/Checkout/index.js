@@ -49,7 +49,8 @@ var Checkout = exports.Checkout = function Checkout(props) {
     UIComponent = props.UIComponent,
     isApp = props.isApp,
     isKiosk = props.isKiosk,
-    isCustomerMode = props.isCustomerMode;
+    isCustomerMode = props.isCustomerMode,
+    handleOrderRedirect = props.handleOrderRedirect;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -846,6 +847,23 @@ var Checkout = exports.Checkout = function Checkout(props) {
       setDeliveryOptionSelected(cart === null || cart === void 0 ? void 0 : cart.delivery_option_id);
     }
   }, [cart === null || cart === void 0 ? void 0 : cart.delivery_option_id]);
+  (0, _react.useEffect)(function () {
+    var _socket$socket;
+    var handleCartUpdate = function handleCartUpdate(cart) {
+      var _cart$order, _cart$order2;
+      if ((cart === null || cart === void 0 ? void 0 : cart.status) !== 1 || !(cart !== null && cart !== void 0 && (_cart$order = cart.order) !== null && _cart$order !== void 0 && _cart$order.uuid)) return;
+      handleOrderRedirect && handleOrderRedirect(cart === null || cart === void 0 || (_cart$order2 = cart.order) === null || _cart$order2 === void 0 ? void 0 : _cart$order2.uuid);
+    };
+    if (isCustomerMode && socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && (_socket$socket = _socket$socket._callbacks) !== null && _socket$socket !== void 0 && _socket$socket.$carts_update) {
+      socket.on('carts_update', handleCartUpdate);
+    }
+    return function () {
+      var _socket$socket2;
+      if (isCustomerMode && socket !== null && socket !== void 0 && (_socket$socket2 = socket.socket) !== null && _socket$socket2 !== void 0 && (_socket$socket2 = _socket$socket2._callbacks) !== null && _socket$socket2 !== void 0 && _socket$socket2.$carts_update) {
+        socket.off('carts_update', handleCartUpdate);
+      }
+    };
+  }, [socket, isCustomerMode]);
   (0, _react.useEffect)(function () {
     if (!isKiosk) {
       Promise.all([getDeliveryOptions(), getLoyaltyPlans()].map(function (promise) {
