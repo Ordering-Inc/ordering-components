@@ -119,7 +119,7 @@ var PaymentOptionStripeLink = exports.PaymentOptionStripeLink = function Payment
             _context.t0 = _context["catch"](0);
             setStripeLinkState(_objectSpread(_objectSpread({}, stripeLinkState), {}, {
               loading: false,
-              error: _context.t0
+              error: [_context.t0.message]
             }));
           case 22:
           case "end":
