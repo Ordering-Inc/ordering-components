@@ -58,7 +58,7 @@ export const PaymentOptionStripeLink = (props) => {
       callback && callback()
       showToast(ToastType.Success, t('MESSAGE_SENT_SUCCESSFULLY', 'The link has been sent'))
     } catch (error) {
-      setStripeLinkState({ ...stripeLinkState, loading: false, error })
+      setStripeLinkState({ ...stripeLinkState, loading: false, error: [error.message] })
     }
   }
 
