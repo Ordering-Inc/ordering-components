@@ -130,20 +130,44 @@ export const GoogleMaps = (props) => {
       const geocoder = new window.google.maps.Geocoder()
 
       geocoder.geocode({ latLng: pos }, (results) => {
-        let zipcode = null
         if (results && results.length > 0 && results?.[0]?.address_components) {
+          const addressObj = {}
           for (const component of results[0].address_components) {
             const addressType = component.types[0]
             if (addressType === 'postal_code') {
-              zipcode = component.short_name
-              break
+              addressObj.zipcode = component.short_name
+            }
+            if (addressType === 'street_number') {
+              addressObj.street_number = component.long_name
+            }
+            if (addressType === 'neighborhood') {
+              addressObj.neighborhood = component.long_name
+            }
+            if (addressType === 'route') {
+              addressObj.route = component.short_name
+            }
+            if (addressType === 'locality') {
+              addressObj.locality = component.long_name
+            }
+            if (component.types?.includes('sublocality')) {
+              addressObj.sublocality = component.long_name
+            }
+            if (addressType === 'country') {
+              addressObj.country = component.long_name
+              addressObj.country_code = component.short_name
+            }
+            if (addressType === 'administrative_area_level_1') {
+              addressObj.state = component.long_name
+            }
+            if (addressType === 'administrative_area_level_2') {
+              addressObj.city = component.long_name
             }
           }
           const address = {
             address: results[0].formatted_address,
-            location: { lat: pos?.lat(), lng: pos?.lng() }
+            location: { lat: pos?.lat(), lng: pos?.lng() },
+            ...addressObj
           }
-          if (zipcode) address.zipcode = zipcode
 
           handleChangeAddressMap && handleChangeAddressMap(address)
 
