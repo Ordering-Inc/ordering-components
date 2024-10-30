@@ -82,7 +82,7 @@ var AutocompleteInput = function AutocompleteInput(props) {
               if (addressType === 'locality') {
                 addressObj.locality = component.long_name;
               }
-              if (((_component$types = component.types) === null || _component$types === void 0 ? void 0 : _component$types.includes('sublocality')) === 'sublocality') {
+              if ((_component$types = component.types) !== null && _component$types !== void 0 && _component$types.includes('sublocality')) {
                 addressObj.sublocality = component.long_name;
               }
               if (addressType === 'country') {
