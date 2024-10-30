@@ -27,8 +27,8 @@ const AutocompleteInput = (props) => {
   })
 
   const options = {
-    types: types,
-    fields: fields
+    types,
+    fields
   }
 
   if (countryCode !== '*') {
@@ -61,7 +61,7 @@ const AutocompleteInput = (props) => {
             if (addressType === 'locality') {
               addressObj.locality = component.long_name
             }
-            if (component.types?.includes('sublocality') === 'sublocality') {
+            if (component.types?.includes('sublocality')) {
               addressObj.sublocality = component.long_name
             }
             if (addressType === 'country') {
