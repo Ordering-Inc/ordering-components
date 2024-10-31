@@ -3,14 +3,16 @@ import PropTypes from 'prop-types'
 
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useSession } from '../../contexts/SessionContext'
 
 export const UpsellingPage = (props) => {
-  const { UIComponent, products, cartProducts, onSave } = props
-
+  const { UIComponent, useSuggestiveUpselling, products, cartProducts, onSave } = props
   const [upsellingProducts, setUpsellingProducts] = useState({ products: [], loading: true, error: false })
   const [businessProducts, setBusinessProducts] = useState([])
   const [ordering] = useApi()
   const [orderState] = useOrder()
+  const [{ token }] = useSession()
+  const currentCart = orderState.carts[`businessId:${props.businessId}`]
 
   const businessId = props.uuid
     ? Object.values(orderState.carts).find(_cart => _cart?.uuid === props.uuid)?.business_id ?? {}
@@ -21,7 +23,14 @@ export const UpsellingPage = (props) => {
       if (products?.length && !props.uuid) {
         getUpsellingProducts(products)
       } else {
-        getProducts()
+        if (useSuggestiveUpselling) {
+          setUpsellingProducts({
+            ...upsellingProducts,
+            loading: false
+          })
+        } else {
+          getProducts()
+        }
       }
     } else {
       setUpsellingProducts({
@@ -33,10 +42,16 @@ export const UpsellingPage = (props) => {
   }, [businessId])
 
   useEffect(() => {
-    if (!upsellingProducts.loading) {
+    if (useSuggestiveUpselling) return
+    if (!upsellingProducts.loading && !orderState.loading) {
       getUpsellingProducts(businessProducts)
     }
-  }, [orderState.loading])
+  }, [orderState.loading, upsellingProducts.loading])
+
+  useEffect(() => {
+    if (!cartProducts?.length || !useSuggestiveUpselling || upsellingProducts.loading || orderState.loading) return
+    getSuggestiveProducts()
+  }, [cartProducts?.length, orderState.loading, upsellingProducts.loading])
 
   /**
    * getting products if array of product is not defined
@@ -58,29 +73,49 @@ export const UpsellingPage = (props) => {
       })
     }
   }
+
+  /**
+   * getting suggestive products if useSuggestiveUpselling is true
+   */
+  const getSuggestiveProducts = async () => {
+    if (!currentCart?.uuid) return
+    try {
+      const { content: { error, result } } = await ordering.setAccessToken(token).carts(currentCart?.uuid).getUpselling()
+      if (!error) {
+        setBusinessProducts(result)
+        getUpsellingProducts(result, true)
+      } else {
+        setUpsellingProducts({
+          ...upsellingProducts,
+          loading: false,
+          error
+        })
+      }
+    } catch (error) {
+      setUpsellingProducts({
+        ...upsellingProducts,
+        loading: false,
+        error
+      })
+    }
+  }
+
   /**
    *
    * filt products if they are already in the cart
    * @param {array} cartProducts
    */
-  const getUpsellingProducts = (result) => {
-    const upsellingProductsfiltered = result.filter(product => product.upselling)
+  const getUpsellingProducts = (result, allowAll = false) => {
+    const upsellingProductsfiltered = result.filter(product => product.upselling || allowAll)
+    const repeatProducts = cartProducts?.length ? cartProducts?.filter(cartProduct => upsellingProductsfiltered.find(product => product.id === cartProduct.id)) : []
 
-    const repeatProducts = cartProducts && cartProducts?.filter(cartProduct => upsellingProductsfiltered.find(product => product.id === cartProduct.id))
-
-    if (repeatProducts.length) {
-      setUpsellingProducts({
-        ...upsellingProducts,
-        loading: false,
-        products: upsellingProductsfiltered.filter(product => !product.inventoried && !repeatProducts.find(repeatProduct => repeatProduct.id === product.id))
-      })
-    } else {
-      setUpsellingProducts({
-        ...upsellingProducts,
-        loading: false,
-        products: upsellingProductsfiltered
-      })
-    }
+    setUpsellingProducts({
+      ...upsellingProducts,
+      loading: false,
+      products: repeatProducts?.length
+        ? upsellingProductsfiltered?.filter(product => !product.inventoried && !repeatProducts.find(repeatProduct => repeatProduct.id === product.id))
+        : upsellingProductsfiltered
+    })
   }
 
   /**
@@ -96,6 +131,7 @@ export const UpsellingPage = (props) => {
       {...props}
       upsellingProducts={upsellingProducts}
       handleFormProduct={handleFormProduct}
+      businessId={businessId}
     />
   )
 }
