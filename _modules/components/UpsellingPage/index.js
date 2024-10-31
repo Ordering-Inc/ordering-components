@@ -65,7 +65,13 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
       if (products !== null && products !== void 0 && products.length && !props.uuid) {
         getUpsellingProducts(products);
       } else {
-        getProducts();
+        if (useSuggestiveUpselling) {
+          setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
+            loading: false
+          }));
+        } else {
+          getProducts();
+        }
       }
     } else {
       setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
@@ -75,14 +81,15 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
     }
   }, [businessId]);
   (0, _react.useEffect)(function () {
-    if (!upsellingProducts.loading) {
+    if (useSuggestiveUpselling) return;
+    if (!upsellingProducts.loading && !orderState.loading) {
       getUpsellingProducts(businessProducts);
     }
-  }, [orderState.loading]);
+  }, [orderState.loading, upsellingProducts.loading]);
   (0, _react.useEffect)(function () {
-    if (!(cartProducts !== null && cartProducts !== void 0 && cartProducts.length) || !useSuggestiveUpselling) return;
+    if (!(cartProducts !== null && cartProducts !== void 0 && cartProducts.length) || !useSuggestiveUpselling || upsellingProducts.loading || orderState.loading) return;
     getSuggestiveProducts();
-  }, [cartProducts === null || cartProducts === void 0 ? void 0 : cartProducts.length, useSuggestiveUpselling]);
+  }, [cartProducts === null || cartProducts === void 0 ? void 0 : cartProducts.length, orderState.loading, upsellingProducts.loading]);
 
   /**
    * getting products if array of product is not defined
