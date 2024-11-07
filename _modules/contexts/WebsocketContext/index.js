@@ -75,7 +75,7 @@ var WebsocketProvider = exports.WebsocketProvider = function WebsocketProvider(_
   (0, _react.useEffect)(function () {
     if (session.auth) return;
     var projectInputInterval = setInterval(/*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var project;
+      var project, parsedProject;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -97,11 +97,20 @@ var WebsocketProvider = exports.WebsocketProvider = function WebsocketProvider(_
             clearInterval(projectInputInterval);
           case 10:
             if (project) {
-              setConfigs(function (prevConfigs) {
-                return _objectSpread(_objectSpread({}, prevConfigs), {}, {
-                  project: JSON.parse(project)
+              try {
+                parsedProject = JSON.parse(project);
+                setConfigs(function (prevConfigs) {
+                  return _objectSpread(_objectSpread({}, prevConfigs), {}, {
+                    project: parsedProject
+                  });
                 });
-              });
+              } catch (error) {
+                setConfigs(function (prevConfigs) {
+                  return _objectSpread(_objectSpread({}, prevConfigs), {}, {
+                    project: project
+                  });
+                });
+              }
               clearInterval(projectInputInterval);
             }
           case 11:
