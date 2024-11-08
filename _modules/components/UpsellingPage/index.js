@@ -136,7 +136,7 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
    */
   var getSuggestiveProducts = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var requestOptions, response, _yield$response$json, error, result;
+      var _yield$ordering$setAc, _yield$ordering$setAc2, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -147,23 +147,13 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
             return _context2.abrupt("return");
           case 2:
             _context2.prev = 2;
-            requestOptions = {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token)
-              }
-            };
-            _context2.next = 6;
-            return fetch("".concat(ordering.root, "/carts/").concat(currentCart === null || currentCart === void 0 ? void 0 : currentCart.uuid, "/upselling"), requestOptions);
-          case 6:
-            response = _context2.sent;
-            _context2.next = 9;
-            return response.json();
-          case 9:
-            _yield$response$json = _context2.sent;
-            error = _yield$response$json.error;
-            result = _yield$response$json.result;
+            _context2.next = 5;
+            return ordering.setAccessToken(token).carts(currentCart === null || currentCart === void 0 ? void 0 : currentCart.uuid).getUpselling();
+          case 5:
+            _yield$ordering$setAc = _context2.sent;
+            _yield$ordering$setAc2 = _yield$ordering$setAc.content;
+            error = _yield$ordering$setAc2.error;
+            result = _yield$ordering$setAc2.result;
             if (!error) {
               setBusinessProducts(result);
               getUpsellingProducts(result);
@@ -173,20 +163,20 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
                 error: error
               }));
             }
-            _context2.next = 18;
+            _context2.next = 15;
             break;
-          case 15:
-            _context2.prev = 15;
+          case 12:
+            _context2.prev = 12;
             _context2.t0 = _context2["catch"](2);
             setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
               loading: false,
               error: _context2.t0
             }));
-          case 18:
+          case 15:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[2, 15]]);
+      }, _callee2, null, [[2, 12]]);
     }));
     return function getSuggestiveProducts() {
       return _ref2.apply(this, arguments);
@@ -226,7 +216,8 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
   };
   return /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     upsellingProducts: upsellingProducts,
-    handleFormProduct: handleFormProduct
+    handleFormProduct: handleFormProduct,
+    businessId: businessId
   }));
 };
 UpsellingPage.propTypes = {
