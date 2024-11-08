@@ -80,15 +80,7 @@ export const UpsellingPage = (props) => {
   const getSuggestiveProducts = async () => {
     if (!currentCart?.uuid) return
     try {
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      }
-      const response = await fetch(`${ordering.root}/carts/${currentCart?.uuid}/upselling`, requestOptions)
-      const { error, result } = await response.json()
+      const { content: { error, result } } = await ordering.setAccessToken(token).carts(currentCart?.uuid).getUpselling()
       if (!error) {
         setBusinessProducts(result)
         getUpsellingProducts(result)
@@ -140,6 +132,7 @@ export const UpsellingPage = (props) => {
       {...props}
       upsellingProducts={upsellingProducts}
       handleFormProduct={handleFormProduct}
+      businessId={businessId}
     />
   )
 }
