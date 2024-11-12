@@ -83,7 +83,7 @@ export const UpsellingPage = (props) => {
       const { content: { error, result } } = await ordering.setAccessToken(token).carts(currentCart?.uuid).getUpselling()
       if (!error) {
         setBusinessProducts(result)
-        getUpsellingProducts(result)
+        getUpsellingProducts(result, true)
       } else {
         setUpsellingProducts({
           ...upsellingProducts,
@@ -105,9 +105,8 @@ export const UpsellingPage = (props) => {
    * filt products if they are already in the cart
    * @param {array} cartProducts
    */
-  const getUpsellingProducts = (result) => {
-    const upsellingProductsfiltered = result.filter(product => product.upselling)
-
+  const getUpsellingProducts = (result, allowAll = false) => {
+    const upsellingProductsfiltered = result.filter(product => product.upselling || allowAll)
     const repeatProducts = cartProducts?.length ? cartProducts?.filter(cartProduct => upsellingProductsfiltered.find(product => product.id === cartProduct.id)) : []
 
     setUpsellingProducts({
