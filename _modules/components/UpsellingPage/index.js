@@ -156,7 +156,7 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
             result = _yield$ordering$setAc2.result;
             if (!error) {
               setBusinessProducts(result);
-              getUpsellingProducts(result);
+              getUpsellingProducts(result, true);
             } else {
               setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
                 loading: false,
@@ -189,8 +189,9 @@ var UpsellingPage = exports.UpsellingPage = function UpsellingPage(props) {
    * @param {array} cartProducts
    */
   var getUpsellingProducts = function getUpsellingProducts(result) {
+    var allowAll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     var upsellingProductsfiltered = result.filter(function (product) {
-      return product.upselling;
+      return product.upselling || allowAll;
     });
     var repeatProducts = cartProducts !== null && cartProducts !== void 0 && cartProducts.length ? cartProducts === null || cartProducts === void 0 ? void 0 : cartProducts.filter(function (cartProduct) {
       return upsellingProductsfiltered.find(function (product) {
