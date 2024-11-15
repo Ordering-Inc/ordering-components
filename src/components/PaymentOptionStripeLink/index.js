@@ -29,9 +29,10 @@ export const PaymentOptionStripeLink = (props) => {
   const handleSendStripeLink = async (type, callback) => {
     try {
       setStripeLinkState({ ...stripeLinkState, loading: true })
+      const customProviders = ['pizzahutstaging', 'pizzahutmexico']
       const data = {
         type,
-        provider: ordering?.project === 'pizzahutmexico' ? 'custom' : 'twilio',
+        provider: customProviders.includes(ordering?.project) ? 'custom' : 'twilio',
         country_phone_code: userInfo.country_phone_code,
         cellphone: userInfo.cellphone,
         message: t('LINK_TO_PAY_MESSAGE',
