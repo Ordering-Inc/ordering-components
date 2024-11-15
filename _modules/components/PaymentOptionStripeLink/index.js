@@ -64,7 +64,7 @@ var PaymentOptionStripeLink = exports.PaymentOptionStripeLink = function Payment
   };
   var handleSendStripeLink = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(type, callback) {
-      var data, response, _yield$response$json, result, error;
+      var customProviders, data, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -72,14 +72,15 @@ var PaymentOptionStripeLink = exports.PaymentOptionStripeLink = function Payment
             setStripeLinkState(_objectSpread(_objectSpread({}, stripeLinkState), {}, {
               loading: true
             }));
+            customProviders = ['pizzahutstaging', 'pizzahutmexico'];
             data = {
               type: type,
-              provider: (ordering === null || ordering === void 0 ? void 0 : ordering.project) === 'pizzahutmexico' ? 'custom' : 'twilio',
+              provider: customProviders.includes(ordering === null || ordering === void 0 ? void 0 : ordering.project) ? 'custom' : 'twilio',
               country_phone_code: userInfo.country_phone_code,
               cellphone: userInfo.cellphone,
               message: t('LINK_TO_PAY_MESSAGE', 'Hello there _name_ _lastname_, click on the following link to complete the payment: _link_').replace('_name_', userInfo === null || userInfo === void 0 ? void 0 : userInfo.name).replace('_lastname_', userInfo === null || userInfo === void 0 ? void 0 : userInfo.lastname).replace('_link_', paymentURL)
             };
-            _context.next = 5;
+            _context.next = 6;
             return fetch("".concat(ordering.root, "/text_messages/send"), {
               method: 'POST',
               headers: {
@@ -89,16 +90,16 @@ var PaymentOptionStripeLink = exports.PaymentOptionStripeLink = function Payment
               },
               body: JSON.stringify(data)
             });
-          case 5:
+          case 6:
             response = _context.sent;
-            _context.next = 8;
+            _context.next = 9;
             return response.json();
-          case 8:
+          case 9:
             _yield$response$json = _context.sent;
             result = _yield$response$json.result;
             error = _yield$response$json.error;
             if (!error) {
-              _context.next = 14;
+              _context.next = 15;
               break;
             }
             setStripeLinkState(_objectSpread(_objectSpread({}, stripeLinkState), {}, {
@@ -106,26 +107,26 @@ var PaymentOptionStripeLink = exports.PaymentOptionStripeLink = function Payment
               error: result
             }));
             return _context.abrupt("return");
-          case 14:
+          case 15:
             setStripeLinkState(_objectSpread(_objectSpread({}, stripeLinkState), {}, {
               loading: false
             }));
             callback && callback();
             showToast(_ToastContext.ToastType.Success, t('MESSAGE_SENT_SUCCESSFULLY', 'The link has been sent'));
-            _context.next = 22;
+            _context.next = 23;
             break;
-          case 19:
-            _context.prev = 19;
+          case 20:
+            _context.prev = 20;
             _context.t0 = _context["catch"](0);
             setStripeLinkState(_objectSpread(_objectSpread({}, stripeLinkState), {}, {
               loading: false,
               error: [_context.t0.message]
             }));
-          case 22:
+          case 23:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 19]]);
+      }, _callee, null, [[0, 20]]);
     }));
     return function handleSendStripeLink(_x, _x2) {
       return _ref.apply(this, arguments);
