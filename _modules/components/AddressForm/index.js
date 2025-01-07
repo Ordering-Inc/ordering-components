@@ -228,47 +228,55 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: false,
               error: content.error ? content.result : null,
+              result: content.result,
               changes: content.error ? formState.changes : {}
             }));
-            if (!content.error) {
-              setAddressState(_objectSpread(_objectSpread({}, addressState), {}, {
-                address: content.result
-              }));
-              onSaveAddress && onSaveAddress(content.result);
-              if (isSelectedAfterAdd) {
-                changeAddress(content.result.id, {
-                  address: isEdit ? null : content.result,
-                  country_code: (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.country_code,
-                  type: options === null || options === void 0 ? void 0 : options.type,
-                  isEdit: isEdit
-                });
-              }
-            }
-            if (!userCustomerSetup) {
-              _context2.next = 18;
+            if (content.error) {
+              _context2.next = 20;
               break;
             }
-            _context2.next = 18;
+            setAddressState(_objectSpread(_objectSpread({}, addressState), {}, {
+              address: content.result
+            }));
+            if (!isSelectedAfterAdd) {
+              _context2.next = 19;
+              break;
+            }
+            _context2.next = 19;
+            return changeAddress(content.result.id, {
+              address: isEdit ? null : content.result,
+              country_code: (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.country_code,
+              type: options === null || options === void 0 ? void 0 : options.type,
+              isEdit: isEdit
+            });
+          case 19:
+            onSaveAddress && onSaveAddress(content.result);
+          case 20:
+            if (!userCustomerSetup) {
+              _context2.next = 23;
+              break;
+            }
+            _context2.next = 23;
             return setUserCustomer(userCustomerSetup, true);
-          case 18:
+          case 23:
             if (!avoidRefreshUserInfo) {
               refreshUserInfo();
             }
-            _context2.next = 24;
+            _context2.next = 29;
             break;
-          case 21:
-            _context2.prev = 21;
+          case 26:
+            _context2.prev = 26;
             _context2.t0 = _context2["catch"](8);
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: false,
               error: [_context2.t0.message],
               address: {}
             }));
-          case 24:
+          case 29:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[8, 21]]);
+      }, _callee2, null, [[8, 26]]);
     }));
     return function saveAddress(_x3, _x4) {
       return _ref2.apply(this, arguments);
