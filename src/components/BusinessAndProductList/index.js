@@ -269,7 +269,13 @@ export const BusinessAndProductList = (props) => {
       categoryState.products = productsFiltered || []
     } else if (categorySelected.id === 'featured') {
       const productsFiltered = businessState?.business?.categories?.reduce(
-        (products, category) => [...products, ...category.products], []
+        (products, category) => [
+          ...products,
+          ...category.products.map(product => ({
+            ...product,
+            ...(category.slug ? { category: { ...product?.category, slug: category.slug } } : {})
+          }))
+        ], []
       ).filter(
         product => isFeaturedSearch(product)
       )
@@ -283,7 +289,13 @@ export const BusinessAndProductList = (props) => {
 
       const productsToFilter = avoidProductDuplicate ? _categoriesCustom : businessState?.business?.categories
       const productsFiltered = productsToFilter?.reduce(
-        (products, category) => [...products, ...category.products], []
+        (products, category) => [
+          ...products,
+          ...category.products.map(product => ({
+            ...product,
+            ...(category.slug ? { category: { ...product?.category, slug: category.slug } } : {})
+          }))
+        ], []
       ).filter(
         product => isMatchSearch(product.name, product.description, product?.price)
       )
@@ -496,7 +508,14 @@ export const BusinessAndProductList = (props) => {
       }
 
       if (!(categorySelected.id && categorySelected.id !== 'featured')) {
-        const productsList = searchValue ? [...result] : [].concat(...result.map(category => category?.products)).filter(item => item)
+        const productsList = searchValue
+          ? [...result]
+          : [].concat(...result.map(category =>
+              category?.products?.map(product => ({
+                ...product,
+                ...(category?.slug ? { category: { ...product.category, slug: category.slug } } : {})
+              }))
+            )).filter(item => item)
         const productsListFeatured = featuredRes?.content?.result ?? []
         const paginationData = categorySelected.id === 'featured'
           ? categoriesState?.featured?.pagination ?? {}
