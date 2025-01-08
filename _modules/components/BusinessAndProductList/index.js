@@ -365,7 +365,13 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               categoryState.products = productsFiltered || [];
             } else if (categorySelected.id === 'featured') {
               _productsFiltered = businessState === null || businessState === void 0 || (_businessState$busine8 = businessState.business) === null || _businessState$busine8 === void 0 || (_businessState$busine8 = _businessState$busine8.categories) === null || _businessState$busine8 === void 0 ? void 0 : _businessState$busine8.reduce(function (products, category) {
-                return [].concat(_toConsumableArray(products), _toConsumableArray(category.products));
+                return [].concat(_toConsumableArray(products), _toConsumableArray(category.products.map(function (product) {
+                  return _objectSpread(_objectSpread({}, product), category.slug ? {
+                    category: _objectSpread(_objectSpread({}, product === null || product === void 0 ? void 0 : product.category), {}, {
+                      slug: category.slug
+                    })
+                  } : {});
+                })));
               }, []).filter(function (product) {
                 return isFeaturedSearch(product);
               });
@@ -381,7 +387,13 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               }
               productsToFilter = avoidProductDuplicate ? _categoriesCustom : businessState === null || businessState === void 0 || (_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : _businessState$busine10.categories;
               _productsFiltered2 = productsToFilter === null || productsToFilter === void 0 ? void 0 : productsToFilter.reduce(function (products, category) {
-                return [].concat(_toConsumableArray(products), _toConsumableArray(category.products));
+                return [].concat(_toConsumableArray(products), _toConsumableArray(category.products.map(function (product) {
+                  return _objectSpread(_objectSpread({}, product), category.slug ? {
+                    category: _objectSpread(_objectSpread({}, product === null || product === void 0 ? void 0 : product.category), {}, {
+                      slug: category.slug
+                    })
+                  } : {});
+                })));
               }, []).filter(function (product) {
                 return isMatchSearch(product.name, product.description, product === null || product === void 0 ? void 0 : product.price);
               });
@@ -668,7 +680,14 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
             }
             if (!(categorySelected.id && categorySelected.id !== 'featured')) {
               productsList = searchValue ? _toConsumableArray(result) : (_ref9 = []).concat.apply(_ref9, _toConsumableArray(result.map(function (category) {
-                return category === null || category === void 0 ? void 0 : category.products;
+                var _category$products2;
+                return category === null || category === void 0 || (_category$products2 = category.products) === null || _category$products2 === void 0 ? void 0 : _category$products2.map(function (product) {
+                  return _objectSpread(_objectSpread({}, product), category !== null && category !== void 0 && category.slug ? {
+                    category: _objectSpread(_objectSpread({}, product.category), {}, {
+                      slug: category.slug
+                    })
+                  } : {});
+                });
               }))).filter(function (item) {
                 return item;
               });
