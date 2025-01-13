@@ -39,10 +39,12 @@ export const GpsButton = (props) => {
           setIsLoading(false)
           let postalCode = null
           const addressObj = {}
+          const cityFallback = results[0].address_components.find(component => component.types.includes('administrative_area_level_2'))
           if (results?.[0]?.address_components) {
             for (const component of results[0].address_components) {
               const addressType = component.types[0]
               if (addressType === 'postal_code') {
+                addressObj.zipcode = component.short_name
                 postalCode = component.short_name
               }
               if (addressType === 'street_number') {
@@ -52,9 +54,10 @@ export const GpsButton = (props) => {
                 addressObj.neighborhood = component.long_name
               }
               if (addressType === 'route') {
-                addressObj.route = component.short_name
+                addressObj.route = component.long_name
               }
               if (addressType === 'locality') {
+                addressObj.city = component.long_name || cityFallback.long_name
                 addressObj.locality = component.long_name
               }
               if (component.types?.includes('sublocality')) {
@@ -66,9 +69,7 @@ export const GpsButton = (props) => {
               }
               if (addressType === 'administrative_area_level_1') {
                 addressObj.state = component.long_name
-              }
-              if (addressType === 'administrative_area_level_2') {
-                addressObj.city = component.long_name
+                addressObj.state_code = component.short_name
               }
             }
             if (status === 'OK') {

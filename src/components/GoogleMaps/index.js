@@ -132,6 +132,7 @@ export const GoogleMaps = (props) => {
       geocoder.geocode({ latLng: pos }, (results) => {
         if (results && results.length > 0 && results?.[0]?.address_components) {
           const addressObj = {}
+          const cityFallback = results[0].address_components.find(component => component.types.includes('administrative_area_level_2'))
           for (const component of results[0].address_components) {
             const addressType = component.types[0]
             if (addressType === 'postal_code') {
@@ -144,9 +145,10 @@ export const GoogleMaps = (props) => {
               addressObj.neighborhood = component.long_name
             }
             if (addressType === 'route') {
-              addressObj.route = component.short_name
+              addressObj.route = component.long_name
             }
             if (addressType === 'locality') {
+              addressObj.city = component.long_name || cityFallback.long_name
               addressObj.locality = component.long_name
             }
             if (component.types?.includes('sublocality')) {
@@ -158,9 +160,7 @@ export const GoogleMaps = (props) => {
             }
             if (addressType === 'administrative_area_level_1') {
               addressObj.state = component.long_name
-            }
-            if (addressType === 'administrative_area_level_2') {
-              addressObj.city = component.long_name
+              addressObj.state_code = component.short_name
             }
           }
           const address = {
