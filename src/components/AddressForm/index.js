@@ -127,10 +127,17 @@ export const AddressForm = (props) => {
 
     setFormState({ ...formState, loading: true })
     try {
+      const data = { ...values, ...formState.changes }
+      Object.keys(data).forEach(key => {
+        if (data[key] === null) {
+          delete data[key]
+        }
+      })
+
       const { content } = await ordering
         .users(userByToken?.id || userId)
         .addresses(addressState.address?.id)
-        .save({ ...values, ...formState.changes }, { accessToken: userByToken?.session?.token || accessToken })
+        .save(data, { accessToken: userByToken?.session?.token || accessToken })
       setFormState({
         ...formState,
         loading: false,
