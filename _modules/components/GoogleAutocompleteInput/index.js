@@ -59,6 +59,9 @@ var AutocompleteInput = function AutocompleteInput(props) {
       autocomplete.addListener('place_changed', function () {
         var place = autocomplete.getPlace();
         var addressObj = {};
+        var cityFallback = place === null || place === void 0 ? void 0 : place.address_components.find(function (component) {
+          return component.types.includes('administrative_area_level_2');
+        });
         if (place !== null && place !== void 0 && place.address_components) {
           var _iterator = _createForOfIteratorHelper(place.address_components),
             _step;
@@ -77,9 +80,10 @@ var AutocompleteInput = function AutocompleteInput(props) {
                 addressObj.neighborhood = component.long_name;
               }
               if (addressType === 'route') {
-                addressObj.route = component.short_name;
+                addressObj.route = component.long_name;
               }
               if (addressType === 'locality') {
+                addressObj.city = component.long_name || cityFallback.long_name;
                 addressObj.locality = component.long_name;
               }
               if ((_component$types = component.types) !== null && _component$types !== void 0 && _component$types.includes('sublocality')) {
@@ -91,9 +95,7 @@ var AutocompleteInput = function AutocompleteInput(props) {
               }
               if (addressType === 'administrative_area_level_1') {
                 addressObj.state = component.long_name;
-              }
-              if (addressType === 'administrative_area_level_2') {
-                addressObj.city = component.long_name;
+                addressObj.state_code = component.short_name;
               }
             }
           } catch (err) {

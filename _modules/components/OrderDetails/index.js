@@ -569,7 +569,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
    */
   var getOrder = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
-      var source, options, _result, result, error, response, res, _yield$ordering$setAc7, content, order, err, businessData, _err, _yield$ordering$setAc8, _content, _e$message, _order$id, _e$message2;
+      var source, options, _result, result, error, response, res, _yield$ordering$setAc7, content, order, err, businessData, _yield$ordering$setAc8, _content, _e$message, _order$id, _e$message2;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
           case 0:
@@ -631,7 +631,7 @@ var OrderDetails = exports.OrderDetails = function OrderDetails(props) {
             }
             setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
               loading: false,
-              error: [(_err = err) !== null && _err !== void 0 ? _err : 'ERROR']
+              error: [err !== null && err !== void 0 ? err : 'ERROR']
             }));
             return _context7.abrupt("return");
           case 30:

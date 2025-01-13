@@ -66,6 +66,9 @@ var GpsButton = exports.GpsButton = function GpsButton(props) {
           setIsLoading(false);
           var postalCode = null;
           var addressObj = {};
+          var cityFallback = results[0].address_components.find(function (component) {
+            return component.types.includes('administrative_area_level_2');
+          });
           if (results !== null && results !== void 0 && (_results$ = results[0]) !== null && _results$ !== void 0 && _results$.address_components) {
             var _iterator = _createForOfIteratorHelper(results[0].address_components),
               _step;
@@ -75,6 +78,7 @@ var GpsButton = exports.GpsButton = function GpsButton(props) {
                 var component = _step.value;
                 var addressType = component.types[0];
                 if (addressType === 'postal_code') {
+                  addressObj.zipcode = component.short_name;
                   postalCode = component.short_name;
                 }
                 if (addressType === 'street_number') {
@@ -84,9 +88,10 @@ var GpsButton = exports.GpsButton = function GpsButton(props) {
                   addressObj.neighborhood = component.long_name;
                 }
                 if (addressType === 'route') {
-                  addressObj.route = component.short_name;
+                  addressObj.route = component.long_name;
                 }
                 if (addressType === 'locality') {
+                  addressObj.city = component.long_name || cityFallback.long_name;
                   addressObj.locality = component.long_name;
                 }
                 if ((_component$types = component.types) !== null && _component$types !== void 0 && _component$types.includes('sublocality')) {
@@ -98,9 +103,7 @@ var GpsButton = exports.GpsButton = function GpsButton(props) {
                 }
                 if (addressType === 'administrative_area_level_1') {
                   addressObj.state = component.long_name;
-                }
-                if (addressType === 'administrative_area_level_2') {
-                  addressObj.city = component.long_name;
+                  addressObj.state_code = component.short_name;
                 }
               }
             } catch (err) {

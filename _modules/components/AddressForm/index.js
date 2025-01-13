@@ -193,7 +193,7 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
   var saveAddress = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values, userCustomerSetup) {
       var _userByToken$session;
-      var _values$country_code, _formState$changes, _addressState$address, _userByToken$session2, _yield$ordering$users2, content, _content$result;
+      var _values$country_code, _formState$changes, _addressState$address, _userByToken$session2, data, _yield$ordering$users2, content, _content$result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -218,11 +218,17 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
               loading: true
             }));
             _context2.prev = 8;
-            _context2.next = 11;
-            return ordering.users((userByToken === null || userByToken === void 0 ? void 0 : userByToken.id) || userId).addresses((_addressState$address = addressState.address) === null || _addressState$address === void 0 ? void 0 : _addressState$address.id).save(_objectSpread(_objectSpread({}, values), formState.changes), {
+            data = _objectSpread(_objectSpread({}, values), formState.changes);
+            Object.keys(data).forEach(function (key) {
+              if (data[key] === null) {
+                delete data[key];
+              }
+            });
+            _context2.next = 13;
+            return ordering.users((userByToken === null || userByToken === void 0 ? void 0 : userByToken.id) || userId).addresses((_addressState$address = addressState.address) === null || _addressState$address === void 0 ? void 0 : _addressState$address.id).save(data, {
               accessToken: (userByToken === null || userByToken === void 0 || (_userByToken$session2 = userByToken.session) === null || _userByToken$session2 === void 0 ? void 0 : _userByToken$session2.token) || accessToken
             });
-          case 11:
+          case 13:
             _yield$ordering$users2 = _context2.sent;
             content = _yield$ordering$users2.content;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
@@ -232,51 +238,51 @@ var AddressForm = exports.AddressForm = function AddressForm(props) {
               changes: content.error ? formState.changes : {}
             }));
             if (content.error) {
-              _context2.next = 20;
+              _context2.next = 22;
               break;
             }
             setAddressState(_objectSpread(_objectSpread({}, addressState), {}, {
               address: content.result
             }));
             if (!isSelectedAfterAdd) {
-              _context2.next = 19;
+              _context2.next = 21;
               break;
             }
-            _context2.next = 19;
+            _context2.next = 21;
             return changeAddress(content.result.id, {
               address: isEdit ? null : content.result,
               country_code: (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.country_code,
               type: options === null || options === void 0 ? void 0 : options.type,
               isEdit: isEdit
             });
-          case 19:
+          case 21:
             onSaveAddress && onSaveAddress(content.result);
-          case 20:
+          case 22:
             if (!userCustomerSetup) {
-              _context2.next = 23;
+              _context2.next = 25;
               break;
             }
-            _context2.next = 23;
+            _context2.next = 25;
             return setUserCustomer(userCustomerSetup, true);
-          case 23:
+          case 25:
             if (!avoidRefreshUserInfo) {
               refreshUserInfo();
             }
-            _context2.next = 29;
+            _context2.next = 31;
             break;
-          case 26:
-            _context2.prev = 26;
+          case 28:
+            _context2.prev = 28;
             _context2.t0 = _context2["catch"](8);
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: false,
               error: [_context2.t0.message],
               address: {}
             }));
-          case 29:
+          case 31:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[8, 26]]);
+      }, _callee2, null, [[8, 28]]);
     }));
     return function saveAddress(_x3, _x4) {
       return _ref2.apply(this, arguments);
