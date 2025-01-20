@@ -192,6 +192,9 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
         if (results && results.length > 0 && results !== null && results !== void 0 && (_results$ = results[0]) !== null && _results$ !== void 0 && _results$.address_components) {
           var _address$location, _address$location2;
           var addressObj = {};
+          var cityFallback = results[0].address_components.find(function (component) {
+            return component.types.includes('administrative_area_level_2');
+          });
           var _iterator2 = _createForOfIteratorHelper(results[0].address_components),
             _step2;
           try {
@@ -209,9 +212,10 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
                 addressObj.neighborhood = component.long_name;
               }
               if (addressType === 'route') {
-                addressObj.route = component.short_name;
+                addressObj.route = component.long_name;
               }
               if (addressType === 'locality') {
+                addressObj.city = component.long_name || cityFallback.long_name;
                 addressObj.locality = component.long_name;
               }
               if ((_component$types = component.types) !== null && _component$types !== void 0 && _component$types.includes('sublocality')) {
@@ -223,9 +227,7 @@ var GoogleMaps = exports.GoogleMaps = function GoogleMaps(props) {
               }
               if (addressType === 'administrative_area_level_1') {
                 addressObj.state = component.long_name;
-              }
-              if (addressType === 'administrative_area_level_2') {
-                addressObj.city = component.long_name;
+                addressObj.state_code = component.short_name;
               }
             }
           } catch (err) {
