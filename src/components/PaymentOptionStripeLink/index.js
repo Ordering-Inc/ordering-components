@@ -11,7 +11,8 @@ import { useSession } from '../../contexts/SessionContext'
 export const PaymentOptionStripeLink = (props) => {
   const {
     UIComponent,
-    paymentURL
+    paymentURL,
+    cartTotal
   } = props
 
   const [ordering] = useApi()
@@ -35,6 +36,14 @@ export const PaymentOptionStripeLink = (props) => {
         provider: customProviders.includes(ordering?.project) ? 'custom' : 'twilio',
         country_phone_code: userInfo.country_phone_code,
         cellphone: userInfo.cellphone,
+        payment_url: paymentURL,
+        user: {
+          name: userInfo?.name,
+          lastname: userInfo?.lastname
+        },
+        cart: {
+          total: cartTotal ?? 0
+        },
         message: t('LINK_TO_PAY_MESSAGE',
           'Hello there _name_ _lastname_, click on the following link to complete the payment: _link_')
           .replace('_name_', userInfo?.name)
