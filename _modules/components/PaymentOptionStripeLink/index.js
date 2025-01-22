@@ -34,7 +34,8 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
  */
 var PaymentOptionStripeLink = exports.PaymentOptionStripeLink = function PaymentOptionStripeLink(props) {
   var UIComponent = props.UIComponent,
-    paymentURL = props.paymentURL;
+    paymentURL = props.paymentURL,
+    cartTotal = props.cartTotal;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -78,6 +79,14 @@ var PaymentOptionStripeLink = exports.PaymentOptionStripeLink = function Payment
               provider: customProviders.includes(ordering === null || ordering === void 0 ? void 0 : ordering.project) ? 'custom' : 'twilio',
               country_phone_code: userInfo.country_phone_code,
               cellphone: userInfo.cellphone,
+              payment_url: paymentURL,
+              user: {
+                name: userInfo === null || userInfo === void 0 ? void 0 : userInfo.name,
+                lastname: userInfo === null || userInfo === void 0 ? void 0 : userInfo.lastname
+              },
+              cart: {
+                total: cartTotal !== null && cartTotal !== void 0 ? cartTotal : 0
+              },
               message: t('LINK_TO_PAY_MESSAGE', 'Hello there _name_ _lastname_, click on the following link to complete the payment: _link_').replace('_name_', userInfo === null || userInfo === void 0 ? void 0 : userInfo.name).replace('_lastname_', userInfo === null || userInfo === void 0 ? void 0 : userInfo.lastname).replace('_link_', paymentURL)
             };
             _context.next = 6;
