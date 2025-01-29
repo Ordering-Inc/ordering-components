@@ -51,14 +51,20 @@ export const ProductOptionSuboption = (props) => {
     const selectStatus = isOrigin ? !state.selected : state.selected
     const minMaxValidation = option.with_half_option ? usePizzaValidation : (balance === option.max && !(option?.max === 1 && option?.min === 1))
     const canBeSelectedByHalf = (pizzaState?.[`option:${option?.id}`]?.value === (option.max - 0.5)) && option.with_half_option
+
+    const shouldApplyHalfLogic = option?.with_half_option && option?.allow_suboption_quantity && option?.limit_suboptions_by_max
+    const remainingBalance = option.max - balance
+    const canOnlySelectHalf = shouldApplyHalfLogic && remainingBalance < 1 && remainingBalance > 0
+
     if (selectStatus && (option.limit_suboptions_by_max || isAlsea) && minMaxValidation && !canBeSelectedByHalf) {
       return
     }
+
     changeState({
       ...state,
       quantity: state.selected ? 0 : 1,
       selected: !state.selected,
-      position: canBeSelectedByHalf ? 'left' : 'whole'
+      position: (canBeSelectedByHalf || canOnlySelectHalf) ? 'left' : 'whole'
     })
   }
 
@@ -66,15 +72,34 @@ export const ProductOptionSuboption = (props) => {
    * Increment suboption quantity
    */
   const increment = () => {
+    const shouldApplyHalfLogic = option?.with_half_option && option?.allow_suboption_quantity && option?.limit_suboptions_by_max
+    const maxByPosition = shouldApplyHalfLogic && state.position !== 'whole'
+      ? suboption.max * 2
+      : suboption.max
+
+    // Validar si incrementar excedería el máximo de la opción cuando está en 'whole'
+    if (shouldApplyHalfLogic && state.position === 'whole') {
+      const otherOptionsValue = pizzaState?.[`option:${option?.id}`]?.value
+      const wouldExceedMax = (otherOptionsValue + 1) > option.max
+
+      if (wouldExceedMax) {
+        return
+      }
+    }
+
     if (!option?.with_half_option && option.limit_suboptions_by_max && (balance === option.max || state.quantity === suboption.max)) {
       return
     }
     if (!option?.with_half_option && !option.limit_suboptions_by_max && state.quantity === suboption.max) {
       return
     }
+    if (shouldApplyHalfLogic && state.quantity === maxByPosition) {
+      return
+    }
     if (option?.with_half_option && usePizzaValidation) {
       return
     }
+
     changeState({
       ...state,
       selected: state.quantity === 0 ? true : state.selected,
@@ -104,17 +129,36 @@ export const ProductOptionSuboption = (props) => {
    */
   const changePosition = (position) => {
     const price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price
+
+    const shouldApplyHalfLogic = option?.with_half_option && option?.allow_suboption_quantity && option?.limit_suboptions_by_max
+
+    if (shouldApplyHalfLogic && position === 'whole') {
+      const otherOptionsValue = pizzaState?.[`option:${option?.id}`]?.value
+      const additionalValue = position === 'whole' ? state.quantity / 2 : 0
+      const wouldExceedMax = (otherOptionsValue + additionalValue) > option.max
+
+      if (wouldExceedMax) {
+        return
+      }
+    }
+
+    let newQuantity = state.quantity
+    if (shouldApplyHalfLogic && position === 'whole' && state.quantity > suboption.max) {
+      newQuantity = suboption.max
+    }
+
     changeState({
       ...state,
       position,
       price,
-      total: price * state.quantity
+      quantity: newQuantity,
+      total: price * newQuantity
     })
   }
 
   /**
-   * Change position of the suboption
-   * @param {string} position Position of the suboption
+   * Change quantity of the suboption
+   * @param {number} quantity Quantity of the suboption
    */
   const changeQuantity = (quantity) => {
     changeState({
