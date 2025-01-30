@@ -73,13 +73,16 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
     var selectStatus = isOrigin ? !state.selected : state.selected;
     var minMaxValidation = option.with_half_option ? usePizzaValidation : balance === option.max && !((option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1);
     var canBeSelectedByHalf = (pizzaState === null || pizzaState === void 0 || (_pizzaState2 = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState2 === void 0 ? void 0 : _pizzaState2.value) === option.max - 0.5 && option.with_half_option;
+    var shouldApplyHalfLogic = (option === null || option === void 0 ? void 0 : option.with_half_option) && (option === null || option === void 0 ? void 0 : option.allow_suboption_quantity) && (option === null || option === void 0 ? void 0 : option.limit_suboptions_by_max);
+    var remainingBalance = option.max - balance;
+    var canOnlySelectHalf = shouldApplyHalfLogic && remainingBalance < 1 && remainingBalance > 0;
     if (selectStatus && (option.limit_suboptions_by_max || isAlsea) && minMaxValidation && !canBeSelectedByHalf) {
       return;
     }
     changeState(_objectSpread(_objectSpread({}, state), {}, {
       quantity: state.selected ? 0 : 1,
       selected: !state.selected,
-      position: canBeSelectedByHalf ? 'left' : 'whole'
+      position: canBeSelectedByHalf || canOnlySelectHalf ? 'left' : 'whole'
     }));
   };
 
@@ -87,10 +90,25 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
    * Increment suboption quantity
    */
   var increment = function increment() {
+    var shouldApplyHalfLogic = (option === null || option === void 0 ? void 0 : option.with_half_option) && (option === null || option === void 0 ? void 0 : option.allow_suboption_quantity) && (option === null || option === void 0 ? void 0 : option.limit_suboptions_by_max);
+    var maxByPosition = shouldApplyHalfLogic && state.position !== 'whole' ? suboption.max * 2 : suboption.max;
+
+    // Validar si incrementar excedería el máximo de la opción cuando está en 'whole'
+    if (shouldApplyHalfLogic && state.position === 'whole') {
+      var _pizzaState3;
+      var otherOptionsValue = pizzaState === null || pizzaState === void 0 || (_pizzaState3 = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState3 === void 0 ? void 0 : _pizzaState3.value;
+      var wouldExceedMax = otherOptionsValue + 1 > option.max;
+      if (wouldExceedMax) {
+        return;
+      }
+    }
     if (!(option !== null && option !== void 0 && option.with_half_option) && option.limit_suboptions_by_max && (balance === option.max || state.quantity === suboption.max)) {
       return;
     }
     if (!(option !== null && option !== void 0 && option.with_half_option) && !option.limit_suboptions_by_max && state.quantity === suboption.max) {
+      return;
+    }
+    if (shouldApplyHalfLogic && state.quantity === maxByPosition) {
       return;
     }
     if (option !== null && option !== void 0 && option.with_half_option && usePizzaValidation) {
@@ -123,16 +141,31 @@ var ProductOptionSuboption = exports.ProductOptionSuboption = function ProductOp
    */
   var changePosition = function changePosition(position) {
     var price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price;
+    var shouldApplyHalfLogic = (option === null || option === void 0 ? void 0 : option.with_half_option) && (option === null || option === void 0 ? void 0 : option.allow_suboption_quantity) && (option === null || option === void 0 ? void 0 : option.limit_suboptions_by_max);
+    if (shouldApplyHalfLogic && position === 'whole') {
+      var _pizzaState4;
+      var otherOptionsValue = pizzaState === null || pizzaState === void 0 || (_pizzaState4 = pizzaState["option:".concat(option === null || option === void 0 ? void 0 : option.id)]) === null || _pizzaState4 === void 0 ? void 0 : _pizzaState4.value;
+      var additionalValue = position === 'whole' ? state.quantity / 2 : 0;
+      var wouldExceedMax = otherOptionsValue + additionalValue > option.max;
+      if (wouldExceedMax) {
+        return;
+      }
+    }
+    var newQuantity = state.quantity;
+    if (shouldApplyHalfLogic && position === 'whole' && state.quantity > suboption.max) {
+      newQuantity = suboption.max;
+    }
     changeState(_objectSpread(_objectSpread({}, state), {}, {
       position: position,
       price: price,
-      total: price * state.quantity
+      quantity: newQuantity,
+      total: price * newQuantity
     }));
   };
 
   /**
-   * Change position of the suboption
-   * @param {string} position Position of the suboption
+   * Change quantity of the suboption
+   * @param {number} quantity Quantity of the suboption
    */
   var changeQuantity = function changeQuantity(quantity) {
     changeState(_objectSpread(_objectSpread({}, state), {}, {
