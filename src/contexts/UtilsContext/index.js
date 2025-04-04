@@ -122,7 +122,7 @@ export const UtilsProviders = ({ children }) => {
       thousand: options?.thousand || configState.configs.format_number_thousand_separator?.value || '.',
       currency: options?.currency || configState.configs.format_number_currency?.value || '$',
       currencyPosition: options?.currencyPosition || configState.configs.currency_position?.value || 'left',
-      isTruncable: options?.isTruncable
+      isTruncable: options?.isTruncable || (configState.configs.format_number_thousand_separator?.value === '.' && configState.configs.format_number_decimal_separator?.value === ',')
     }
     let number = parseNumber(value, formatNumber)
     if (formatNumber.currencyPosition?.toLowerCase() === 'left') {
