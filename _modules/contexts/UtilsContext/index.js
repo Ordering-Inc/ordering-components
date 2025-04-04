@@ -98,7 +98,7 @@ var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
     _dayjs.default.updateLocale('auto', localeObject);
   };
   var parsePrice = function parsePrice(value) {
-    var _configState$configs$, _configState$configs$2, _configState$configs$3, _configState$configs$4, _configState$configs$5, _formatNumber$currenc;
+    var _configState$configs$, _configState$configs$2, _configState$configs$3, _configState$configs$4, _configState$configs$5, _configState$configs$6, _configState$configs$7, _formatNumber$currenc;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var formatNumber = {
       decimal: (options === null || options === void 0 ? void 0 : options.decimal) || ((_configState$configs$ = configState.configs.format_number_decimal_length) === null || _configState$configs$ === void 0 ? void 0 : _configState$configs$.value) || 2,
@@ -106,7 +106,7 @@ var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
       thousand: (options === null || options === void 0 ? void 0 : options.thousand) || ((_configState$configs$3 = configState.configs.format_number_thousand_separator) === null || _configState$configs$3 === void 0 ? void 0 : _configState$configs$3.value) || '.',
       currency: (options === null || options === void 0 ? void 0 : options.currency) || ((_configState$configs$4 = configState.configs.format_number_currency) === null || _configState$configs$4 === void 0 ? void 0 : _configState$configs$4.value) || '$',
       currencyPosition: (options === null || options === void 0 ? void 0 : options.currencyPosition) || ((_configState$configs$5 = configState.configs.currency_position) === null || _configState$configs$5 === void 0 ? void 0 : _configState$configs$5.value) || 'left',
-      isTruncable: options === null || options === void 0 ? void 0 : options.isTruncable
+      isTruncable: (options === null || options === void 0 ? void 0 : options.isTruncable) || ((_configState$configs$6 = configState.configs.format_number_thousand_separator) === null || _configState$configs$6 === void 0 ? void 0 : _configState$configs$6.value) === '.' && ((_configState$configs$7 = configState.configs.format_number_decimal_separator) === null || _configState$configs$7 === void 0 ? void 0 : _configState$configs$7.value) === ','
     };
     var number = parseNumber(value, formatNumber);
     if (((_formatNumber$currenc = formatNumber.currencyPosition) === null || _formatNumber$currenc === void 0 ? void 0 : _formatNumber$currenc.toLowerCase()) === 'left') {
@@ -117,13 +117,13 @@ var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
     return number;
   };
   var parseNumber = function parseNumber(value) {
-    var _configState$configs$6, _configState$configs$7, _configState$configs$8;
+    var _configState$configs$8, _configState$configs$9, _configState$configs$10;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     value = parseFloat(value) || 0;
     var formatNumber = {
-      decimal: (options === null || options === void 0 ? void 0 : options.decimal) || ((_configState$configs$6 = configState.configs.format_number_decimal_length) === null || _configState$configs$6 === void 0 ? void 0 : _configState$configs$6.value) || 2,
-      separator: (options === null || options === void 0 ? void 0 : options.separator) || ((_configState$configs$7 = configState.configs.format_number_decimal_separator) === null || _configState$configs$7 === void 0 ? void 0 : _configState$configs$7.value) || ',',
-      thousand: (options === null || options === void 0 ? void 0 : options.thousand) || ((_configState$configs$8 = configState.configs.format_number_thousand_separator) === null || _configState$configs$8 === void 0 ? void 0 : _configState$configs$8.value) || '.'
+      decimal: (options === null || options === void 0 ? void 0 : options.decimal) || ((_configState$configs$8 = configState.configs.format_number_decimal_length) === null || _configState$configs$8 === void 0 ? void 0 : _configState$configs$8.value) || 2,
+      separator: (options === null || options === void 0 ? void 0 : options.separator) || ((_configState$configs$9 = configState.configs.format_number_decimal_separator) === null || _configState$configs$9 === void 0 ? void 0 : _configState$configs$9.value) || ',',
+      thousand: (options === null || options === void 0 ? void 0 : options.thousand) || ((_configState$configs$10 = configState.configs.format_number_thousand_separator) === null || _configState$configs$10 === void 0 ? void 0 : _configState$configs$10.value) || '.'
     };
     var number = value;
     if (options !== null && options !== void 0 && options.isTruncable) {
@@ -148,9 +148,9 @@ var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
     return number;
   };
   var parseDate = function parseDate(date) {
-    var _configState$configs$9, _configState$configs;
+    var _configState$configs$11, _configState$configs;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_configState$configs$9 = configState.configs.format_time) === null || _configState$configs$9 === void 0 ? void 0 : _configState$configs$9.value) || '24';
+    var formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_configState$configs$11 = configState.configs.format_time) === null || _configState$configs$11 === void 0 ? void 0 : _configState$configs$11.value) || '24';
     var formatDate = {
       inputFormat: (options === null || options === void 0 ? void 0 : options.inputFormat) || ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD hh:mm:ss A', 'YYYY-MM-DD hh:mm:ss'],
       outputFormat: (options === null || options === void 0 ? void 0 : options.outputFormat) || ((_configState$configs = configState.configs) === null || _configState$configs === void 0 || (_configState$configs = _configState$configs.dates_general_format) === null || _configState$configs === void 0 ? void 0 : _configState$configs.value) || (formatTime === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ss A'),
@@ -163,10 +163,10 @@ var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
     return _date.format(formatDate.outputFormat);
   };
   var parseTime = function parseTime(time) {
-    var _configState$configs$10;
+    var _configState$configs$12;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     if (!time) return '00:00';
-    var _formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_configState$configs$10 = configState.configs.format_time) === null || _configState$configs$10 === void 0 ? void 0 : _configState$configs$10.value) || '24';
+    var _formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_configState$configs$12 = configState.configs.format_time) === null || _configState$configs$12 === void 0 ? void 0 : _configState$configs$12.value) || '24';
     var formatTime = {
       inputFormat: (options === null || options === void 0 ? void 0 : options.inputFormat) || ['HH:mm', 'hh:mm A', 'hh:mm'],
       outputFormat: (options === null || options === void 0 ? void 0 : options.outputFormat) || (_formatTime === '24' ? 'HH:mm' : 'hh:mm A'),
@@ -191,16 +191,16 @@ var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
     }
   };
   var parseDistance = function parseDistance(distance) {
-    var _configState$configs$11, _configState$configs$12;
+    var _configState$configs$13, _configState$configs$14;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     distance = parseFloat(distance) || 0;
     var unit = (options === null || options === void 0 ? void 0 : options.unit) || 'KM';
-    if (((_configState$configs$11 = configState.configs.distance_unit_km) === null || _configState$configs$11 === void 0 ? void 0 : _configState$configs$11.value) === '1') {
+    if (((_configState$configs$13 = configState.configs.distance_unit_km) === null || _configState$configs$13 === void 0 ? void 0 : _configState$configs$13.value) === '1') {
       unit = 'KM';
     }
-    if ((_configState$configs$12 = configState.configs.distance_unit) !== null && _configState$configs$12 !== void 0 && _configState$configs$12.value) {
-      var _configState$configs$13;
-      unit = (_configState$configs$13 = configState.configs.distance_unit) === null || _configState$configs$13 === void 0 ? void 0 : _configState$configs$13.value;
+    if ((_configState$configs$14 = configState.configs.distance_unit) !== null && _configState$configs$14 !== void 0 && _configState$configs$14.value) {
+      var _configState$configs$15;
+      unit = (_configState$configs$15 = configState.configs.distance_unit) === null || _configState$configs$15 === void 0 ? void 0 : _configState$configs$15.value;
     }
     if (unit.toUpperCase() === 'MI') {
       var dist = distance * 0.621371;
