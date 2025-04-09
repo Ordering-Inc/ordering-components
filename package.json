@@ -58,7 +58,7 @@
     "dayjs": "^1.9.3",
     "decimal.js": "^10.4.3",
     "firebase": "9.15.0",
-    "libphonenumber-js": "^1.9.17",
+    "libphonenumber-js": "1.11.19",
     "moment": "^2.29.4",
     "ordering-api-sdk": "github:Ordering-Inc/ordering-api-sdk#release",
     "prop-types": "^15.7.2",
