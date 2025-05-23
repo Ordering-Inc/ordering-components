@@ -274,7 +274,8 @@ export const ProductForm = (props) => {
       const source = {}
       requestsState.product = source
       const parameters = {
-        version: 'v2'
+        version: 'v2',
+        type: orderState.options?.type || 1
       }
       const { content: { result, error } } = await ordering
         .businesses(props.businessId)
