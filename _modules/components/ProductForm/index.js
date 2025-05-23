@@ -7,7 +7,9 @@ Object.defineProperty(exports, "__esModule", {
 exports.ProductForm = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
-var _moment = _interopRequireDefault(require("moment"));
+var _moment2 = _interopRequireDefault(require("moment"));
+var _dayjs = _interopRequireDefault(require("dayjs"));
+var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
 var _OrderContext = require("../../contexts/OrderContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
 var _ApiContext = require("../../contexts/ApiContext");
@@ -38,6 +40,7 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+_dayjs.default.extend(_utc.default);
 var ProductForm = exports.ProductForm = function ProductForm(props) {
   var _props$product, _props$productCart, _orderState$carts, _product$product, _product$product2, _product$product3, _product$product4;
   var UIComponent = props.UIComponent,
@@ -400,13 +403,15 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
       return _ref.apply(this, arguments);
     };
   }();
-
+  var isValidMoment = function isValidMoment(date, format) {
+    return _dayjs.default.utc(date, format).format(format) === date;
+  };
   /**
    * Load product from API
    */
   var loadProductWithOptions = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var _orderState$options, source, parameters, _yield$ordering$busin, _yield$ordering$busin2, result, error;
+      var _orderState$options, _orderState$options2, _orderState$options3, source, parameters, _orderState$options4, _moment, _yield$ordering$busin, _yield$ordering$busin2, result, error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -420,17 +425,21 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
               version: 'v2',
               type: ((_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) || 1
             };
-            _context2.next = 7;
+            if ((_orderState$options2 = orderState.options) !== null && _orderState$options2 !== void 0 && _orderState$options2.moment && isValidMoment((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.moment, 'YYYY-MM-DD HH:mm:ss')) {
+              _moment = _dayjs.default.utc((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
+              parameters.timestamp = _moment;
+            }
+            _context2.next = 8;
             return ordering.businesses(props.businessId).categories(props.categoryId).products(props.productId).parameters(parameters).get({
               cancelToken: source
             });
-          case 7:
+          case 8:
             _yield$ordering$busin = _context2.sent;
             _yield$ordering$busin2 = _yield$ordering$busin.content;
             result = _yield$ordering$busin2.result;
             error = _yield$ordering$busin2.error;
             if (error) {
-              _context2.next = 14;
+              _context2.next = 15;
               break;
             }
             setProduct(_objectSpread(_objectSpread({}, product), {}, {
@@ -438,25 +447,25 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
               product: result
             }));
             return _context2.abrupt("return");
-          case 14:
+          case 15:
             setProduct(_objectSpread(_objectSpread({}, product), {}, {
               loading: false,
               error: [result]
             }));
-            _context2.next = 20;
+            _context2.next = 21;
             break;
-          case 17:
-            _context2.prev = 17;
+          case 18:
+            _context2.prev = 18;
             _context2.t0 = _context2["catch"](0);
             setProduct(_objectSpread(_objectSpread({}, product), {}, {
               loading: false,
               error: [_context2.t0.message]
             }));
-          case 20:
+          case 21:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[0, 17]]);
+      }, _callee2, null, [[0, 18]]);
     }));
     return function loadProductWithOptions() {
       return _ref2.apply(this, arguments);
@@ -809,7 +818,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
    */
   var handleSave = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
-      var _JSON$parse, _product$product9, _cart$metafields, _cart$metafields$find, _errors, isMultiProduct, hasAlreadyCoupon, successful, _values$professional, _values$serviceTime, _orderState$options2, _props$productCart6, _props$productCart7, changes, currentProduct, _product$product0, updatedProfessional, duration, _props$productCart8, _props$productCart9;
+      var _JSON$parse, _product$product9, _cart$metafields, _cart$metafields$find, _errors, isMultiProduct, hasAlreadyCoupon, successful, _values$professional, _values$serviceTime, _orderState$options5, _props$productCart6, _props$productCart7, changes, currentProduct, _product$product0, updatedProfessional, duration, _props$productCart8, _props$productCart9;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -838,7 +847,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
             };
             currentProduct = !isService ? _objectSpread({}, productCart) : _objectSpread(_objectSpread({}, productCart), {}, {
               professional_id: values === null || values === void 0 || (_values$professional = values.professional) === null || _values$professional === void 0 ? void 0 : _values$professional.id,
-              service_start: (_values$serviceTime = values === null || values === void 0 ? void 0 : values.serviceTime) !== null && _values$serviceTime !== void 0 ? _values$serviceTime : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.moment
+              service_start: (_values$serviceTime = values === null || values === void 0 ? void 0 : values.serviceTime) !== null && _values$serviceTime !== void 0 ? _values$serviceTime : (_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment
             });
             onSave(productCart, !((_props$productCart6 = props.productCart) !== null && _props$productCart6 !== void 0 && _props$productCart6.code));
             if ((_props$productCart7 = props.productCart) !== null && _props$productCart7 !== void 0 && _props$productCart7.code) {
@@ -879,7 +888,7 @@ var ProductForm = exports.ProductForm = function ProductForm(props) {
                 duration = product === null || product === void 0 || (_product$product0 = product.product) === null || _product$product0 === void 0 ? void 0 : _product$product0.duration;
                 updatedProfessional.busy_times.push({
                   start: values === null || values === void 0 ? void 0 : values.serviceTime,
-                  end: (0, _moment.default)(values === null || values === void 0 ? void 0 : values.serviceTime).add(duration, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
+                  end: (0, _moment2.default)(values === null || values === void 0 ? void 0 : values.serviceTime).add(duration, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
                   duration: duration
                 });
                 handleUpdateProfessionals && handleUpdateProfessionals(updatedProfessional);
