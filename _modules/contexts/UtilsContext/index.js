@@ -13,8 +13,7 @@ var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
 var _relativeTime = _interopRequireDefault(require("dayjs/plugin/relativeTime"));
 var _updateLocale = _interopRequireDefault(require("dayjs/plugin/updateLocale"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
 function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -117,13 +116,13 @@ var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
     return number;
   };
   var parseNumber = function parseNumber(value) {
-    var _configState$configs$8, _configState$configs$9, _configState$configs$10;
+    var _configState$configs$8, _configState$configs$9, _configState$configs$0;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     value = parseFloat(value) || 0;
     var formatNumber = {
       decimal: (options === null || options === void 0 ? void 0 : options.decimal) || ((_configState$configs$8 = configState.configs.format_number_decimal_length) === null || _configState$configs$8 === void 0 ? void 0 : _configState$configs$8.value) || 2,
       separator: (options === null || options === void 0 ? void 0 : options.separator) || ((_configState$configs$9 = configState.configs.format_number_decimal_separator) === null || _configState$configs$9 === void 0 ? void 0 : _configState$configs$9.value) || ',',
-      thousand: (options === null || options === void 0 ? void 0 : options.thousand) || ((_configState$configs$10 = configState.configs.format_number_thousand_separator) === null || _configState$configs$10 === void 0 ? void 0 : _configState$configs$10.value) || '.'
+      thousand: (options === null || options === void 0 ? void 0 : options.thousand) || ((_configState$configs$0 = configState.configs.format_number_thousand_separator) === null || _configState$configs$0 === void 0 ? void 0 : _configState$configs$0.value) || '.'
     };
     var number = value;
     if (options !== null && options !== void 0 && options.isTruncable) {
@@ -148,9 +147,9 @@ var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
     return number;
   };
   var parseDate = function parseDate(date) {
-    var _configState$configs$11, _configState$configs;
+    var _configState$configs$1, _configState$configs;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_configState$configs$11 = configState.configs.format_time) === null || _configState$configs$11 === void 0 ? void 0 : _configState$configs$11.value) || '24';
+    var formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_configState$configs$1 = configState.configs.format_time) === null || _configState$configs$1 === void 0 ? void 0 : _configState$configs$1.value) || '24';
     var formatDate = {
       inputFormat: (options === null || options === void 0 ? void 0 : options.inputFormat) || ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD hh:mm:ss A', 'YYYY-MM-DD hh:mm:ss'],
       outputFormat: (options === null || options === void 0 ? void 0 : options.outputFormat) || ((_configState$configs = configState.configs) === null || _configState$configs === void 0 || (_configState$configs = _configState$configs.dates_general_format) === null || _configState$configs === void 0 ? void 0 : _configState$configs.value) || (formatTime === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ss A'),
@@ -163,10 +162,10 @@ var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
     return _date.format(formatDate.outputFormat);
   };
   var parseTime = function parseTime(time) {
-    var _configState$configs$12;
+    var _configState$configs$10;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     if (!time) return '00:00';
-    var _formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_configState$configs$12 = configState.configs.format_time) === null || _configState$configs$12 === void 0 ? void 0 : _configState$configs$12.value) || '24';
+    var _formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_configState$configs$10 = configState.configs.format_time) === null || _configState$configs$10 === void 0 ? void 0 : _configState$configs$10.value) || '24';
     var formatTime = {
       inputFormat: (options === null || options === void 0 ? void 0 : options.inputFormat) || ['HH:mm', 'hh:mm A', 'hh:mm'],
       outputFormat: (options === null || options === void 0 ? void 0 : options.outputFormat) || (_formatTime === '24' ? 'HH:mm' : 'hh:mm A'),
@@ -191,16 +190,16 @@ var UtilsProviders = exports.UtilsProviders = function UtilsProviders(_ref) {
     }
   };
   var parseDistance = function parseDistance(distance) {
-    var _configState$configs$13, _configState$configs$14;
+    var _configState$configs$11, _configState$configs$12;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     distance = parseFloat(distance) || 0;
     var unit = (options === null || options === void 0 ? void 0 : options.unit) || 'KM';
-    if (((_configState$configs$13 = configState.configs.distance_unit_km) === null || _configState$configs$13 === void 0 ? void 0 : _configState$configs$13.value) === '1') {
+    if (((_configState$configs$11 = configState.configs.distance_unit_km) === null || _configState$configs$11 === void 0 ? void 0 : _configState$configs$11.value) === '1') {
       unit = 'KM';
     }
-    if ((_configState$configs$14 = configState.configs.distance_unit) !== null && _configState$configs$14 !== void 0 && _configState$configs$14.value) {
-      var _configState$configs$15;
-      unit = (_configState$configs$15 = configState.configs.distance_unit) === null || _configState$configs$15 === void 0 ? void 0 : _configState$configs$15.value;
+    if ((_configState$configs$12 = configState.configs.distance_unit) !== null && _configState$configs$12 !== void 0 && _configState$configs$12.value) {
+      var _configState$configs$13;
+      unit = (_configState$configs$13 = configState.configs.distance_unit) === null || _configState$configs$13 === void 0 ? void 0 : _configState$configs$13.value;
     }
     if (unit.toUpperCase() === 'MI') {
       var dist = distance * 0.621371;
