@@ -15,10 +15,9 @@ var _ConfigContext = require("../../contexts/ConfigContext");
 var _ToastContext = require("../../contexts/ToastContext");
 var _CustomerContext = require("../../contexts/CustomerContext");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator.return && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, catch: function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return r; }; var t, r = {}, e = Object.prototype, n = e.hasOwnProperty, o = "function" == typeof Symbol ? Symbol : {}, i = o.iterator || "@@iterator", a = o.asyncIterator || "@@asyncIterator", u = o.toStringTag || "@@toStringTag"; function c(t, r, e, n) { return Object.defineProperty(t, r, { value: e, enumerable: !n, configurable: !n, writable: !n }); } try { c({}, ""); } catch (t) { c = function c(t, r, e) { return t[r] = e; }; } function h(r, e, n, o) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype); return c(a, "_invoke", function (r, e, n) { var o = 1; return function (i, a) { if (3 === o) throw Error("Generator is already running"); if (4 === o) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var u = n.delegate; if (u) { var c = d(u, n); if (c) { if (c === f) continue; return c; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (1 === o) throw o = 4, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = 3; var h = s(r, e, n); if ("normal" === h.type) { if (o = n.done ? 4 : 2, h.arg === f) continue; return { value: h.arg, done: n.done }; } "throw" === h.type && (o = 4, n.method = "throw", n.arg = h.arg); } }; }(r, n, new Context(o || [])), !0), a; } function s(t, r, e) { try { return { type: "normal", arg: t.call(r, e) }; } catch (t) { return { type: "throw", arg: t }; } } r.wrap = h; var f = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var l = {}; c(l, i, function () { return this; }); var p = Object.getPrototypeOf, y = p && p(p(x([]))); y && y !== e && n.call(y, i) && (l = y); var v = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(l); function g(t) { ["next", "throw", "return"].forEach(function (r) { c(t, r, function (t) { return this._invoke(r, t); }); }); } function AsyncIterator(t, r) { function e(o, i, a, u) { var c = s(t[o], t, i); if ("throw" !== c.type) { var h = c.arg, f = h.value; return f && "object" == _typeof(f) && n.call(f, "__await") ? r.resolve(f.__await).then(function (t) { e("next", t, a, u); }, function (t) { e("throw", t, a, u); }) : r.resolve(f).then(function (t) { h.value = t, a(h); }, function (t) { return e("throw", t, a, u); }); } u(c.arg); } var o; c(this, "_invoke", function (t, n) { function i() { return new r(function (r, o) { e(t, n, r, o); }); } return o = o ? o.then(i, i) : i(); }, !0); } function d(r, e) { var n = e.method, o = r.i[n]; if (o === t) return e.delegate = null, "throw" === n && r.i.return && (e.method = "return", e.arg = t, d(r, e), "throw" === e.method) || "return" !== n && (e.method = "throw", e.arg = new TypeError("The iterator does not provide a '" + n + "' method")), f; var i = s(o, r.i, e.arg); if ("throw" === i.type) return e.method = "throw", e.arg = i.arg, e.delegate = null, f; var a = i.arg; return a ? a.done ? (e[r.r] = a.value, e.next = r.n, "return" !== e.method && (e.method = "next", e.arg = t), e.delegate = null, f) : a : (e.method = "throw", e.arg = new TypeError("iterator result is not an object"), e.delegate = null, f); } function w(t) { this.tryEntries.push(t); } function m(r) { var e = r[4] || {}; e.type = "normal", e.arg = t, r[4] = e; } function Context(t) { this.tryEntries = [[-1]], t.forEach(w, this), this.reset(!0); } function x(r) { if (null != r) { var e = r[i]; if (e) return e.call(r); if ("function" == typeof r.next) return r; if (!isNaN(r.length)) { var o = -1, a = function e() { for (; ++o < r.length;) if (n.call(r, o)) return e.value = r[o], e.done = !1, e; return e.value = t, e.done = !0, e; }; return a.next = a; } } throw new TypeError(_typeof(r) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, c(v, "constructor", GeneratorFunctionPrototype), c(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = c(GeneratorFunctionPrototype, u, "GeneratorFunction"), r.isGeneratorFunction = function (t) { var r = "function" == typeof t && t.constructor; return !!r && (r === GeneratorFunction || "GeneratorFunction" === (r.displayName || r.name)); }, r.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, c(t, u, "GeneratorFunction")), t.prototype = Object.create(v), t; }, r.awrap = function (t) { return { __await: t }; }, g(AsyncIterator.prototype), c(AsyncIterator.prototype, a, function () { return this; }), r.AsyncIterator = AsyncIterator, r.async = function (t, e, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(h(t, e, n, o), i); return r.isGeneratorFunction(e) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, g(v), c(v, u, "Generator"), c(v, i, function () { return this; }), c(v, "toString", function () { return "[object Generator]"; }), r.keys = function (t) { var r = Object(t), e = []; for (var n in r) e.unshift(n); return function t() { for (; e.length;) if ((n = e.pop()) in r) return t.value = n, t.done = !1, t; return t.done = !0, t; }; }, r.values = x, Context.prototype = { constructor: Context, reset: function reset(r) { if (this.prev = this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(m), !r) for (var e in this) "t" === e.charAt(0) && n.call(this, e) && !isNaN(+e.slice(1)) && (this[e] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0][4]; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(r) { if (this.done) throw r; var e = this; function n(t) { a.type = "throw", a.arg = r, e.next = t; } for (var o = e.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i[4], u = this.prev, c = i[1], h = i[2]; if (-1 === i[0]) return n("end"), !1; if (!c && !h) throw Error("try statement without catch or finally"); if (null != i[0] && i[0] <= u) { if (u < c) return this.method = "next", this.arg = t, n(c), !0; if (u < h) return n(h), !1; } } }, abrupt: function abrupt(t, r) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var n = this.tryEntries[e]; if (n[0] > -1 && n[0] <= this.prev && this.prev < n[2]) { var o = n; break; } } o && ("break" === t || "continue" === t) && o[0] <= r && r <= o[2] && (o = null); var i = o ? o[4] : {}; return i.type = t, i.arg = r, o ? (this.method = "next", this.next = o[2], f) : this.complete(i); }, complete: function complete(t, r) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && r && (this.next = r), f; }, finish: function finish(t) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var e = this.tryEntries[r]; if (e[2] === t) return this.complete(e[4], e[3]), m(e), f; } }, catch: function _catch(t) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var e = this.tryEntries[r]; if (e[0] === t) { var n = e[4]; if ("throw" === n.type) { var o = n.arg; m(e); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(r, e, n) { return this.delegate = { i: x(r), r: e, n: n }, "next" === this.method && (this.arg = t), f; } }, r; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -38,7 +37,7 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 _dayjs.default.extend(_utc.default);
 var BusinessAndProductList = exports.BusinessAndProductList = function BusinessAndProductList(props) {
-  var _configs$use_parent_c, _configs$use_parent_c2, _businessState$busine12, _orderState$options20, _orderState$options21, _orderState$options22;
+  var _configs$use_parent_c, _configs$use_parent_c2, _businessState$busine10, _orderState$options18, _orderState$options19, _orderState$options20;
   var isSearchByName = props.isSearchByName,
     isSearchByDescription = props.isSearchByDescription,
     slug = props.slug,
@@ -95,63 +94,63 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
     sortByValue = _useState8[0],
     setSortByValue = _useState8[1];
   var _useState9 = (0, _react.useState)(null),
-    _useState10 = _slicedToArray(_useState9, 2),
-    filterByMenus = _useState10[0],
-    setFilterByMenus = _useState10[1];
-  var _useState11 = (0, _react.useState)(null),
-    _useState12 = _slicedToArray(_useState11, 2),
-    professionalSelected = _useState12[0],
-    setProfessionalSelected = _useState12[1];
-  var _useState13 = (0, _react.useState)({
+    _useState0 = _slicedToArray(_useState9, 2),
+    filterByMenus = _useState0[0],
+    setFilterByMenus = _useState0[1];
+  var _useState1 = (0, _react.useState)(null),
+    _useState10 = _slicedToArray(_useState1, 2),
+    professionalSelected = _useState10[0],
+    setProfessionalSelected = _useState10[1];
+  var _useState11 = (0, _react.useState)({
       business: {},
       menus: null,
       loading: !props.avoidBusinessLoading,
       error: null
     }),
+    _useState12 = _slicedToArray(_useState11, 2),
+    businessState = _useState12[0],
+    setBusinessState = _useState12[1];
+  var _useState13 = (0, _react.useState)(false),
     _useState14 = _slicedToArray(_useState13, 2),
-    businessState = _useState14[0],
-    setBusinessState = _useState14[1];
-  var _useState15 = (0, _react.useState)(false),
+    loadedFirstTime = _useState14[0],
+    setLoadedFirstTime = _useState14[1];
+  var _useState15 = (0, _react.useState)({}),
     _useState16 = _slicedToArray(_useState15, 2),
-    loadedFirstTime = _useState16[0],
-    setLoadedFirstTime = _useState16[1];
+    categoriesState = _useState16[0],
+    setCategoriesState = _useState16[1];
   var _useState17 = (0, _react.useState)({}),
     _useState18 = _slicedToArray(_useState17, 2),
-    categoriesState = _useState18[0],
-    setCategoriesState = _useState18[1];
-  var _useState19 = (0, _react.useState)({}),
-    _useState20 = _slicedToArray(_useState19, 2),
-    orderOptions = _useState20[0],
-    setOrderOptions = _useState20[1];
-  var _useState21 = (0, _react.useState)({
+    orderOptions = _useState18[0],
+    setOrderOptions = _useState18[1];
+  var _useState19 = (0, _react.useState)({
       product: null,
       loading: false,
       error: null
     }),
+    _useState20 = _slicedToArray(_useState19, 2),
+    productModal = _useState20[0],
+    setProductModal = _useState20[1];
+  var _useState21 = (0, _react.useState)(false),
     _useState22 = _slicedToArray(_useState21, 2),
-    productModal = _useState22[0],
-    setProductModal = _useState22[1];
+    notFound = _useState22[0],
+    setNotFound = _useState22[1];
   var _useState23 = (0, _react.useState)(false),
     _useState24 = _slicedToArray(_useState23, 2),
-    notFound = _useState24[0],
-    setNotFound = _useState24[1];
-  var _useState25 = (0, _react.useState)(false),
-    _useState26 = _slicedToArray(_useState25, 2),
-    featuredProducts = _useState26[0],
-    setFeaturedProducts = _useState26[1];
-  var _useState27 = (0, _react.useState)({
+    featuredProducts = _useState24[0],
+    setFeaturedProducts = _useState24[1];
+  var _useState25 = (0, _react.useState)({
       values: []
     }),
-    _useState28 = _slicedToArray(_useState27, 2),
-    openCategories = _useState28[0],
-    setOpenCategories = _useState28[1];
-  var _useState29 = (0, _react.useState)({
+    _useState26 = _slicedToArray(_useState25, 2),
+    openCategories = _useState26[0],
+    setOpenCategories = _useState26[1];
+  var _useState27 = (0, _react.useState)({
       min: null,
       max: null
     }),
-    _useState30 = _slicedToArray(_useState29, 2),
-    priceFilterValues = _useState30[0],
-    setPriceFilterValues = _useState30[1];
+    _useState28 = _slicedToArray(_useState27, 2),
+    priceFilterValues = _useState28[0],
+    setPriceFilterValues = _useState28[1];
   var requestsState = {};
   var categoryStateDefault = {
     loading: true,
@@ -164,18 +163,18 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
     },
     products: []
   };
-  var _useState31 = (0, _react.useState)(categoryStateDefault),
+  var _useState29 = (0, _react.useState)(categoryStateDefault),
+    _useState30 = _slicedToArray(_useState29, 2),
+    categoryState = _useState30[0],
+    setCategoryState = _useState30[1];
+  var _useState31 = (0, _react.useState)(null),
     _useState32 = _slicedToArray(_useState31, 2),
-    categoryState = _useState32[0],
-    setCategoryState = _useState32[1];
-  var _useState33 = (0, _react.useState)(null),
+    errors = _useState32[0],
+    setErrors = _useState32[1];
+  var _useState33 = (0, _react.useState)(false),
     _useState34 = _slicedToArray(_useState33, 2),
-    errors = _useState34[0],
-    setErrors = _useState34[1];
-  var _useState35 = (0, _react.useState)(false),
-    _useState36 = _slicedToArray(_useState35, 2),
-    errorQuantityProducts = _useState36[0],
-    setErrorQuantityProducts = _useState36[1];
+    errorQuantityProducts = _useState34[0],
+    setErrorQuantityProducts = _useState34[1];
   var categoryKey = searchValue ? 'search' : categorySelected.id === 'featured' ? 'featured' : categorySelected.id ? "categoryId:".concat(categorySelected.id) : 'all';
   var isUseParentCategory = (configs === null || configs === void 0 || (_configs$use_parent_c = configs.use_parent_category) === null || _configs$use_parent_c === void 0 ? void 0 : _configs$use_parent_c.value) === 'true' || (configs === null || configs === void 0 || (_configs$use_parent_c2 = configs.use_parent_category) === null || _configs$use_parent_c2 === void 0 ? void 0 : _configs$use_parent_c2.value) === '1';
 
@@ -314,7 +313,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
   var getProducts = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _categoryState$produc;
-      var i, _ref2, _businessState$busine2, _businessState$busine3, _category$products, category, isFeatured, categoryState, _businessState$busine4, _ref3, _businessState$busine5, _businessState$busine6, _categories$find, _subCategoriesList$fi, _businessState$busine7, categoriesList, categories, parentCategory, categoryFinded, productsFiltered, _businessState$busine8, _productsFiltered, _businessState$busine10, _categoriesCustom, _businessState$busine9, customCategories, productsToFilter, _productsFiltered2;
+      var i, _ref2, _businessState$busine2, _businessState$busine3, _category$products, category, isFeatured, categoryState, _businessState$busine4, _ref3, _businessState$busine5, _businessState$busine6, _categories$find, _subCategoriesList$fi, _businessState$busine7, categoriesList, categories, parentCategory, categoryFinded, productsFiltered, _businessState$busine8, _productsFiltered, _businessState$busine0, _categoriesCustom, _businessState$busine9, customCategories, productsToFilter, _productsFiltered2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -385,7 +384,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
                   return !customCategories.includes(id);
                 });
               }
-              productsToFilter = avoidProductDuplicate ? _categoriesCustom : businessState === null || businessState === void 0 || (_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : _businessState$busine10.categories;
+              productsToFilter = avoidProductDuplicate ? _categoriesCustom : businessState === null || businessState === void 0 || (_businessState$busine0 = businessState.business) === null || _businessState$busine0 === void 0 ? void 0 : _businessState$busine0.categories;
               _productsFiltered2 = productsToFilter === null || productsToFilter === void 0 ? void 0 : productsToFilter.reduce(function (products, category) {
                 return [].concat(_toConsumableArray(products), _toConsumableArray(category.products.map(function (product) {
                   return _objectSpread(_objectSpread({}, product), category.slug ? {
@@ -534,7 +533,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
   }();
   var loadProducts = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-      var _categoriesState$cate, _curCategoryState$pro, _businessState$busine11;
+      var _categoriesState$cate, _curCategoryState$pro, _businessState$busine1;
       var _ref8,
         newFetch,
         curCategoryState,
@@ -571,9 +570,9 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
         _categoriesState$feat4,
         _categoriesState$feat5,
         _curCategoryState$pag,
+        _featuredRes$content0,
+        _featuredRes$content1,
         _featuredRes$content10,
-        _featuredRes$content11,
-        _featuredRes$content12,
         _categoriesState$feat6,
         productsList,
         productsListFeatured,
@@ -598,7 +597,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
             }));
             return _context3.abrupt("return");
           case 6:
-            isLazy = !!(businessState !== null && businessState !== void 0 && (_businessState$busine11 = businessState.business) !== null && _businessState$busine11 !== void 0 && _businessState$busine11.lazy_load_products_recommended);
+            isLazy = !!(businessState !== null && businessState !== void 0 && (_businessState$busine1 = businessState.business) !== null && _businessState$busine1 !== void 0 && _businessState$busine1.lazy_load_products_recommended);
             if (isLazy) {
               _context3.next = 10;
               break;
@@ -695,9 +694,9 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               paginationData = categorySelected.id === 'featured' ? (_categoriesState$feat4 = categoriesState === null || categoriesState === void 0 || (_categoriesState$feat5 = categoriesState.featured) === null || _categoriesState$feat5 === void 0 ? void 0 : _categoriesState$feat5.pagination) !== null && _categoriesState$feat4 !== void 0 ? _categoriesState$feat4 : {} : (_curCategoryState$pag = curCategoryState === null || curCategoryState === void 0 ? void 0 : curCategoryState.pagination) !== null && _curCategoryState$pag !== void 0 ? _curCategoryState$pag : {};
               _newcategoryState = {
                 pagination: _objectSpread(_objectSpread({}, paginationData), {}, {
-                  currentPage: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content10 = featuredRes.content) === null || _featuredRes$content10 === void 0 || (_featuredRes$content10 = _featuredRes$content10.pagination) === null || _featuredRes$content10 === void 0 ? void 0 : _featuredRes$content10.current_page : pagination === null || pagination === void 0 ? void 0 : pagination.current_page,
-                  totalItems: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content11 = featuredRes.content) === null || _featuredRes$content11 === void 0 || (_featuredRes$content11 = _featuredRes$content11.pagination) === null || _featuredRes$content11 === void 0 ? void 0 : _featuredRes$content11.total : pagination === null || pagination === void 0 ? void 0 : pagination.total,
-                  totalPages: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content12 = featuredRes.content) === null || _featuredRes$content12 === void 0 || (_featuredRes$content12 = _featuredRes$content12.pagination) === null || _featuredRes$content12 === void 0 ? void 0 : _featuredRes$content12.total_pages : pagination === null || pagination === void 0 ? void 0 : pagination.total_pages
+                  currentPage: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content0 = featuredRes.content) === null || _featuredRes$content0 === void 0 || (_featuredRes$content0 = _featuredRes$content0.pagination) === null || _featuredRes$content0 === void 0 ? void 0 : _featuredRes$content0.current_page : pagination === null || pagination === void 0 ? void 0 : pagination.current_page,
+                  totalItems: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content1 = featuredRes.content) === null || _featuredRes$content1 === void 0 || (_featuredRes$content1 = _featuredRes$content1.pagination) === null || _featuredRes$content1 === void 0 ? void 0 : _featuredRes$content1.total : pagination === null || pagination === void 0 ? void 0 : pagination.total,
+                  totalPages: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content10 = featuredRes.content) === null || _featuredRes$content10 === void 0 || (_featuredRes$content10 = _featuredRes$content10.pagination) === null || _featuredRes$content10 === void 0 ? void 0 : _featuredRes$content10.total_pages : pagination === null || pagination === void 0 ? void 0 : pagination.total_pages
                 }),
                 loading: false,
                 products: categorySelected.id === 'featured' ? productsListFeatured : searchValue ? [].concat(_toConsumableArray(productsListFeatured), _toConsumableArray(productsList)).filter(function (product, i, _hash) {
@@ -738,9 +737,9 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
     };
   }();
   var loadMoreProducts = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref0 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var _categoriesState$cate2;
-      var curCategoryState, _featuredRes$content13, _yield$getLazyProduct3, _yield$getLazyProduct4, lazyRes, featuredRes, content, error, result, pagination, errorsList, _featuredRes$content14, _featuredRes$content15, _featuredRes$content16, _featuredRes$content17, _oldFeatured$products2, _featuredRes$content$2, _featuredRes$content18, oldFeatured, featureState, _curCategoryState$pro2, _categoriesState$all, _categoriesState$feat7, newcategoryState, isFeatured, _ref11, _featuredRes$content$3, _featuredRes$content19, _categoriesState$feat8, _categoriesState$feat9, _curCategoryState$pag2, _featuredRes$content20, _featuredRes$content21, _featuredRes$content22, _curCategoryState$pro3, _curCategoryState$pro4, _categoriesState$all2, _categoriesState$feat10, productsList, productsListFeatured, paginationData, _newcategoryState2, _isFeatured2, _err$constructor2, _err$message2;
+      var curCategoryState, _featuredRes$content11, _yield$getLazyProduct3, _yield$getLazyProduct4, lazyRes, featuredRes, content, error, result, pagination, errorsList, _featuredRes$content12, _featuredRes$content13, _featuredRes$content14, _featuredRes$content15, _oldFeatured$products2, _featuredRes$content$2, _featuredRes$content16, oldFeatured, featureState, _curCategoryState$pro2, _categoriesState$all, _categoriesState$feat7, newcategoryState, isFeatured, _ref1, _featuredRes$content$3, _featuredRes$content17, _categoriesState$feat8, _categoriesState$feat9, _curCategoryState$pag2, _featuredRes$content18, _featuredRes$content19, _featuredRes$content20, _curCategoryState$pro3, _curCategoryState$pro4, _categoriesState$all2, _categoriesState$feat0, productsList, productsListFeatured, paginationData, _newcategoryState2, _isFeatured2, _err$constructor2, _err$message2;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
@@ -767,8 +766,8 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
             if (error) {
               errorsList.push(result[0]);
             }
-            if (featuredRes !== null && featuredRes !== void 0 && (_featuredRes$content13 = featuredRes.content) !== null && _featuredRes$content13 !== void 0 && _featuredRes$content13.error) {
-              errorsList.push(featuredRes === null || featuredRes === void 0 || (_featuredRes$content14 = featuredRes.content) === null || _featuredRes$content14 === void 0 ? void 0 : _featuredRes$content14.result[0]);
+            if (featuredRes !== null && featuredRes !== void 0 && (_featuredRes$content11 = featuredRes.content) !== null && _featuredRes$content11 !== void 0 && _featuredRes$content11.error) {
+              errorsList.push(featuredRes === null || featuredRes === void 0 || (_featuredRes$content12 = featuredRes.content) === null || _featuredRes$content12 === void 0 ? void 0 : _featuredRes$content12.result[0]);
             }
             if (!(errorsList !== null && errorsList !== void 0 && errorsList.length)) {
               _context4.next = 21;
@@ -784,12 +783,12 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               oldFeatured = categoriesState === null || categoriesState === void 0 ? void 0 : categoriesState.featured;
               featureState = {
                 pagination: _objectSpread(_objectSpread({}, oldFeatured === null || oldFeatured === void 0 ? void 0 : oldFeatured.pagination), {}, {
-                  currentPage: featuredRes === null || featuredRes === void 0 || (_featuredRes$content15 = featuredRes.content) === null || _featuredRes$content15 === void 0 || (_featuredRes$content15 = _featuredRes$content15.pagination) === null || _featuredRes$content15 === void 0 ? void 0 : _featuredRes$content15.current_page,
-                  totalItems: featuredRes === null || featuredRes === void 0 || (_featuredRes$content16 = featuredRes.content) === null || _featuredRes$content16 === void 0 || (_featuredRes$content16 = _featuredRes$content16.pagination) === null || _featuredRes$content16 === void 0 ? void 0 : _featuredRes$content16.total,
-                  totalPages: featuredRes === null || featuredRes === void 0 || (_featuredRes$content17 = featuredRes.content) === null || _featuredRes$content17 === void 0 || (_featuredRes$content17 = _featuredRes$content17.pagination) === null || _featuredRes$content17 === void 0 ? void 0 : _featuredRes$content17.total_pages
+                  currentPage: featuredRes === null || featuredRes === void 0 || (_featuredRes$content13 = featuredRes.content) === null || _featuredRes$content13 === void 0 || (_featuredRes$content13 = _featuredRes$content13.pagination) === null || _featuredRes$content13 === void 0 ? void 0 : _featuredRes$content13.current_page,
+                  totalItems: featuredRes === null || featuredRes === void 0 || (_featuredRes$content14 = featuredRes.content) === null || _featuredRes$content14 === void 0 || (_featuredRes$content14 = _featuredRes$content14.pagination) === null || _featuredRes$content14 === void 0 ? void 0 : _featuredRes$content14.total,
+                  totalPages: featuredRes === null || featuredRes === void 0 || (_featuredRes$content15 = featuredRes.content) === null || _featuredRes$content15 === void 0 || (_featuredRes$content15 = _featuredRes$content15.pagination) === null || _featuredRes$content15 === void 0 ? void 0 : _featuredRes$content15.total_pages
                 }),
                 loading: false,
-                products: [].concat(_toConsumableArray((_oldFeatured$products2 = oldFeatured === null || oldFeatured === void 0 ? void 0 : oldFeatured.products) !== null && _oldFeatured$products2 !== void 0 ? _oldFeatured$products2 : []), _toConsumableArray((_featuredRes$content$2 = featuredRes === null || featuredRes === void 0 || (_featuredRes$content18 = featuredRes.content) === null || _featuredRes$content18 === void 0 ? void 0 : _featuredRes$content18.result) !== null && _featuredRes$content$2 !== void 0 ? _featuredRes$content$2 : []))
+                products: [].concat(_toConsumableArray((_oldFeatured$products2 = oldFeatured === null || oldFeatured === void 0 ? void 0 : oldFeatured.products) !== null && _oldFeatured$products2 !== void 0 ? _oldFeatured$products2 : []), _toConsumableArray((_featuredRes$content$2 = featuredRes === null || featuredRes === void 0 || (_featuredRes$content16 = featuredRes.content) === null || _featuredRes$content16 === void 0 ? void 0 : _featuredRes$content16.result) !== null && _featuredRes$content$2 !== void 0 ? _featuredRes$content$2 : []))
               };
               categoriesState.featured = featureState;
             }
@@ -815,18 +814,18 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               setFeaturedProducts(isFeatured);
             }
             if (!(categorySelected.id && categorySelected.id !== 'featured')) {
-              productsList = (_ref11 = []).concat.apply(_ref11, _toConsumableArray(result.map(function (category) {
+              productsList = (_ref1 = []).concat.apply(_ref1, _toConsumableArray(result.map(function (category) {
                 return category === null || category === void 0 ? void 0 : category.products;
               }))).filter(function (item) {
                 return item;
               });
-              productsListFeatured = (_featuredRes$content$3 = featuredRes === null || featuredRes === void 0 || (_featuredRes$content19 = featuredRes.content) === null || _featuredRes$content19 === void 0 ? void 0 : _featuredRes$content19.result) !== null && _featuredRes$content$3 !== void 0 ? _featuredRes$content$3 : [];
+              productsListFeatured = (_featuredRes$content$3 = featuredRes === null || featuredRes === void 0 || (_featuredRes$content17 = featuredRes.content) === null || _featuredRes$content17 === void 0 ? void 0 : _featuredRes$content17.result) !== null && _featuredRes$content$3 !== void 0 ? _featuredRes$content$3 : [];
               paginationData = categorySelected.id === 'featured' ? (_categoriesState$feat8 = categoriesState === null || categoriesState === void 0 || (_categoriesState$feat9 = categoriesState.featured) === null || _categoriesState$feat9 === void 0 ? void 0 : _categoriesState$feat9.pagination) !== null && _categoriesState$feat8 !== void 0 ? _categoriesState$feat8 : {} : (_curCategoryState$pag2 = curCategoryState === null || curCategoryState === void 0 ? void 0 : curCategoryState.pagination) !== null && _curCategoryState$pag2 !== void 0 ? _curCategoryState$pag2 : {};
               _newcategoryState2 = {
                 pagination: _objectSpread(_objectSpread({}, paginationData), {}, {
-                  currentPage: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content20 = featuredRes.content) === null || _featuredRes$content20 === void 0 || (_featuredRes$content20 = _featuredRes$content20.pagination) === null || _featuredRes$content20 === void 0 ? void 0 : _featuredRes$content20.current_page : pagination === null || pagination === void 0 ? void 0 : pagination.current_page,
-                  totalItems: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content21 = featuredRes.content) === null || _featuredRes$content21 === void 0 || (_featuredRes$content21 = _featuredRes$content21.pagination) === null || _featuredRes$content21 === void 0 ? void 0 : _featuredRes$content21.total : pagination === null || pagination === void 0 ? void 0 : pagination.total,
-                  totalPages: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content22 = featuredRes.content) === null || _featuredRes$content22 === void 0 || (_featuredRes$content22 = _featuredRes$content22.pagination) === null || _featuredRes$content22 === void 0 ? void 0 : _featuredRes$content22.total_pages : pagination === null || pagination === void 0 ? void 0 : pagination.total_pages
+                  currentPage: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content18 = featuredRes.content) === null || _featuredRes$content18 === void 0 || (_featuredRes$content18 = _featuredRes$content18.pagination) === null || _featuredRes$content18 === void 0 ? void 0 : _featuredRes$content18.current_page : pagination === null || pagination === void 0 ? void 0 : pagination.current_page,
+                  totalItems: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content19 = featuredRes.content) === null || _featuredRes$content19 === void 0 || (_featuredRes$content19 = _featuredRes$content19.pagination) === null || _featuredRes$content19 === void 0 ? void 0 : _featuredRes$content19.total : pagination === null || pagination === void 0 ? void 0 : pagination.total,
+                  totalPages: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 || (_featuredRes$content20 = featuredRes.content) === null || _featuredRes$content20 === void 0 || (_featuredRes$content20 = _featuredRes$content20.pagination) === null || _featuredRes$content20 === void 0 ? void 0 : _featuredRes$content20.total_pages : pagination === null || pagination === void 0 ? void 0 : pagination.total_pages
                 }),
                 loading: false,
                 products: categorySelected.id === 'featured' ? productsListFeatured : [].concat(_toConsumableArray(productsListFeatured), _toConsumableArray((_curCategoryState$pro3 = curCategoryState === null || curCategoryState === void 0 || (_curCategoryState$pro4 = curCategoryState.products) === null || _curCategoryState$pro4 === void 0 ? void 0 : _curCategoryState$pro4.concat(productsList)) !== null && _curCategoryState$pro3 !== void 0 ? _curCategoryState$pro3 : []))
@@ -837,7 +836,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
               setCategoriesState(_objectSpread({}, categoriesState));
               _isFeatured2 = (categoriesState === null || categoriesState === void 0 || (_categoriesState$all2 = categoriesState.all) === null || _categoriesState$all2 === void 0 || (_categoriesState$all2 = _categoriesState$all2.products) === null || _categoriesState$all2 === void 0 ? void 0 : _categoriesState$all2.some(function (product) {
                 return product.featured;
-              })) || (categoriesState === null || categoriesState === void 0 || (_categoriesState$feat10 = categoriesState.featured) === null || _categoriesState$feat10 === void 0 || (_categoriesState$feat10 = _categoriesState$feat10.products) === null || _categoriesState$feat10 === void 0 ? void 0 : _categoriesState$feat10.some(function (product) {
+              })) || (categoriesState === null || categoriesState === void 0 || (_categoriesState$feat0 = categoriesState.featured) === null || _categoriesState$feat0 === void 0 || (_categoriesState$feat0 = _categoriesState$feat0.products) === null || _categoriesState$feat0 === void 0 ? void 0 : _categoriesState$feat0.some(function (product) {
                 return product.featured;
               }));
               setFeaturedProducts(_isFeatured2);
@@ -863,11 +862,11 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
       }, _callee4, null, [[3, 27]]);
     }));
     return function loadMoreProducts() {
-      return _ref10.apply(this, arguments);
+      return _ref0.apply(this, arguments);
     };
   }();
   var getProduct = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var _props$product, _props$product2, _props$product3;
       var _orderState$options5, _orderState$options6, _orderState$options7, _orderState$options8, _props$product4, _props$product5, _props$product6, source, parameters, _orderState$options9, moment, _yield$ordering$busin, result, product;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
@@ -921,17 +920,17 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
       }, _callee5, null, [[1, 16]]);
     }));
     return function getProduct() {
-      return _ref12.apply(this, arguments);
+      return _ref10.apply(this, arguments);
     };
   }();
   (0, _react.useEffect)(function () {
     if (isInitialRender) {
       getProduct();
     }
-  }, [JSON.stringify((_businessState$busine12 = businessState.business) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.id), isInitialRender]);
+  }, [JSON.stringify((_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : _businessState$busine10.id), isInitialRender]);
   var getBusiness = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-      var _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13, _orderState$options14, _orderState$options15, _customerState$user, _result$categories, source, parameters, _orderState$options16, moment, _customerState$user2, _yield$ordering$busin2, result, data, _yield$ordering$busin3, menus;
+    var _ref11 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+      var _orderState$options0, _orderState$options1, _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13, _customerState$user, _result$categories, source, parameters, _orderState$options14, moment, _customerState$user2, _yield$ordering$busin2, result, data, _yield$ordering$busin3, menus;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
@@ -943,11 +942,11 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
             requestsState.business = source;
             parameters = {
               version: 'v2',
-              type: ((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.type) || 1,
-              location: location ? "".concat(location === null || location === void 0 ? void 0 : location.lat, ",").concat(location === null || location === void 0 ? void 0 : location.lng) : (_orderState$options11 = orderState.options) !== null && _orderState$options11 !== void 0 && (_orderState$options11 = _orderState$options11.address) !== null && _orderState$options11 !== void 0 && _orderState$options11.location ? "".concat((_orderState$options12 = orderState.options) === null || _orderState$options12 === void 0 || (_orderState$options12 = _orderState$options12.address) === null || _orderState$options12 === void 0 || (_orderState$options12 = _orderState$options12.location) === null || _orderState$options12 === void 0 ? void 0 : _orderState$options12.lat, ",").concat((_orderState$options13 = orderState.options) === null || _orderState$options13 === void 0 || (_orderState$options13 = _orderState$options13.address) === null || _orderState$options13 === void 0 || (_orderState$options13 = _orderState$options13.location) === null || _orderState$options13 === void 0 ? void 0 : _orderState$options13.lng) : null
+              type: ((_orderState$options0 = orderState.options) === null || _orderState$options0 === void 0 ? void 0 : _orderState$options0.type) || 1,
+              location: location ? "".concat(location === null || location === void 0 ? void 0 : location.lat, ",").concat(location === null || location === void 0 ? void 0 : location.lng) : (_orderState$options1 = orderState.options) !== null && _orderState$options1 !== void 0 && (_orderState$options1 = _orderState$options1.address) !== null && _orderState$options1 !== void 0 && _orderState$options1.location ? "".concat((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 || (_orderState$options10 = _orderState$options10.address) === null || _orderState$options10 === void 0 || (_orderState$options10 = _orderState$options10.location) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.lat, ",").concat((_orderState$options11 = orderState.options) === null || _orderState$options11 === void 0 || (_orderState$options11 = _orderState$options11.address) === null || _orderState$options11 === void 0 || (_orderState$options11 = _orderState$options11.location) === null || _orderState$options11 === void 0 ? void 0 : _orderState$options11.lng) : null
             };
-            if ((_orderState$options14 = orderState.options) !== null && _orderState$options14 !== void 0 && _orderState$options14.moment && isValidMoment((_orderState$options15 = orderState.options) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.moment, 'YYYY-MM-DD HH:mm:ss')) {
-              moment = _dayjs.default.utc((_orderState$options16 = orderState.options) === null || _orderState$options16 === void 0 ? void 0 : _orderState$options16.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
+            if ((_orderState$options12 = orderState.options) !== null && _orderState$options12 !== void 0 && _orderState$options12.moment && isValidMoment((_orderState$options13 = orderState.options) === null || _orderState$options13 === void 0 ? void 0 : _orderState$options13.moment, 'YYYY-MM-DD HH:mm:ss')) {
+              moment = _dayjs.default.utc((_orderState$options14 = orderState.options) === null || _orderState$options14 === void 0 ? void 0 : _orderState$options14.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
               parameters.timestamp = moment;
             }
             if (filterByMenus) {
@@ -1001,11 +1000,11 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
       }, _callee6, null, [[0, 25]]);
     }));
     return function getBusiness() {
-      return _ref13.apply(this, arguments);
+      return _ref11.apply(this, arguments);
     };
   }();
   var multiRemoveProducts = /*#__PURE__*/function () {
-    var _ref14 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(unavailableProducts, carts) {
+    var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(unavailableProducts, carts) {
       var allPromise;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -1035,12 +1034,12 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
       }, _callee7);
     }));
     return function multiRemoveProducts(_x2, _x3) {
-      return _ref14.apply(this, arguments);
+      return _ref12.apply(this, arguments);
     };
   }();
   var handleUpdateProfessionals = function handleUpdateProfessionals(selectedProfessional) {
-    var _businessState$busine13;
-    var professionals = businessState === null || businessState === void 0 || (_businessState$busine13 = businessState.business) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.professionals.map(function (professional) {
+    var _businessState$busine11;
+    var professionals = businessState === null || businessState === void 0 || (_businessState$busine11 = businessState.business) === null || _businessState$busine11 === void 0 ? void 0 : _businessState$busine11.professionals.map(function (professional) {
       if ((selectedProfessional === null || selectedProfessional === void 0 ? void 0 : selectedProfessional.id) === (professional === null || professional === void 0 ? void 0 : professional.id)) {
         return _objectSpread(_objectSpread({}, professional), selectedProfessional);
       }
@@ -1066,9 +1065,9 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
     });
   };
   var updateStoreProduct = /*#__PURE__*/function () {
-    var _ref15 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8(categoryId, productId) {
+    var _ref13 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8(categoryId, productId) {
       var updateParams,
-        _businessState$busine14,
+        _businessState$busine12,
         _yield$ordering$busin4,
         _yield$ordering$busin5,
         result,
@@ -1081,7 +1080,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
             updateParams = _args8.length > 2 && _args8[2] !== undefined ? _args8[2] : {};
             _context8.prev = 1;
             _context8.next = 4;
-            return ordering.businesses(businessState === null || businessState === void 0 || (_businessState$busine14 = businessState.business) === null || _businessState$busine14 === void 0 ? void 0 : _businessState$busine14.id).categories(categoryId).products(productId).save(updateParams);
+            return ordering.businesses(businessState === null || businessState === void 0 || (_businessState$busine12 = businessState.business) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.id).categories(categoryId).products(productId).save(updateParams);
           case 4:
             _yield$ordering$busin4 = _context8.sent;
             _yield$ordering$busin5 = _yield$ordering$busin4.content;
@@ -1114,13 +1113,13 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
       }, _callee8, null, [[1, 11]]);
     }));
     return function updateStoreProduct(_x4, _x5) {
-      return _ref15.apply(this, arguments);
+      return _ref13.apply(this, arguments);
     };
   }();
   var updateStoreCategory = /*#__PURE__*/function () {
-    var _ref16 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9(categoryId) {
+    var _ref14 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9(categoryId) {
       var updateParams,
-        _businessState$busine15,
+        _businessState$busine13,
         _yield$ordering$busin6,
         _yield$ordering$busin7,
         result,
@@ -1134,7 +1133,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
             updateParams = _args9.length > 1 && _args9[1] !== undefined ? _args9[1] : {};
             _context9.prev = 1;
             _context9.next = 4;
-            return ordering.businesses(businessState === null || businessState === void 0 || (_businessState$busine15 = businessState.business) === null || _businessState$busine15 === void 0 ? void 0 : _businessState$busine15.id).categories(categoryId).save(updateParams);
+            return ordering.businesses(businessState === null || businessState === void 0 || (_businessState$busine13 = businessState.business) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.id).categories(categoryId).save(updateParams);
           case 4:
             _yield$ordering$busin6 = _context9.sent;
             _yield$ordering$busin7 = _yield$ordering$busin6.content;
@@ -1165,7 +1164,7 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
       }, _callee9, null, [[1, 11]]);
     }));
     return function updateStoreCategory(_x6) {
-      return _ref16.apply(this, arguments);
+      return _ref14.apply(this, arguments);
     };
   }();
   (0, _react.useEffect)(function () {
@@ -1234,14 +1233,14 @@ var BusinessAndProductList = exports.BusinessAndProductList = function BusinessA
   }, [props.product]);
   (0, _react.useEffect)(function () {
     if (!orderState.loading) {
-      var _orderState$options17, _orderState$options18, _orderState$options19;
+      var _orderState$options15, _orderState$options16, _orderState$options17;
       setOrderOptions({
-        type: orderState === null || orderState === void 0 || (_orderState$options17 = orderState.options) === null || _orderState$options17 === void 0 ? void 0 : _orderState$options17.type,
-        moment: orderState === null || orderState === void 0 || (_orderState$options18 = orderState.options) === null || _orderState$options18 === void 0 ? void 0 : _orderState$options18.moment,
-        location: orderState === null || orderState === void 0 || (_orderState$options19 = orderState.options) === null || _orderState$options19 === void 0 || (_orderState$options19 = _orderState$options19.address) === null || _orderState$options19 === void 0 ? void 0 : _orderState$options19.location
+        type: orderState === null || orderState === void 0 || (_orderState$options15 = orderState.options) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.type,
+        moment: orderState === null || orderState === void 0 || (_orderState$options16 = orderState.options) === null || _orderState$options16 === void 0 ? void 0 : _orderState$options16.moment,
+        location: orderState === null || orderState === void 0 || (_orderState$options17 = orderState.options) === null || _orderState$options17 === void 0 || (_orderState$options17 = _orderState$options17.address) === null || _orderState$options17 === void 0 ? void 0 : _orderState$options17.location
       });
     }
-  }, [orderState === null || orderState === void 0 ? void 0 : orderState.loading, orderState === null || orderState === void 0 || (_orderState$options20 = orderState.options) === null || _orderState$options20 === void 0 ? void 0 : _orderState$options20.type, orderState === null || orderState === void 0 || (_orderState$options21 = orderState.options) === null || _orderState$options21 === void 0 ? void 0 : _orderState$options21.moment, JSON.stringify(orderState === null || orderState === void 0 || (_orderState$options22 = orderState.options) === null || _orderState$options22 === void 0 || (_orderState$options22 = _orderState$options22.address) === null || _orderState$options22 === void 0 ? void 0 : _orderState$options22.location)]);
+  }, [orderState === null || orderState === void 0 ? void 0 : orderState.loading, orderState === null || orderState === void 0 || (_orderState$options18 = orderState.options) === null || _orderState$options18 === void 0 ? void 0 : _orderState$options18.type, orderState === null || orderState === void 0 || (_orderState$options19 = orderState.options) === null || _orderState$options19 === void 0 ? void 0 : _orderState$options19.moment, JSON.stringify(orderState === null || orderState === void 0 || (_orderState$options20 = orderState.options) === null || _orderState$options20 === void 0 || (_orderState$options20 = _orderState$options20.address) === null || _orderState$options20 === void 0 ? void 0 : _orderState$options20.location)]);
 
   /**
    * Cancel business request
