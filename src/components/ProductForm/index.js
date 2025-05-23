@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useApi } from '../../contexts/ApiContext'
@@ -9,6 +11,8 @@ import { useSession } from '../../contexts/SessionContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+
+dayjs.extend(utc)
 
 export const ProductForm = (props) => {
   const {
@@ -265,6 +269,7 @@ export const ProductForm = (props) => {
     }
   }
 
+  const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   /**
    * Load product from API
    */
@@ -276,6 +281,10 @@ export const ProductForm = (props) => {
       const parameters = {
         version: 'v2',
         type: orderState.options?.type || 1
+      }
+      if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
+        const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
+        parameters.timestamp = moment
       }
       const { content: { result, error } } = await ordering
         .businesses(props.businessId)
