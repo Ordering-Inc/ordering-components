@@ -15,9 +15,10 @@ var _ConfigContext = require("../../contexts/ConfigContext");
 var _LanguageContext = require("../../contexts/LanguageContext");
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t7 in e) "default" !== _t7 && {}.hasOwnProperty.call(e, _t7) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t7)) && (i.get || i.set) ? o(f, _t7, i) : f[_t7] = e[_t7]); return f; })(e, t); }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return r; }; var t, r = {}, e = Object.prototype, n = e.hasOwnProperty, o = "function" == typeof Symbol ? Symbol : {}, i = o.iterator || "@@iterator", a = o.asyncIterator || "@@asyncIterator", u = o.toStringTag || "@@toStringTag"; function c(t, r, e, n) { return Object.defineProperty(t, r, { value: e, enumerable: !n, configurable: !n, writable: !n }); } try { c({}, ""); } catch (t) { c = function c(t, r, e) { return t[r] = e; }; } function h(r, e, n, o) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype); return c(a, "_invoke", function (r, e, n) { var o = 1; return function (i, a) { if (3 === o) throw Error("Generator is already running"); if (4 === o) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var u = n.delegate; if (u) { var c = d(u, n); if (c) { if (c === f) continue; return c; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (1 === o) throw o = 4, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = 3; var h = s(r, e, n); if ("normal" === h.type) { if (o = n.done ? 4 : 2, h.arg === f) continue; return { value: h.arg, done: n.done }; } "throw" === h.type && (o = 4, n.method = "throw", n.arg = h.arg); } }; }(r, n, new Context(o || [])), !0), a; } function s(t, r, e) { try { return { type: "normal", arg: t.call(r, e) }; } catch (t) { return { type: "throw", arg: t }; } } r.wrap = h; var f = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var l = {}; c(l, i, function () { return this; }); var p = Object.getPrototypeOf, y = p && p(p(x([]))); y && y !== e && n.call(y, i) && (l = y); var v = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(l); function g(t) { ["next", "throw", "return"].forEach(function (r) { c(t, r, function (t) { return this._invoke(r, t); }); }); } function AsyncIterator(t, r) { function e(o, i, a, u) { var c = s(t[o], t, i); if ("throw" !== c.type) { var h = c.arg, f = h.value; return f && "object" == _typeof(f) && n.call(f, "__await") ? r.resolve(f.__await).then(function (t) { e("next", t, a, u); }, function (t) { e("throw", t, a, u); }) : r.resolve(f).then(function (t) { h.value = t, a(h); }, function (t) { return e("throw", t, a, u); }); } u(c.arg); } var o; c(this, "_invoke", function (t, n) { function i() { return new r(function (r, o) { e(t, n, r, o); }); } return o = o ? o.then(i, i) : i(); }, !0); } function d(r, e) { var n = e.method, o = r.i[n]; if (o === t) return e.delegate = null, "throw" === n && r.i.return && (e.method = "return", e.arg = t, d(r, e), "throw" === e.method) || "return" !== n && (e.method = "throw", e.arg = new TypeError("The iterator does not provide a '" + n + "' method")), f; var i = s(o, r.i, e.arg); if ("throw" === i.type) return e.method = "throw", e.arg = i.arg, e.delegate = null, f; var a = i.arg; return a ? a.done ? (e[r.r] = a.value, e.next = r.n, "return" !== e.method && (e.method = "next", e.arg = t), e.delegate = null, f) : a : (e.method = "throw", e.arg = new TypeError("iterator result is not an object"), e.delegate = null, f); } function w(t) { this.tryEntries.push(t); } function m(r) { var e = r[4] || {}; e.type = "normal", e.arg = t, r[4] = e; } function Context(t) { this.tryEntries = [[-1]], t.forEach(w, this), this.reset(!0); } function x(r) { if (null != r) { var e = r[i]; if (e) return e.call(r); if ("function" == typeof r.next) return r; if (!isNaN(r.length)) { var o = -1, a = function e() { for (; ++o < r.length;) if (n.call(r, o)) return e.value = r[o], e.done = !1, e; return e.value = t, e.done = !0, e; }; return a.next = a; } } throw new TypeError(_typeof(r) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, c(v, "constructor", GeneratorFunctionPrototype), c(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = c(GeneratorFunctionPrototype, u, "GeneratorFunction"), r.isGeneratorFunction = function (t) { var r = "function" == typeof t && t.constructor; return !!r && (r === GeneratorFunction || "GeneratorFunction" === (r.displayName || r.name)); }, r.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, c(t, u, "GeneratorFunction")), t.prototype = Object.create(v), t; }, r.awrap = function (t) { return { __await: t }; }, g(AsyncIterator.prototype), c(AsyncIterator.prototype, a, function () { return this; }), r.AsyncIterator = AsyncIterator, r.async = function (t, e, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(h(t, e, n, o), i); return r.isGeneratorFunction(e) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, g(v), c(v, u, "Generator"), c(v, i, function () { return this; }), c(v, "toString", function () { return "[object Generator]"; }), r.keys = function (t) { var r = Object(t), e = []; for (var n in r) e.unshift(n); return function t() { for (; e.length;) if ((n = e.pop()) in r) return t.value = n, t.done = !1, t; return t.done = !0, t; }; }, r.values = x, Context.prototype = { constructor: Context, reset: function reset(r) { if (this.prev = this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(m), !r) for (var e in this) "t" === e.charAt(0) && n.call(this, e) && !isNaN(+e.slice(1)) && (this[e] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0][4]; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(r) { if (this.done) throw r; var e = this; function n(t) { a.type = "throw", a.arg = r, e.next = t; } for (var o = e.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i[4], u = this.prev, c = i[1], h = i[2]; if (-1 === i[0]) return n("end"), !1; if (!c && !h) throw Error("try statement without catch or finally"); if (null != i[0] && i[0] <= u) { if (u < c) return this.method = "next", this.arg = t, n(c), !0; if (u < h) return n(h), !1; } } }, abrupt: function abrupt(t, r) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var n = this.tryEntries[e]; if (n[0] > -1 && n[0] <= this.prev && this.prev < n[2]) { var o = n; break; } } o && ("break" === t || "continue" === t) && o[0] <= r && r <= o[2] && (o = null); var i = o ? o[4] : {}; return i.type = t, i.arg = r, o ? (this.method = "next", this.next = o[2], f) : this.complete(i); }, complete: function complete(t, r) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && r && (this.next = r), f; }, finish: function finish(t) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var e = this.tryEntries[r]; if (e[2] === t) return this.complete(e[4], e[3]), m(e), f; } }, catch: function _catch(t) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var e = this.tryEntries[r]; if (e[0] === t) { var n = e[4]; if ("throw" === n.type) { var o = n.arg; m(e); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(r, e, n) { return this.delegate = { i: x(r), r: e, n: n }, "next" === this.method && (this.arg = t), f; } }, r; }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
@@ -141,19 +142,19 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
    * @param {object} credentials Login credentials email/cellphone and password
    */
   var handleLoginClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
-      var _credentials4, _window, _credentials, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, level, session, accessToken, _yield$ordering$setAc, logoutResp, _result$session, _result$session2;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) switch (_context.prev = _context.next) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(values) {
+      var _credentials4, _window, _credentials, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, level, session, accessToken, _yield$ordering$setAc, logoutResp, _result$session, _result$session2, _t, _t2;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
           case 0:
             if (!handleCustomLogin) {
-              _context.next = 3;
+              _context.n = 1;
               break;
             }
             handleCustomLogin(values || credentials, loginTab);
-            return _context.abrupt("return");
-          case 3:
-            _context.prev = 3;
+            return _context.a(2);
+          case 1:
+            _context.p = 1;
             if (isDeviceLoginEnabled && values !== null && values !== void 0 && values.device_code) {
               _credentials = {
                 device_code: values === null || values === void 0 ? void 0 : values.device_code
@@ -169,11 +170,11 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               _credentials = _defineProperty(_defineProperty({}, loginTab, values && values[loginTab] || credentials[loginTab]), "password", values && (values === null || values === void 0 ? void 0 : values.password) || credentials.password);
             }
             if (!isReCaptchaEnable) {
-              _context.next = 13;
+              _context.n = 3;
               break;
             }
             if (!((reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.code) === '')) {
-              _context.next = 11;
+              _context.n = 2;
               break;
             }
             setFormState({
@@ -183,11 +184,11 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               },
               loading: false
             });
-            return _context.abrupt("return");
-          case 11:
+            return _context.a(2);
+          case 2:
             _credentials.verification_code = reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.code;
             _credentials.recaptcha_type = reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.version;
-          case 13:
+          case 3:
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: true
             }));
@@ -204,10 +205,10 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               _credentials.notification_token = notificationState.notification_token;
             }
             if (isGuest && user !== null && user !== void 0 && user.guest_id) _credentials.guest_token = user === null || user === void 0 ? void 0 : user.guest_id;
-            _context.next = 19;
+            _context.n = 4;
             return ordering.users().auth(_credentials);
-          case 19:
-            _yield$ordering$users = _context.sent;
+          case 4:
+            _yield$ordering$users = _context.v;
             _yield$ordering$users2 = _yield$ordering$users.content;
             error = _yield$ordering$users2.error;
             result = _yield$ordering$users2.result;
@@ -219,28 +220,28 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               });
             }
             if (error) {
-              _context.next = 48;
+              _context.n = 11;
               break;
             }
             if (!useDefualtSessionManager) {
-              _context.next = 44;
+              _context.n = 10;
               break;
             }
             if (!(allowedLevels && (allowedLevels === null || allowedLevels === void 0 ? void 0 : allowedLevels.length) > 0)) {
-              _context.next = 43;
+              _context.n = 9;
               break;
             }
             level = result.level, session = result.session;
             accessToken = session === null || session === void 0 ? void 0 : session.access_token;
             if (allowedLevels.includes(level)) {
-              _context.next = 43;
+              _context.n = 9;
               break;
             }
-            _context.prev = 30;
-            _context.next = 33;
+            _context.p = 5;
+            _context.n = 6;
             return ordering.setAccessToken(accessToken).users().logout();
-          case 33:
-            _yield$ordering$setAc = _context.sent;
+          case 6:
+            _yield$ordering$setAc = _context.v;
             logoutResp = _yield$ordering$setAc.content;
             if (!logoutResp.error) {
               logout();
@@ -252,21 +253,21 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               },
               loading: false
             });
-            _context.next = 42;
+            _context.n = 8;
             break;
-          case 39:
-            _context.prev = 39;
-            _context.t0 = _context["catch"](30);
+          case 7:
+            _context.p = 7;
+            _t = _context.v;
             setFormState({
               result: {
                 error: true,
-                result: _context.t0.message
+                result: _t.message
               },
               loading: false
             });
-          case 42:
-            return _context.abrupt("return");
-          case 43:
+          case 8:
+            return _context.a(2);
+          case 9:
             if (values !== null && values !== void 0 && values.device_code) {
               login({
                 user: result,
@@ -279,7 +280,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
                 token: (_result$session2 = result.session) === null || _result$session2 === void 0 ? void 0 : _result$session2.access_token
               });
             }
-          case 44:
+          case 10:
             events.emit('userLogin', result);
             if (handleSuccessLogin) {
               handleSuccessLogin(result);
@@ -287,8 +288,8 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
             if (urlToRedirect) {
               window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
             }
-            return _context.abrupt("return", true);
-          case 48:
+            return _context.a(2, true);
+          case 11:
             setFormState({
               result: {
                 error: error,
@@ -296,22 +297,21 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               },
               loading: false
             });
-            return _context.abrupt("return", false);
-          case 52:
-            _context.prev = 52;
-            _context.t1 = _context["catch"](3);
+            return _context.a(2, false);
+          case 12:
+            _context.p = 12;
+            _t2 = _context.v;
             setFormState({
               result: {
                 error: true,
-                result: _context.t1.message
+                result: _t2.message
               },
               loading: false
             });
-          case 55:
-          case "end":
-            return _context.stop();
+          case 13:
+            return _context.a(2);
         }
-      }, _callee, null, [[3, 52], [30, 39]]);
+      }, _callee, null, [[5, 7], [1, 12]]);
     }));
     return function handleLoginClick(_x) {
       return _ref.apply(this, arguments);
@@ -345,12 +345,12 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
    * @param {Object} values object with cellphone and country code values
    */
   var sendVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
-      var response, res;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(values) {
+      var response, res, _t3;
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.p = _context2.n) {
           case 0:
-            _context2.prev = 0;
+            _context2.p = 0;
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               result: {
                 error: false
@@ -359,7 +359,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
             setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
               loading: true
             }));
-            _context2.next = 5;
+            _context2.n = 1;
             return fetch("".concat(ordering.root, "/auth/sms/twilio/verify"), {
               method: 'POST',
               headers: {
@@ -372,32 +372,31 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
                 country_phone_code: "+".concat(values.country_phone_code)
               })
             });
-          case 5:
-            response = _context2.sent;
-            _context2.next = 8;
+          case 1:
+            response = _context2.v;
+            _context2.n = 2;
             return response.json();
-          case 8:
-            res = _context2.sent;
+          case 2:
+            res = _context2.v;
             setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
               loading: false,
               result: res
             }));
-            _context2.next = 15;
+            _context2.n = 4;
             break;
-          case 12:
-            _context2.prev = 12;
-            _context2.t0 = _context2["catch"](0);
+          case 3:
+            _context2.p = 3;
+            _t3 = _context2.v;
             setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
               loading: false,
               result: {
-                error: _context2.t0.message
+                error: _t3.message
               }
             }));
-          case 15:
-          case "end":
-            return _context2.stop();
+          case 4:
+            return _context2.a(2);
         }
-      }, _callee2, null, [[0, 12]]);
+      }, _callee2, null, [[0, 3]]);
     }));
     return function sendVerifyPhoneCode(_x2) {
       return _ref2.apply(this, arguments);
@@ -418,13 +417,13 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
    * @param {Object} values object with cellphone and country code values
    */
   var checkVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
-      var body, _res$result, response, res, _res$result2;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(values) {
+      var body, _res$result, response, res, _res$result2, _t4;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
           case 0:
             body = _objectSpread({}, values);
-            _context3.prev = 1;
+            _context3.p = 1;
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: true
             }));
@@ -432,7 +431,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               body.notification_token = notificationState.notification_token;
               body.notification_app = notificationState.notification_app;
             }
-            _context3.next = 6;
+            _context3.n = 2;
             return fetch("".concat(ordering.root, "/auth/sms/twilio"), {
               method: 'POST',
               headers: {
@@ -442,12 +441,12 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               },
               body: JSON.stringify(body)
             });
-          case 6:
-            response = _context3.sent;
-            _context3.next = 9;
+          case 2:
+            response = _context3.v;
+            _context3.n = 3;
             return response.json();
-          case 9:
-            res = _context3.sent;
+          case 3:
+            res = _context3.v;
             if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
               login({
                 user: res === null || res === void 0 ? void 0 : res.result,
@@ -461,32 +460,31 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               loading: false,
               result: res
             }));
-            _context3.next = 17;
+            _context3.n = 5;
             break;
-          case 14:
-            _context3.prev = 14;
-            _context3.t0 = _context3["catch"](1);
+          case 4:
+            _context3.p = 4;
+            _t4 = _context3.v;
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               loading: false,
               result: {
-                error: _context3.t0.message
+                error: _t4.message
               }
             }));
-          case 17:
-          case "end":
-            return _context3.stop();
+          case 5:
+            return _context3.a(2);
         }
-      }, _callee3, null, [[1, 14]]);
+      }, _callee3, null, [[1, 4]]);
     }));
     return function checkVerifyPhoneCode(_x3) {
       return _ref3.apply(this, arguments);
     };
   }();
   var generateOtpCode = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
-      var body, email, cellphone, countryPhoneCode, response, _yield$response$json, result, error;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(values) {
+      var body, email, cellphone, countryPhoneCode, response, _yield$response$json, result, error, _t5;
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.p = _context4.n) {
           case 0:
             body = {
               type: 4,
@@ -496,7 +494,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
             email = (values === null || values === void 0 ? void 0 : values.email) || (credentials === null || credentials === void 0 ? void 0 : credentials.email);
             cellphone = cellphoneStartZero || (values === null || values === void 0 ? void 0 : values.cellphone) || (credentials === null || credentials === void 0 ? void 0 : credentials.cellphone);
             countryPhoneCode = (values === null || values === void 0 ? void 0 : values.countryPhoneCode) || (values === null || values === void 0 ? void 0 : values.country_phone_code) || credentials.country_phone_code;
-            _context4.prev = 4;
+            _context4.p = 1;
             if (otpType === 'cellphone') {
               body.country_phone_code = countryPhoneCode;
               body.cellphone = cellphone;
@@ -510,7 +508,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
                 email: email
               });
             }
-            _context4.next = 8;
+            _context4.n = 2;
             return fetch("".concat(ordering.root, "/codes/generate"), {
               method: 'POST',
               headers: {
@@ -520,16 +518,16 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               },
               body: JSON.stringify(body)
             });
-          case 8:
-            response = _context4.sent;
-            _context4.next = 11;
+          case 2:
+            response = _context4.v;
+            _context4.n = 3;
             return response.json();
-          case 11:
-            _yield$response$json = _context4.sent;
+          case 3:
+            _yield$response$json = _context4.v;
             result = _yield$response$json.result;
             error = _yield$response$json.error;
             if (error) {
-              _context4.next = 17;
+              _context4.n = 4;
               break;
             }
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
@@ -538,44 +536,43 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
                 error: null
               }
             }));
-            return _context4.abrupt("return");
-          case 17:
+            return _context4.a(2);
+          case 4:
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               result: {
                 error: result
               }
             }));
-            _context4.next = 23;
+            _context4.n = 6;
             break;
-          case 20:
-            _context4.prev = 20;
-            _context4.t0 = _context4["catch"](4);
+          case 5:
+            _context4.p = 5;
+            _t5 = _context4.v;
             setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
               result: {
-                error: _context4.t0.message
+                error: _t5.message
               }
             }));
-          case 23:
-          case "end":
-            return _context4.stop();
+          case 6:
+            return _context4.a(2);
         }
-      }, _callee4, null, [[4, 20]]);
+      }, _callee4, null, [[1, 5]]);
     }));
     return function generateOtpCode(_x4) {
       return _ref4.apply(this, arguments);
     };
   }();
   var handleLoginSpoonity = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
-      var _result$session3, response, _yield$response$json2, result, error;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+      var _result$session3, response, _yield$response$json2, result, error, _t6;
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.p = _context5.n) {
           case 0:
-            _context5.prev = 0;
+            _context5.p = 0;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: true
             }));
-            _context5.next = 4;
+            _context5.n = 1;
             return fetch("".concat(ordering.root, "/auth/spoonity"), {
               method: 'POST',
               headers: {
@@ -586,16 +583,16 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
                 password: credentials.password
               })
             });
-          case 4:
-            response = _context5.sent;
-            _context5.next = 7;
+          case 1:
+            response = _context5.v;
+            _context5.n = 2;
             return response.json();
-          case 7:
-            _yield$response$json2 = _context5.sent;
+          case 2:
+            _yield$response$json2 = _context5.v;
             result = _yield$response$json2.result;
             error = _yield$response$json2.error;
             if (!error) {
-              _context5.next = 13;
+              _context5.n = 3;
               break;
             }
             setFormState({
@@ -605,8 +602,8 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               },
               loading: false
             });
-            return _context5.abrupt("return");
-          case 13:
+            return _context5.a(2);
+          case 3:
             login({
               user: result,
               token: result === null || result === void 0 || (_result$session3 = result.session) === null || _result$session3 === void 0 ? void 0 : _result$session3.access_token
@@ -618,23 +615,22 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
               },
               loading: false
             });
-            _context5.next = 20;
+            _context5.n = 5;
             break;
-          case 17:
-            _context5.prev = 17;
-            _context5.t0 = _context5["catch"](0);
+          case 4:
+            _context5.p = 4;
+            _t6 = _context5.v;
             setFormState({
               result: {
                 error: true,
-                result: _context5.t0.message
+                result: _t6.message
               },
               loading: false
             });
-          case 20:
-          case "end":
-            return _context5.stop();
+          case 5:
+            return _context5.a(2);
         }
-      }, _callee5, null, [[0, 17]]);
+      }, _callee5, null, [[0, 4]]);
     }));
     return function handleLoginSpoonity() {
       return _ref5.apply(this, arguments);
