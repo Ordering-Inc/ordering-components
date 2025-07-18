@@ -19,9 +19,10 @@ var _excluded = ["carts"],
   _excluded2 = ["carts"],
   _excluded3 = ["carts"];
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t17 in e) "default" !== _t17 && {}.hasOwnProperty.call(e, _t17) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t17)) && (i.get || i.set) ? o(f, _t17, i) : f[_t17] = e[_t17]); return f; })(e, t); }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return r; }; var t, r = {}, e = Object.prototype, n = e.hasOwnProperty, o = "function" == typeof Symbol ? Symbol : {}, i = o.iterator || "@@iterator", a = o.asyncIterator || "@@asyncIterator", u = o.toStringTag || "@@toStringTag"; function c(t, r, e, n) { return Object.defineProperty(t, r, { value: e, enumerable: !n, configurable: !n, writable: !n }); } try { c({}, ""); } catch (t) { c = function c(t, r, e) { return t[r] = e; }; } function h(r, e, n, o) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype); return c(a, "_invoke", function (r, e, n) { var o = 1; return function (i, a) { if (3 === o) throw Error("Generator is already running"); if (4 === o) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var u = n.delegate; if (u) { var c = d(u, n); if (c) { if (c === f) continue; return c; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (1 === o) throw o = 4, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = 3; var h = s(r, e, n); if ("normal" === h.type) { if (o = n.done ? 4 : 2, h.arg === f) continue; return { value: h.arg, done: n.done }; } "throw" === h.type && (o = 4, n.method = "throw", n.arg = h.arg); } }; }(r, n, new Context(o || [])), !0), a; } function s(t, r, e) { try { return { type: "normal", arg: t.call(r, e) }; } catch (t) { return { type: "throw", arg: t }; } } r.wrap = h; var f = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var l = {}; c(l, i, function () { return this; }); var p = Object.getPrototypeOf, y = p && p(p(x([]))); y && y !== e && n.call(y, i) && (l = y); var v = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(l); function g(t) { ["next", "throw", "return"].forEach(function (r) { c(t, r, function (t) { return this._invoke(r, t); }); }); } function AsyncIterator(t, r) { function e(o, i, a, u) { var c = s(t[o], t, i); if ("throw" !== c.type) { var h = c.arg, f = h.value; return f && "object" == _typeof(f) && n.call(f, "__await") ? r.resolve(f.__await).then(function (t) { e("next", t, a, u); }, function (t) { e("throw", t, a, u); }) : r.resolve(f).then(function (t) { h.value = t, a(h); }, function (t) { return e("throw", t, a, u); }); } u(c.arg); } var o; c(this, "_invoke", function (t, n) { function i() { return new r(function (r, o) { e(t, n, r, o); }); } return o = o ? o.then(i, i) : i(); }, !0); } function d(r, e) { var n = e.method, o = r.i[n]; if (o === t) return e.delegate = null, "throw" === n && r.i.return && (e.method = "return", e.arg = t, d(r, e), "throw" === e.method) || "return" !== n && (e.method = "throw", e.arg = new TypeError("The iterator does not provide a '" + n + "' method")), f; var i = s(o, r.i, e.arg); if ("throw" === i.type) return e.method = "throw", e.arg = i.arg, e.delegate = null, f; var a = i.arg; return a ? a.done ? (e[r.r] = a.value, e.next = r.n, "return" !== e.method && (e.method = "next", e.arg = t), e.delegate = null, f) : a : (e.method = "throw", e.arg = new TypeError("iterator result is not an object"), e.delegate = null, f); } function w(t) { this.tryEntries.push(t); } function m(r) { var e = r[4] || {}; e.type = "normal", e.arg = t, r[4] = e; } function Context(t) { this.tryEntries = [[-1]], t.forEach(w, this), this.reset(!0); } function x(r) { if (null != r) { var e = r[i]; if (e) return e.call(r); if ("function" == typeof r.next) return r; if (!isNaN(r.length)) { var o = -1, a = function e() { for (; ++o < r.length;) if (n.call(r, o)) return e.value = r[o], e.done = !1, e; return e.value = t, e.done = !0, e; }; return a.next = a; } } throw new TypeError(_typeof(r) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, c(v, "constructor", GeneratorFunctionPrototype), c(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = c(GeneratorFunctionPrototype, u, "GeneratorFunction"), r.isGeneratorFunction = function (t) { var r = "function" == typeof t && t.constructor; return !!r && (r === GeneratorFunction || "GeneratorFunction" === (r.displayName || r.name)); }, r.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, c(t, u, "GeneratorFunction")), t.prototype = Object.create(v), t; }, r.awrap = function (t) { return { __await: t }; }, g(AsyncIterator.prototype), c(AsyncIterator.prototype, a, function () { return this; }), r.AsyncIterator = AsyncIterator, r.async = function (t, e, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(h(t, e, n, o), i); return r.isGeneratorFunction(e) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, g(v), c(v, u, "Generator"), c(v, i, function () { return this; }), c(v, "toString", function () { return "[object Generator]"; }), r.keys = function (t) { var r = Object(t), e = []; for (var n in r) e.unshift(n); return function t() { for (; e.length;) if ((n = e.pop()) in r) return t.value = n, t.done = !1, t; return t.done = !0, t; }; }, r.values = x, Context.prototype = { constructor: Context, reset: function reset(r) { if (this.prev = this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(m), !r) for (var e in this) "t" === e.charAt(0) && n.call(this, e) && !isNaN(+e.slice(1)) && (this[e] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0][4]; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(r) { if (this.done) throw r; var e = this; function n(t) { a.type = "throw", a.arg = r, e.next = t; } for (var o = e.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i[4], u = this.prev, c = i[1], h = i[2]; if (-1 === i[0]) return n("end"), !1; if (!c && !h) throw Error("try statement without catch or finally"); if (null != i[0] && i[0] <= u) { if (u < c) return this.method = "next", this.arg = t, n(c), !0; if (u < h) return n(h), !1; } } }, abrupt: function abrupt(t, r) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var n = this.tryEntries[e]; if (n[0] > -1 && n[0] <= this.prev && this.prev < n[2]) { var o = n; break; } } o && ("break" === t || "continue" === t) && o[0] <= r && r <= o[2] && (o = null); var i = o ? o[4] : {}; return i.type = t, i.arg = r, o ? (this.method = "next", this.next = o[2], f) : this.complete(i); }, complete: function complete(t, r) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && r && (this.next = r), f; }, finish: function finish(t) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var e = this.tryEntries[r]; if (e[2] === t) return this.complete(e[4], e[3]), m(e), f; } }, catch: function _catch(t) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var e = this.tryEntries[r]; if (e[0] === t) { var n = e[4]; if ("throw" === n.type) { var o = n.arg; m(e); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(r, e, n) { return this.delegate = { i: x(r), r: e, n: n }, "next" === this.method && (this.arg = t), f; } }, r; }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i.return) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
 function _objectWithoutProperties(e, t) { if (null == e) return {}; var o, r, i = _objectWithoutPropertiesLoose(e, t); if (Object.getOwnPropertySymbols) { var n = Object.getOwnPropertySymbols(e); for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]); } return i; }
 function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -133,25 +134,25 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Refresh order options and carts from API
    */
   var refreshOrderOptions = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _state$options, _state$options2, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, options, countryCode, res, error, result, _options2$address, carts, _options2, _options2$address2, localOptions, _options3, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) switch (_context.prev = _context.next) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      var _state$options, _state$options2, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, options, countryCode, res, error, result, _options2$address, carts, _options2, _options2$address2, localOptions, _options3, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message, _t;
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.p = _context.n) {
           case 0:
-            _context.prev = 0;
+            _context.p = 0;
             if (!state.loading) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
             }
-            _context.next = 4;
+            _context.n = 1;
             return strategy.getItem('country-code');
-          case 4:
-            countryCodeFromLocalStorage = _context.sent;
-            _context.next = 7;
+          case 1:
+            countryCodeFromLocalStorage = _context.v;
+            _context.n = 2;
             return strategy.getItem('user-customer', true);
-          case 7:
-            customerFromLocalStorage = _context.sent;
+          case 2:
+            customerFromLocalStorage = _context.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             options = {};
             if (userCustomerId) {
@@ -171,14 +172,14 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 'X-Country-Code-X': countryCode
               };
             }
-            _context.next = 16;
+            _context.n = 3;
             return ordering.setAccessToken(session.token).orderOptions().get(options);
-          case 16:
-            res = _context.sent;
+          case 3:
+            res = _context.v;
             error = res === null || res === void 0 || (_res$content = res.content) === null || _res$content === void 0 ? void 0 : _res$content.error;
             result = res === null || res === void 0 || (_res$content2 = res.content) === null || _res$content2 === void 0 ? void 0 : _res$content2.result;
             if (error) {
-              _context.next = 27;
+              _context.n = 4;
               break;
             }
             carts = result.carts, _options2 = _objectWithoutProperties(result, _excluded);
@@ -188,14 +189,14 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             });
             state.options = _objectSpread(_objectSpread({}, state.options), _options2);
             if (!(!countryCodeFromLocalStorage && _options2 !== null && _options2 !== void 0 && (_options2$address = _options2.address) !== null && _options2$address !== void 0 && _options2$address.country_code)) {
-              _context.next = 27;
+              _context.n = 4;
               break;
             }
-            _context.next = 27;
+            _context.n = 4;
             return updateOrderOptions({
               country_code: _options2 === null || _options2 === void 0 || (_options2$address2 = _options2.address) === null || _options2$address2 === void 0 ? void 0 : _options2$address2.country_code
             });
-          case 27:
+          case 4:
             if (error) {
               setAlert({
                 show: true,
@@ -205,17 +206,17 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 session.auth && logout();
               }
             }
-            _context.next = 30;
+            _context.n = 5;
             return strategy.getItem('options', true);
-          case 30:
-            localOptions = _context.sent;
+          case 5:
+            localOptions = _context.v;
             if (!localOptions) {
-              _context.next = 63;
+              _context.n = 12;
               break;
             }
             _options3 = {};
             if (!(Object.keys(localOptions.address).length > 0)) {
-              _context.next = 54;
+              _context.n = 10;
               break;
             }
             conditions = [{
@@ -223,10 +224,10 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               value: localOptions === null || localOptions === void 0 || (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.address
             }];
             userId = userCustomerId || session.user.id;
-            _context.next = 38;
+            _context.n = 6;
             return ordering.setAccessToken(session.token).users(userId).addresses().where(conditions).get();
-          case 38:
-            addressesResponse = _context.sent;
+          case 6:
+            addressesResponse = _context.v;
             address = addressesResponse.content.result.find(function (address) {
               var _localOptions$address2, _localOptions$address3, _localOptions$address4, _address$location, _localOptions$address5, _address$location2, _localOptions$address6, _localOptions$address7, _localOptions$address8, _localOptions$address9;
               localOptions.address.internal_number = ((_localOptions$address2 = localOptions.address) === null || _localOptions$address2 === void 0 ? void 0 : _localOptions$address2.internal_number) || null;
@@ -235,33 +236,33 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               return (address === null || address === void 0 || (_address$location = address.location) === null || _address$location === void 0 ? void 0 : _address$location.lat) === (localOptions === null || localOptions === void 0 || (_localOptions$address5 = localOptions.address) === null || _localOptions$address5 === void 0 ? void 0 : _localOptions$address5.location.lat) && (address === null || address === void 0 || (_address$location2 = address.location) === null || _address$location2 === void 0 ? void 0 : _address$location2.lng) === (localOptions === null || localOptions === void 0 || (_localOptions$address6 = localOptions.address) === null || _localOptions$address6 === void 0 || (_localOptions$address6 = _localOptions$address6.location) === null || _localOptions$address6 === void 0 ? void 0 : _localOptions$address6.lng) && (address === null || address === void 0 ? void 0 : address.internal_number) === (localOptions === null || localOptions === void 0 || (_localOptions$address7 = localOptions.address) === null || _localOptions$address7 === void 0 ? void 0 : _localOptions$address7.internal_number) && (address === null || address === void 0 ? void 0 : address.zipcode) === (localOptions === null || localOptions === void 0 || (_localOptions$address8 = localOptions.address) === null || _localOptions$address8 === void 0 ? void 0 : _localOptions$address8.zipcode) && (address === null || address === void 0 ? void 0 : address.address_notes) === (localOptions === null || localOptions === void 0 || (_localOptions$address9 = localOptions.address) === null || _localOptions$address9 === void 0 ? void 0 : _localOptions$address9.address_notes);
             });
             if (address) {
-              _context.next = 51;
+              _context.n = 8;
               break;
             }
             Object.keys(localOptions.address).forEach(function (key) {
               var _localOptions$address0, _localOptions$address1;
               return (localOptions === null || localOptions === void 0 || (_localOptions$address0 = localOptions.address) === null || _localOptions$address0 === void 0 ? void 0 : _localOptions$address0[key]) === null && (localOptions === null || localOptions === void 0 || (_localOptions$address1 = localOptions.address) === null || _localOptions$address1 === void 0 || delete _localOptions$address1[key]);
             });
-            _context.next = 44;
+            _context.n = 7;
             return ordering.setAccessToken(session.token).users(userId).addresses().save(localOptions.address);
-          case 44:
-            _yield$ordering$setAc = _context.sent;
+          case 7:
+            _yield$ordering$setAc = _context.v;
             _yield$ordering$setAc2 = _yield$ordering$setAc.content;
             _error = _yield$ordering$setAc2.error;
             _result = _yield$ordering$setAc2.result;
             if (!_error) {
               address = _result;
             }
-            _context.next = 53;
+            _context.n = 9;
             break;
-          case 51:
-            _context.next = 53;
+          case 8:
+            _context.n = 9;
             return ordering.setAccessToken(session.token).users(userId).addresses(address.id).save({
               default: true
             });
-          case 53:
+          case 9:
             address && (_options3.address_id = address.id);
-          case 54:
+          case 10:
             if (localOptions.type) {
               _options3.type = localOptions.type;
             }
@@ -281,22 +282,22 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 loading: false
               }));
             }
-            _context.next = 61;
+            _context.n = 11;
             return strategy.removeItem('options');
-          case 61:
-            _context.next = 64;
+          case 11:
+            _context.n = 13;
             break;
-          case 63:
+          case 12:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-          case 64:
-            _context.next = 71;
+          case 13:
+            _context.n = 15;
             break;
-          case 66:
-            _context.prev = 66;
-            _context.t0 = _context["catch"](0);
-            message = _context.t0 !== null && _context.t0 !== void 0 && (_err$message = _context.t0.message) !== null && _err$message !== void 0 && _err$message.includes('Internal error') ? 'INTERNAL_ERROR' : !_context.t0.message ? t('NETWORK_ERROR', 'Network error') : _context.t0.message;
+          case 14:
+            _context.p = 14;
+            _t = _context.v;
+            message = _t !== null && _t !== void 0 && (_err$message = _t.message) !== null && _err$message !== void 0 && _err$message.includes('Internal error') ? 'INTERNAL_ERROR' : !_t.message ? t('NETWORK_ERROR', 'Network error') : _t.message;
             setAlert({
               show: true,
               content: [message]
@@ -304,11 +305,10 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-          case 71:
-          case "end":
-            return _context.stop();
+          case 15:
+            return _context.a(2);
         }
-      }, _callee, null, [[0, 66]]);
+      }, _callee, null, [[0, 14]]);
     }));
     return function refreshOrderOptions() {
       return _ref2.apply(this, arguments);
@@ -340,80 +340,79 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Change order address
    */
   var changeAddress = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(addressId, params) {
+    var _ref3 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(addressId, params) {
       var _state$options8;
       var isCountryCodeChanged, optionsStorage, options, _state$options9, _params, _params$address;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
+      return _regenerator().w(function (_context2) {
+        while (1) switch (_context2.n) {
           case 0:
             isCountryCodeChanged = ((_state$options8 = state.options) === null || _state$options8 === void 0 || (_state$options8 = _state$options8.address) === null || _state$options8 === void 0 ? void 0 : _state$options8.country_code) !== (params === null || params === void 0 ? void 0 : params.country_code);
             if (!(_typeof(addressId) === 'object')) {
-              _context2.next = 11;
+              _context2.n = 3;
               break;
             }
-            _context2.next = 4;
+            _context2.n = 1;
             return strategy.getItem('options', true);
-          case 4:
-            optionsStorage = _context2.sent;
+          case 1:
+            optionsStorage = _context2.v;
             options = _objectSpread(_objectSpread(_objectSpread({}, state.options), optionsStorage), {}, {
               address: _objectSpread(_objectSpread({}, optionsStorage === null || optionsStorage === void 0 ? void 0 : optionsStorage.address), addressId)
             });
             if (!session.auth) {
               options.type = state === null || state === void 0 || (_state$options9 = state.options) === null || _state$options9 === void 0 ? void 0 : _state$options9.type;
             }
-            _context2.next = 9;
+            _context2.n = 2;
             return strategy.setItem('options', options, true);
-          case 9:
+          case 2:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               options: options
             }));
-            return _context2.abrupt("return");
-          case 11:
+            return _context2.a(2);
+          case 3:
             _params = {
               country_code: params === null || params === void 0 ? void 0 : params.country_code
             };
             (params === null || params === void 0 ? void 0 : params.type) && (_params.type = params === null || params === void 0 ? void 0 : params.type);
             if (!(params && params !== null && params !== void 0 && params.address && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
-              _context2.next = 19;
+              _context2.n = 5;
               break;
             }
             _params.address_id = params === null || params === void 0 || (_params$address = params.address) === null || _params$address === void 0 ? void 0 : _params$address.id;
-            _context2.next = 17;
+            _context2.n = 4;
             return updateOrderOptions(_params);
-          case 17:
+          case 4:
             if (isCountryCodeChanged) {
               events.emit('country_code_changed', params === null || params === void 0 ? void 0 : params.country_code);
             }
-            return _context2.abrupt("return");
-          case 19:
+            return _context2.a(2);
+          case 5:
             addressId && (_params.address_id = addressId);
             if (!(params && params !== null && params !== void 0 && params.isEdit)) {
-              _context2.next = 27;
+              _context2.n = 8;
               break;
             }
             if (!(addressId !== state.options.address_id)) {
-              _context2.next = 23;
+              _context2.n = 6;
               break;
             }
-            return _context2.abrupt("return");
-          case 23:
-            _context2.next = 25;
+            return _context2.a(2);
+          case 6:
+            _context2.n = 7;
             return updateOrderOptions(_params);
-          case 25:
+          case 7:
             if (isCountryCodeChanged) {
               events.emit('country_code_changed', params === null || params === void 0 ? void 0 : params.country_code);
             }
-            return _context2.abrupt("return");
-          case 27:
-            _context2.next = 29;
+            return _context2.a(2);
+          case 8:
+            _context2.n = 9;
             return updateOrderOptions(_params);
-          case 29:
+          case 9:
             if (isCountryCodeChanged) {
               events.emit('country_code_changed', params === null || params === void 0 ? void 0 : params.country_code);
             }
-          case 30:
-          case "end":
-            return _context2.stop();
+          case 10:
+            return _context2.a(2);
         }
       }, _callee2);
     }));
@@ -426,21 +425,21 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Change order type
    */
   var changeType = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(type) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(type) {
       var _state$options0;
       var options, cityId, params, _options;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.n) {
           case 0:
             options = _objectSpread(_objectSpread({}, state.options), {}, {
               type: type
             });
             if (!(state.options.type === type)) {
-              _context3.next = 3;
+              _context3.n = 1;
               break;
             }
-            return _context3.abrupt("return");
-          case 3:
+            return _context3.a(2);
+          case 1:
             cityId = (_state$options0 = state.options) === null || _state$options0 === void 0 ? void 0 : _state$options0.city_id;
             params = {
               type: type
@@ -449,21 +448,20 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               params.city_id = null;
             }
             if (session.auth) {
-              _context3.next = 11;
+              _context3.n = 3;
               break;
             }
             _options = _objectSpread(_objectSpread({}, options), params);
-            _context3.next = 10;
+            _context3.n = 2;
             return strategy.setItem('options', _options, true);
-          case 10:
+          case 2:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               options: _options
             }));
-          case 11:
+          case 3:
             updateOrderOptions(params);
-          case 12:
-          case "end":
-            return _context3.stop();
+          case 4:
+            return _context3.a(2);
         }
       }, _callee3);
     }));
@@ -476,10 +474,10 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Change order moment
    */
   var changeMoment = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(moment) {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(moment) {
       var momentUnix, momentFormatted, options;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.n) {
           case 0:
             momentUnix = moment ? moment.getTime() / 1000 : null;
             momentFormatted = momentUnix ? _dayjs.default.unix(momentUnix).utc().format('YYYY-MM-DD HH:mm:ss') : null;
@@ -487,28 +485,27 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               moment: momentFormatted
             });
             if (!(state.options.moment === momentFormatted)) {
-              _context4.next = 5;
+              _context4.n = 1;
               break;
             }
-            return _context4.abrupt("return");
-          case 5:
+            return _context4.a(2);
+          case 1:
             if (session.auth) {
-              _context4.next = 9;
+              _context4.n = 3;
               break;
             }
-            _context4.next = 8;
+            _context4.n = 2;
             return strategy.setItem('options', options, true);
-          case 8:
+          case 2:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               options: options
             }));
-          case 9:
+          case 3:
             updateOrderOptions({
               moment: momentUnix
             });
-          case 10:
-          case "end":
-            return _context4.stop();
+          case 4:
+            return _context4.a(2);
         }
       }, _callee4);
     }));
@@ -521,37 +518,36 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Change order city
    */
   var changeCityFilter = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(id) {
+    var _ref6 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(id) {
       var options;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.n) {
           case 0:
             options = _objectSpread(_objectSpread({}, state.options), {}, {
               city_id: id
             });
             if (!(state.options.city_id === id)) {
-              _context5.next = 3;
+              _context5.n = 1;
               break;
             }
-            return _context5.abrupt("return");
-          case 3:
+            return _context5.a(2);
+          case 1:
             if (session.auth) {
-              _context5.next = 7;
+              _context5.n = 3;
               break;
             }
-            _context5.next = 6;
+            _context5.n = 2;
             return strategy.setItem('options', options, true);
-          case 6:
+          case 2:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               options: options
             }));
-          case 7:
+          case 3:
             updateOrderOptions({
               city_id: id
             });
-          case 8:
-          case "end":
-            return _context5.stop();
+          case 4:
+            return _context5.a(2);
         }
       }, _callee5);
     }));
@@ -564,28 +560,28 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * @param {object} changes Changes to update order options
    */
   var updateOrderOptions = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(changes) {
-      var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options1, _ref8, _state$options10, options, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, _options4, _err$message2, message;
-      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-        while (1) switch (_context6.prev = _context6.next) {
+    var _ref7 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(changes) {
+      var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options1, _ref8, _state$options10, options, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, _options4, _err$message2, message, _t2;
+      return _regenerator().w(function (_context6) {
+        while (1) switch (_context6.p = _context6.n) {
           case 0:
             if (!session.auth) {
-              _context6.next = 40;
+              _context6.n = 7;
               break;
             }
-            _context6.next = 3;
+            _context6.n = 1;
             return strategy.getItem('country-code');
-          case 3:
-            countryCodeFromLocalStorage = _context6.sent;
-            _context6.next = 6;
+          case 1:
+            countryCodeFromLocalStorage = _context6.v;
+            _context6.n = 2;
             return strategy.getItem('user-customer', true);
-          case 6:
-            customerFromLocalStorage = _context6.sent;
+          case 2:
+            customerFromLocalStorage = _context6.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = _objectSpread(_objectSpread({}, changes), {}, {
               user_id: userCustomerId || session.user.id
             });
-            _context6.prev = 9;
+            _context6.p = 3;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
@@ -596,15 +592,15 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             };
             countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 || (_state$options1 = state.options) === null || _state$options1 === void 0 || (_state$options1 = _state$options1.address) === null || _state$options1 === void 0 ? void 0 : _state$options1.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : (_ref8 = countryCodeFromLocalStorage !== null && countryCodeFromLocalStorage !== void 0 ? countryCodeFromLocalStorage : changes === null || changes === void 0 ? void 0 : changes.country_code) !== null && _ref8 !== void 0 ? _ref8 : state === null || state === void 0 || (_state$options10 = state.options) === null || _state$options10 === void 0 || (_state$options10 = _state$options10.address) === null || _state$options10 === void 0 ? void 0 : _state$options10.country_code;
             if (!countryCode) {
-              _context6.next = 19;
+              _context6.n = 4;
               break;
             }
             options.headers = _objectSpread(_objectSpread({}, options.headers), {}, {
               'X-Country-Code-X': countryCode
             });
-            _context6.next = 19;
+            _context6.n = 4;
             return strategy.setItem('country-code', countryCode);
-          case 19:
+          case 4:
             if (franchiseId) {
               options.query = _objectSpread(_objectSpread({}, options.query), {}, {
                 franchise_id: franchiseId
@@ -613,10 +609,10 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             if (body !== null && body !== void 0 && body.country_code) {
               body === null || body === void 0 || delete body.country_code;
             }
-            _context6.next = 23;
+            _context6.n = 5;
             return ordering.setAccessToken(session.token).orderOptions().save(body, options);
-          case 23:
-            _yield$ordering$setAc3 = _context6.sent;
+          case 5:
+            _yield$ordering$setAc3 = _context6.v;
             _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
             error = _yield$ordering$setAc4.error;
             result = _yield$ordering$setAc4.result;
@@ -637,11 +633,11 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               loading: false
             }));
             state.loading = false;
-            return _context6.abrupt("return", !error);
-          case 33:
-            _context6.prev = 33;
-            _context6.t0 = _context6["catch"](9);
-            message = _context6.t0 !== null && _context6.t0 !== void 0 && (_err$message2 = _context6.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context6.t0.message;
+            return _context6.a(2, !error);
+          case 6:
+            _context6.p = 6;
+            _t2 = _context6.v;
+            message = _t2 !== null && _t2 !== void 0 && (_err$message2 = _t2.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _t2.message;
             setAlert({
               show: true,
               content: [message]
@@ -650,12 +646,11 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               loading: false
             }));
             state.loading = false;
-            return _context6.abrupt("return", false);
-          case 40:
-          case "end":
-            return _context6.stop();
+            return _context6.a(2, false);
+          case 7:
+            return _context6.a(2);
         }
-      }, _callee6, null, [[9, 33]]);
+      }, _callee6, null, [[3, 6]]);
     }));
     return function updateOrderOptions(_x6) {
       return _ref7.apply(this, arguments);
@@ -669,7 +664,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * @param {boolean} isQuickAddProduct option to add product when clicks
    */
   var addProduct = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product, cart, isQuickAddProduct) {
+    var _ref9 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7(product, cart, isQuickAddProduct) {
       var isPlatformProduct,
         countryCode,
         customerFromLocalStorage,
@@ -680,23 +675,24 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         _yield$ordering$setAc6,
         error,
         result,
-        _args7 = arguments;
-      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-        while (1) switch (_context7.prev = _context7.next) {
+        _args7 = arguments,
+        _t3;
+      return _regenerator().w(function (_context7) {
+        while (1) switch (_context7.p = _context7.n) {
           case 0:
             isPlatformProduct = _args7.length > 3 && _args7[3] !== undefined ? _args7[3] : false;
-            _context7.prev = 1;
+            _context7.p = 1;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context7.next = 5;
+            _context7.n = 2;
             return strategy.getItem('country-code');
-          case 5:
-            countryCode = _context7.sent;
-            _context7.next = 8;
+          case 2:
+            countryCode = _context7.v;
+            _context7.n = 3;
             return strategy.getItem('user-customer', true);
-          case 8:
-            customerFromLocalStorage = _context7.sent;
+          case 3:
+            customerFromLocalStorage = _context7.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             headers = {
               'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
@@ -713,12 +709,12 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 platform_product: _objectSpread({}, product)
               };
             }
-            _context7.next = 14;
+            _context7.n = 4;
             return ordering.setAccessToken(session.token).carts().addProduct(body, {
               headers: headers
             });
-          case 14:
-            _yield$ordering$setAc5 = _context7.sent;
+          case 4:
+            _yield$ordering$setAc5 = _context7.v;
             _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
             error = _yield$ordering$setAc6.error;
             result = _yield$ordering$setAc6.result;
@@ -741,39 +737,38 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               loading: false
             }));
             if (!isPlatformProduct) {
-              _context7.next = 24;
+              _context7.n = 5;
               break;
             }
-            return _context7.abrupt("return", {
+            return _context7.a(2, {
               error: error,
               result: result
             });
-          case 24:
-            return _context7.abrupt("return", !error);
-          case 25:
-            _context7.next = 35;
+          case 5:
+            return _context7.a(2, !error);
+          case 6:
+            _context7.n = 9;
             break;
-          case 27:
-            _context7.prev = 27;
-            _context7.t0 = _context7["catch"](1);
+          case 7:
+            _context7.p = 7;
+            _t3 = _context7.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
             if (!isPlatformProduct) {
-              _context7.next = 34;
+              _context7.n = 8;
               break;
             }
-            return _context7.abrupt("return", {
+            return _context7.a(2, {
               error: true,
-              result: _context7.t0.message
+              result: _t3.message
             });
-          case 34:
-            return _context7.abrupt("return", false);
-          case 35:
-          case "end":
-            return _context7.stop();
+          case 8:
+            return _context7.a(2, false);
+          case 9:
+            return _context7.a(2);
         }
-      }, _callee7, null, [[1, 27]]);
+      }, _callee7, null, [[1, 7]]);
     }));
     return function addProduct(_x7, _x8, _x9) {
       return _ref9.apply(this, arguments);
@@ -787,23 +782,23 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * @param {boolean} isQuickAddProduct option to add product when clicks
    */
   var addMultiProduct = /*#__PURE__*/function () {
-    var _ref0 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8(product, cart, isQuickAddProduct) {
-      var countryCode, customerFromLocalStorage, userCustomerId, headers, body, response, _yield$response$json, result, error;
-      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
-        while (1) switch (_context8.prev = _context8.next) {
+    var _ref0 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee8(product, cart, isQuickAddProduct) {
+      var countryCode, customerFromLocalStorage, userCustomerId, headers, body, response, _yield$response$json, result, error, _t4;
+      return _regenerator().w(function (_context8) {
+        while (1) switch (_context8.p = _context8.n) {
           case 0:
-            _context8.prev = 0;
+            _context8.p = 0;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context8.next = 4;
+            _context8.n = 1;
             return strategy.getItem('country-code');
-          case 4:
-            countryCode = _context8.sent;
-            _context8.next = 7;
+          case 1:
+            countryCode = _context8.v;
+            _context8.n = 2;
             return strategy.getItem('user-customer', true);
-          case 7:
-            customerFromLocalStorage = _context8.sent;
+          case 2:
+            customerFromLocalStorage = _context8.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             headers = {
               'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
@@ -814,7 +809,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               business_id: cart.business_id,
               user_id: userCustomerId || session.user.id
             };
-            _context8.next = 13;
+            _context8.n = 3;
             return fetch("".concat(ordering.root, "/carts/multi_product"), {
               method: 'POST',
               body: JSON.stringify(_objectSpread(_objectSpread({}, body), {}, {
@@ -825,12 +820,12 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 'Content-Type': 'application/json'
               })
             });
-          case 13:
-            response = _context8.sent;
-            _context8.next = 16;
+          case 3:
+            response = _context8.v;
+            _context8.n = 4;
             return response.json();
-          case 16:
-            _yield$response$json = _context8.sent;
+          case 4:
+            _yield$response$json = _context8.v;
             result = _yield$response$json.result;
             error = _yield$response$json.error;
             if (!error) {
@@ -851,19 +846,16 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context8.abrupt("return", !error);
-          case 24:
-            _context8.prev = 24;
-            _context8.t0 = _context8["catch"](0);
+            return _context8.a(2, !error);
+          case 5:
+            _context8.p = 5;
+            _t4 = _context8.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context8.abrupt("return", false);
-          case 28:
-          case "end":
-            return _context8.stop();
+            return _context8.a(2, false);
         }
-      }, _callee8, null, [[0, 24]]);
+      }, _callee8, null, [[0, 5]]);
     }));
     return function addMultiProduct(_x0, _x1, _x10) {
       return _ref0.apply(this, arguments);
@@ -874,23 +866,23 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Remove product to cart
    */
   var removeProduct = /*#__PURE__*/function () {
-    var _ref1 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9(product, cart) {
-      var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
-      return _regeneratorRuntime().wrap(function _callee9$(_context9) {
-        while (1) switch (_context9.prev = _context9.next) {
+    var _ref1 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee9(product, cart) {
+      var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result, _t5;
+      return _regenerator().w(function (_context9) {
+        while (1) switch (_context9.p = _context9.n) {
           case 0:
-            _context9.prev = 0;
+            _context9.p = 0;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context9.next = 4;
+            _context9.n = 1;
             return strategy.getItem('country-code');
-          case 4:
-            countryCode = _context9.sent;
-            _context9.next = 7;
+          case 1:
+            countryCode = _context9.v;
+            _context9.n = 2;
             return strategy.getItem('user-customer', true);
-          case 7:
-            customerFromLocalStorage = _context9.sent;
+          case 2:
+            customerFromLocalStorage = _context9.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = {
               product: {
@@ -901,15 +893,15 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               business_id: cart.business_id,
               user_id: userCustomerId || session.user.id
             };
-            _context9.next = 12;
+            _context9.n = 3;
             return ordering.setAccessToken(session.token).carts().removeProduct(body, {
               headers: {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
             });
-          case 12:
-            _yield$ordering$setAc7 = _context9.sent;
+          case 3:
+            _yield$ordering$setAc7 = _context9.v;
             _yield$ordering$setAc8 = _yield$ordering$setAc7.content;
             error = _yield$ordering$setAc8.error;
             result = _yield$ordering$setAc8.result;
@@ -926,19 +918,16 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context9.abrupt("return", !error);
-          case 21:
-            _context9.prev = 21;
-            _context9.t0 = _context9["catch"](0);
+            return _context9.a(2, !error);
+          case 4:
+            _context9.p = 4;
+            _t5 = _context9.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context9.abrupt("return", false);
-          case 25:
-          case "end":
-            return _context9.stop();
+            return _context9.a(2, false);
         }
-      }, _callee9, null, [[0, 21]]);
+      }, _callee9, null, [[0, 4]]);
     }));
     return function removeProduct(_x11, _x12) {
       return _ref1.apply(this, arguments);
@@ -949,7 +938,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Clear products of cart
    */
   var clearCart = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee0(uuid) {
+    var _ref10 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee0(uuid) {
       var configurations,
         countryCode,
         customerFromLocalStorage,
@@ -959,29 +948,30 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         _yield$response$json2,
         error,
         result,
-        _args0 = arguments;
-      return _regeneratorRuntime().wrap(function _callee0$(_context0) {
-        while (1) switch (_context0.prev = _context0.next) {
+        _args0 = arguments,
+        _t6;
+      return _regenerator().w(function (_context0) {
+        while (1) switch (_context0.p = _context0.n) {
           case 0:
             configurations = _args0.length > 1 && _args0[1] !== undefined ? _args0[1] : {};
-            _context0.prev = 1;
+            _context0.p = 1;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: !(configurations !== null && configurations !== void 0 && configurations.disableLoading)
             }));
-            _context0.next = 5;
+            _context0.n = 2;
             return strategy.getItem('country-code');
-          case 5:
-            countryCode = _context0.sent;
-            _context0.next = 8;
+          case 2:
+            countryCode = _context0.v;
+            _context0.n = 3;
             return strategy.getItem('user-customer', true);
-          case 8:
-            customerFromLocalStorage = _context0.sent;
+          case 3:
+            customerFromLocalStorage = _context0.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = JSON.stringify({
               uuid: uuid,
               user_id: userCustomerId || session.user.id
             });
-            _context0.next = 13;
+            _context0.n = 4;
             return fetch("".concat(ordering.root, "/carts/clear"), {
               method: 'POST',
               headers: {
@@ -993,12 +983,12 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               },
               body: body
             });
-          case 13:
-            response = _context0.sent;
-            _context0.next = 16;
+          case 4:
+            response = _context0.v;
+            _context0.n = 5;
             return response.json();
-          case 16:
-            _yield$response$json2 = _context0.sent;
+          case 5:
+            _yield$response$json2 = _context0.v;
             error = _yield$response$json2.error;
             result = _yield$response$json2.result;
             if (!error) {
@@ -1012,22 +1002,19 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context0.abrupt("return", {
+            return _context0.a(2, {
               error: error,
               result: result
             });
-          case 24:
-            _context0.prev = 24;
-            _context0.t0 = _context0["catch"](1);
+          case 6:
+            _context0.p = 6;
+            _t6 = _context0.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context0.abrupt("return", false);
-          case 28:
-          case "end":
-            return _context0.stop();
+            return _context0.a(2, false);
         }
-      }, _callee0, null, [[1, 24]]);
+      }, _callee0, null, [[1, 6]]);
     }));
     return function clearCart(_x13) {
       return _ref10.apply(this, arguments);
@@ -1038,38 +1025,38 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Update product to cart
    */
   var updateProduct = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee1(product, cart, isQuickAddProduct) {
-      var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc0, error, result;
-      return _regeneratorRuntime().wrap(function _callee1$(_context1) {
-        while (1) switch (_context1.prev = _context1.next) {
+    var _ref11 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee1(product, cart, isQuickAddProduct) {
+      var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc0, error, result, _t7;
+      return _regenerator().w(function (_context1) {
+        while (1) switch (_context1.p = _context1.n) {
           case 0:
-            _context1.prev = 0;
+            _context1.p = 0;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context1.next = 4;
+            _context1.n = 1;
             return strategy.getItem('country-code');
-          case 4:
-            countryCode = _context1.sent;
-            _context1.next = 7;
+          case 1:
+            countryCode = _context1.v;
+            _context1.n = 2;
             return strategy.getItem('user-customer', true);
-          case 7:
-            customerFromLocalStorage = _context1.sent;
+          case 2:
+            customerFromLocalStorage = _context1.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = {
               product: product,
               business_id: cart.business_id,
               user_id: userCustomerId || session.user.id
             };
-            _context1.next = 12;
+            _context1.n = 3;
             return ordering.setAccessToken(session.token).carts().updateProduct(body, {
               headers: {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
             });
-          case 12:
-            _yield$ordering$setAc9 = _context1.sent;
+          case 3:
+            _yield$ordering$setAc9 = _context1.v;
             _yield$ordering$setAc0 = _yield$ordering$setAc9.content;
             error = _yield$ordering$setAc0.error;
             result = _yield$ordering$setAc0.result;
@@ -1087,19 +1074,16 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context1.abrupt("return", !error);
-          case 21:
-            _context1.prev = 21;
-            _context1.t0 = _context1["catch"](0);
+            return _context1.a(2, !error);
+          case 4:
+            _context1.p = 4;
+            _t7 = _context1.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context1.abrupt("return", false);
-          case 25:
-          case "end":
-            return _context1.stop();
+            return _context1.a(2, false);
         }
-      }, _callee1, null, [[0, 21]]);
+      }, _callee1, null, [[0, 4]]);
     }));
     return function updateProduct(_x14, _x15, _x16) {
       return _ref11.apply(this, arguments);
@@ -1110,43 +1094,43 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Apply coupon to cart
    */
   var applyCoupon = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10(couponData, customParams) {
+    var _ref12 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee10(couponData, customParams) {
       var _state$carts;
-      var countryCode, response, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc1, content, result;
-      return _regeneratorRuntime().wrap(function _callee10$(_context10) {
-        while (1) switch (_context10.prev = _context10.next) {
+      var countryCode, response, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc1, content, result, _t8;
+      return _regenerator().w(function (_context10) {
+        while (1) switch (_context10.p = _context10.n) {
           case 0:
             if (couponData.business_id) {
-              _context10.next = 2;
+              _context10.n = 1;
               break;
             }
             throw new Error('`business_id` is required.');
-          case 2:
+          case 1:
             if (!(typeof couponData.coupon === 'undefined')) {
-              _context10.next = 4;
+              _context10.n = 2;
               break;
             }
             throw new Error('`coupon` is required.');
-          case 4:
+          case 2:
             if (!(((_state$carts = state.carts["businessId:".concat(couponData.business_id)]) === null || _state$carts === void 0 ? void 0 : _state$carts.coupon) === couponData.coupon)) {
-              _context10.next = 6;
+              _context10.n = 3;
               break;
             }
-            return _context10.abrupt("return");
-          case 6:
-            _context10.prev = 6;
+            return _context10.a(2);
+          case 3:
+            _context10.p = 3;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context10.next = 10;
+            _context10.n = 4;
             return strategy.getItem('country-code');
-          case 10:
-            countryCode = _context10.sent;
+          case 4:
+            countryCode = _context10.v;
             if (!(customParams && isAlsea)) {
-              _context10.next = 22;
+              _context10.n = 7;
               break;
             }
-            _context10.next = 14;
+            _context10.n = 5;
             return fetch('https://alsea-plugins.ordering.co/alseaplatform/vcoupon2.php', {
               method: 'POST',
               body: JSON.stringify({
@@ -1163,14 +1147,14 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 'X-Country-Code-X': countryCode
               }
             });
-          case 14:
-            response = _context10.sent;
-            _context10.next = 17;
+          case 5:
+            response = _context10.v;
+            _context10.n = 6;
             return response.json();
-          case 17:
-            _result2 = _context10.sent;
+          case 6:
+            _result2 = _context10.v;
             if (!(_result2.message !== "Cup\xF3n v\xE1lido")) {
-              _context10.next = 22;
+              _context10.n = 7;
               break;
             }
             setAlert({
@@ -1180,27 +1164,27 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context10.abrupt("return");
-          case 22:
-            _context10.next = 24;
+            return _context10.a(2);
+          case 7:
+            _context10.n = 8;
             return strategy.getItem('user-customer', true);
-          case 24:
-            customerFromLocalStorage = _context10.sent;
+          case 8:
+            customerFromLocalStorage = _context10.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = {
               business_id: couponData.business_id,
               coupon: couponData.coupon,
               user_id: userCustomerId || session.user.id
             };
-            _context10.next = 29;
+            _context10.n = 9;
             return ordering.setAccessToken(session.token).carts().applyCoupon(body, {
               headers: {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
             });
-          case 29:
-            _yield$ordering$setAc1 = _context10.sent;
+          case 9:
+            _yield$ordering$setAc1 = _context10.v;
             content = _yield$ordering$setAc1.content;
             result = content;
             if (!result.error) {
@@ -1215,51 +1199,48 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context10.abrupt("return", !result.error);
-          case 37:
-            _context10.prev = 37;
-            _context10.t0 = _context10["catch"](6);
+            return _context10.a(2, !result.error);
+          case 10:
+            _context10.p = 10;
+            _t8 = _context10.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context10.abrupt("return", false);
-          case 41:
-          case "end":
-            return _context10.stop();
+            return _context10.a(2, false);
         }
-      }, _callee10, null, [[6, 37]]);
+      }, _callee10, null, [[3, 10]]);
     }));
     return function applyCoupon(_x17, _x18) {
       return _ref12.apply(this, arguments);
     };
   }();
   var applyOffer = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee11(offerData) {
-      var _offerData$force, countryCode, response, result;
-      return _regeneratorRuntime().wrap(function _callee11$(_context11) {
-        while (1) switch (_context11.prev = _context11.next) {
+    var _ref13 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee11(offerData) {
+      var _offerData$force, countryCode, response, result, _t9;
+      return _regenerator().w(function (_context11) {
+        while (1) switch (_context11.p = _context11.n) {
           case 0:
             if (offerData.business_id) {
-              _context11.next = 2;
+              _context11.n = 1;
               break;
             }
             throw new Error('`business_id` is required.');
-          case 2:
+          case 1:
             if (!(typeof offerData.coupon === 'undefined')) {
-              _context11.next = 4;
+              _context11.n = 2;
               break;
             }
             throw new Error('`coupon` is required.');
-          case 4:
-            _context11.prev = 4;
+          case 2:
+            _context11.p = 2;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context11.next = 8;
+            _context11.n = 3;
             return strategy.getItem('country-code');
-          case 8:
-            countryCode = _context11.sent;
-            _context11.next = 11;
+          case 3:
+            countryCode = _context11.v;
+            _context11.n = 4;
             return fetch("".concat(ordering.root, "/carts/add_offer"), {
               method: 'POST',
               body: JSON.stringify({
@@ -1276,12 +1257,12 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 'X-Country-Code-X': countryCode
               }
             });
-          case 11:
-            response = _context11.sent;
-            _context11.next = 14;
+          case 4:
+            response = _context11.v;
+            _context11.n = 5;
             return response.json();
-          case 14:
-            result = _context11.sent;
+          case 5:
+            result = _context11.v;
             if (!result.error) {
               state.carts["businessId:".concat(result.result.business_id)] = result.result;
               events.emit('cart_updated', result.result);
@@ -1298,47 +1279,44 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context11.abrupt("return", !result.error);
-          case 20:
-            _context11.prev = 20;
-            _context11.t0 = _context11["catch"](4);
+            return _context11.a(2, !result.error);
+          case 6:
+            _context11.p = 6;
+            _t9 = _context11.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context11.abrupt("return", false);
-          case 24:
-          case "end":
-            return _context11.stop();
+            return _context11.a(2, false);
         }
-      }, _callee11, null, [[4, 20]]);
+      }, _callee11, null, [[2, 6]]);
     }));
     return function applyOffer(_x19) {
       return _ref13.apply(this, arguments);
     };
   }();
   var removeOffer = /*#__PURE__*/function () {
-    var _ref14 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee12(offerData) {
-      var countryCode, offerRemoveData, response, result;
-      return _regeneratorRuntime().wrap(function _callee12$(_context12) {
-        while (1) switch (_context12.prev = _context12.next) {
+    var _ref14 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee12(offerData) {
+      var countryCode, offerRemoveData, response, result, _t0;
+      return _regenerator().w(function (_context12) {
+        while (1) switch (_context12.p = _context12.n) {
           case 0:
             if (offerData.business_id) {
-              _context12.next = 2;
+              _context12.n = 1;
               break;
             }
             throw new Error('`business_id` is required.');
-          case 2:
+          case 1:
             if (!(typeof offerData.offer_id === 'undefined')) {
-              _context12.next = 4;
+              _context12.n = 2;
               break;
             }
             throw new Error('`offer_id` is required.');
-          case 4:
-            _context12.prev = 4;
-            _context12.next = 7;
+          case 2:
+            _context12.p = 2;
+            _context12.n = 3;
             return strategy.getItem('country-code');
-          case 7:
-            countryCode = _context12.sent;
+          case 3:
+            countryCode = _context12.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
@@ -1347,7 +1325,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               offer_id: offerData.offer_id
             };
             if (offerData.user_id) offerRemoveData.user_id = offerData.user_id;
-            _context12.next = 13;
+            _context12.n = 4;
             return fetch("".concat(ordering.root, "/carts/remove_offer"), {
               method: 'POST',
               body: JSON.stringify(offerRemoveData),
@@ -1359,12 +1337,12 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 'X-Country-Code-X': countryCode
               }
             });
-          case 13:
-            response = _context12.sent;
-            _context12.next = 16;
+          case 4:
+            response = _context12.v;
+            _context12.n = 5;
             return response.json();
-          case 16:
-            result = _context12.sent;
+          case 5:
+            result = _context12.v;
             if (!result.error) {
               state.carts["businessId:".concat(result.result.business_id)] = result.result;
               events.emit('cart_updated', result.result);
@@ -1378,19 +1356,16 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context12.abrupt("return", !result.error);
-          case 22:
-            _context12.prev = 22;
-            _context12.t0 = _context12["catch"](4);
+            return _context12.a(2, !result.error);
+          case 6:
+            _context12.p = 6;
+            _t0 = _context12.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context12.abrupt("return", false);
-          case 26:
-          case "end":
-            return _context12.stop();
+            return _context12.a(2, false);
         }
-      }, _callee12, null, [[4, 22]]);
+      }, _callee12, null, [[2, 6]]);
     }));
     return function removeOffer(_x20) {
       return _ref14.apply(this, arguments);
@@ -1401,7 +1376,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Apply coupon to cart
    */
   var changeDriverTip = /*#__PURE__*/function () {
-    var _ref15 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee13(businessId) {
+    var _ref15 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee13(businessId) {
       var _state$carts2;
       var driverTipRate,
         isFixedPrice,
@@ -1413,55 +1388,56 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         _yield$ordering$setAc11,
         error,
         result,
-        _args13 = arguments;
-      return _regeneratorRuntime().wrap(function _callee13$(_context13) {
-        while (1) switch (_context13.prev = _context13.next) {
+        _args13 = arguments,
+        _t1;
+      return _regenerator().w(function (_context13) {
+        while (1) switch (_context13.p = _context13.n) {
           case 0:
             driverTipRate = _args13.length > 1 && _args13[1] !== undefined ? _args13[1] : 0;
             isFixedPrice = _args13.length > 2 ? _args13[2] : undefined;
             if (businessId) {
-              _context13.next = 4;
+              _context13.n = 1;
               break;
             }
             throw new Error('`businessId` is required.');
-          case 4:
+          case 1:
             if (!(!driverTipRate && driverTipRate !== 0)) {
-              _context13.next = 6;
+              _context13.n = 2;
               break;
             }
             throw new Error('`driverTipRate` is required.');
-          case 6:
+          case 2:
             if (!(!state.carts["businessId:".concat(businessId)] || ((_state$carts2 = state.carts["businessId:".concat(businessId)]) === null || _state$carts2 === void 0 ? void 0 : _state$carts2.driver_tip_rate) === driverTipRate)) {
-              _context13.next = 8;
+              _context13.n = 3;
               break;
             }
-            return _context13.abrupt("return");
-          case 8:
-            _context13.prev = 8;
+            return _context13.a(2);
+          case 3:
+            _context13.p = 3;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context13.next = 12;
+            _context13.n = 4;
             return strategy.getItem('country-code');
-          case 12:
-            countryCode = _context13.sent;
-            _context13.next = 15;
+          case 4:
+            countryCode = _context13.v;
+            _context13.n = 5;
             return strategy.getItem('user-customer', true);
-          case 15:
-            customerFromLocalStorage = _context13.sent;
+          case 5:
+            customerFromLocalStorage = _context13.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = _defineProperty(_defineProperty({
               business_id: businessId
             }, isFixedPrice ? 'driver_tip' : 'driver_tip_rate', driverTipRate), "user_id", userCustomerId || session.user.id);
-            _context13.next = 20;
+            _context13.n = 6;
             return ordering.setAccessToken(session.token).carts().changeDriverTip(body, {
               headers: {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
             });
-          case 20:
-            _yield$ordering$setAc10 = _context13.sent;
+          case 6:
+            _yield$ordering$setAc10 = _context13.v;
             _yield$ordering$setAc11 = _yield$ordering$setAc10.content;
             error = _yield$ordering$setAc11.error;
             result = _yield$ordering$setAc11.result;
@@ -1477,19 +1453,16 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context13.abrupt("return", !error);
-          case 29:
-            _context13.prev = 29;
-            _context13.t0 = _context13["catch"](8);
+            return _context13.a(2, !error);
+          case 7:
+            _context13.p = 7;
+            _t1 = _context13.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context13.abrupt("return", false);
-          case 33:
-          case "end":
-            return _context13.stop();
+            return _context13.a(2, false);
         }
-      }, _callee13, null, [[8, 29]]);
+      }, _callee13, null, [[3, 7]]);
     }));
     return function changeDriverTip(_x21) {
       return _ref15.apply(this, arguments);
@@ -1500,48 +1473,48 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Change payment method
    */
   var changePaymethod = /*#__PURE__*/function () {
-    var _ref16 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee14(businessId, paymethodId, paymethodData) {
+    var _ref16 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee14(businessId, paymethodId, paymethodData) {
       var _state$carts3;
-      var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc12, _yield$ordering$setAc13, error, result;
-      return _regeneratorRuntime().wrap(function _callee14$(_context14) {
-        while (1) switch (_context14.prev = _context14.next) {
+      var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc12, _yield$ordering$setAc13, error, result, _t10;
+      return _regenerator().w(function (_context14) {
+        while (1) switch (_context14.p = _context14.n) {
           case 0:
             if (businessId) {
-              _context14.next = 2;
+              _context14.n = 1;
               break;
             }
             throw new Error('`businessId` is required.');
-          case 2:
+          case 1:
             if (paymethodId) {
-              _context14.next = 4;
+              _context14.n = 2;
               break;
             }
             throw new Error('`paymethodId` is required.');
-          case 4:
+          case 2:
             if (paymethodData) {
-              _context14.next = 6;
+              _context14.n = 3;
               break;
             }
             throw new Error('`paymethodData` is required.');
-          case 6:
+          case 3:
             if (!(!state.carts["businessId:".concat(businessId)] || ((_state$carts3 = state.carts["businessId:".concat(businessId)]) === null || _state$carts3 === void 0 ? void 0 : _state$carts3.paymethodId) === paymethodId)) {
-              _context14.next = 8;
+              _context14.n = 4;
               break;
             }
-            return _context14.abrupt("return");
-          case 8:
-            _context14.prev = 8;
+            return _context14.a(2);
+          case 4:
+            _context14.p = 4;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context14.next = 12;
+            _context14.n = 5;
             return strategy.getItem('country-code');
-          case 12:
-            countryCode = _context14.sent;
-            _context14.next = 15;
+          case 5:
+            countryCode = _context14.v;
+            _context14.n = 6;
             return strategy.getItem('user-customer', true);
-          case 15:
-            customerFromLocalStorage = _context14.sent;
+          case 6:
+            customerFromLocalStorage = _context14.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = {
               business_id: businessId,
@@ -1549,15 +1522,15 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               paymethod_data: paymethodData,
               user_id: userCustomerId !== null && userCustomerId !== void 0 ? userCustomerId : session.user.id
             };
-            _context14.next = 20;
+            _context14.n = 7;
             return ordering.setAccessToken(session.token).carts().changePaymethod(body, {
               headers: {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
             });
-          case 20:
-            _yield$ordering$setAc12 = _context14.sent;
+          case 7:
+            _yield$ordering$setAc12 = _context14.v;
             _yield$ordering$setAc13 = _yield$ordering$setAc12.content;
             error = _yield$ordering$setAc13.error;
             result = _yield$ordering$setAc13.result;
@@ -1568,20 +1541,17 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context14.abrupt("return", !error);
-          case 29:
-            _context14.prev = 29;
-            _context14.t0 = _context14["catch"](8);
+            return _context14.a(2, !error);
+          case 8:
+            _context14.p = 8;
+            _t10 = _context14.v;
             refreshOrderOptions();
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context14.abrupt("return", false);
-          case 34:
-          case "end":
-            return _context14.stop();
+            return _context14.a(2, false);
         }
-      }, _callee14, null, [[8, 29]]);
+      }, _callee14, null, [[4, 8]]);
     }));
     return function changePaymethod(_x22, _x23, _x24) {
       return _ref16.apply(this, arguments);
@@ -1592,23 +1562,23 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Place cart
    */
   var placeCart = /*#__PURE__*/function () {
-    var _ref17 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee15(cardId, data) {
-      var countryCode, customerFromLocalStorage, userCustomerId, body, headers, _yield$ordering$setAc14, _yield$ordering$setAc15, error, result, orderObject;
-      return _regeneratorRuntime().wrap(function _callee15$(_context15) {
-        while (1) switch (_context15.prev = _context15.next) {
+    var _ref17 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee15(cardId, data) {
+      var countryCode, customerFromLocalStorage, userCustomerId, body, headers, _yield$ordering$setAc14, _yield$ordering$setAc15, error, result, orderObject, _t11;
+      return _regenerator().w(function (_context15) {
+        while (1) switch (_context15.p = _context15.n) {
           case 0:
-            _context15.prev = 0;
+            _context15.p = 0;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context15.next = 4;
+            _context15.n = 1;
             return strategy.getItem('country-code');
-          case 4:
-            countryCode = _context15.sent;
-            _context15.next = 7;
+          case 1:
+            countryCode = _context15.v;
+            _context15.n = 2;
             return strategy.getItem('user-customer', true);
-          case 7:
-            customerFromLocalStorage = _context15.sent;
+          case 2:
+            customerFromLocalStorage = _context15.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = _objectSpread(_objectSpread({}, data), {}, {
               user_id: userCustomerId || session.user.id
@@ -1622,17 +1592,17 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 'User-Agent': userAgent
               });
             }
-            _context15.next = 14;
+            _context15.n = 3;
             return ordering.setAccessToken(session.token).carts(cardId).place(body, {
               headers: headers
             });
-          case 14:
-            _yield$ordering$setAc14 = _context15.sent;
+          case 3:
+            _yield$ordering$setAc14 = _context15.v;
             _yield$ordering$setAc15 = _yield$ordering$setAc14.content;
             error = _yield$ordering$setAc15.error;
             result = _yield$ordering$setAc15.result;
             if (error) {
-              _context15.next = 22;
+              _context15.n = 4;
               break;
             }
             if (result.status !== 1) {
@@ -1653,9 +1623,9 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               };
               events.emit('order_placed', orderObject);
             }
-            _context15.next = 25;
+            _context15.n = 5;
             break;
-          case 22:
+          case 4:
             setAlert({
               show: true,
               content: result
@@ -1663,30 +1633,27 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context15.abrupt("return");
-          case 25:
+            return _context15.a(2);
+          case 5:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context15.abrupt("return", {
+            return _context15.a(2, {
               error: error,
               result: result
             });
-          case 29:
-            _context15.prev = 29;
-            _context15.t0 = _context15["catch"](0);
+          case 6:
+            _context15.p = 6;
+            _t11 = _context15.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context15.abrupt("return", {
+            return _context15.a(2, {
               error: true,
-              result: [_context15.t0.message]
+              result: [_t11.message]
             });
-          case 33:
-          case "end":
-            return _context15.stop();
         }
-      }, _callee15, null, [[0, 29]]);
+      }, _callee15, null, [[0, 6]]);
     }));
     return function placeCart(_x25, _x26) {
       return _ref17.apply(this, arguments);
@@ -1697,23 +1664,23 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Place multi carts
    */
   var placeMultiCarts = /*#__PURE__*/function () {
-    var _ref18 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee16(data, cartUuid) {
-      var countryCode, customerFromLocalStorage, userCustomerId, body, requestOptions, response, _yield$response$json3, error, result;
-      return _regeneratorRuntime().wrap(function _callee16$(_context16) {
-        while (1) switch (_context16.prev = _context16.next) {
+    var _ref18 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee16(data, cartUuid) {
+      var countryCode, customerFromLocalStorage, userCustomerId, body, requestOptions, response, _yield$response$json3, error, result, _t12;
+      return _regenerator().w(function (_context16) {
+        while (1) switch (_context16.p = _context16.n) {
           case 0:
-            _context16.prev = 0;
+            _context16.p = 0;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context16.next = 4;
+            _context16.n = 1;
             return strategy.getItem('country-code');
-          case 4:
-            countryCode = _context16.sent;
-            _context16.next = 7;
+          case 1:
+            countryCode = _context16.v;
+            _context16.n = 2;
             return strategy.getItem('user-customer', true);
-          case 7:
-            customerFromLocalStorage = _context16.sent;
+          case 2:
+            customerFromLocalStorage = _context16.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = _objectSpread(_objectSpread({}, data), {}, {
               user_id: userCustomerId || session.user.id
@@ -1729,14 +1696,14 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
               },
               body: JSON.stringify(body)
             };
-            _context16.next = 13;
+            _context16.n = 3;
             return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid, "/place"), requestOptions);
-          case 13:
-            response = _context16.sent;
-            _context16.next = 16;
+          case 3:
+            response = _context16.v;
+            _context16.n = 4;
             return response.json();
-          case 16:
-            _yield$response$json3 = _context16.sent;
+          case 4:
+            _yield$response$json3 = _context16.v;
             error = _yield$response$json3.error;
             result = _yield$response$json3.result;
             if (!error) {
@@ -1763,25 +1730,22 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context16.abrupt("return", {
+            return _context16.a(2, {
               error: error,
               result: result
             });
-          case 24:
-            _context16.prev = 24;
-            _context16.t0 = _context16["catch"](0);
+          case 5:
+            _context16.p = 5;
+            _t12 = _context16.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context16.abrupt("return", {
+            return _context16.a(2, {
               error: true,
-              result: [_context16.t0.message]
+              result: [_t12.message]
             });
-          case 28:
-          case "end":
-            return _context16.stop();
         }
-      }, _callee16, null, [[0, 24]]);
+      }, _callee16, null, [[0, 5]]);
     }));
     return function placeMultiCarts(_x27, _x28) {
       return _ref18.apply(this, arguments);
@@ -1792,53 +1756,53 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Confirm cart
    */
   var confirmCart = /*#__PURE__*/function () {
-    var _ref19 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee17(cardId, data) {
-      var countryCode, customerFromLocalStorage, userCustomerId, body, fetchurl, _fetchurl, _fetchurl$content, error, result, cart;
-      return _regeneratorRuntime().wrap(function _callee17$(_context17) {
-        while (1) switch (_context17.prev = _context17.next) {
+    var _ref19 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee17(cardId, data) {
+      var countryCode, customerFromLocalStorage, userCustomerId, body, fetchurl, _fetchurl, _fetchurl$content, error, result, cart, _t13;
+      return _regenerator().w(function (_context17) {
+        while (1) switch (_context17.p = _context17.n) {
           case 0:
-            _context17.prev = 0;
+            _context17.p = 0;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context17.next = 4;
+            _context17.n = 1;
             return strategy.getItem('country-code');
-          case 4:
-            countryCode = _context17.sent;
-            _context17.next = 7;
+          case 1:
+            countryCode = _context17.v;
+            _context17.n = 2;
             return strategy.getItem('user-customer', true);
-          case 7:
-            customerFromLocalStorage = _context17.sent;
+          case 2:
+            customerFromLocalStorage = _context17.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = _objectSpread(_objectSpread({}, data), {}, {
               user_id: userCustomerId || session.user.id
             });
             if (!(body.user_id === userCustomerId || data)) {
-              _context17.next = 16;
+              _context17.n = 4;
               break;
             }
-            _context17.next = 13;
+            _context17.n = 3;
             return ordering.setAccessToken(session.token).carts(cardId).confirmWithData(body, {
               headers: {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
             });
-          case 13:
-            fetchurl = _context17.sent;
-            _context17.next = 19;
+          case 3:
+            fetchurl = _context17.v;
+            _context17.n = 6;
             break;
-          case 16:
-            _context17.next = 18;
+          case 4:
+            _context17.n = 5;
             return ordering.setAccessToken(session.token).carts(cardId).confirm(body, {
               headers: {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
             });
-          case 18:
-            fetchurl = _context17.sent;
-          case 19:
+          case 5:
+            fetchurl = _context17.v;
+          case 6:
             _fetchurl = fetchurl, _fetchurl$content = _fetchurl.content, error = _fetchurl$content.error, result = _fetchurl$content.result, cart = _fetchurl$content.cart;
             if (!error) {
               if (result.status !== 1) {
@@ -1854,25 +1818,22 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context17.abrupt("return", {
+            return _context17.a(2, {
               error: error,
               result: result
             });
-          case 25:
-            _context17.prev = 25;
-            _context17.t0 = _context17["catch"](0);
+          case 7:
+            _context17.p = 7;
+            _t13 = _context17.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context17.abrupt("return", {
+            return _context17.a(2, {
               error: true,
-              result: [_context17.t0.message]
+              result: [_t13.message]
             });
-          case 29:
-          case "end":
-            return _context17.stop();
         }
-      }, _callee17, null, [[0, 25]]);
+      }, _callee17, null, [[0, 7]]);
     }));
     return function confirmCart(_x29, _x30) {
       return _ref19.apply(this, arguments);
@@ -1883,19 +1844,19 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
   * Confirm multi carts
   */
   var confirmMultiCarts = /*#__PURE__*/function () {
-    var _ref20 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee18(cartUuid) {
-      var countryCode, requestOptions, response, _yield$response$json4, result, error;
-      return _regeneratorRuntime().wrap(function _callee18$(_context18) {
-        while (1) switch (_context18.prev = _context18.next) {
+    var _ref20 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee18(cartUuid) {
+      var countryCode, requestOptions, response, _yield$response$json4, result, error, _t14;
+      return _regenerator().w(function (_context18) {
+        while (1) switch (_context18.p = _context18.n) {
           case 0:
-            _context18.prev = 0;
+            _context18.p = 0;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context18.next = 4;
+            _context18.n = 1;
             return strategy.getItem('country-code');
-          case 4:
-            countryCode = _context18.sent;
+          case 1:
+            countryCode = _context18.v;
             requestOptions = {
               method: 'POST',
               headers: {
@@ -1906,14 +1867,14 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 'X-Country-Code-X': countryCode
               }
             };
-            _context18.next = 8;
+            _context18.n = 2;
             return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid, "/confirm"), requestOptions);
-          case 8:
-            response = _context18.sent;
-            _context18.next = 11;
+          case 2:
+            response = _context18.v;
+            _context18.n = 3;
             return response.json();
-          case 11:
-            _yield$response$json4 = _context18.sent;
+          case 3:
+            _yield$response$json4 = _context18.v;
             result = _yield$response$json4.result;
             error = _yield$response$json4.error;
             if (!error) {
@@ -1929,25 +1890,22 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context18.abrupt("return", {
+            return _context18.a(2, {
               error: error,
               result: result
             });
-          case 19:
-            _context18.prev = 19;
-            _context18.t0 = _context18["catch"](0);
+          case 4:
+            _context18.p = 4;
+            _t14 = _context18.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context18.abrupt("return", {
+            return _context18.a(2, {
               error: true,
-              result: [_context18.t0.message]
+              result: [_t14.message]
             });
-          case 23:
-          case "end":
-            return _context18.stop();
         }
-      }, _callee18, null, [[0, 19]]);
+      }, _callee18, null, [[0, 4]]);
     }));
     return function confirmMultiCarts(_x31) {
       return _ref20.apply(this, arguments);
@@ -1958,7 +1916,7 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
    * Reorder an order and get cart
    */
   var reorder = /*#__PURE__*/function () {
-    var _ref21 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee19(orderId, offAlert) {
+    var _ref21 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee19(orderId, offAlert) {
       var configurations,
         countryCode,
         customerFromLocalStorage,
@@ -1969,23 +1927,24 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
         _yield$ordering$setAc17,
         error,
         result,
-        _args19 = arguments;
-      return _regeneratorRuntime().wrap(function _callee19$(_context19) {
-        while (1) switch (_context19.prev = _context19.next) {
+        _args19 = arguments,
+        _t15;
+      return _regenerator().w(function (_context19) {
+        while (1) switch (_context19.p = _context19.n) {
           case 0:
             configurations = _args19.length > 2 && _args19[2] !== undefined ? _args19[2] : {};
-            _context19.prev = 1;
+            _context19.p = 1;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: !(configurations !== null && configurations !== void 0 && configurations.disableLoading)
             }));
-            _context19.next = 5;
+            _context19.n = 2;
             return strategy.getItem('country-code');
-          case 5:
-            countryCode = _context19.sent;
-            _context19.next = 8;
+          case 2:
+            countryCode = _context19.v;
+            _context19.n = 3;
             return strategy.getItem('user-customer', true);
-          case 8:
-            customerFromLocalStorage = _context19.sent;
+          case 3:
+            customerFromLocalStorage = _context19.v;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             query = userCustomerId ? {
               user_id: userCustomerId
@@ -1999,10 +1958,10 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             if (query) {
               options.query = query;
             }
-            _context19.next = 15;
+            _context19.n = 4;
             return ordering.setAccessToken(session.token).orders(orderId).reorder(options);
-          case 15:
-            _yield$ordering$setAc16 = _context19.sent;
+          case 4:
+            _yield$ordering$setAc16 = _context19.v;
             _yield$ordering$setAc17 = _yield$ordering$setAc16.content;
             error = _yield$ordering$setAc17.error;
             result = _yield$ordering$setAc17.result;
@@ -2018,41 +1977,38 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context19.abrupt("return", {
+            return _context19.a(2, {
               error: error,
               result: result
             });
-          case 24:
-            _context19.prev = 24;
-            _context19.t0 = _context19["catch"](1);
+          case 5:
+            _context19.p = 5;
+            _t15 = _context19.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context19.abrupt("return", {
+            return _context19.a(2, {
               error: true,
-              result: [_context19.t0.message]
+              result: [_t15.message]
             });
-          case 28:
-          case "end":
-            return _context19.stop();
         }
-      }, _callee19, null, [[1, 24]]);
+      }, _callee19, null, [[1, 5]]);
     }));
     return function reorder(_x32, _x33) {
       return _ref21.apply(this, arguments);
     };
   }();
   var setOptionFromLocalStorage = /*#__PURE__*/function () {
-    var _ref22 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee20() {
+    var _ref22 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee20() {
       var _configState$configs3, _state$options11;
       var optionsLocalStorage;
-      return _regeneratorRuntime().wrap(function _callee20$(_context20) {
-        while (1) switch (_context20.prev = _context20.next) {
+      return _regenerator().w(function (_context20) {
+        while (1) switch (_context20.n) {
           case 0:
-            _context20.next = 2;
+            _context20.n = 1;
             return strategy.getItem('options', true);
-          case 2:
-            optionsLocalStorage = _context20.sent;
+          case 1:
+            optionsLocalStorage = _context20.v;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false,
               options: isDisabledDefaultOpts ? {
@@ -2065,9 +2021,8 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 city_id: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.city_id) || null
               }
             }));
-          case 4:
-          case "end":
-            return _context20.stop();
+          case 2:
+            return _context20.a(2);
         }
       }, _callee20);
     }));
@@ -2080,13 +2035,13 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
   * get Latest past Order that has no review
   */
   var getLastOrderHasNoReview = /*#__PURE__*/function () {
-    var _ref23 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee21() {
+    var _ref23 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee21() {
       var pastOrderTypes, where, options, _yield$ordering$setAc18, _yield$ordering$setAc19, result, error, _noRviewOrder, _options5, _yield$ordering$setAc20, _yield$ordering$setAc21, _result3, _error2, noReviewOrders;
-      return _regeneratorRuntime().wrap(function _callee21$(_context21) {
-        while (1) switch (_context21.prev = _context21.next) {
+      return _regenerator().w(function (_context21) {
+        while (1) switch (_context21.n) {
           case 0:
             if (!(session !== null && session !== void 0 && session.token)) {
-              _context21.next = 38;
+              _context21.n = 9;
               break;
             }
             pastOrderTypes = [1, 2, 5, 6, 10, 11, 12, 15, 16, 17];
@@ -2138,22 +2093,22 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 where: where
               }
             };
-            _context21.next = 9;
+            _context21.n = 1;
             return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(options);
-          case 9:
-            _yield$ordering$setAc18 = _context21.sent;
+          case 1:
+            _yield$ordering$setAc18 = _context21.v;
             _yield$ordering$setAc19 = _yield$ordering$setAc18.content;
             result = _yield$ordering$setAc19.result;
             error = _yield$ordering$setAc19.error;
             if (!(!error && (result === null || result === void 0 ? void 0 : result.length) > 0)) {
-              _context21.next = 35;
+              _context21.n = 7;
               break;
             }
             _noRviewOrder = result === null || result === void 0 ? void 0 : result.find(function (order) {
               return !(order !== null && order !== void 0 && order.review);
             });
             if (!(_noRviewOrder !== null && _noRviewOrder !== void 0 && _noRviewOrder.cart_group_id)) {
-              _context21.next = 32;
+              _context21.n = 5;
               break;
             }
             where.push({
@@ -2167,41 +2122,40 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 page_size: 10
               }
             };
-            _context21.next = 20;
+            _context21.n = 2;
             return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(_options5);
-          case 20:
-            _yield$ordering$setAc20 = _context21.sent;
+          case 2:
+            _yield$ordering$setAc20 = _context21.v;
             _yield$ordering$setAc21 = _yield$ordering$setAc20.content;
             _result3 = _yield$ordering$setAc21.result;
             _error2 = _yield$ordering$setAc21.error;
             if (_error2) {
-              _context21.next = 29;
+              _context21.n = 3;
               break;
             }
             noReviewOrders = _result3.filter(function (order) {
               return !(order !== null && order !== void 0 && order.review);
             });
-            return _context21.abrupt("return", noReviewOrders);
-          case 29:
-            return _context21.abrupt("return", null);
-          case 30:
-            _context21.next = 33;
+            return _context21.a(2, noReviewOrders);
+          case 3:
+            return _context21.a(2, null);
+          case 4:
+            _context21.n = 6;
             break;
-          case 32:
-            return _context21.abrupt("return", _noRviewOrder);
-          case 33:
-            _context21.next = 36;
+          case 5:
+            return _context21.a(2, _noRviewOrder);
+          case 6:
+            _context21.n = 8;
             break;
-          case 35:
-            return _context21.abrupt("return", null);
-          case 36:
-            _context21.next = 39;
+          case 7:
+            return _context21.a(2, null);
+          case 8:
+            _context21.n = 10;
             break;
-          case 38:
-            return _context21.abrupt("return", null);
-          case 39:
-          case "end":
-            return _context21.stop();
+          case 9:
+            return _context21.a(2, null);
+          case 10:
+            return _context21.a(2);
         }
       }, _callee21);
     }));
@@ -2213,28 +2167,27 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
     setState(_objectSpread(_objectSpread({}, state), values));
   };
   var setUserCustomerOptions = /*#__PURE__*/function () {
-    var _ref24 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee22(params) {
+    var _ref24 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee22(params) {
       var _params$options, _params$customer;
       var options;
-      return _regeneratorRuntime().wrap(function _callee22$(_context22) {
-        while (1) switch (_context22.prev = _context22.next) {
+      return _regenerator().w(function (_context22) {
+        while (1) switch (_context22.n) {
           case 0:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
             options = (_params$options = params.options) !== null && _params$options !== void 0 ? _params$options : {};
-            _context22.next = 4;
+            _context22.n = 1;
             return setUserCustomer((_params$customer = params.customer) !== null && _params$customer !== void 0 ? _params$customer : {}, true);
-          case 4:
-            _context22.next = 6;
+          case 1:
+            _context22.n = 2;
             return updateOrderOptions(options);
-          case 6:
+          case 2:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-          case 7:
-          case "end":
-            return _context22.stop();
+          case 3:
+            return _context22.a(2);
         }
       }, _callee22);
     }));
@@ -2248,21 +2201,21 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
     }));
   };
   var handleLogEvent = /*#__PURE__*/function () {
-    var _ref25 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee23(events) {
-      var countryCode, headers;
-      return _regeneratorRuntime().wrap(function _callee23$(_context23) {
-        while (1) switch (_context23.prev = _context23.next) {
+    var _ref25 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee23(events) {
+      var countryCode, headers, _t16;
+      return _regenerator().w(function (_context23) {
+        while (1) switch (_context23.p = _context23.n) {
           case 0:
-            _context23.prev = 0;
-            _context23.next = 3;
+            _context23.p = 0;
+            _context23.n = 1;
             return strategy.getItem('country-code');
-          case 3:
-            countryCode = _context23.sent;
+          case 1:
+            countryCode = _context23.v;
             headers = {
               'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
               'X-Country-Code-X': countryCode
             };
-            _context23.next = 7;
+            _context23.n = 2;
             return fetch("".concat(ordering.root, "/tracking_events"), {
               method: 'POST',
               body: JSON.stringify({
@@ -2273,17 +2226,16 @@ var OrderProvider = exports.OrderProvider = function OrderProvider(_ref) {
                 'Content-Type': 'application/json'
               })
             });
-          case 7:
-            _context23.next = 11;
+          case 2:
+            _context23.n = 4;
             break;
-          case 9:
-            _context23.prev = 9;
-            _context23.t0 = _context23["catch"](0);
-          case 11:
-          case "end":
-            return _context23.stop();
+          case 3:
+            _context23.p = 3;
+            _t16 = _context23.v;
+          case 4:
+            return _context23.a(2);
         }
-      }, _callee23, null, [[0, 9]]);
+      }, _callee23, null, [[0, 3]]);
     }));
     return function handleLogEvent(_x35) {
       return _ref25.apply(this, arguments);
