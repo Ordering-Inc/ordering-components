@@ -121,8 +121,7 @@ export const UtilsProviders = ({ children }) => {
       separator: options?.separator || configState.configs.format_number_decimal_separator?.value || ',',
       thousand: options?.thousand || configState.configs.format_number_thousand_separator?.value || '.',
       currency: options?.currency || configState.configs.format_number_currency?.value || '$',
-      currencyPosition: options?.currencyPosition || configState.configs.currency_position?.value || 'left',
-      isTruncable: options?.isTruncable || (configState.configs.format_number_thousand_separator?.value === '.' && configState.configs.format_number_decimal_separator?.value === ',')
+      currencyPosition: options?.currencyPosition || configState.configs.currency_position?.value || 'left'
     }
     let number = parseNumber(value, formatNumber)
     if (formatNumber.currencyPosition?.toLowerCase() === 'left') {
@@ -140,16 +139,7 @@ export const UtilsProviders = ({ children }) => {
       separator: options?.separator || configState.configs.format_number_decimal_separator?.value || ',',
       thousand: options?.thousand || configState.configs.format_number_thousand_separator?.value || '.'
     }
-    let number = value
-    if (options?.isTruncable) {
-      number = number.toString()
-      const numberParts = number.split(formatNumber.separator)
-      let decimalPart = numberParts[1] ?? ''
-      decimalPart = decimalPart.padEnd(formatNumber.decimal, '0').substring(0, formatNumber.decimal)
-      number = numberParts[0] + '.' + decimalPart
-    } else {
-      number = value.toFixed(formatNumber.decimal)
-    }
+    let number = value.toFixed(formatNumber.decimal)
     number = number.toString()
     if (number.indexOf('.')) {
       number = number.replace('.', formatNumber.separator)
@@ -157,6 +147,7 @@ export const UtilsProviders = ({ children }) => {
       number = number.replace(',', formatNumber.separator)
     }
     const numberParts = number.split(formatNumber.separator)
+    if (formatNumber.thousand === 'space') formatNumber.thousand = ' '
     numberParts[0] = numberParts[0].replace(/(.)(?=(\d{3})+$)/g, '$1' + formatNumber.thousand)
     number = numberParts.join(formatNumber.separator)
     return number
