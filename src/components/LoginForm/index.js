@@ -39,10 +39,11 @@ export const LoginForm = (props) => {
   const useLoginByCellphone = configs?.phone_password_login_enabled?.value === '1'
   const useLoginOtpEmail = configs?.opt_email_enabled?.value === '1'
   const useLoginOtpCellphone = configs?.otp_cellphone_enabled?.value === '1'
-  const useLoginByEmail = (useLoginByCellphone || useLoginOtpEmail || useLoginOtpCellphone)
+  const useLoginOtpWhatsapp = configs?.whatsapp_otp_login_enabled?.value === '1'
+  const useLoginByEmail = (useLoginByCellphone || useLoginOtpEmail || useLoginOtpCellphone || useLoginOtpWhatsapp)
     ? configs?.email_password_login_enabled?.value === '1' : true
   const useLoginSpoonity = configs?.spoonity_enabled?.value === '1'
-  const useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone
+  const useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone || useLoginOtpWhatsapp
   const isDeviceLoginEnabled = configs?.device_code_login_enabled?.value === '1'
 
   defaultLoginTab = useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp'
@@ -76,7 +77,9 @@ export const LoginForm = (props) => {
         if (otpType === 'cellphone') {
           _credentials = {
             ..._credentials,
-            country_phone_code: (values && values?.country_phone_code) || credentials?.country_phone_code
+            country_phone_code:
+              (values && values?.country_phone_code) ||
+              credentials?.country_phone_code
           }
         }
       } else {
@@ -156,18 +159,13 @@ export const LoginForm = (props) => {
               return
             }
           }
-          if (values?.device_code) {
-            login({
-              user: result,
-              token: result.session?.access_token,
+          login({
+            user: result,
+            token: result.session?.access_token,
+            ...(values?.device_code && {
               device_code: values?.device_code
             })
-          } else {
-            login({
-              user: result,
-              token: result.session?.access_token
-            })
-          }
+          })
         }
         events.emit('userLogin', result)
         if (handleSuccessLogin) {
@@ -317,10 +315,10 @@ export const LoginForm = (props) => {
     }
   }
 
-  const generateOtpCode = async (values) => {
+  const generateOtpCode = async (values, channel) => {
     const body = {
       type: 4,
-      channel: otpType === 'email' ? 1 : 2,
+      channel: otpType === 'email' ? 1 : (channel || 2),
       size: 6
     }
     const email = values?.email || credentials?.email
@@ -438,6 +436,7 @@ export const LoginForm = (props) => {
           useLoginByCellphone={useLoginByCellphone}
           useLoginOtpEmail={useLoginOtpEmail}
           useLoginOtpCellphone={useLoginOtpCellphone}
+          useLoginOtpWhatsapp={useLoginOtpWhatsapp}
           useLoginSpoonity={useLoginSpoonity}
           handleLoginSpoonity={handleLoginSpoonity}
           setCellphoneStartZero={setCellphoneStartZero}
