@@ -49,7 +49,8 @@ export const SignupForm = (props) => {
 
   const useSignUpOtpEmail = configs?.email_otp_signup_enabled?.value === '1' && !isCustomerMode
   const useSignUpOtpCellphone = configs?.phone_otp_signup_enabled?.value === '1' && !isCustomerMode
-  const useSignUpFullDetails = (useSignUpOtpEmail || useSignUpOtpCellphone) ? configs?.full_details_signup_enabled?.value === '1' : true
+  const useSignUpOtpWhatsapp = configs?.whatsapp_otp_signup_enabled?.value === '1' && !isCustomerMode
+  const useSignUpFullDetails = (useSignUpOtpEmail || useSignUpOtpCellphone || useSignUpOtpWhatsapp) ? configs?.full_details_signup_enabled?.value === '1' : true
 
   const defaultSignUpTab = useSignUpFullDetails ? 'default' : useSignUpOtpEmail ? 'otpEmail' : 'otpCellphone'
   const [signUpTab, setSignUpTab] = useState(defaultSignUpTab)
@@ -232,7 +233,7 @@ export const SignupForm = (props) => {
     }
   }
 
-  const generateOtpCode = async (values) => {
+  const generateOtpCode = async (values, channel) => {
     if (isReCaptchaEnable && reCaptchaValue === null) {
       setCheckPhoneCodeState({
         ...checkPhoneCodeState,
@@ -246,7 +247,7 @@ export const SignupForm = (props) => {
     }
     const body = {
       type: 4,
-      channel: signUpTab === 'otpEmail' ? 1 : 2,
+      channel: signUpTab === 'otpEmail' ? 1 : (channel || 2),
       size: 6
     }
     const email = values?.email || signupData?.email
@@ -478,6 +479,7 @@ export const SignupForm = (props) => {
           useSignUpFullDetails={useSignUpFullDetails}
           useSignUpOtpEmail={useSignUpOtpEmail}
           useSignUpOtpCellphone={useSignUpOtpCellphone}
+          useSignUpOtpWhatsapp={useSignUpOtpWhatsapp}
         />
       )}
     </>
