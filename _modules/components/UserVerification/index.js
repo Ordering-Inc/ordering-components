@@ -8,6 +8,7 @@ exports.UserVerification = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _SessionContext = require("../../contexts/SessionContext");
 var _ApiContext = require("../../contexts/ApiContext");
+var _ConfigContext = require("../../contexts/ConfigContext");
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t5 in e) "default" !== _t5 && {}.hasOwnProperty.call(e, _t5) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t5)) && (i.get || i.set) ? o(f, _t5, i) : f[_t5] = e[_t5]); return f; })(e, t); }
 function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
@@ -30,6 +31,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
  * Component to manage User Verification behavior without UI component
  */
 var UserVerification = exports.UserVerification = function UserVerification(props) {
+  var _configs$whatsapp_otp;
   var UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
@@ -41,6 +43,10 @@ var UserVerification = exports.UserVerification = function UserVerification(prop
     user = _useSession2$.user,
     token = _useSession2$.token,
     changeUser = _useSession2[1].changeUser;
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+    _useConfig2 = _slicedToArray(_useConfig, 1),
+    configs = _useConfig2[0].configs;
+  var useWhatsappVerification = (configs === null || configs === void 0 || (_configs$whatsapp_otp = configs.whatsapp_otp_login_enabled) === null || _configs$whatsapp_otp === void 0 ? void 0 : _configs$whatsapp_otp.value) === '1';
   var _useState = (0, _react.useState)({
       loadingSendCode: false,
       resultSendCode: null,
@@ -339,6 +345,7 @@ var UserVerification = exports.UserVerification = function UserVerification(prop
     sendVerifyPhoneCode: sendVerifyPhoneCode,
     checkVerifyEmailCode: checkVerifyEmailCode,
     checkVerifyPhoneCode: checkVerifyPhoneCode,
-    cleanErrorsState: cleanErrorsState
+    cleanErrorsState: cleanErrorsState,
+    useWhatsappVerification: useWhatsappVerification
   })));
 };

@@ -37,7 +37,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
  * Component to manage signup behavior without UI component
  */
 var SignupForm = exports.SignupForm = function SignupForm(props) {
-  var _configs$email_otp_si, _configs$phone_otp_si, _configs$full_details;
+  var _configs$email_otp_si, _configs$phone_otp_si, _configs$whatsapp_otp, _configs$full_details;
   var UIComponent = props.UIComponent,
     useChekoutFileds = props.useChekoutFileds,
     handleButtonSignupClick = props.handleButtonSignupClick,
@@ -134,7 +134,8 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
     setCellphoneStartZero = _useState18[1];
   var useSignUpOtpEmail = (configs === null || configs === void 0 || (_configs$email_otp_si = configs.email_otp_signup_enabled) === null || _configs$email_otp_si === void 0 ? void 0 : _configs$email_otp_si.value) === '1' && !isCustomerMode;
   var useSignUpOtpCellphone = (configs === null || configs === void 0 || (_configs$phone_otp_si = configs.phone_otp_signup_enabled) === null || _configs$phone_otp_si === void 0 ? void 0 : _configs$phone_otp_si.value) === '1' && !isCustomerMode;
-  var useSignUpFullDetails = useSignUpOtpEmail || useSignUpOtpCellphone ? (configs === null || configs === void 0 || (_configs$full_details = configs.full_details_signup_enabled) === null || _configs$full_details === void 0 ? void 0 : _configs$full_details.value) === '1' : true;
+  var useSignUpOtpWhatsapp = (configs === null || configs === void 0 || (_configs$whatsapp_otp = configs.whatsapp_otp_login_enabled) === null || _configs$whatsapp_otp === void 0 ? void 0 : _configs$whatsapp_otp.value) === '1' && !isCustomerMode;
+  var useSignUpFullDetails = useSignUpOtpEmail || useSignUpOtpCellphone || useSignUpOtpWhatsapp ? (configs === null || configs === void 0 || (_configs$full_details = configs.full_details_signup_enabled) === null || _configs$full_details === void 0 ? void 0 : _configs$full_details.value) === '1' : true;
   var defaultSignUpTab = useSignUpFullDetails ? 'default' : useSignUpOtpEmail ? 'otpEmail' : 'otpCellphone';
   var _useState19 = (0, _react.useState)(defaultSignUpTab),
     _useState20 = _slicedToArray(_useState19, 2),
@@ -362,7 +363,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
     };
   }();
   var generateOtpCode = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(values) {
+    var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(values, channel) {
       var body, email, cellphone, countryPhoneCode, response, _yield$response$json, result, error, _t3;
       return _regenerator().w(function (_context3) {
         while (1) switch (_context3.p = _context3.n) {
@@ -382,7 +383,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
           case 1:
             body = {
               type: 4,
-              channel: signUpTab === 'otpEmail' ? 1 : 2,
+              channel: signUpTab === 'otpEmail' ? 1 : channel || 2,
               size: 6
             };
             email = (values === null || values === void 0 ? void 0 : values.email) || (signupData === null || signupData === void 0 ? void 0 : signupData.email);
@@ -465,7 +466,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
         }
       }, _callee3, null, [[2, 6]]);
     }));
-    return function generateOtpCode(_x3) {
+    return function generateOtpCode(_x3, _x4) {
       return _ref5.apply(this, arguments);
     };
   }();
@@ -544,7 +545,7 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
         }
       }, _callee4, null, [[1, 4]]);
     }));
-    return function checkVerifyPhoneCode(_x4) {
+    return function checkVerifyPhoneCode(_x5) {
       return _ref6.apply(this, arguments);
     };
   }();
@@ -688,7 +689,8 @@ var SignupForm = exports.SignupForm = function SignupForm(props) {
     willVerifyOtpState: willVerifyOtpState,
     useSignUpFullDetails: useSignUpFullDetails,
     useSignUpOtpEmail: useSignUpOtpEmail,
-    useSignUpOtpCellphone: useSignUpOtpCellphone
+    useSignUpOtpCellphone: useSignUpOtpCellphone,
+    useSignUpOtpWhatsapp: useSignUpOtpWhatsapp
   })));
 };
 SignupForm.propTypes = {
