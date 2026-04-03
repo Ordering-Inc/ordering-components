@@ -36,7 +36,7 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
  * Component to manage login behavior without UI component
  */
 var LoginForm = exports.LoginForm = function LoginForm(props) {
-  var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$email_passwo, _configs$spoonity_ena, _configs$device_code_;
+  var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$whatsapp_otp, _configs$email_passwo, _configs$spoonity_ena, _configs$device_code_;
   var UIComponent = props.UIComponent,
     handleButtonLoginClick = props.handleButtonLoginClick,
     handleSuccessLogin = props.handleSuccessLogin,
@@ -110,9 +110,10 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
   var useLoginByCellphone = (configs === null || configs === void 0 || (_configs$phone_passwo = configs.phone_password_login_enabled) === null || _configs$phone_passwo === void 0 ? void 0 : _configs$phone_passwo.value) === '1';
   var useLoginOtpEmail = (configs === null || configs === void 0 || (_configs$opt_email_en = configs.opt_email_enabled) === null || _configs$opt_email_en === void 0 ? void 0 : _configs$opt_email_en.value) === '1';
   var useLoginOtpCellphone = (configs === null || configs === void 0 || (_configs$otp_cellphon = configs.otp_cellphone_enabled) === null || _configs$otp_cellphon === void 0 ? void 0 : _configs$otp_cellphon.value) === '1';
-  var useLoginByEmail = useLoginByCellphone || useLoginOtpEmail || useLoginOtpCellphone ? (configs === null || configs === void 0 || (_configs$email_passwo = configs.email_password_login_enabled) === null || _configs$email_passwo === void 0 ? void 0 : _configs$email_passwo.value) === '1' : true;
+  var useLoginOtpWhatsapp = (configs === null || configs === void 0 || (_configs$whatsapp_otp = configs.whatsapp_otp_login_enabled) === null || _configs$whatsapp_otp === void 0 ? void 0 : _configs$whatsapp_otp.value) === '1';
+  var useLoginByEmail = useLoginByCellphone || useLoginOtpEmail || useLoginOtpCellphone || useLoginOtpWhatsapp ? (configs === null || configs === void 0 || (_configs$email_passwo = configs.email_password_login_enabled) === null || _configs$email_passwo === void 0 ? void 0 : _configs$email_passwo.value) === '1' : true;
   var useLoginSpoonity = (configs === null || configs === void 0 || (_configs$spoonity_ena = configs.spoonity_enabled) === null || _configs$spoonity_ena === void 0 ? void 0 : _configs$spoonity_ena.value) === '1';
-  var useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone;
+  var useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone || useLoginOtpWhatsapp;
   var isDeviceLoginEnabled = (configs === null || configs === void 0 || (_configs$device_code_ = configs.device_code_login_enabled) === null || _configs$device_code_ === void 0 ? void 0 : _configs$device_code_.value) === '1';
   defaultLoginTab = useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp';
   var _useState13 = (0, _react.useState)(defaultLoginTab),
@@ -143,7 +144,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
    */
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(values) {
-      var _credentials4, _window, _credentials, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, level, session, accessToken, _yield$ordering$setAc, logoutResp, _result$session, _result$session2, _t, _t2;
+      var _credentials4, _window, _credentials, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, accessToken, _yield$ordering$setAc, logoutResp, _t, _t2;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.p = _context.n) {
           case 0:
@@ -268,18 +269,12 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
           case 8:
             return _context.a(2);
           case 9:
-            if (values !== null && values !== void 0 && values.device_code) {
-              login({
-                user: result,
-                token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token,
-                device_code: values === null || values === void 0 ? void 0 : values.device_code
-              });
-            } else {
-              login({
-                user: result,
-                token: (_result$session2 = result.session) === null || _result$session2 === void 0 ? void 0 : _result$session2.access_token
-              });
-            }
+            login(_objectSpread({
+              user: result,
+              token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
+            }, (values === null || values === void 0 ? void 0 : values.device_code) && {
+              device_code: values === null || values === void 0 ? void 0 : values.device_code
+            }));
           case 10:
             events.emit('userLogin', result);
             if (handleSuccessLogin) {
@@ -481,14 +476,14 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
     };
   }();
   var generateOtpCode = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(values) {
+    var _ref4 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4(values, channel) {
       var body, email, cellphone, countryPhoneCode, response, _yield$response$json, result, error, _t5;
       return _regenerator().w(function (_context4) {
         while (1) switch (_context4.p = _context4.n) {
           case 0:
             body = {
               type: 4,
-              channel: otpType === 'email' ? 1 : 2,
+              channel: otpType === 'email' ? 1 : channel || 2,
               size: 6
             };
             email = (values === null || values === void 0 ? void 0 : values.email) || (credentials === null || credentials === void 0 ? void 0 : credentials.email);
@@ -558,13 +553,13 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
         }
       }, _callee4, null, [[1, 5]]);
     }));
-    return function generateOtpCode(_x4) {
+    return function generateOtpCode(_x4, _x5) {
       return _ref4.apply(this, arguments);
     };
   }();
   var handleLoginSpoonity = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
-      var _result$session3, response, _yield$response$json2, result, error, _t6;
+      var _result$session2, response, _yield$response$json2, result, error, _t6;
       return _regenerator().w(function (_context5) {
         while (1) switch (_context5.p = _context5.n) {
           case 0:
@@ -606,7 +601,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
           case 3:
             login({
               user: result,
-              token: result === null || result === void 0 || (_result$session3 = result.session) === null || _result$session3 === void 0 ? void 0 : _result$session3.access_token
+              token: result === null || result === void 0 || (_result$session2 = result.session) === null || _result$session2 === void 0 ? void 0 : _result$session2.access_token
             });
             setFormState({
               result: {
@@ -660,6 +655,7 @@ var LoginForm = exports.LoginForm = function LoginForm(props) {
     useLoginByCellphone: useLoginByCellphone,
     useLoginOtpEmail: useLoginOtpEmail,
     useLoginOtpCellphone: useLoginOtpCellphone,
+    useLoginOtpWhatsapp: useLoginOtpWhatsapp,
     useLoginSpoonity: useLoginSpoonity,
     handleLoginSpoonity: handleLoginSpoonity,
     setCellphoneStartZero: setCellphoneStartZero
