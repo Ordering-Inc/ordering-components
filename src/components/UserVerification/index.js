@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useConfig } from '../../contexts/ConfigContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
@@ -14,6 +15,8 @@ export const UserVerification = (props) => {
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [{ user, token }, { changeUser }] = useSession()
+  const [{ configs }] = useConfig()
+  const useWhatsappVerification = configs?.whatsapp_otp_login_enabled?.value === '1'
 
   const [verifyEmailState, setVerifyEmailState] = useState({
     loadingSendCode: false,
@@ -235,6 +238,7 @@ export const UserVerification = (props) => {
           checkVerifyEmailCode={checkVerifyEmailCode}
           checkVerifyPhoneCode={checkVerifyPhoneCode}
           cleanErrorsState={cleanErrorsState}
+          useWhatsappVerification={useWhatsappVerification}
         />
       )}
     </>

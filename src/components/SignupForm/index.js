@@ -49,7 +49,7 @@ export const SignupForm = (props) => {
 
   const useSignUpOtpEmail = configs?.email_otp_signup_enabled?.value === '1' && !isCustomerMode
   const useSignUpOtpCellphone = configs?.phone_otp_signup_enabled?.value === '1' && !isCustomerMode
-  const useSignUpOtpWhatsapp = configs?.whatsapp_otp_signup_enabled?.value === '1' && !isCustomerMode
+  const useSignUpOtpWhatsapp = configs?.whatsapp_otp_login_enabled?.value === '1' && !isCustomerMode
   const useSignUpFullDetails = (useSignUpOtpEmail || useSignUpOtpCellphone || useSignUpOtpWhatsapp) ? configs?.full_details_signup_enabled?.value === '1' : true
 
   const defaultSignUpTab = useSignUpFullDetails ? 'default' : useSignUpOtpEmail ? 'otpEmail' : 'otpCellphone'
